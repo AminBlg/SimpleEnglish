@@ -122,7 +122,7 @@ Then ask for any technical writing, or say: *"rewrite this with simple-english"*
 | One instruction per sentence | Steps nobody can follow at 2 a.m. |
 | Keep articles, keep "that" | Telegraph style. STE is short, not terse |
 
-Full paraphrased set with software examples: [`references/rules.md`](skills/simple-english/references/rules.md). Yes, this README breaks half of them. Marketing is explicitly out of STE scope. The skill knows that and stays in the docs. 😌
+Full paraphrased set with software examples: [`SKILL.md`](skills/simple-english/SKILL.md). Yes, this README breaks half of them. Marketing is explicitly out of STE scope. The skill knows that and stays in the docs. 😌
 
 ## 🧰 Not just docs
 

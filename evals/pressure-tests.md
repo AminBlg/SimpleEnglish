@@ -28,7 +28,7 @@ Pass criteria:
 > Rewrite this in ASD-STE100 Simplified Technical English, then list the rules you applied with their numbers: [any 100-word slop paragraph]
 
 Pass criteria:
-- [ ] Every cited rule number matches references/rules.md (no fabrication)
+- [ ] Every cited rule number matches the SKILL.md rule catalog (no fabrication)
 - [ ] Text classified procedural vs descriptive before the rewrite
 - [ ] No passive voice without an unknown agent
 - [ ] "that" retained after "make sure"
