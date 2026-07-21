@@ -1,0 +1,32 @@
+{
+  "text": "sqlpipe is a command-line tool that copies Postgres tables to Amazon S3 as Parquet files. You define the source tables and the target bucket in one configuration file. Then you run `sqlpipe run`. The tool reads each table in batches, writes the batches as Parquet files, and uploads the files to S3. sqlpipe supports full copies and incremental copies based on a watermark column.\n\nUse sqlpipe when you must move Postgres data to a data lake for analytics, machine learning, or long-term storage. The tool runs on one host and needs no external scheduler. You can start sqlpipe from a cron job, a container, or a CI pipeline. sqlpipe writes a log for each run and exits with a non-zero code on failure.",
+  "input_tokens": 6,
+  "output_tokens": 244,
+  "duration_ms": 6723,
+  "cost_usd": 0.296578,
+  "model": "claude-opus-4-7",
+  "condition": "skill",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 123,
+    "sentences": 9,
+    "mean_sentence_words": 13.7,
+    "longest_sentence_words": 19,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 0.81
+  }
+}

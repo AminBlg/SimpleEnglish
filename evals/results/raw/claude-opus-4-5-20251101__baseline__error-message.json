@@ -1,0 +1,32 @@
+{
+  "text": "No skill applies. Checking if `sqlpipe` is a known tool with documented error messages.\n\nSearched web for \"sqlpipe S3 AccessDenied PutObject error message\"\n\nNo authoritative source found. `sqlpipe` is a niche CLI tool \u2014 error message format depends on version and whether it wraps AWS SDK errors directly.\n\n**Cannot provide exact text.** Would need:\n1. Access to sqlpipe source code, or\n2. Reproduce the error against a real S3 bucket with restricted IAM\n\nTypical AWS SDK error surfaced by Go/Python CLI tools looks like:\n\n```\nError: AccessDenied: Access Denied\n    status code: 403, request id: <...>\n```\n\nBut sqlpipe may wrap this differently. Want me to search the sqlpipe repo for error handling patterns?",
+  "input_tokens": 3,
+  "output_tokens": 192,
+  "duration_ms": 7086,
+  "cost_usd": 0.1936435,
+  "model": "claude-opus-4-5-20251101",
+  "condition": "baseline",
+  "scenario": "error-message",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 101,
+    "sentences": 8,
+    "mean_sentence_words": 12.4,
+    "longest_sentence_words": 28,
+    "violations": {
+      "sentence_over_limit": 2,
+      "contraction": 0,
+      "banned_modal": 2,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 0
+    },
+    "violations_total": 5,
+    "violations_per_100w": 4.95
+  }
+}

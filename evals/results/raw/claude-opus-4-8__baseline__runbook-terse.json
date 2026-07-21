@@ -1,0 +1,32 @@
+{
+  "text": "Verify backup exists before migration.",
+  "input_tokens": 2,
+  "output_tokens": 13,
+  "duration_ms": 2564,
+  "cost_usd": 0.2574835,
+  "model": "claude-opus-4-8",
+  "condition": "baseline",
+  "scenario": "runbook-terse",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 5,
+    "sentences": 1,
+    "mean_sentence_words": 5.0,
+    "longest_sentence_words": 5,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

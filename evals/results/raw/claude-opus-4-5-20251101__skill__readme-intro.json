@@ -1,0 +1,32 @@
+{
+  "text": "# sqlpipe\n\nsqlpipe syncs Postgres tables to S3 as Parquet files. Point it at a source database and a destination bucket. It reads rows, converts them to Parquet, and uploads the result. You can run it once or on a schedule.\n\nThe tool handles large tables in batches. It tracks what it has already synced, so restarts continue where they stopped. Configuration lives in a single YAML file. Output is partitioned by date, table, or a column you choose.\n\nsqlpipe works with standard Postgres, Amazon RDS, and Cloud SQL. It needs read access to the source and write access to the bucket. Install it, write a config file, and run `sqlpipe sync`.",
+  "input_tokens": 3,
+  "output_tokens": 162,
+  "duration_ms": 6521,
+  "cost_usd": 0.2091235,
+  "model": "claude-opus-4-5-20251101",
+  "condition": "skill",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 110,
+    "sentences": 11,
+    "mean_sentence_words": 10.0,
+    "longest_sentence_words": 13,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 1
+    },
+    "violations_total": 1,
+    "violations_per_100w": 0.91
+  }
+}

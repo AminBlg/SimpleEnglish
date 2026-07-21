@@ -1,0 +1,32 @@
+{
+  "text": "## Getting started\n\nInstall sqlpipe with a single command:\n\n```sh\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nThe script drops the `sqlpipe` binary into `/usr/local/bin` and verifies it is on your `PATH`.\n\nNext, create a `sqlpipe.yaml` in your project root. At minimum, declare a source, a destination, and one pipeline:\n\n```yaml\nsource:\n  driver: postgres\n  dsn: postgres://user:pass@localhost:5432/app\n\ndestination:\n  driver: snowflake\n  dsn: snowflake://user:pass@account/db/schema\n\npipelines:\n  - name: users\n    query: SELECT * FROM users\n    target: users\n```\n\nKick off the first run:\n\n```sh\nsqlpipe run --config sqlpipe.yaml\n```\n\nsqlpipe validates the config, connects to both endpoints, and streams each pipeline in order. Progress prints to stdout; a non-zero exit code means at least one pipeline failed \u2014 check the log lines tagged with the pipeline name.\n\nAdd `--dry-run` to inspect the plan without moving data, or `-v` for verbose driver logs.",
+  "input_tokens": 6,
+  "output_tokens": 392,
+  "duration_ms": 7818,
+  "cost_usd": 0.231198,
+  "model": "claude-opus-4-7",
+  "condition": "baseline",
+  "scenario": "getting-started",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 98,
+    "sentences": 8,
+    "mean_sentence_words": 12.2,
+    "longest_sentence_words": 24,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 1,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 1
+    },
+    "violations_total": 3,
+    "violations_per_100w": 3.06
+  }
+}

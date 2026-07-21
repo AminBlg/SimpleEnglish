@@ -1,0 +1,32 @@
+{
+  "text": "Cannot answer. No verified source for sqlpipe exact error string. Would need repo grep or docs lookup to return real text. Fabricating error message = same category as fabricating API shapes.",
+  "input_tokens": 6,
+  "output_tokens": 65,
+  "duration_ms": 3578,
+  "cost_usd": 0.22252300000000003,
+  "model": "claude-opus-4-7",
+  "condition": "baseline",
+  "scenario": "error-message",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 31,
+    "sentences": 4,
+    "mean_sentence_words": 7.8,
+    "longest_sentence_words": 11,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 1,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 3.23
+  }
+}

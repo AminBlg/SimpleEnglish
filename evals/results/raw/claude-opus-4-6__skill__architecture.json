@@ -1,0 +1,32 @@
+{
+  "text": "sqlpipe moves rows from Postgres to S3 as Parquet files.\n\nThe system has three stages that run at the same time:\n\n- **Reader** \u2014 connects to Postgres and streams rows in fixed-size batches. Each batch goes into a shared queue. The reader controls memory use because it never holds more than one batch at a time.\n\n- **Converter** \u2014 takes batches from the queue and encodes each batch as one Parquet row group. It maps Postgres types to Parquet types and applies compression (Snappy by default). Each row group is a self-contained unit of data.\n\n- **Uploader** \u2014 sends each row group to S3 as part of a multipart upload. If a part fails, the uploader retries it up to three times before it stops the pipeline. When all parts are complete, the uploader finalizes the multipart upload.\n\nThe three stages communicate through bounded queues. Backpressure flows upstream: if the uploader is slow, the converter blocks, and the reader pauses.",
+  "input_tokens": 3,
+  "output_tokens": 233,
+  "duration_ms": 10681,
+  "cost_usd": 0.249127,
+  "model": "claude-opus-4-6",
+  "condition": "skill",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 160,
+    "sentences": 14,
+    "mean_sentence_words": 11.2,
+    "longest_sentence_words": 17,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

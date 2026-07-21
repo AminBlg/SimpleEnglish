@@ -1,0 +1,32 @@
+{
+  "text": "**sqlpipe** syncs PostgreSQL tables to S3 as Parquet files. Point it at a database, tell it where to write, and it handles the rest \u2014 schema inference, chunked reads, columnar conversion, and upload. No config files, no daemons, no dependencies beyond a Postgres connection and AWS credentials.\n\nBuilt for the common case: you have operational data in Postgres and need it in S3 for analytics, ML pipelines, or cold storage. sqlpipe reads directly from the source, writes efficient Parquet with sensible defaults (Snappy compression, row-group sizing tuned for query engines), and supports incremental syncs via timestamp or ID columns. One binary, one command, minimal moving parts.",
+  "input_tokens": 3,
+  "output_tokens": 163,
+  "duration_ms": 7855,
+  "cost_usd": 0.32298,
+  "model": "claude-opus-4-5-20251101",
+  "condition": "baseline",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 106,
+    "sentences": 7,
+    "mean_sentence_words": 15.1,
+    "longest_sentence_words": 29,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 0.94
+  }
+}

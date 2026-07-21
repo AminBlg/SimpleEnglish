@@ -1,0 +1,32 @@
+{
+  "text": "Upload to S3 fail: AccessDenied. IAM credentials missing `s3:PutObject` permission for bucket `{bucket}`.\n\nAdd `s3:PutObject` to role or user policy, then retry upload.",
+  "input_tokens": 2,
+  "output_tokens": 75,
+  "duration_ms": 3598,
+  "cost_usd": 0.20320620000000003,
+  "model": "claude-sonnet-5",
+  "condition": "skill",
+  "scenario": "error-message",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 24,
+    "sentences": 3,
+    "mean_sentence_words": 7.7,
+    "longest_sentence_words": 10,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

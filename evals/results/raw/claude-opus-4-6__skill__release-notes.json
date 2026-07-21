@@ -1,0 +1,32 @@
+{
+  "text": "**sqlpipe v2.0 Release Notes**\n\n**Breaking change**\n\nThe `name` field in `/v2/users` is now two fields: `first_name` and `last_name`. Update all code that reads or writes the `name` field before you upgrade.\n\n**New feature: incremental transfers**\n\nUse the `--incremental` flag to transfer only the rows that changed since the last run. sqlpipe tracks the high-water mark automatically.\n\n```\nsqlpipe transfer --incremental --source my_pg --target my_s3\n```\n\n**Performance**\n\nParquet writes are 40% faster. sqlpipe now writes row groups in parallel and compresses each group on a separate thread. No configuration change is necessary.\n\n**Upgrade steps**\n\n1. Read the migration guide at `docs/v2-migration.md`.\n2. Replace all uses of `name` with `first_name` and `last_name`.\n3. Run your test suite against the new version.\n4. Deploy to production.",
+  "input_tokens": 3,
+  "output_tokens": 234,
+  "duration_ms": 8100,
+  "cost_usd": 0.249252,
+  "model": "claude-opus-4-6",
+  "condition": "skill",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 117,
+    "sentences": 13,
+    "mean_sentence_words": 8.7,
+    "longest_sentence_words": 17,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

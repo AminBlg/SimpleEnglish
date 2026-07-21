@@ -1,0 +1,32 @@
+{
+  "text": "**Incident Report \u2014 2026-07-21**\n\n**Duration:** 14:02 \u2013 14:31 UTC (29 minutes)\n\n**Impact:** 12% of API requests returned HTTP 502 errors.\n\n**Root cause:** A deployment at 14:02 UTC inadvertently removed the cache warmup step from the service startup sequence. Without warmed caches, the API returned 502 errors under normal traffic load.\n\n**Timeline:**\n- 14:02 UTC \u2014 Deployment completed; errors began.\n- 14:27 UTC \u2014 Deployment reverted to previous release.\n- 14:31 UTC \u2014 Error rate returned to baseline.\n\n**Resolution:** The previous release was restored. The cache warmup step will be enforced as a required pre-flight check in the deployment pipeline before the next release.",
+  "input_tokens": 3,
+  "output_tokens": 188,
+  "duration_ms": 4891,
+  "cost_usd": 0.11748929999999999,
+  "model": "claude-sonnet-4-6",
+  "condition": "baseline",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 103,
+    "sentences": 8,
+    "mean_sentence_words": 12.5,
+    "longest_sentence_words": 20,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 1,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 0.97
+  }
+}

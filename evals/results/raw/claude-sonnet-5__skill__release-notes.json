@@ -1,0 +1,32 @@
+{
+  "text": "sqlpipe v2.0 release notes. Descriptive, 25-word limit, verb \"change\" for the breaking item.\n\n**sqlpipe v2.0**\n\n**Breaking change.** The `name` field of `/v2/users` no longer exists. The endpoint now returns two fields: `first_name` and `last_name`. Update your client code to use the new fields before you upgrade.\n\n**New flag.** The `--incremental` flag runs only the changes since the last sync. Use it to reduce sync time on large tables.\n\n**Faster Parquet writes.** Parquet write speed is 40% faster than in v1.x. No config change is necessary.\n\nCAUTION: Test the new user fields in a staging environment before you deploy v2.0 to production. The old `name` field returns a 404 error after the upgrade.",
+  "input_tokens": 3,
+  "output_tokens": 313,
+  "duration_ms": 8085,
+  "cost_usd": 0.23763330000000002,
+  "model": "claude-sonnet-5",
+  "condition": "skill",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 113,
+    "sentences": 12,
+    "mean_sentence_words": 9.3,
+    "longest_sentence_words": 15,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

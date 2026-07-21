@@ -1,0 +1,32 @@
+{
+  "text": "**Incident: Elevated 502 errors on API**\n\n**Status:** Resolved\n**Duration:** 14:02\u201314:31 UTC (29 minutes)\n\nBetween 14:02 and 14:31 UTC, approximately 12% of API requests returned HTTP 502 errors. The disruption began after a deploy inadvertently removed the cache warmup step, leaving downstream services unable to serve requests reliably under load.\n\nAt 14:27 UTC, we reverted the deploy. Error rates returned to baseline within four minutes, and full recovery was confirmed at 14:31 UTC.\n\nWe apologize for the impact. A full post-mortem, including changes to our deploy validation process, will be published within five business days.",
+  "input_tokens": 6,
+  "output_tokens": 236,
+  "duration_ms": 5099,
+  "cost_usd": 0.22699800000000003,
+  "model": "claude-opus-4-7",
+  "condition": "baseline",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 94,
+    "sentences": 6,
+    "mean_sentence_words": 15.5,
+    "longest_sentence_words": 26,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 1.06
+  }
+}

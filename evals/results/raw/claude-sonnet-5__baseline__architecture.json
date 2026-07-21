@@ -1,0 +1,32 @@
+{
+  "text": "SqlPipe move data Postgres to S3 via three-stage pipeline. Reader process stream Postgres rows in batch, avoid loading full table into memory. Converter transform each batch into Parquet row group, columnar format enable efficient downstream analytics. Uploader take finished Parquet output, write as multipart object to S3, retry on transient failure so single network blip not restart whole transfer.\n\nStage overlap: reader fill next batch while converter still working previous one, converter produce row group while uploader still push earlier part. Backpressure between stage prevent fast stage overwhelm slow one, memory usage bounded by batch size not table size.\n\nBatch size tune throughput vs memory. Retry policy (backoff, max attempt) tune uploader resilience vs stall risk. Pipeline suit large table export where single-shot dump exceed memory or connection timeout budget.",
+  "input_tokens": 2,
+  "output_tokens": 287,
+  "duration_ms": 7740,
+  "cost_usd": 0.1647402,
+  "model": "claude-sonnet-5",
+  "condition": "baseline",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 130,
+    "sentences": 10,
+    "mean_sentence_words": 13.0,
+    "longest_sentence_words": 23,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

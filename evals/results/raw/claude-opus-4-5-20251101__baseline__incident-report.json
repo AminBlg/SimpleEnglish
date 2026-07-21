@@ -1,0 +1,32 @@
+{
+  "text": "**Incident Report \u2014 API Degradation (2026-07-21)**\n\n**Duration:** 14:02\u201314:31 UTC (29 minutes)\n**Impact:** 12% of API requests returned HTTP 502 errors\n\n**Summary:**\nA deployment at 14:02 UTC inadvertently removed the cache warmup step from our release process. Without pre-warmed caches, backend services experienced cold-start latency spikes that exceeded upstream timeout thresholds, causing 502 errors for approximately 12% of requests.\n\n**Resolution:**\nThe faulty deployment was reverted at 14:27 UTC. Full service recovery confirmed at 14:31 UTC.\n\n**Next Steps:**\nWe are adding automated checks to prevent deployments that skip required warmup stages. A post-incident review is scheduled.",
+  "input_tokens": 3,
+  "output_tokens": 184,
+  "duration_ms": 6222,
+  "cost_usd": 0.1935935,
+  "model": "claude-opus-4-5-20251101",
+  "condition": "baseline",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 94,
+    "sentences": 6,
+    "mean_sentence_words": 15.7,
+    "longest_sentence_words": 36,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 1,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 1
+    },
+    "violations_total": 3,
+    "violations_per_100w": 3.19
+  }
+}

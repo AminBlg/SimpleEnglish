@@ -1,0 +1,32 @@
+{
+  "text": "# sqlpipe v2.0 Release Notes\n\n## Breaking Changes\n\n**User API field rename**: The `/v2/users` endpoint now returns `first_name` and `last_name` instead of the single `name` field. Update client code that reads user data before upgrading.\n\n## New Features\n\n**Incremental sync**: The new `--incremental` flag enables delta-only transfers. sqlpipe tracks the high-water mark between runs and syncs only rows added or modified since the last execution. Useful for large tables where full refreshes are expensive.\n\n## Performance\n\n**Parquet writes 40% faster**: Rewrote the Parquet serialization layer with better buffer management and parallel column encoding. Most noticeable on wide tables (50+ columns) and large batches.\n\n## Upgrade Path\n\n1. Update API clients to handle `first_name`/`last_name`\n2. Upgrade sqlpipe binary\n3. Run existing pipelines \u2014 no config changes required unless using user endpoints",
+  "input_tokens": 3,
+  "output_tokens": 227,
+  "duration_ms": 9204,
+  "cost_usd": 0.1947385,
+  "model": "claude-opus-4-5-20251101",
+  "condition": "baseline",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 116,
+    "sentences": 11,
+    "mean_sentence_words": 10.3,
+    "longest_sentence_words": 23,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "text": "## Getting Started\n\n### Install\n\n```bash\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nVerify installation:\n\n```bash\nsqlpipe --version\n```\n\n### Configure\n\nCreate `sqlpipe.yaml` in your project root:\n\n```yaml\nsource:\n  type: postgres\n  host: localhost\n  port: 5432\n  database: mydb\n  user: admin\n  password: ${DB_PASSWORD}\n\ndestination:\n  type: bigquery\n  project: my-gcp-project\n  dataset: analytics\n\npipelines:\n  - name: sync-users\n    query: \"SELECT * FROM users WHERE updated_at > :last_run\"\n    schedule: \"*/15 * * * *\"\n```\n\nCredentials can use environment variables with `${VAR}` syntax. See the full configuration reference for all supported source and destination types.\n\n### Run\n\nExecute your pipeline:\n\n```bash\nsqlpipe run --config sqlpipe.yaml\n```\n\nAdd `--dry-run` to preview without writing. Add `--verbose` for detailed logging.\n\nFor continuous operation, use `sqlpipe serve --config sqlpipe.yaml` to run pipelines on their defined schedules.",
+  "input_tokens": 3,
+  "output_tokens": 282,
+  "duration_ms": 7900,
+  "cost_usd": 0.162602,
+  "model": "claude-opus-4-6",
+  "condition": "baseline",
+  "scenario": "getting-started",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 54,
+    "sentences": 8,
+    "mean_sentence_words": 6.8,
+    "longest_sentence_words": 12,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "text": "sqlpipe copy Postgres table into Parquet file, push to S3. Command-line tool, one job.\n\nPoint sqlpipe at source table and target S3 bucket, tool run query, convert result to Parquet format, upload file. sqlpipe read connection settings from a config file or command-line flag. Sync run once or on schedule, with option to sync only new or changed rows since last run.\n\nOutput work with common Parquet readers: Athena, Redshift Spectrum, DuckDB, Spark.",
+  "input_tokens": 2,
+  "output_tokens": 163,
+  "duration_ms": 4766,
+  "cost_usd": 0.2045382,
+  "model": "claude-sonnet-5",
+  "condition": "skill",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 73,
+    "sentences": 7,
+    "mean_sentence_words": 10.4,
+    "longest_sentence_words": 19,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 1
+    },
+    "violations_total": 1,
+    "violations_per_100w": 1.37
+  }
+}

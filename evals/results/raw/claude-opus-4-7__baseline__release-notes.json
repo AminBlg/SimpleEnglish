@@ -1,0 +1,32 @@
+{
+  "text": "# sqlpipe v2.0\n\n## Breaking changes\n\n**`/v2/users` name split.** `name` field removed. Replaced by `first_name` and `last_name`. Update clients before upgrading. Old payloads rejected with 400.\n\nMigration:\n```json\n// before\n{ \"name\": \"Ada Lovelace\" }\n// after\n{ \"first_name\": \"Ada\", \"last_name\": \"Lovelace\" }\n```\n\n## New features\n\n**`--incremental` flag.** Pipes only rows changed since last run. Tracks watermark per source. Skips full-table rescans on large tables.\n\n```bash\nsqlpipe run --incremental config.yaml\n```\n\n## Performance\n\n**Parquet writes 40% faster.** Column encoder rewritten. No config change needed. Measured on 10M-row benchmark, mixed schema.\n\n## Upgrade\n\n```bash\ngo install github.com/sqlpipe/sqlpipe@v2.0.0\n```",
+  "input_tokens": 6,
+  "output_tokens": 313,
+  "duration_ms": 8443,
+  "cost_usd": 0.228993,
+  "model": "claude-opus-4-7",
+  "condition": "baseline",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 60,
+    "sentences": 10,
+    "mean_sentence_words": 5.9,
+    "longest_sentence_words": 10,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "text": "sqlpipe moves Postgres data to S3 Parquet through three concurrent stages connected by bounded channels.\n\n**Reader** opens a server-side cursor, fetches rows in configurable batches (default 10k), and pushes each batch downstream. Backpressure from a full channel pauses fetches automatically.\n\n**Converter** receives row batches, maps Postgres types to Arrow, and accumulates rows until a row-group threshold (row count or byte size). Completed row groups serialize to Parquet in memory and forward to the uploader.\n\n**Uploader** initiates an S3 multipart upload, streams each Parquet chunk as a part (minimum 5 MB), and completes the upload when the converter signals EOF. Failed parts retry with exponential backoff; after max retries the upload aborts and the pipeline errors.\n\nChannels decouple stage speeds. The reader can outpace the converter briefly; the uploader can lag without blocking row production.",
+  "input_tokens": 3,
+  "output_tokens": 219,
+  "duration_ms": 8806,
+  "cost_usd": 0.19438850000000002,
+  "model": "claude-opus-4-5-20251101",
+  "condition": "baseline",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 134,
+    "sentences": 9,
+    "mean_sentence_words": 14.9,
+    "longest_sentence_words": 25,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 2,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 0
+    },
+    "violations_total": 3,
+    "violations_per_100w": 2.24
+  }
+}

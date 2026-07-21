@@ -1,0 +1,32 @@
+{
+  "text": "\n\n## Troubleshooting\n\n### Postgres Connection Timeouts\n\nIf `sqlpipe` hangs or times out connecting to Postgres, check these first:\n\n- Verify the host is reachable: `pg_isready -h <host> -p <port>`.\n- Confirm your `connect_timeout` parameter (default is often 0, meaning wait forever). Set it explicitly: `--pg-dsn \"host=... connect_timeout=5\"`.\n- Check firewall rules and security groups \u2014 port 5432 must be open inbound from your machine or container.\n- If connecting through a tunnel or VPN, ensure the tunnel is alive before sqlpipe starts.\n- SSL mismatch: if the server requires SSL, add `sslmode=require` to the DSN.\n\n### S3 Permission Errors\n\nCommon `AccessDenied` or `403` responses:\n\n- Verify credentials: `aws sts get-caller-identity` should return the expected role/user.\n- Check the bucket policy grants `s3:PutObject` and `s3:GetObject` on the exact prefix sqlpipe targets.\n- Wrong region causes signature errors \u2014 set `--s3-region` explicitly.\n- If using IAM roles on EC2/ECS, confirm the instance profile is attached and the role trust policy is correct.",
+  "input_tokens": 3,
+  "output_tokens": 307,
+  "duration_ms": 10448,
+  "cost_usd": 0.19871700000000003,
+  "model": "claude-opus-4-6",
+  "condition": "baseline",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 144,
+    "sentences": 16,
+    "mean_sentence_words": 8.4,
+    "longest_sentence_words": 19,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 1,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 3
+    },
+    "violations_total": 4,
+    "violations_per_100w": 2.78
+  }
+}

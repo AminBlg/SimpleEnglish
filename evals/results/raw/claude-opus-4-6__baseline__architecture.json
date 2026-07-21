@@ -1,0 +1,32 @@
+{
+  "text": "sqlpipe streams Postgres data to S3 as Parquet through three pipelined stages connected by bounded channels.\n\n**Reader** opens a server-side cursor against Postgres via `COPY ... WITH BINARY` or row-at-a-time fetching, pulling rows in configurable batches. Each batch is serialized into an intermediate column-oriented buffer and pushed onto a channel.\n\n**Converter** consumes those buffers, maps Postgres types (timestamptz, numeric, jsonb, etc.) to Parquet logical types, and assembles full row groups with dictionary and run-length encoding. Completed row groups are pushed to a second channel.\n\n**Uploader** initiates an S3 multipart upload, writes each row group as a part with exponential-backoff retries on transient failures, and finalizes with `CompleteMultipartUpload`. If the pipeline errors, it aborts the upload to avoid orphaned parts.\n\nBackpressure propagates upstream through bounded channels \u2014 a slow upload throttles conversion, which throttles reading.",
+  "input_tokens": 3,
+  "output_tokens": 237,
+  "duration_ms": 12458,
+  "cost_usd": 0.197167,
+  "model": "claude-opus-4-6",
+  "condition": "baseline",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 132,
+    "sentences": 8,
+    "mean_sentence_words": 16.5,
+    "longest_sentence_words": 25,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 1,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 0.76
+  }
+}

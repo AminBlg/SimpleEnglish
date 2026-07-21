@@ -1,0 +1,32 @@
+{
+  "text": "## Troubleshooting\n\n**Postgres connection timeouts**\n\nIf `sqlpipe` hangs or exits with `dial tcp: i/o timeout`, the Postgres endpoint is unreachable from where the CLI is running. Check the host and port with `pg_isready -h <host> -p <port>` first. Common causes: a security group or firewall blocking the source IP, an SSH tunnel that has dropped, or an RDS instance in a private subnet. Raise the `--connection-timeout` flag (default 30s) for high-latency links, and confirm `sslmode` matches server config \u2014 a mismatch surfaces as a timeout, not an SSL error.\n\n**S3 permission errors**\n\n`AccessDenied` or `403 Forbidden` on transfer means the IAM identity lacks `s3:GetObject`, `s3:PutObject`, or `s3:ListBucket` on the target prefix. Verify credentials with `aws sts get-caller-identity`, then dry-run with `aws s3 ls s3://<bucket>/<prefix>/`. For cross-account buckets, the bucket policy must grant access explicitly \u2014 role permissions alone are not enough. KMS-encrypted buckets also require `kms:Decrypt` on the key.",
+  "input_tokens": 6,
+  "output_tokens": 415,
+  "duration_ms": 8472,
+  "cost_usd": 0.231193,
+  "model": "claude-opus-4-7",
+  "condition": "baseline",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 139,
+    "sentences": 9,
+    "mean_sentence_words": 15.4,
+    "longest_sentence_words": 26,
+    "violations": {
+      "sentence_over_limit": 4,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 1,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 2
+    },
+    "violations_total": 7,
+    "violations_per_100w": 5.04
+  }
+}

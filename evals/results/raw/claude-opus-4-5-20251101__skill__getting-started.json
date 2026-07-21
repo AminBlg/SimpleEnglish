@@ -1,0 +1,32 @@
+{
+  "text": "# Getting Started\n\n## Install sqlpipe\n\nRun this command to download and install sqlpipe:\n\n```bash\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nThe installer puts the binary in `/usr/local/bin`. Make sure that this directory is in your PATH.\n\n## Create a configuration file\n\nCreate a file named `sqlpipe.yaml` in your project directory. The file must contain the connection details for your source and target databases.\n\n```yaml\nsource:\n  type: postgres\n  host: localhost\n  port: 5432\n  database: source_db\n\ntarget:\n  type: postgres\n  host: localhost\n  port: 5432\n  database: target_db\n```\n\nChange the values to match your databases.\n\n## Run sqlpipe\n\nStart the data transfer with this command:\n\n```bash\nsqlpipe run --config sqlpipe.yaml\n```\n\nsqlpipe reads the configuration file and connects to both databases. It then copies data from the source to the target. The terminal shows the transfer progress.",
+  "input_tokens": 3,
+  "output_tokens": 239,
+  "duration_ms": 6725,
+  "cost_usd": 0.24711849999999996,
+  "model": "claude-opus-4-5-20251101",
+  "condition": "skill",
+  "scenario": "getting-started",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 87,
+    "sentences": 10,
+    "mean_sentence_words": 8.7,
+    "longest_sentence_words": 13,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

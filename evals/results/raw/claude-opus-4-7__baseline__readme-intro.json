@@ -1,0 +1,32 @@
+{
+  "text": "sqlpipe is a command-line tool that moves Postgres tables into S3 as Parquet files. Point it at a database, name the tables you want, and it streams rows out in columnar batches, uploading each partition directly to the bucket you configure. Schemas are inferred from Postgres types and preserved in the Parquet metadata, so downstream engines like Athena, DuckDB, and Spark can query the output without extra setup.\n\nIt is built for repeatable syncs rather than one-off dumps. Incremental mode tracks a watermark column and only exports new or changed rows on each run, while full mode rewrites the target prefix atomically. Parallel workers, configurable compression, and resumable uploads keep large tables tractable on modest hardware.",
+  "input_tokens": 6,
+  "output_tokens": 243,
+  "duration_ms": 6909,
+  "cost_usd": 0.43947500000000006,
+  "model": "claude-opus-4-7",
+  "condition": "baseline",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 116,
+    "sentences": 6,
+    "mean_sentence_words": 19.3,
+    "longest_sentence_words": 27,
+    "violations": {
+      "sentence_over_limit": 2,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 2,
+    "violations_per_100w": 1.72
+  }
+}

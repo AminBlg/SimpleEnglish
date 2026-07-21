@@ -1,0 +1,32 @@
+{
+  "text": "## Troubleshooting\n\n### Postgres Connection Timeouts\n\nConnection timeouts typically indicate network or configuration issues.\n\n**Check basics first:** Verify host, port, and credentials. Test with `psql` directly to isolate whether the problem is sqlpipe-specific or general connectivity.\n\n**Firewall/security groups:** Ensure your IP is allowed. Cloud databases often block all traffic by default.\n\n**SSL requirements:** Some hosts require `sslmode=require`. Add it to your connection string if connections hang without error.\n\n**Increase timeout:** Use `--connect-timeout` flag if the default is too short for high-latency networks.\n\n### S3 Permission Errors\n\nPermission errors mean AWS credentials lack required access.\n\n**Verify credentials:** Run `aws sts get-caller-identity` to confirm which identity sqlpipe is using. Check for expired tokens.\n\n**Required permissions:** sqlpipe needs `s3:GetObject`, `s3:PutObject`, and `s3:ListBucket` on the target bucket and prefix.\n\n**Bucket policy conflicts:** Even with correct IAM permissions, explicit bucket policy denies override. Check both.\n\n**Region mismatch:** Specify `--s3-region` if the bucket isn't in your default region.",
+  "input_tokens": 3,
+  "output_tokens": 285,
+  "duration_ms": 8485,
+  "cost_usd": 0.1958385,
+  "model": "claude-opus-4-5-20251101",
+  "condition": "baseline",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 143,
+    "sentences": 15,
+    "mean_sentence_words": 9.5,
+    "longest_sentence_words": 16,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 1,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 3,
+      "synonym_rotation": 3
+    },
+    "violations_total": 7,
+    "violations_per_100w": 4.9
+  }
+}

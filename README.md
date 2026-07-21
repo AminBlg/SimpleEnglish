@@ -152,6 +152,21 @@ The skill ships adaptations ([`use-cases.md`](skills/simple-english/references/u
 
 Where it refuses to go: marketing copy, blog voice, brand writing. Flat on purpose. ✋
 
+## 📊 Benchmarks
+
+**72.9% fewer STE violations per 100 words with the skill on, averaged across 6 models × 8 writing tasks (96 generations, measured).**
+
+| Model | Baseline viol/100w | Skill viol/100w | Reduction |
+|---|---|---|---|
+| claude-opus-4-8 | 1.05 | 0.62 | 41% |
+| claude-opus-4-7 | 2.28 | 0.42 | 82% |
+| claude-opus-4-6 | 2.24 | 0.40 | 82% |
+| claude-opus-4-5 | 2.55 | 0.57 | 78% |
+| claude-sonnet-5 | 2.67 | 0.53 | 80% |
+| claude-sonnet-4-6 | 2.06 | 0.52 | 75% |
+
+Output tokens went DOWN on all six models too (the skill writes shorter). Deterministic regex linter, same rules for both conditions, honest-caveat list and full method in [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` — needs only a logged-in Claude Code CLI.
+
 ## 🧾 Receipts
 
 Built TDD-style against the **primary Issue 9 text** (2025), not blog summaries:

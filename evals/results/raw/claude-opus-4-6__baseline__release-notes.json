@@ -1,0 +1,32 @@
+{
+  "text": "# sqlpipe v2.0 Release Notes\n\n## Breaking Changes\n\n- **User name field split:** The `name` field on `/v2/users` is now two separate fields: `first_name` and `last_name`. Requests sending `name` will be rejected. Update your payloads and any code that reads the response.\n\n## New Features\n\n- **Incremental transfers:** Pass `--incremental` to sync only rows changed since the last run. Uses server-side change tracking where available; falls back to timestamp comparison. Dramatically reduces transfer time on large, append-heavy tables.\n\n## Performance\n\n- **Parquet writes are 40% faster.** Column encoding and dictionary compression now run in parallel, cutting write time on wide tables significantly. No configuration changes needed \u2014 upgrade and the speedup applies automatically.\n\n---\n\nUpgrade guide: update all clients reading `/v2/users` before deploying. The `--incremental` flag is opt-in; existing pipelines are unaffected.",
+  "input_tokens": 3,
+  "output_tokens": 223,
+  "duration_ms": 9571,
+  "cost_usd": 0.196967,
+  "model": "claude-opus-4-6",
+  "condition": "baseline",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 120,
+    "sentences": 12,
+    "mean_sentence_words": 9.8,
+    "longest_sentence_words": 21,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 2,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 2,
+    "violations_per_100w": 1.67
+  }
+}

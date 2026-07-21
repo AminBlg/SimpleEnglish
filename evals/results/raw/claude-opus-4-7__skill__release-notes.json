@@ -1,0 +1,32 @@
+{
+  "text": "# sqlpipe v2.0\n\n## Breaking changes\n\nCAUTION: The `name` field of `/v2/users` is removed. The endpoint now returns `first_name` and `last_name`. Update every client that reads `name` before you deploy v2.0. Requests that send `name` fail with HTTP 400.\n\n## New features\n\n- `--incremental` flag on `sqlpipe run`. The flag copies only the rows that changed since the last run. sqlpipe tracks the last run in the state file.\n\n## Performance\n\n- Parquet writes are 40% faster. The gain applies to every target that writes Parquet. No configuration change is required.\n\n## Upgrade\n\n1. Read the breaking change above.\n2. Install sqlpipe v2.0.\n3. Run `sqlpipe run` as before.",
+  "input_tokens": 6,
+  "output_tokens": 260,
+  "duration_ms": 22589,
+  "cost_usd": 0.297228,
+  "model": "claude-opus-4-7",
+  "condition": "skill",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 96,
+    "sentences": 13,
+    "mean_sentence_words": 6.9,
+    "longest_sentence_words": 12,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

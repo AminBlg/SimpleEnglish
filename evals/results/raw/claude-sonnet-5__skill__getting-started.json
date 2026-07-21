@@ -1,0 +1,32 @@
+{
+  "text": "Install with `curl -sSL https://get.sqlpipe.dev | sh`. This command downloads sqlpipe and installs it on your system.\n\nThen create a configuration file, `sqlpipe.yaml`. This file tells sqlpipe where to read data from and where to write it to. Add your source and destination settings to this file.\n\nTo start your first pipeline, run this command:\n\n```\nsqlpipe run --config sqlpipe.yaml\n```\n\nsqlpipe reads `sqlpipe.yaml`, connects to the source and the destination, and starts the data transfer.\n\nIf the command fails, check two things. First, make sure that `sqlpipe.yaml` is valid YAML syntax. Second, make sure that sqlpipe can reach both the source and the destination over the network.\n\nFor more configuration options, see the Configuration Reference. For common errors and fixes, see Troubleshooting.",
+  "input_tokens": 2,
+  "output_tokens": 288,
+  "duration_ms": 5370,
+  "cost_usd": 0.2066412,
+  "model": "claude-sonnet-5",
+  "condition": "skill",
+  "scenario": "getting-started",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 116,
+    "sentences": 12,
+    "mean_sentence_words": 9.7,
+    "longest_sentence_words": 16,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 1
+    },
+    "violations_total": 1,
+    "violations_per_100w": 0.86
+  }
+}

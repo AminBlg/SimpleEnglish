@@ -1,0 +1,32 @@
+{
+  "text": "**Incident Report \u2014 API Errors (HTTP 502)**\n\n**Duration:** 2026-07-21 14:02\u201314:31 UTC (29 minutes)\n**Impact:** Approximately 12% of API requests returned HTTP 502 errors.\n\n**Root cause:** A deployment at 14:02 UTC inadvertently removed the cache warmup step, causing a subset of requests to hit cold backend instances that were unable to serve traffic in time.\n\n**Timeline:**\n\n- 14:02 \u2014 Deploy rolled out; 502 errors began.\n- 14:09 \u2014 Monitoring alerts triggered; investigation started.\n- 14:27 \u2014 Faulty deploy reverted.\n- 14:31 \u2014 Error rates returned to normal.\n\n**Resolution:** The deploy was rolled back. The cache warmup step has been restored and a deployment safeguard added to prevent its removal.",
+  "input_tokens": 3,
+  "output_tokens": 201,
+  "duration_ms": 7806,
+  "cost_usd": 0.198147,
+  "model": "claude-opus-4-6",
+  "condition": "baseline",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 108,
+    "sentences": 8,
+    "mean_sentence_words": 13.0,
+    "longest_sentence_words": 31,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 1,
+      "ing_clause": 1,
+      "semicolon": 2,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 5,
+    "violations_per_100w": 4.63
+  }
+}

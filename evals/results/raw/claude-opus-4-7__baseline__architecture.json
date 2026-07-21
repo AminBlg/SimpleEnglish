@@ -1,0 +1,32 @@
+{
+  "text": "sqlpipe moves Postgres tables to S3 as Parquet through three decoupled processes connected by bounded channels. The reader opens a single Postgres connection, streams rows with a server-side cursor, and pushes fixed-size row batches downstream, applying backpressure when the converter falls behind. The converter consumes batches, maps Postgres types to Parquet logical types, and accumulates row groups until a target byte threshold is reached, then emits sealed Parquet buffers. The uploader takes each buffer as one part of an S3 multipart upload, retrying individual parts with exponential backoff and aborting the upload on terminal failure. A coordinator owns cursor position, part numbers, and the final CompleteMultipartUpload call, so a crash resumes from the last committed batch instead of restarting the table.",
+  "input_tokens": 6,
+  "output_tokens": 269,
+  "duration_ms": 11139,
+  "cost_usd": 0.227873,
+  "model": "claude-opus-4-7",
+  "condition": "baseline",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 121,
+    "sentences": 5,
+    "mean_sentence_words": 24.2,
+    "longest_sentence_words": 27,
+    "violations": {
+      "sentence_over_limit": 4,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 0
+    },
+    "violations_total": 5,
+    "violations_per_100w": 4.13
+  }
+}

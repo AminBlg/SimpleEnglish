@@ -1,0 +1,32 @@
+{
+  "text": "Sqlpipe not found in known tools/docs \u2014 writing generic Postgres/S3 troubleshooting text, no sqlpipe-specific flags verified.\n\n## Troubleshooting\n\n**Connection timeouts to Postgres**\n\nTimeout usually means network path or Postgres refuse connection silently. Check:\n- Host/port reachable: `psql -h <host> -p 5432 -U <user> -d <db>` or `nc -zv <host> 5432`.\n- `pg_hba.conf` allow client IP/CIDR + auth method match.\n- `listen_addresses` in `postgresql.conf` include `*` or target interface, not just `localhost`.\n- Firewall/security group open port 5432 both directions.\n- SSL mismatch: if server force SSL, add `sslmode=require` to sqlpipe connection string.\n- Connection pool exhausted: check `max_connections` vs active sessions.\n\n**S3 permission errors**\n\nUsually IAM policy gap, not credential problem:\n- Confirm role/user have `s3:GetObject`, `s3:PutObject`, `s3:ListBucket` on target bucket/prefix.\n- Bucket policy not block cross-account access if sqlpipe run under different account.\n- Check `s3:PutObject` need `s3:PutObjectAcl` too if bucket enforce ACLs.\n- KMS-encrypted bucket: role need `kms:Decrypt`/`kms:GenerateDataKey` too.\n- Region mismatch between sqlpipe config and bucket region cause opaque 403.\n\nEnable verbose/debug flag (check sqlpipe `--help` for exact name) for detailed error before escalate.",
+  "input_tokens": 2,
+  "output_tokens": 556,
+  "duration_ms": 8203,
+  "cost_usd": 0.16863720000000001,
+  "model": "claude-sonnet-5",
+  "condition": "baseline",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 170,
+    "sentences": 19,
+    "mean_sentence_words": 8.3,
+    "longest_sentence_words": 16,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 2,
+      "synonym_rotation": 1
+    },
+    "violations_total": 3,
+    "violations_per_100w": 1.76
+  }
+}

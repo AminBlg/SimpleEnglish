@@ -1,0 +1,78 @@
+{
+  "generated": "2026-07-21",
+  "models": [
+    {
+      "model": "claude-opus-4-8",
+      "baseline_viol_per_100w": 1.05,
+      "baseline_mean_sentence": 10.7,
+      "baseline_output_tokens": 260,
+      "baseline_n": 8,
+      "skill_viol_per_100w": 0.62,
+      "skill_mean_sentence": 10.0,
+      "skill_output_tokens": 235,
+      "skill_n": 8,
+      "reduction_pct": 41.0
+    },
+    {
+      "model": "claude-opus-4-7",
+      "baseline_viol_per_100w": 2.28,
+      "baseline_mean_sentence": 13.0,
+      "baseline_output_tokens": 243,
+      "baseline_n": 8,
+      "skill_viol_per_100w": 0.42,
+      "skill_mean_sentence": 10.8,
+      "skill_output_tokens": 226,
+      "skill_n": 8,
+      "reduction_pct": 81.6
+    },
+    {
+      "model": "claude-opus-4-6",
+      "baseline_viol_per_100w": 2.24,
+      "baseline_mean_sentence": 10.9,
+      "baseline_output_tokens": 185,
+      "baseline_n": 8,
+      "skill_viol_per_100w": 0.4,
+      "skill_mean_sentence": 9.0,
+      "skill_output_tokens": 176,
+      "skill_n": 8,
+      "reduction_pct": 82.1
+    },
+    {
+      "model": "claude-opus-4-5-20251101",
+      "baseline_viol_per_100w": 2.55,
+      "baseline_mean_sentence": 11.1,
+      "baseline_output_tokens": 196,
+      "baseline_n": 8,
+      "skill_viol_per_100w": 0.57,
+      "skill_mean_sentence": 8.5,
+      "skill_output_tokens": 159,
+      "skill_n": 8,
+      "reduction_pct": 77.6
+    },
+    {
+      "model": "claude-sonnet-5",
+      "baseline_viol_per_100w": 2.67,
+      "baseline_mean_sentence": 10.0,
+      "baseline_output_tokens": 266,
+      "baseline_n": 8,
+      "skill_viol_per_100w": 0.53,
+      "skill_mean_sentence": 9.7,
+      "skill_output_tokens": 205,
+      "skill_n": 8,
+      "reduction_pct": 80.1
+    },
+    {
+      "model": "claude-sonnet-4-6",
+      "baseline_viol_per_100w": 2.06,
+      "baseline_mean_sentence": 11.7,
+      "baseline_output_tokens": 168,
+      "baseline_n": 8,
+      "skill_viol_per_100w": 0.52,
+      "skill_mean_sentence": 10.2,
+      "skill_output_tokens": 162,
+      "skill_n": 8,
+      "reduction_pct": 74.8
+    }
+  ],
+  "runs": 96
+}

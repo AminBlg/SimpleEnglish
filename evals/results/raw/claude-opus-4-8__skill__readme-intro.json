@@ -1,0 +1,32 @@
+{
+  "text": "sqlpipe copies Postgres tables to Amazon S3 as Parquet files. You give it a connection string, a list of tables, and a bucket. It reads each table, writes Parquet, and uploads the result. One command, no server, no scheduler.\n\nThe tool runs from a single binary. You can run it by hand, from a cron job, or inside a CI pipeline. sqlpipe writes each table to its own prefix in the bucket, so query engines such as Athena, DuckDB, and Spark can read the output without extra work. Large tables are written in parts, and the parts stream to S3 while the table is still read. Memory use stays flat.\n\nTo start, read the Installation section. Then read Quickstart for a first sync.",
+  "input_tokens": 2,
+  "output_tokens": 232,
+  "duration_ms": 6315,
+  "cost_usd": 0.28348850000000003,
+  "model": "claude-opus-4-8",
+  "condition": "skill",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 123,
+    "sentences": 11,
+    "mean_sentence_words": 11.2,
+    "longest_sentence_words": 27,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 0.81
+  }
+}

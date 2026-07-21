@@ -1,0 +1,32 @@
+{
+  "text": "# Getting Started\n\n## Install sqlpipe\n\nRun the installer:\n\n```\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nMake sure that `sqlpipe` is on your PATH. Run `sqlpipe --version` to confirm.\n\n## Create a configuration file\n\nCreate a file named `sqlpipe.yaml` in your working directory. Add the source and target databases:\n\n```yaml\nsource:\n  type: postgres\n  host: localhost\n  port: 5432\n  database: app_db\n  user: reader\n  password: ${SOURCE_PASSWORD}\n\ntarget:\n  type: postgres\n  host: warehouse.example.com\n  port: 5432\n  database: analytics\n  user: writer\n  password: ${TARGET_PASSWORD}\n```\n\nReplace the values with your connection details. Store passwords in environment variables, not in the file.\n\n## Run the first transfer\n\nStart sqlpipe:\n\n```\nsqlpipe run --config sqlpipe.yaml\n```\n\nsqlpipe reads the configuration, connects to both databases, and transfers the data. Watch the terminal for progress. If a connection fails, read the error message for the cause.",
+  "input_tokens": 3,
+  "output_tokens": 267,
+  "duration_ms": 7913,
+  "cost_usd": 0.250097,
+  "model": "claude-opus-4-6",
+  "condition": "skill",
+  "scenario": "getting-started",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 76,
+    "sentences": 11,
+    "mean_sentence_words": 6.9,
+    "longest_sentence_words": 12,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "text": "# sqlpipe v2.0\n\n**Breaking: `/v2/users` name split**\n\n`name` gone. Replaced by `first_name` and `last_name`. Clients reading `name` break on upgrade. Update parsers before deploying. No compatibility shim \u2014 v1 endpoints stay available if you need time to migrate.\n\n**New: `--incremental`**\n\nSync only rows changed since last run instead of full table copy. Cuts transfer volume on large tables with low churn.\n\n**Faster Parquet writes**\n\nParquet output now 40% faster. No config change needed \u2014 applies to all existing pipelines.\n\n**Upgrade**\n\nFix `name` field consumers first, then upgrade. Rest of v2.0 is drop-in.",
+  "input_tokens": 2,
+  "output_tokens": 239,
+  "duration_ms": 6292,
+  "cost_usd": 0.2634935,
+  "model": "claude-opus-4-8",
+  "condition": "baseline",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 91,
+    "sentences": 11,
+    "mean_sentence_words": 8.1,
+    "longest_sentence_words": 14,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 1.1
+  }
+}

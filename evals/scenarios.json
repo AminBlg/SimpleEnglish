@@ -1,0 +1,42 @@
+[
+  {
+    "id": "readme-intro",
+    "type": "descriptive",
+    "prompt": "Write the introduction section (one or two paragraphs, about 120 words) of the README for a CLI tool called sqlpipe that syncs Postgres tables to S3 as Parquet files. Return only the text."
+  },
+  {
+    "id": "getting-started",
+    "type": "procedural",
+    "prompt": "Write a 'Getting started' documentation section for the CLI tool sqlpipe: install with `curl -sSL https://get.sqlpipe.dev | sh`, configure sqlpipe.yaml, first run with `sqlpipe run --config sqlpipe.yaml`. About 150 words. Return only the text."
+  },
+  {
+    "id": "troubleshooting",
+    "type": "procedural",
+    "prompt": "Write a troubleshooting section for the CLI tool sqlpipe covering connection timeouts to Postgres and S3 permission errors. About 150 words. Return only the text."
+  },
+  {
+    "id": "error-message",
+    "type": "procedural",
+    "prompt": "Write the exact error message text that sqlpipe prints when an S3 upload fails with AccessDenied because the IAM credentials lack s3:PutObject. Two to four lines. Return only the message text."
+  },
+  {
+    "id": "incident-report",
+    "type": "descriptive",
+    "prompt": "Write a public status-page incident report: between 14:02 and 14:31 UTC, 12% of API requests failed with HTTP 502 after a deploy removed the cache warmup step; the deploy was reverted at 14:27. About 100 words. Return only the text."
+  },
+  {
+    "id": "release-notes",
+    "type": "descriptive",
+    "prompt": "Write release notes for sqlpipe v2.0: the `name` field of /v2/users split into `first_name` and `last_name` (breaking), a new `--incremental` flag, and 40% faster Parquet writes. About 120 words. Return only the text."
+  },
+  {
+    "id": "runbook-terse",
+    "type": "procedural",
+    "prompt": "Rewrite this runbook step to be as short as possible: 'Ensure the backup exists before running the migration.' Return only the rewritten step."
+  },
+  {
+    "id": "architecture",
+    "type": "descriptive",
+    "prompt": "Write an architecture overview (about 130 words) of sqlpipe: a reader process streams Postgres rows in batches, a converter turns batches into Parquet row groups, an uploader writes multipart objects to S3 with retries. Return only the text."
+  }
+]

@@ -1,0 +1,32 @@
+{
+  "text": "**Getting started**\n\nInstall sqlpipe:\n\n```\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nCreate `sqlpipe.yaml` in project root. Define source/target connections and pipeline steps (format depends on your setup \u2014 see Configuration reference for full schema).\n\nRun first pipeline:\n\n```\nsqlpipe run --config sqlpipe.yaml\n```\n\nsqlpipe reads config, validates connections, executes pipeline in order. Output logs each step's progress and result to stdout.\n\nCheck exit code (`echo $?`) to confirm success in scripts/CI. Non-zero means a step failed \u2014 check logs for which one.\n\nNext: explore transform options and scheduling in the Configuration guide.",
+  "input_tokens": 2,
+  "output_tokens": 241,
+  "duration_ms": 5676,
+  "cost_usd": 0.16426020000000002,
+  "model": "claude-sonnet-5",
+  "condition": "baseline",
+  "scenario": "getting-started",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 80,
+    "sentences": 9,
+    "mean_sentence_words": 8.8,
+    "longest_sentence_words": 18,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 3
+    },
+    "violations_total": 3,
+    "violations_per_100w": 3.75
+  }
+}
