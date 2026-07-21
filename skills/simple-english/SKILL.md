@@ -194,7 +194,7 @@ Rule 8.6 matters for software text: `sqlpipe run --config sqlpipe.yaml` in backt
 | 9.3 | Do not build phrasal verbs ("go down" → "decrease", "set up" → "install" or "configure"). |
 | 9.4 | Keep one consistent style and terminology through the whole document. |
 
-General recommendations GR-1 to GR-8: keep the conjunction "that", be careful with "with", give pronouns clear referents, prefer "this + noun" over bare "this", avoid false friends, avoid Latin abbreviations, use inclusive language, avoid the possessive apostrophe form.
+General recommendations GR-1 to GR-8: keep the conjunction "that", be careful with "with", give pronouns clear referents, prefer "this + noun" over bare "this", avoid false friends, avoid Latin abbreviations, use inclusive language, and use the possessive apostrophe form only when you are sure it is correct (GR-8: if unsure, do not use it — non-native readers find it hard).
 
 GR-6 for software docs: "e.g." → "for example", "i.e." → "that is", and delete "etc." — name the items or write "and more".
 
@@ -206,8 +206,9 @@ Known part-of-speech rulings, useful as patterns:
 
 | Word | Ruling |
 |---|---|
-| test, check, oil, work | Noun only. "Do a test", not "test the pump". "Do work with", not "work with". |
-| help | Verb only. "With the aid of", not "with the help of". |
+| test, check, work | Noun only. "Do a test", not "test the pump". "Check that X" becomes "make sure that X". |
+| oil | Noun only as used in STE examples. For the verb, the dictionary gives "lubricate". |
+| help | Verb only. For the noun, the dictionary gives "aid": "with the aid of". |
 | fall | "To move down by gravity" only, never "decrease". |
 | follow | "To come after" only, never "obey". Write "obey the instructions". |
 | above, below | Physical positions only. For limits write "more than", "less than". |

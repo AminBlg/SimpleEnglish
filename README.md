@@ -106,6 +106,21 @@ No SKILL.md support at all? Paste [`prompts/system-prompt.md`](prompts/system-pr
 
 Then ask for any technical writing, or say: *"rewrite this with simple-english"*.
 
+## 🖱️ No terminal? (claude.ai, ChatGPT, Gemini)
+
+**Claude.ai** (paid plans) supports skills natively:
+
+1. Download the skill file: open [SKILL.md](https://github.com/AminBlg/SimpleEnglish/raw/main/skills/simple-english/SKILL.md) and save it (Ctrl+S / Cmd+S).
+2. In claude.ai, go to **Settings → Capabilities** and turn on code execution.
+3. Go to **Settings → Customize → Skills → Upload** and upload the saved `SKILL.md`.
+4. Toggle the skill on. Done. Claude applies it when you ask for technical writing.
+
+**ChatGPT**: no skill support, so use the prompt version. Copy the block from [`prompts/system-prompt.md`](prompts/system-prompt.md) into **Settings → Personalization → Custom Instructions**, or into the instructions of a Project or Custom GPT.
+
+**Gemini**: create a Gem and paste the same block into its instructions.
+
+**Any other chatbot**: attach or paste `prompts/system-prompt.md` into the chat and say "apply this to everything you write for me".
+
 ## 📏 The rules
 
 53 numbered rules, 9 sections, written in 1983 by people whose readers die when a sentence is ambiguous. The ones doing the heavy lifting:
