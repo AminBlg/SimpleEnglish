@@ -93,16 +93,16 @@ More rewrites in [`examples/before-after.md`](examples/before-after.md): READMEs
 ## 📦 Install
 
 ```bash
-git clone https://github.com/AminBlg/SimpleEnglish
-
-# Claude Code (project)
-cp -r SimpleEnglish/skills/simple-english .claude/skills/
-
-# Claude Code (global)
-cp -r SimpleEnglish/skills/simple-english ~/.claude/skills/
+npx skills add AminBlg/SimpleEnglish
 ```
 
-Other skill-compatible harnesses: same folder, their skills directory. No SKILL.md support at all? Paste [`prompts/system-prompt.md`](prompts/system-prompt.md) into your system prompt, AGENTS.md, or `.cursorrules`. There is even a ~60-token version for tight budgets.
+That is it. The [skills CLI](https://github.com/vercel-labs/skills) detects your agents (Claude Code, Cursor, Codex, Copilot, Gemini CLI, and more) and installs for the ones you pick. Try before installing:
+
+```bash
+npx skills use AminBlg/SimpleEnglish@simple-english
+```
+
+No SKILL.md support at all? Paste [`prompts/system-prompt.md`](prompts/system-prompt.md) into your system prompt, AGENTS.md, or `.cursorrules`. There is even a ~60-token version for tight budgets.
 
 Then ask for any technical writing, or say: *"rewrite this with simple-english"*.
 
