@@ -9,10 +9,10 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/AminBlg/SimpleEnglish/stargazers"><img src="https://img.shields.io/github/stars/AminBlg/SimpleEnglish?style=flat&color=yellow" alt="Stars"></a>
+  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/STE_violations-%E2%88%9272.9%25_measured-brightgreen?style=flat" alt="72.9% fewer violations, measured"></a>
+  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-6_Claude_models-blueviolet?style=flat" alt="6 models benchmarked"></a>
   <a href="https://agentskills.io"><img src="https://img.shields.io/badge/SKILL.md-open_standard-blue?style=flat" alt="Agent Skills"></a>
-  <a href="https://github.com/AminBlg/SimpleEnglish/commits/main"><img src="https://img.shields.io/github/last-commit/AminBlg/SimpleEnglish?style=flat" alt="Last commit"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/github/license/AminBlg/SimpleEnglish?style=flat" alt="License"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat" alt="MIT"></a>
 </p>
 
 <p align="center">
@@ -79,13 +79,12 @@ Left column is **real unedited Claude output**. Right column is the same model w
 </table>
 
 ```
-┌──────────────────────────────────────────────┐
-│  words per sentence      ██▓░░░░░░░   20 max │
-│  meanings per word       █░░░░░░░░░    1     │
-│  "seamlessly" survived   ░░░░░░░░░░    0     │
-│  hedging modals          ░░░░░░░░░░    0     │
-│  misread instructions    ░░░░░░░░░░    0 ✈️  │
-└──────────────────────────────────────────────┘
+┌── measured: 6 Claude models × 8 tasks × 2 conditions, 96 runs ──┐
+│  STE violations per 100 words     ▼ 72.9%  (every model won)    │
+│  output tokens                    ▼ on all 6 models             │
+│  mean sentence length             11.2 → 9.7 words              │
+│  "seamlessly" survived            0                             │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 More rewrites in [`examples/before-after.md`](examples/before-after.md): READMEs, error messages, incident reports, release notes.
