@@ -164,7 +164,22 @@ Where it refuses to go: marketing copy, blog voice, brand writing. Flat on purpo
 | claude-sonnet-5 | 2.67 | 0.53 | 80% |
 | claude-sonnet-4-6 | 2.06 | 0.52 | 75% |
 
-Output tokens went DOWN on all six models too (the skill writes shorter). Deterministic regex linter, same rules for both conditions, honest-caveat list and full method in [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` — needs only a logged-in Claude Code CLI.
+Output tokens went DOWN on all six Claude models too. Deterministic regex linter, same rules for both conditions, honest-caveat list and full method in [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` — needs only a logged-in Claude Code CLI.
+
+### Pi cross-check
+
+A separate Pi run tested four models on the same 8 tasks and 2 conditions. All 64 generations completed.
+
+| Model | Baseline viol/100w | Skill viol/100w | Reduction |
+|---|---:|---:|---:|
+| GLM-5.2 max | 2.56 | 0.40 | 84.4% |
+| GPT-5.6 Sol medium | 1.33 | 0.16 | 88.0% |
+| GPT-5.6 Terra medium | 1.69 | 0.48 | 71.6% |
+| GPT-5.6 Luna medium | 1.28 | 0.42 | 67.2% |
+
+The skill reduced measured violations on all four models. It shortened final text only on GLM-5.2; the three GPT-5.6 models wrote slightly more words.
+
+See the [Pi results, method, raw responses, and reproduction command](evals/results/pi-2026-07-31/RESULTS.md). Run other configured models with `python3 evals/run_pi_bench.py --model PROVIDER/MODEL:THINKING`.
 
 ## 🧾 Receipts
 

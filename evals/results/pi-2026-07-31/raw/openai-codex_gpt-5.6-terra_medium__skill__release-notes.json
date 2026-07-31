@@ -1,0 +1,37 @@
+{
+  "text": "# sqlpipe v2.0\n\n## Breaking change\n\nWARNING: Before you install v2.0, update clients that use `/v2/users`.\n\nThe endpoint no longer returns the `name` field. It returns `first_name` and `last_name` instead. This change can cause errors in clients that read `name`.\n\n## New flag\n\nUse `--incremental` to copy only data that changed after the previous successful run. The flag reduces copied data during later runs.\n\n## Performance\n\nParquet writes are 40% faster than in v1.x. Actual speed can change with the data size, storage system, and network speed.",
+  "input_tokens": 4759,
+  "output_tokens": 653,
+  "reasoning_tokens": 516,
+  "total_tokens": 5412,
+  "cost_usd": 0.017354,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-terra",
+  "stop_reason": "stop",
+  "duration_ms": 15509,
+  "model": "openai-codex/gpt-5.6-terra:medium",
+  "condition": "skill",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 78,
+    "sentences": 8,
+    "mean_sentence_words": 9.6,
+    "longest_sentence_words": 13,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

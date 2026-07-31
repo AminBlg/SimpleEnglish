@@ -1,0 +1,37 @@
+{
+  "text": "## Troubleshooting\n\n### Postgres connection timeouts\n\nsqlpipe reports `dial tcp: i/o timeout` when it cannot reach the Postgres server.\n\n1. Make sure that the Postgres host name and port in the configuration are correct.\n2. Make sure that the sqlpipe host can reach the Postgres port.\n3. If a firewall or security group blocks the port, permit traffic from the sqlpipe host.\n4. If the network is slow, increase `source.connect_timeout_seconds` in the configuration.\n5. Run sqlpipe again.\n\n### S3 permission errors\n\nsqlpipe reports `AccessDenied` when the AWS identity does not have permission for the requested S3 operation.\n\n1. Make sure that sqlpipe uses the correct AWS profile, access key, or IAM role.\n2. Make sure that the identity can access the configured bucket and object prefix.\n3. Grant the required S3 actions in the IAM policy.\n4. If the bucket uses AWS KMS encryption, grant access to the KMS key.\n5. If a bucket policy denies access, change the policy to permit the sqlpipe identity.\n6. Run sqlpipe again.",
+  "input_tokens": 4729,
+  "output_tokens": 1162,
+  "reasoning_tokens": 923,
+  "total_tokens": 5891,
+  "cost_usd": 0.058505,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-sol",
+  "stop_reason": "stop",
+  "duration_ms": 34914,
+  "model": "openai-codex/gpt-5.6-sol:medium",
+  "condition": "skill",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 156,
+    "sentences": 13,
+    "mean_sentence_words": 11.2,
+    "longest_sentence_words": 16,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 2,
+      "synonym_rotation": 0
+    },
+    "violations_total": 2,
+    "violations_per_100w": 1.28
+  }
+}

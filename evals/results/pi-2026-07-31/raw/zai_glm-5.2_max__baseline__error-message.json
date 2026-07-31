@@ -1,0 +1,37 @@
+{
+  "text": "AccessDenied: Access Denied\nstatus code: 403, request id: A1B2C3D4E5F6G7H8, host id: aBcDeFgHiJkLmNoPqRsTuVwXyZ1234567890AbCdEfGhIjKlMnOpQrStUvWxYz==",
+  "input_tokens": 70,
+  "output_tokens": 2094,
+  "reasoning_tokens": 2006,
+  "total_tokens": 2164,
+  "cost_usd": 0,
+  "provider": "zai",
+  "model_id": "glm-5.2",
+  "stop_reason": "stop",
+  "duration_ms": 26815,
+  "model": "zai/glm-5.2:max",
+  "condition": "baseline",
+  "scenario": "error-message",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 12,
+    "sentences": 3,
+    "mean_sentence_words": 3.3,
+    "longest_sentence_words": 4,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

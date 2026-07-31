@@ -1,0 +1,37 @@
+{
+  "text": "# sqlpipe v2.0\n\nThis release has one breaking change and two improvements.\n\n**Breaking change: `/v2/users` name fields**\n\nWARNING: Update your code before you install v2.0. The `/v2/users` endpoint does not have the `name` field. The endpoint now returns `first_name` and `last_name`. Code that reads `name` will fail.\n\n**New `--incremental` flag**\n\nUse the `--incremental` flag to copy only new or changed rows. This flag makes large copies faster when only a small part of the data changes. For example, a daily copy of a table with many rows can finish in seconds, not minutes.\n\n**40% faster Parquet writes**\n\nParquet writes are 40% faster than in v1.0. Large exports complete in less time.",
+  "input_tokens": 94,
+  "output_tokens": 5343,
+  "reasoning_tokens": 5169,
+  "total_tokens": 10109,
+  "cost_usd": 0,
+  "provider": "zai",
+  "model_id": "glm-5.2",
+  "stop_reason": "stop",
+  "duration_ms": 57661,
+  "model": "zai/glm-5.2:max",
+  "condition": "skill",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 109,
+    "sentences": 12,
+    "mean_sentence_words": 9.1,
+    "longest_sentence_words": 17,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 0.92
+  }
+}

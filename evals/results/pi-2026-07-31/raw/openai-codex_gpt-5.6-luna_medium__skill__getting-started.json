@@ -1,0 +1,37 @@
+{
+  "text": "## Getting started\n\nInstall `sqlpipe` with the installation command:\n\n```sh\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nCreate a file named `sqlpipe.yaml` in your project directory.\n\nAdd the source and destination details that `sqlpipe` requires.\n\nSave the file after you add the configuration.\n\nIf you store the file in another directory, use its path in the command.\n\nRun the first data transfer:\n\n```sh\nsqlpipe run --config sqlpipe.yaml\n```\n\nThe `--config` option tells `sqlpipe` to read the configuration from `sqlpipe.yaml`.\n\nIf the command reports an error, read the error message.\n\nMake sure that the source and destination details match your environment.\n\nMake sure that the database credentials allow the required connections.\n\nKeep `sqlpipe.yaml` out of public repositories when it contains credentials.\n\nAdd the file to `.gitignore` if it contains passwords or access tokens.\n\nRun the command again after you correct the configuration.\n\nUse the same configuration file for later runs when the source and destination do not change.",
+  "input_tokens": 4755,
+  "output_tokens": 523,
+  "reasoning_tokens": 299,
+  "total_tokens": 5278,
+  "cost_usd": 0.0015786,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-luna",
+  "stop_reason": "stop",
+  "duration_ms": 13230,
+  "model": "openai-codex/gpt-5.6-luna:medium",
+  "condition": "skill",
+  "scenario": "getting-started",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 141,
+    "sentences": 14,
+    "mean_sentence_words": 10.1,
+    "longest_sentence_words": 16,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 3,
+      "synonym_rotation": 0
+    },
+    "violations_total": 3,
+    "violations_per_100w": 2.13
+  }
+}

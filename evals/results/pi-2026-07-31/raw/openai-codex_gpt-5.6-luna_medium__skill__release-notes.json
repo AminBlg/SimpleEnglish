@@ -1,0 +1,37 @@
+{
+  "text": "## sqlpipe v2.0\n\n### Breaking change\n\nThe `/v2/users` response no longer includes `name`. It now returns `first_name` and `last_name`.\n\nUpdate clients before you upgrade to v2.0.\n\nIf your client reads `name`, change it to read both new fields.\n\nIf your client sends `name`, send `first_name` and `last_name` instead.\n\nTest the updated client against v2.0 before production deployment.\n\n### New flag\n\nUse `--incremental` to process only new or changed records.\n\nIf you omit this flag, sqlpipe uses the full processing mode.\n\n### Performance\n\nsqlpipe writes Parquet data 40% faster in the v2.0 benchmark.\n\nActual speed depends on data size, storage, and system load.",
+  "input_tokens": 4759,
+  "output_tokens": 683,
+  "reasoning_tokens": 516,
+  "total_tokens": 5442,
+  "cost_usd": 0.0017714,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-luna",
+  "stop_reason": "stop",
+  "duration_ms": 15774,
+  "model": "openai-codex/gpt-5.6-luna:medium",
+  "condition": "skill",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 95,
+    "sentences": 10,
+    "mean_sentence_words": 9.5,
+    "longest_sentence_words": 13,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

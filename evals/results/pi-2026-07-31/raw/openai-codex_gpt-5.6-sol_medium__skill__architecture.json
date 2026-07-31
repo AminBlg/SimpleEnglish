@@ -1,0 +1,37 @@
+{
+  "text": "# Architecture Overview\n\nsqlpipe uses a three-stage pipeline to move data from Postgres to S3. The stages are a reader process, a converter, and an uploader.\n\nThe reader process opens a Postgres connection and reads rows in batches. It streams each batch to the converter. It does not collect the complete result set before conversion. This flow limits the amount of source data that sqlpipe holds at one time.\n\nThe converter changes each batch into Parquet data. It organizes the rows into Parquet row groups and passes the converted data to the uploader. The Parquet format preserves the column structure for storage and later queries.\n\nThe uploader sends the Parquet data to S3 as multipart objects. It retries failed part uploads after temporary transfer errors. After all parts arrive, the uploader completes the object in S3.",
+  "input_tokens": 4746,
+  "output_tokens": 1508,
+  "reasoning_tokens": 1338,
+  "total_tokens": 6254,
+  "cost_usd": 0.06897,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-sol",
+  "stop_reason": "stop",
+  "duration_ms": 42919,
+  "model": "openai-codex/gpt-5.6-sol:medium",
+  "condition": "skill",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 133,
+    "sentences": 12,
+    "mean_sentence_words": 11.1,
+    "longest_sentence_words": 16,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

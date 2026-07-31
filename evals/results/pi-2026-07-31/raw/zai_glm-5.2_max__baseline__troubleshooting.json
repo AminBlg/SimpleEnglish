@@ -1,0 +1,37 @@
+{
+  "text": "### Troubleshooting\n\n**Connection Timeouts to Postgres**\nIf `sqlpipe` hangs or throws a connection timeout when querying Postgres, first verify your network connectivity and firewall rules to ensure outbound traffic to the Postgres instance (usually port 5432) is allowed. If your database requires IP whitelisting, confirm that the machine executing `sqlpipe` is authorized in your database's `pg_hba.conf` file or your cloud provider's security group settings. To prevent indefinite hangs, you can append `connect_timeout=10` to your database connection string to force a faster failure.\n\n**S3 Permission Errors**\nWhen reading from or writing to S3, `sqlpipe` might return \"Access Denied\" or 403 Forbidden errors. This typically indicates an issue with your AWS credentials or IAM policies. Ensure the IAM role or user being used explicitly grants `s3:PutObject`, `s3:GetObject`, and `s3:ListBucket` permissions for the target S3 bucket. Finally, verify that your `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` environment variables are correctly exported in your shell, and double-check the specified AWS region.",
+  "input_tokens": 61,
+  "output_tokens": 1241,
+  "reasoning_tokens": 998,
+  "total_tokens": 1302,
+  "cost_usd": 0,
+  "provider": "zai",
+  "model_id": "glm-5.2",
+  "stop_reason": "stop",
+  "duration_ms": 12659,
+  "model": "zai/glm-5.2:max",
+  "condition": "baseline",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 154,
+    "sentences": 7,
+    "mean_sentence_words": 22.0,
+    "longest_sentence_words": 36,
+    "violations": {
+      "sentence_over_limit": 4,
+      "contraction": 0,
+      "banned_modal": 1,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 2,
+      "synonym_rotation": 3
+    },
+    "violations_total": 10,
+    "violations_per_100w": 6.49
+  }
+}
