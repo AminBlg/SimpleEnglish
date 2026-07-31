@@ -1,0 +1,24 @@
+{
+  "name": "simple-english",
+  "owner": {
+    "name": "AminBlg",
+    "url": "https://github.com/AminBlg"
+  },
+  "description": "ASD-STE100 Simplified Technical English skill for clear, unambiguous technical writing.",
+  "plugins": [
+    {
+      "name": "simple-english",
+      "source": "./",
+      "displayName": "Simple English",
+      "description": "Write or rewrite technical text with ASD-STE100 Simplified Technical English: short sentences, one word one meaning, active voice, condition before command.",
+      "version": "1.0.0",
+      "author": {
+        "name": "AminBlg"
+      },
+      "homepage": "https://github.com/AminBlg/SimpleEnglish",
+      "repository": "https://github.com/AminBlg/SimpleEnglish",
+      "license": "MIT",
+      "keywords": ["technical-writing", "documentation", "ste", "asd-ste100"]
+    }
+  ]
+}
