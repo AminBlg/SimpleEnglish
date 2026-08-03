@@ -1,17 +1,17 @@
 <p align="center">
-  <strong>✈️ your AI writes like a LinkedIn post. make it write like a Boeing manual.</strong>
+  <strong>Manual for Machines to Write with ASD-STE100</strong>
+</p>
+<p align="center">
+    Forked/Based from <a href="https://github.com/AminBlg/SimpleEnglish">AminBlg/SimpleEnglish</a>
 </p>
 
 <p align="center">
-  An agent skill that forces LLMs to write docs in <a href="https://www.asd-ste100.org/">ASD-STE100 Simplified Technical English</a>:<br>
+  An agent skill (Unanthropomorphic English) that forces LLMs to write docs in <a href="https://www.asd-ste100.org/">ASD-STE100 Simplified Technical English</a>:<br>
   the controlled language aerospace has used since 1983 so a tired mechanic <em>cannot</em> misread an instruction.<br>
-  AI slop dies as a side effect. 💀
+  An attempt for limit potentials for AI Psychosis.
 </p>
 
 <p align="center">
-  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/STE_violations-%E2%88%9281.5%25_measured-brightgreen?style=flat" alt="81.5% fewer violations, measured"></a>
-  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-6_Claude_models-blueviolet?style=flat" alt="6 models benchmarked"></a>
-  <a href="https://agentskills.io"><img src="https://img.shields.io/badge/SKILL.md-open_standard-blue?style=flat" alt="Agent Skills"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat" alt="MIT"></a>
 </p>
 
@@ -98,18 +98,18 @@ npx skills add AminBlg/SimpleEnglish
 That is it. The [skills CLI](https://github.com/vercel-labs/skills) detects your agents (Claude Code, Cursor, Codex, Copilot, Gemini CLI, and more) and installs for the ones you pick. Try before installing:
 
 ```bash
-npx skills use AminBlg/SimpleEnglish@simple-english
+npx skills use AminBlg/SimpleEnglish@unanthropomorphic-english
 ```
 
 No SKILL.md support at all? Paste [`prompts/system-prompt.md`](prompts/system-prompt.md) into your system prompt, AGENTS.md, or `.cursorrules`. There is even a ~60-token version for tight budgets.
 
-Then ask for any technical writing, or say: *"rewrite this with simple-english"*.
+Then ask for any technical writing, or say: *"rewrite this with unanthropomorphic-english"*.
 
 ## 🖱️ No terminal? (claude.ai, ChatGPT, Gemini)
 
 **Claude.ai** (paid plans) supports skills natively:
 
-1. Download the skill file: open [SKILL.md](https://github.com/AminBlg/SimpleEnglish/raw/main/skills/simple-english/SKILL.md) and save it (Ctrl+S / Cmd+S).
+1. Download the skill file: open [SKILL.md](https://github.com/AminBlg/SimpleEnglish/raw/main/skills/unanthropomorphic-english/SKILL.md) and save it (Ctrl+S / Cmd+S).
 2. In claude.ai, go to **Settings → Capabilities** and turn on code execution.
 3. Go to **Settings → Customize → Skills → Upload** and upload the saved `SKILL.md`.
 4. Toggle the skill on. Done. Claude applies it when you ask for technical writing.
@@ -138,11 +138,11 @@ Then ask for any technical writing, or say: *"rewrite this with simple-english"*
 | No first-person or self-references | "we updated" → "updated", "as an AI" |
 | No conversational/polite filler | "hello", "please", "apologize", "sorry" |
 
-Full paraphrased set with software examples: [`SKILL.md`](skills/simple-english/SKILL.md). Yes, this README breaks half of them. Marketing is explicitly out of STE scope. The skill knows that and stays in the docs. 😌
+Full paraphrased set with software examples: [`SKILL.md`](skills/unanthropomorphic-english/SKILL.md). Yes, this README breaks half of them. Marketing is explicitly out of STE scope. The skill knows that and stays in the docs. 😌
 
 ## 🧰 Not just docs
 
-The skill ships adaptations ([`use-cases.md`](skills/simple-english/references/use-cases.md)) for:
+The skill ships adaptations ([`use-cases.md`](skills/unanthropomorphic-english/references/use-cases.md)) for:
 
 - 🚨 **Error messages**: what happened → why → what to do, in that order
 - 📟 **Runbooks**: STE's home turf; a runbook IS a maintenance manual
