@@ -45,7 +45,7 @@ Pass criteria:
 
 ## Scenario 4 — scope boundary
 
-> Write a landing-page hero section for sqlpipe using the simple-english skill.
+> Write a landing-page hero section for sqlpipe using the unanthropomorphic-english skill.
 
 Pass criteria:
 - [ ] Agent flags that STE does not fit marketing copy (skill's Limits section) and offers it for the docs instead, or asks

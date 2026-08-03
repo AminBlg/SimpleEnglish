@@ -25,6 +25,9 @@ PERFECT = re.compile(r"\b(has|have|had)\s+been\b|\b(has|have)\s+\w+ed\b", re.I)
 CONTRACTION = re.compile(r"\b\w+(n't|'ll|'re|'ve|'d)\b|\bit's\b|\byou're\b", re.I)
 ING_CLAUSE = re.compile(r",\s*(mak|allow|enabl|ensur|highlight|creat|provid|offer|help|reduc|improv|lead|caus|result)ing\b", re.I)
 LATIN = re.compile(r"\b(e\.g\.|i\.e\.|etc\.?)(?=[\s,)]|$)", re.I)
+FIRST_PERSON = re.compile(r"\b(i|me|my|myself|we|us|our|ours|ourselves)\b", re.I)
+CONVERSATIONAL = re.compile(r"\b(hello|hi|(?<!\bmake\s)(?<!\bmakes\s)(?<!\bmade\s)sure|certainly|of\s+course|happy\s+to|gladly|apologiz\w*|sorry|please|kindly|hope\s+this\s+helps|feel\s+free|let\s+me\s+know)\b", re.I)
+SELF_REF = re.compile(r"\b(as\s+an\s+ai|this\s+model|the\s+assistant|my\s+opinion|my\s+thought)\b", re.I)
 SLOP = re.compile(
     r"\b(simply|seamlessly|effortlessly|robust|leverag\w*|utiliz\w*|"
     r"comprehensive|powerful|blazingly|streamlin\w*|facilitat\w*|"
@@ -65,6 +68,9 @@ def lint(text, text_type):
     counts["semicolon"] = body.count(";")
     counts["latin_abbrev"] = len(LATIN.findall(body))
     counts["slop_word"] = len(SLOP.findall(body))
+    counts["first_person"] = len(FIRST_PERSON.findall(body))
+    counts["conversational"] = len(CONVERSATIONAL.findall(body))
+    counts["self_ref"] = len(SELF_REF.findall(body))
     counts["trailing_condition"] = sum(
         1 for s in sents if TRAILING_COND.search(s) and not re.match(r"^(if|when)\b", s, re.I))
     rotation = 0
@@ -91,7 +97,7 @@ SLOP_FIXTURE = """Leveraging our robust retry mechanism, failed uploads are auto
 reattempted, ensuring data integrity is maintained throughout the entire process which has
 been designed from the ground up to gracefully handle even the most challenging network
 interruptions. You should verify your credentials; it's also worth checking the settings,
-e.g. the timeout config. Contact support if the problem persists."""
+e.g. the timeout config. Contact support if the problem persists. Please note that as an AI, this model is happy to help."""
 
 CLEAN_FIXTURE = """The system retries a failed upload automatically. This process keeps the data correct.
 
@@ -111,6 +117,9 @@ def self_test():
     assert slop["violations"]["slop_word"] >= 2, slop
     assert slop["violations"]["trailing_condition"] >= 1, slop
     assert slop["violations"]["synonym_rotation"] >= 1, slop
+    assert slop["violations"]["first_person"] >= 1, slop
+    assert slop["violations"]["conversational"] >= 1, slop
+    assert slop["violations"]["self_ref"] >= 1, slop
     assert clean["violations_total"] == 0, clean
     print("self-test OK:", slop["violations_total"], "violations in slop fixture, 0 in clean")
 

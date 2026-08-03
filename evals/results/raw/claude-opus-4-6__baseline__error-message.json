@@ -23,10 +23,13 @@
       "semicolon": 0,
       "latin_abbrev": 0,
       "slop_word": 0,
+      "first_person": 3,
+      "conversational": 0,
+      "self_ref": 0,
       "trailing_condition": 1,
       "synonym_rotation": 0
     },
-    "violations_total": 3,
-    "violations_per_100w": 7.14
+    "violations_total": 6,
+    "violations_per_100w": 14.29
   }
 }

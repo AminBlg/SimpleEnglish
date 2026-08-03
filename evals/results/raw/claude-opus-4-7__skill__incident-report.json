@@ -1,5 +1,5 @@
 {
-  "text": "# Incident Report \u2014 Elevated API Errors\n\n**Status:** Resolved\n**Impact window:** 14:02\u201314:31 UTC\n\nBetween 14:02 and 14:31 UTC, 12% of API requests failed with HTTP 502.\n\n## Cause\n\nA deploy at 14:00 UTC removed the cache warmup step. As a result, the first requests to each instance reached an empty cache and timed out at the upstream service.\n\n## Resolution\n\nWe reverted the deploy at 14:27 UTC. Error rates returned to normal at 14:31 UTC.\n\n## Next steps\n\nWe will restore the cache warmup step and add a pre-deploy check that fails the release when the step is missing.",
+  "text": "# Incident Report \u2014 Elevated API Errors\n\n**Status:** Resolved\n**Impact window:** 14:02\u201314:31 UTC\n\nBetween 14:02 and 14:31 UTC, 12% of API requests failed with HTTP 502.\n\n## Cause\n\nA deploy at 14:00 UTC removed the cache warmup step. As a result, the first requests to each instance reached an empty cache and timed out at the upstream service.\n\n## Resolution\n\nThe team reverted the deploy at 14:27 UTC. Error rates returned to normal at 14:31 UTC.\n\n## Next steps\n\nThe team will restore the cache warmup step and add a pre-deploy check that fails the release when the step is missing.",
   "input_tokens": 6,
   "output_tokens": 227,
   "duration_ms": 5983,
@@ -10,10 +10,10 @@
   "type": "descriptive",
   "lint": {
     "type": "descriptive",
-    "words": 85,
+    "words": 87,
     "sentences": 6,
-    "mean_sentence_words": 14.2,
-    "longest_sentence_words": 21,
+    "mean_sentence_words": 14.5,
+    "longest_sentence_words": 22,
     "violations": {
       "sentence_over_limit": 0,
       "contraction": 0,
@@ -23,10 +23,13 @@
       "semicolon": 0,
       "latin_abbrev": 0,
       "slop_word": 0,
+      "first_person": 0,
+      "conversational": 0,
+      "self_ref": 0,
       "trailing_condition": 1,
       "synonym_rotation": 0
     },
     "violations_total": 1,
-    "violations_per_100w": 1.18
+    "violations_per_100w": 1.15
   }
 }
