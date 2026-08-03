@@ -1,14 +1,14 @@
 # Before / after
 
-Every "before" below is genuine unedited AI output (Claude Sonnet, July 2026, no skill loaded). Every "after" is the same content with the skill applied.
+The examples below contrast default model outputs against outputs generated using the skill.
 
 ## 1. README introduction (descriptive)
 
-**Before — 1 sentence of 30 words, one of 33, a dangling "-ing" clause:**
+Before: Contains long sentences (30–33 words) and dangling "-ing" clauses.
 
 > sqlpipe is a command-line tool for syncing PostgreSQL tables to Amazon S3 as Parquet files. It's built for teams who need a lightweight way to move data out of Postgres into a data lake without standing up a full ETL platform. sqlpipe connects directly to your database, reads table data in batches, converts it to columnar Parquet, and writes the result to an S3 bucket of your choosing. It supports full table snapshots as well as incremental syncs based on a watermark column, so you can run it once for a backfill or schedule it to run continuously. Configuration lives in a single YAML file, making it easy to version-control your sync definitions alongside the rest of your infrastructure code.
 
-**After — max sentence 21 words, one topic per paragraph:**
+After: All sentences under 21 words; structured with one topic per paragraph.
 
 > sqlpipe is a command-line tool that copies PostgreSQL tables to Amazon S3 as Parquet files. It moves data into a data lake without a full ETL platform.
 >
@@ -18,11 +18,11 @@ Every "before" below is genuine unedited AI output (Claude Sonnet, July 2026, no
 
 ## 2. Troubleshooting section (procedural)
 
-**Before — 40-word sentences, contractions, conditions after commands:**
+Before: Contains 40-word sentences, contractions, and trailing conditions.
 
 > **Connection timeouts.** If sqlpipe hangs or fails with `dial tcp: i/o timeout`, check that the host running sqlpipe can reach the Postgres port (usually 5432) — this is often a security group or firewall rule blocking the connection. If you're connecting to a managed database (RDS, Cloud SQL, etc.), confirm the instance allows connections from sqlpipe's IP. You can also try increasing `source.connect_timeout_seconds` in your config, since a slow network path can trip the default timeout even when the connection eventually succeeds.
 
-**After — one instruction per sentence, condition first, one verb for "check":**
+After: Instructs with one command per sentence, places conditions first, and unifies check verbs.
 
 > **Connection timeouts.** sqlpipe stops with `dial tcp: i/o timeout` when it cannot reach the Postgres port (5432 by default).
 >

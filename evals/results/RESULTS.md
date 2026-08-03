@@ -11,16 +11,11 @@
 | claude-sonnet-5 | 3.76 | 0.53 | 85.9% | 10.0 | 9.7 | 266 -> 205 |
 | claude-sonnet-4-6 | 2.65 | 0.51 | 80.8% | 11.7 | 10.2 | 168 -> 162 |
 
-## Honest number warnings
+## Methodology Notes and Limitations
 
-- The linter is a regex pass (see ste_lint.py header). It undercounts real STE
-  violations: no passive-voice or part-of-speech detection. It counts the same
-  way for both conditions, so the comparison is fair even where the absolute
-  numbers are low.
-- The skill condition sends SKILL.md in the prompt, so its input tokens are
-  higher by design. Output tokens are reported; draw your own conclusion.
-- One generation per cell. Re-run the matrix for variance; the runner is
-  resumable, delete results/raw to start fresh.
-- No tool can guarantee ASD-STE100 compliance, including this one.
+- The linter uses regex checks (see `ste_lint.py`). It does not detect passive voice or part-of-speech violations. The evaluation is fair because both conditions use the same linter rules.
+- The skill condition appends `SKILL.md` to the prompt, which increases the input token count. Output token counts are reported below.
+- One generation is evaluated per model scenario. Delete the `results/raw` directory and run the benchmark script again to test variance.
+- No tool can guarantee complete ASD-STE100 compliance.
 
 Reproduce: `python3 evals/run_bench.py` (Claude Code CLI, logged in).

@@ -1,12 +1,12 @@
 # Use cases beyond documentation
 
-STE was built for aircraft maintenance manuals. The same properties — one meaning per word, short sentences, condition-first commands — transfer to any text where misreading has a cost. By the end of Issue 8, 64% of registered STE users were outside aerospace and defense.
+ASD-STE100 rules transfer to any technical text where unambiguous communication is critical.
 
 Each case below names the mode and the adaptations.
 
 ## Error messages and CLI output
 
-Mode: procedural. This is the highest-value target: an error message is a 2 a.m. instruction to a stressed reader.
+Mode: procedural.
 
 Pattern: state what happened (past simple), state the cause if known, give the command or condition to fix it.
 
@@ -15,7 +15,7 @@ Pattern: state what happened (past simple), state the cause if known, give the c
 
 ## Runbooks and standard operating procedures
 
-Mode: strict-leaning procedural. This is STE's home turf — an on-call runbook is a maintenance manual.
+Mode: strict procedural.
 
 - Every step imperative, one instruction per step, conditions first.
 - Warnings before the step, command first, risk second.
@@ -30,19 +30,19 @@ Mode: descriptive. Simple past only — a timeline in present perfect ("we have 
 > **Before:** We have identified an issue that may have impacted some users' ability to access the service.
 > **After:** Between 14:02 and 14:31 UTC, 12% of requests failed. A deploy at 14:00 removed the cache warmup step.
 
-STE bans hedges ("may have impacted") — the report states what is known and says "unknown" for the rest. This reads more honest because it is.
+Omit speculative language (e.g., "may have impacted"). State only known facts, or declare them unknown.
 
 ## Commit messages and PR descriptions
 
-Mode: descriptive body, imperative subject. Convention already matches STE: imperative subject line, plain past facts in the body. Apply the substitution table and the 25-word limit to the body. Delete "this PR aims to".
+Mode: descriptive body, imperative subject. Use imperative verbs in subject lines. Present past facts in bodies. Delete introductory filler (e.g., "this PR aims to").
 
 ## API changelogs and release notes
 
-Mode: descriptive. One entry, one change, one sentence where possible. "Breaking:" entries follow the warning pattern — command first: "Update your calls to `v2/users`. The `name` field split into `first_name` and `last_name`."
+Mode: descriptive. Use one sentence per change. "Breaking:" entries must use warning structure (command first).
 
 ## Instructions for AI agents (prompts, AGENTS.md, skills)
 
-Mode: procedural. A system prompt is a procedure executed by a reader with no ability to ask questions — the exact reader STE was designed for.
+Mode: procedural.
 
 - One instruction per sentence keeps rules independently quotable and hard to half-follow.
 - One word, one meaning prevents the model from treating "check", "verify", and "validate" as three different operations.
@@ -51,16 +51,16 @@ Mode: procedural. A system prompt is a procedure executed by a reader with no ab
 
 ## Support macros and status-page updates
 
-Mode: descriptive, 25-word limit. Non-native readers are the majority of many user bases. No "we sincerely apologize for any inconvenience this may have caused" — "The API was down for 18 minutes. Uploads made during this time were saved and will process today." Do not use polite filler ("please", "kindly") or conversational greetings. State only technical facts.
+Mode: descriptive, 25-word limit. Omit apologies and conversational greetings. State only technical facts.
 
 ## Translation and localization prep
 
-Mode: strict. STE's original purpose was making English readable for non-native maintenance crews, and it doubles as pre-editing for machine translation. One meaning per word plus complete grammar (articles, "that") removes most translation ambiguity. If your docs get localized, STE cuts the error rate and the cost.
+Mode: strict. Complete grammar removes translation ambiguity.
 
 ## UI copy and empty states
 
-Mode: procedural, hard length limits. Buttons and labels are technical names (exempt). Body copy follows the rules: "No projects yet. Create a project to start." Nothing else survives at this length anyway.
+Mode: procedural, strict length limits. Exempt UI labels and button names.
 
 ## Where STE does not fit
 
-Marketing pages, launch posts, blog voice, brand writing. STE deletes persuasion on purpose. Write those in your own voice — then use STE for the docs the landing page links to.
+Do not use STE for marketing copy, blog posts, or brand writing.

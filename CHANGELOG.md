@@ -24,3 +24,7 @@ All notable changes to the `UnanthropomorphicEnglish` agent skill on the `dehuma
   - Corrected first-person pronoun leaks in the five raw skill incident report outputs.
 - **Incident report examples** (`examples/before-after.md`, `README.md`):
   - Rewrote the "After" incident report example to use the third person ("the deployment team" / "the deploy pipeline") instead of the first person ("we").
+- **Skill renaming and tone professionalization**:
+  - Renamed the skill from `simple-english` to `unanthropomorphic-english` (UnanthropomorphicEnglish).
+  - Updated all markdown files (`SKILL.md`, `checklist.md`, `use-cases.md`, `README.md`, `system-prompt.md`, `before-after.md`, `RESULTS.md`) to remove conversational phrasing, casual explanations, emojis, and AI-like descriptions.
+  - Rewrote introduction text and annotations to use a formal, objective, and technical manual style.

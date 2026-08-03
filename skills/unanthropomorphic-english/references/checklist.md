@@ -1,10 +1,10 @@
 # Verification checklist
 
-Run this pass on every draft before you deliver it. The checks are ordered from mechanical to judgment.
+Verify the draft using this checklist before delivery.
 
 ## Mechanical checks (searchable)
 
-Search the draft for each pattern. Every hit outside code blocks and quoted text is a violation.
+Search for these patterns. A match outside code blocks or quoted text is a violation.
 
 | Search for | Violation | Fix |
 |---|---|---|
@@ -43,5 +43,5 @@ Search the draft for each pattern. Every hit outside code blocks and quoted text
 
 ## When reporting violations (check mode)
 
-For each violation give: the rule number, the offending text, and a compliant rewrite. Cite only rule numbers that appear in rules.md.
-End the report with this statement when the user asked for STE compliance: "No tool can guarantee ASD-STE100 compliance. Final approval rests with the writer. The official standard is a free download at asd-ste100.org."
+For each violation, report: rule number, original text, and compliant rewrite. Cite only rules in SKILL.md.
+When the user requests STE compliance, append this disclaimer: "No tool can guarantee ASD-STE100 compliance. Final approval rests with the writer. The official standard is at asd-ste100.org."
