@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/STE_violations-%E2%88%9272.9%25_measured-brightgreen?style=flat" alt="72.9% fewer violations, measured"></a>
+  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/STE_violations-%E2%88%9281.5%25_measured-brightgreen?style=flat" alt="81.5% fewer violations, measured"></a>
   <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-6_Claude_models-blueviolet?style=flat" alt="6 models benchmarked"></a>
   <a href="https://agentskills.io"><img src="https://img.shields.io/badge/SKILL.md-open_standard-blue?style=flat" alt="Agent Skills"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat" alt="MIT"></a>
@@ -72,7 +72,7 @@ Left column is **real unedited Claude output**. Right column is the same model w
 </td>
 <td valign="top">
 
-> Between 14:02 and 14:31 UTC, 12% of requests failed. A deploy at 14:00 removed the cache warmup step. We reverted it at 14:27.
+> Between 14:02 and 14:31 UTC, 12% of API requests failed with HTTP 502. A deploy at 14:00 removed the cache warmup step. The cache nodes overloaded. The deployment team reverted the deploy at 14:27.
 
 </td>
 </tr>
@@ -80,9 +80,9 @@ Left column is **real unedited Claude output**. Right column is the same model w
 
 ```
 ┌── measured: 6 Claude models × 8 tasks × 2 conditions, 96 runs ──┐
-│  STE violations per 100 words     ▼ 72.9%  (every model won)    │
+│  STE violations per 100 words     ▼ 81.5%  (every model won)    │
 │  output tokens                    ▼ on all 6 models             │
-│  mean sentence length             11.2 → 9.7 words              │
+│  mean sentence length             11.4 → 9.7 words              │
 │  "seamlessly" survived            0                             │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -135,6 +135,8 @@ Then ask for any technical writing, or say: *"rewrite this with simple-english"*
 | Condition BEFORE command | Trailing "...if the flag is set" that readers execute too late |
 | One instruction per sentence | Steps nobody can follow at 2 a.m. |
 | Keep articles, keep "that" | Telegraph style. STE is short, not terse |
+| No first-person or self-references | "we updated" → "updated", "as an AI" |
+| No conversational/polite filler | "hello", "please", "apologize", "sorry" |
 
 Full paraphrased set with software examples: [`SKILL.md`](skills/simple-english/SKILL.md). Yes, this README breaks half of them. Marketing is explicitly out of STE scope. The skill knows that and stays in the docs. 😌
 
@@ -144,7 +146,7 @@ The skill ships adaptations ([`use-cases.md`](skills/simple-english/references/u
 
 - 🚨 **Error messages**: what happened → why → what to do, in that order
 - 📟 **Runbooks**: STE's home turf; a runbook IS a maintenance manual
-- 🧯 **Incident reports**: simple past murders "we have identified an issue that may have impacted"
+- 🧯 **Incident reports**: simple past and third person ("the team reverted" instead of "we reverted")
 - 📣 **Release notes**: breaking changes as warnings: command first, risk second
 - 🤖 **Your AGENTS.md / prompts**: a system prompt is a procedure for a reader that cannot ask questions. Models read "should" as optional. STE bans "should". Think about it.
 - 🌍 **Translation prep**: STE's original job: readable for non-natives, cheap to localize
@@ -153,16 +155,16 @@ Where it refuses to go: marketing copy, blog voice, brand writing. Flat on purpo
 
 ## 📊 Benchmarks
 
-**72.9% fewer STE violations per 100 words with the skill on, averaged across 6 models × 8 writing tasks (96 generations, measured).**
+**81.5% fewer STE violations per 100 words with the skill on, averaged across 6 models × 8 writing tasks (96 generations, measured).**
 
 | Model | Baseline viol/100w | Skill viol/100w | Reduction |
 |---|---|---|---|
-| claude-opus-4-8 | 1.05 | 0.62 | 41% |
-| claude-opus-4-7 | 2.28 | 0.42 | 82% |
-| claude-opus-4-6 | 2.24 | 0.40 | 82% |
-| claude-opus-4-5 | 2.55 | 0.57 | 78% |
-| claude-sonnet-5 | 2.67 | 0.53 | 80% |
-| claude-sonnet-4-6 | 2.06 | 0.52 | 75% |
+| claude-opus-4-8 | 2.34 | 0.62 | 74% |
+| claude-opus-4-7 | 2.81 | 0.41 | 85% |
+| claude-opus-4-6 | 3.14 | 0.40 | 87% |
+| claude-opus-4-5 | 2.94 | 0.71 | 76% |
+| claude-sonnet-5 | 3.76 | 0.53 | 86% |
+| claude-sonnet-4-6 | 2.65 | 0.51 | 81% |
 
 Output tokens went DOWN on all six models too (the skill writes shorter). Deterministic regex linter, same rules for both conditions, honest-caveat list and full method in [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` — needs only a logged-in Claude Code CLI.
 
