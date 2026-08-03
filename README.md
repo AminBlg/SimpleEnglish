@@ -16,10 +16,10 @@
 </p>
 
 <p align="center">
-  <a href="#before-after">See it</a> ·
+  <a href="#before-after">Examples</a> ·
   <a href="#install">Install</a> ·
-  <a href="#the-rules">The rules</a> ·
-  <a href="#not-just-docs">Not just docs</a> ·
+  <a href="#the-rules">Rules</a> ·
+  <a href="#not-just-docs">Additional Features</a> ·
   <a href="#receipts">Receipts</a> ·
   <a href="#faq">FAQ</a>
 </p>
@@ -92,13 +92,13 @@ More rewrites in [`examples/before-after.md`](examples/before-after.md): READMEs
 ## Install
 
 ```bash
-npx skills add AminBlg/SimpleEnglish
+npx skills add davidsgbang/UnanthromorphicEnglish
 ```
 
 The [skills CLI](https://github.com/vercel-labs/skills) automatically detects and installs the skill for supported agents (Claude Code, Cursor, Codex, Copilot, Gemini CLI).
 
 ```bash
-npx skills use AminBlg/SimpleEnglish@unanthropomorphic-english
+npx skills use davidsgbang/UnanthromorphicEnglish
 ```
 
 If the environment lacks SKILL.md support, append `prompts/system-prompt.md` to your system prompt, `AGENTS.md`, or `.cursorrules`.
@@ -109,7 +109,7 @@ Then ask for any technical writing, or say: *"rewrite this with unanthropomorphi
 
 **Claude.ai** (paid plans) supports skills natively:
 
-1. Download the skill file: open [SKILL.md](https://github.com/AminBlg/SimpleEnglish/raw/main/skills/unanthropomorphic-english/SKILL.md) and save it (Ctrl+S / Cmd+S).
+1. Download the skill file: open [SKILL.md](https://github.com/davidsgbang/UnanthromorphicEnglish/raw/main/skills/unanthropomorphic-english/SKILL.md) and save it (Ctrl+S / Cmd+S).
 2. In claude.ai, go to **Settings → Capabilities** and turn on code execution.
 3. Go to **Settings → Customize → Skills → Upload** and upload the saved `SKILL.md`.
 4. Enable the skill. Claude applies the rules to technical writing requests.
