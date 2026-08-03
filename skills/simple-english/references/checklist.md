@@ -9,6 +9,9 @@ Search the draft for each pattern. Every hit outside code blocks and quoted text
 | Search for | Violation | Fix |
 |---|---|---|
 | `'ll`, `'re`, `'ve`, `n't`, `it's` | Contraction (Rule 4.2) | Expand it. |
+| `i`, `me`, `my`, `myself`, `we`, `us`, `our`, `ours`, `ourselves` | First-person pronoun (Rule 1.15) | Delete or restructure. |
+| `hello`, `hi`, `sure`, `certainly`, `of course`, `please`, `kindly`, `hope this helps`, `let me know` | Conversational greeting or polite filler (Rule 1.16) | Delete. Use direct imperatives for instructions. |
+| `as an ai`, `this model`, `the assistant`, `apologize`, `sorry` | Self-reference or apology (Rule 1.17) | Delete or rewrite as objective facts. |
 | `has been`, `have been`, `had been` | Present/past perfect (Rule 3.4) | Simple past or simple present. |
 | `has` / `have` + past participle | Present perfect (Rule 3.4) | Simple past. |
 | `should`, `would`, `may`, `might`, `could` | Unapproved modal (Rule 3.2) | See the modal ladder in SKILL.md. |
@@ -36,6 +39,7 @@ Search the draft for each pattern. Every hit outside code blocks and quoted text
 9. **Warnings.** Command or condition first, risk second (Rules 7.2, 7.3).
 10. **Completeness.** Articles present, "that" present after "make sure", no telegraph style (Rule 4.2).
 11. **Untouchables intact.** Code, identifiers, quoted errors, and proper nouns are unchanged.
+12. **Anthropomorphic language.** Does the text present the system/model as a human/person or reference its own thoughts/actions? Rewrite as objective third-person facts.
 
 ## When reporting violations (check mode)
 

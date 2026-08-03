@@ -25,6 +25,8 @@ Mode: strict-leaning procedural. This is STE's home turf — an on-call runbook 
 
 Mode: descriptive. Simple past only — a timeline in present perfect ("we have identified...") hides when things happened.
 
+- Do not use first-person pronouns ("we", "our"). Describe the system, operator, or team in the third person.
+
 > **Before:** We have identified an issue that may have impacted some users' ability to access the service.
 > **After:** Between 14:02 and 14:31 UTC, 12% of requests failed. A deploy at 14:00 removed the cache warmup step.
 
@@ -49,7 +51,7 @@ Mode: procedural. A system prompt is a procedure executed by a reader with no ab
 
 ## Support macros and status-page updates
 
-Mode: descriptive, 25-word limit. Non-native readers are the majority of many user bases. No "we sincerely apologize for any inconvenience this may have caused" — "The API was down for 18 minutes. Uploads made during this time were saved and will process today."
+Mode: descriptive, 25-word limit. Non-native readers are the majority of many user bases. No "we sincerely apologize for any inconvenience this may have caused" — "The API was down for 18 minutes. Uploads made during this time were saved and will process today." Do not use polite filler ("please", "kindly") or conversational greetings. State only technical facts.
 
 ## Translation and localization prep
 

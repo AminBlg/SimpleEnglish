@@ -128,7 +128,7 @@ Then ask for any technical writing, or say: *"rewrite this with simple-english"*
 |---|---|
 | Max 20 words per instruction, 25 per description | The run-on sentence |
 | One word = one meaning, whole document | check/verify/confirm/validate roulette |
-| Simple tenses only | "has been updated" → "we updated" |
+| Simple tenses only | "has been updated" → "updated" |
 | No "-ing" verb forms | ", making it easy to..." clauses |
 | Active voice | "it should be noted that" |
 | No should/would/may/might | Hedging. (`can`, `will`, `must` survive) |

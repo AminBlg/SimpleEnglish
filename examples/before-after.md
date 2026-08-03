@@ -50,7 +50,7 @@ Every "before" below is genuine unedited AI output (Claude Sonnet, July 2026, no
 
 **After:**
 
-> Between 14:02 and 14:31 UTC, 12% of requests to the API failed with HTTP 502. A deploy at 14:00 removed the cache warmup step, and the cache nodes overloaded. We reverted the deploy at 14:27. All requests succeeded from 14:31. We will add a warmup check to the deploy pipeline this week.
+> Between 14:02 and 14:31 UTC, 12% of API requests failed with HTTP 502. A deploy at 14:00 removed the cache warmup step. The cache nodes overloaded. The deployment team reverted the deploy at 14:27. All requests succeeded from 14:31. The deploy pipeline will validate cache warmup from this week.
 
 ## 5. Breaking change in release notes
 

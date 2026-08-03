@@ -57,7 +57,7 @@ Do not mix the two in one passage. A "Getting started" section is procedural. An
 
 53 rules in 9 sections, paraphrased from ASD-STE100 Issue 9 with software examples. The official wording is in the free standard at asd-ste100.org.
 
-### Section 1 — Words (Rules 1.1-1.14)
+### Section 1 — Words (Rules 1.1-1.17)
 
 | Rule | Instruction |
 |---|---|
@@ -75,11 +75,20 @@ Do not mix the two in one passage. A "Getting started" section is procedural. An
 | 1.12 | You can use domain verbs as technical verbs ("deploy", "compile", "merge"). |
 | 1.13 | Do not use technical verbs as nouns. |
 | 1.14 | Use American English spelling. |
+| 1.15 | Do not use first-person pronouns (I, me, my, we, our, us) or self-references. Present information as objective facts. |
+| 1.16 | Do not use conversational greetings, pleasantries, or polite filler (hello, hi, please, kindly, sure, of course). Use direct imperatives for instructions. |
+| 1.17 | Do not use self-referential terms (AI, assistant, model) or cognitive/emotive verbs (think, believe, feel, hope, sorry, apologize) to describe the system's actions or state. State facts directly. |
 
-In pragmatic mode, rules 1.5, 1.8, and 1.12 do the heavy lifting: your domain vocabulary is legal. The ones agents break are 1.7, 1.11, and 1.13.
+In pragmatic mode, rules 1.5, 1.8, and 1.12 do the heavy lifting: your domain vocabulary is legal. The ones agents break are 1.7, 1.11, 1.13, 1.15, 1.16, and 1.17.
 
 **Before:** You can webhook the event, then do a deploy.
 **After:** Send the event to the webhook. Then deploy the service.
+
+**Before:** We will deploy the service after we run the tests.
+**After:** The deployment of the service occurs after the tests run.
+
+**Before:** Hello! Please make sure that you configure the database. I am happy to help you with this.
+**After:** Configure the database.
 
 ### Section 2 — Multi-word nouns (Rules 2.1-2.2)
 
@@ -225,10 +234,16 @@ Known part-of-speech rulings, useful as patterns:
 
 ### Slop-to-simple substitutions
 
-This table is ours, not the ASD dictionary. It maps the words AI-generated docs overuse to plain replacements. If the word carries no fact, delete it instead of replacing it.
+This table is unique to this skill, not the ASD dictionary. It maps the words AI-generated docs overuse to plain replacements. If the word carries no fact, delete it instead of replacing it.
 
 | Slop | Write instead |
 |---|---|
+| I, me, my, we, our, us | (delete or restructure with active non-personal subjects or passive voice) |
+| hello, hi, sure, certainly, of course | (delete) |
+| please, kindly | (delete — use direct imperative) |
+| hope this helps, let me know | (delete) |
+| sorry, apologize, apology | (delete — state the correction factually) |
+| as an AI, this model, the assistant | (delete or restructure without self-reference) |
 | leverage, utilize | use |
 | in order to | to |
 | prior to | before |
@@ -282,9 +297,9 @@ Same rules, different targets. Full adaptations in `references/use-cases.md`:
 
 - **Error messages**: state what happened (simple past), the cause if known, then the fix as an imperative. No "Oops", no "Please ensure", no apology filler.
 - **Runbooks**: STE's home turf. Imperative steps, conditions first, warnings before the step.
-- **Incident reports**: simple past only. "We have identified an issue that may have impacted" becomes "Between 14:02 and 14:31 UTC, 12% of requests failed."
+- **Incident reports**: simple past only. Do not use first-person pronouns ("we", "our"). Describe actions using the third person ("the team", "the operator") or passive voice. "We reverted the deploy" becomes "The team reverted the deploy" or "The deploy was reverted." "We have identified an issue that may have impacted" becomes "Between 14:02 and 14:31 UTC, 12% of requests failed."
 - **Release notes**: breaking changes follow the warning pattern — command first, risk second.
-- **Agent instructions (prompts, AGENTS.md)**: a system prompt is a procedure for a reader that cannot ask questions. One instruction per sentence, no "should", condition first.
+- **Agent instructions (prompts, AGENTS.md)**: a system prompt is a procedure for a reader that cannot ask questions. One instruction per sentence, no "should", condition first. Do not use first-person pronouns, conversational greetings, polite filler, or anthropomorphic language. Present information as objective facts.
 - **Translation prep**: STE's original job. One meaning per word plus complete grammar removes most translation ambiguity.
 
 ## Self-Check Before You Deliver
@@ -292,7 +307,7 @@ Same rules, different targets. Full adaptations in `references/use-cases.md`:
 This step is not optional. Run these four checks on your draft:
 
 1. Count words in your three longest sentences. Over the 20/25 limit → split them.
-2. Search your draft for: `'ll`, `'re`, `'s` (contraction), `has been`, `have been`, `should`, `-ing` verbs after a comma, semicolons.
+2. Search your draft for: `'ll`, `'re`, `'s` (contraction), `has been`, `have been`, `should`, `-ing` verbs after a comma, semicolons, first-person pronouns (I, me, my, we, our, us), conversational greetings/filler (hello, hi, please, kindly, sure, of course, hope this helps), and self-referential phrases (as an AI, this model, the assistant).
 3. Search for every `if` and `when`. Each one stands at the START of its sentence, before the command. "Increase the timeout if the network is slow" → "If the network is slow, increase the timeout."
 4. Search for the verbs you did NOT pick in Your Task step 3 (the check/verify/confirm set). Replace every hit with your chosen verb.
 
