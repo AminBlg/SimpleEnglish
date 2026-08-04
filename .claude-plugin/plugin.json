@@ -1,0 +1,14 @@
+{
+  "name": "simple-english",
+  "displayName": "Simple English",
+  "version": "1.0.0",
+  "description": "Write or rewrite technical text in ASD-STE100 Simplified Technical English: docs, READMEs, runbooks, error messages, release notes, and incident reports, free of AI slop.",
+  "author": {
+    "name": "AminBlg",
+    "url": "https://github.com/AminBlg"
+  },
+  "homepage": "https://github.com/AminBlg/SimpleEnglish",
+  "repository": "https://github.com/AminBlg/SimpleEnglish",
+  "license": "MIT",
+  "keywords": ["writing", "technical-writing", "documentation", "ste", "asd-ste100", "simplified-english"]
+}

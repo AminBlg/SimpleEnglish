@@ -101,6 +101,13 @@ That is it. The [skills CLI](https://github.com/vercel-labs/skills) detects your
 npx skills use AminBlg/SimpleEnglish@simple-english
 ```
 
+**Claude Code plugin**: this repo is also a native [Claude Code plugin marketplace](https://code.claude.com/docs/en/plugin-marketplaces). Skip the CLI entirely:
+
+```
+/plugin marketplace add AminBlg/SimpleEnglish
+/plugin install simple-english@simple-english
+```
+
 No SKILL.md support at all? Paste [`prompts/system-prompt.md`](prompts/system-prompt.md) into your system prompt, AGENTS.md, or `.cursorrules`. There is even a ~60-token version for tight budgets.
 
 Then ask for any technical writing, or say: *"rewrite this with simple-english"*.
