@@ -1,0 +1,15 @@
+{
+  "name": "simple-english",
+  "description": "ASD-STE100 Simplified Technical English skill for Claude Code.",
+  "owner": {
+    "name": "AminBlg",
+    "url": "https://github.com/AminBlg"
+  },
+  "plugins": [
+    {
+      "name": "simple-english",
+      "source": "./",
+      "description": "Write or rewrite technical text in ASD-STE100 Simplified Technical English, free of AI slop."
+    }
+  ]
+}
