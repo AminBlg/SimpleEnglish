@@ -103,7 +103,7 @@ npx skills use davidsgbang/UnanthromorphicEnglish
 
 If the environment lacks SKILL.md support, append `prompts/system-prompt.md` to your system prompt, `AGENTS.md`, or `.cursorrules`.
 
-Then ask for any technical writing, or say: *"rewrite this with unanthropomorphic-english"*.
+The skill loads automatically at the start of sessions at all times and applies unconditionally.
 
 ## No terminal? (claude.ai, ChatGPT, Gemini)
 
@@ -112,7 +112,7 @@ Then ask for any technical writing, or say: *"rewrite this with unanthropomorphi
 1. Download the skill file: open [SKILL.md](https://github.com/davidsgbang/UnanthromorphicEnglish/raw/main/skills/unanthropomorphic-english/SKILL.md) and save it (Ctrl+S / Cmd+S).
 2. In claude.ai, go to **Settings → Capabilities** and turn on code execution.
 3. Go to **Settings → Customize → Skills → Upload** and upload the saved `SKILL.md`.
-4. Enable the skill. Claude applies the rules to technical writing requests.
+4. Enable the skill. Claude loads it at the start of sessions at all times.
 
 **ChatGPT**: no skill support, so use the prompt version. Copy the block from [`prompts/system-prompt.md`](prompts/system-prompt.md) into **Settings → Personalization → Custom Instructions**, or into the instructions of a Project or Custom GPT.
 
