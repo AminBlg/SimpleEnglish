@@ -204,7 +204,7 @@ Built TDD-style against the **primary Issue 9 text** (2025), not blog summaries:
 
 ## ⭐ Star history
 
-<a href="https://star-history.com/#AminBlg/SimpleEnglish&Date"><img src="https://api.star-history.com/svg?repos=AminBlg/SimpleEnglish&type=Date" alt="Star history chart" width="600"></a>
+[![Star History Chart](https://api.star-history.com/chart?repos=AminBlg/SimpleEnglish&type=date&legend=top-left&sealed_token=f-hc7uJ6Ml-zBhYFqbp98e7E91ESjJvmKWaRaS5hCRAp-eyVSCrB7KBtpN3BhnaE7yDidMVWRQ3g6KHZ8_Cm7L0qo4sm3ai8pYjmhkh1fwRdr0aLbyf7a8iZTczZEi6YxW4MDrE70Ma6z9uhY4m5UXWbKzd33K4JSrWZH7pkCKjZ-DtCTbPyDMoZX1UT)](https://www.star-history.com/?repos=AminBlg%2FSimpleEnglish&type=date&legend=top-left)
 
 ## ⚖️ License and status
 
