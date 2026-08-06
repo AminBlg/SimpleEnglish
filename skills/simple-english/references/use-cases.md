@@ -1,8 +1,8 @@
 # Use cases beyond documentation
 
-STE was built for aircraft maintenance manuals. The same properties — one meaning per word, short sentences, condition-first commands — transfer to any text where misreading has a cost. By the end of Issue 8, 64% of registered STE users were outside aerospace and defense.
+STE was built for aircraft maintenance manuals. The same properties — one meaning per word, short sentences, condition-first commands — transfer to any text where misreading has a cost. STE is now used far outside aerospace and defense.
 
-Each case below names the mode and the adaptations.
+Each case that follows names the mode and the adaptations.
 
 ## Error messages and CLI output
 
