@@ -35,7 +35,7 @@ When asked to write or rewrite technical text:
 
 When asked to CHECK text instead of writing it, report each violation as: rule number, the offending text, a compliant rewrite. Cite only rule numbers that exist in this file. Do not cite rule numbers from memory: the numbering is unintuitive and models invent it (tested — an agent without this file cited "Rule 3.1: short sentences"; the real Rule 3.1 is about verb forms).
 
-**If the `asdste100` MCP tool is available**, use it to look up any word whose status is not sure before you make a decision on it. Start the `asdste100_find` tool with the exact word. The tool gives the approved/rejected status, the part of speech, and the alternative. Do not guess — make sure it is in the word list.
+**If the `asdste100` MCP tool is available**, use it to look up any word whose status is not sure before you make a decision on it. Start the `asdste100_word_find` tool with the exact word. The tool gives the approved/rejected status, the part of speech, and the alternative. Do not guess — make sure it is in the word list.
 
 ## Two Modes
 
@@ -204,7 +204,7 @@ GR-6 for software docs: "e.g." → "for example", "i.e." → "that is", and dele
 
 The official dictionary (~900 approved words, ~1,200 banned words with alternatives) is copyrighted by ASD and is not reproduced here. Its mechanics apply without it: **one word, one meaning, one part of speech.**
 
-**If the `asdste100` MCP tool is available**, look up any word before ruling on it: `asdste100_find("word")`. The tool returns the exact dictionary status (approved/rejected), the approved part of speech, and the mandated alternative. Use it instead of relying on the examples below, which cover only a small sample.
+**If the `asdste100` MCP tool is available**, look up any word before ruling on it: `asdste100_word_find("word")`. The tool returns the exact dictionary status (approved/rejected), the approved part of speech, and the mandated alternative. Use it instead of relying on the examples below, which cover only a small sample.
 
 Known part-of-speech rulings, useful as patterns:
 
@@ -276,7 +276,7 @@ Collapse synonym rotations to one term each (Rules 1.11, 9.4). The two lists bel
 | validate | Not in dictionary | Use as technical verb (Rule 1.12), or replace with `make sure that` |
 | delete / drop (verb) / destroy | All rejected | `erase` (data), `remove` (physical); avoid `drop` and `destroy` |
 | remove | Approved verb | Keep it |
-| run / execute | Both rejected | `operate` (strict); pick one (pragmatic) |
+| run / execute | Both rejected | `operate` for run, `do` for execute (strict); pick one (pragmatic) |
 | invoke / launch | Not in dictionary | Use as technical verbs (Rule 1.12) |
 | display (verb) / render / present (verb) | All rejected | `show` (approved verb) |
 | issue | Not in dictionary | Use as technical noun, or replace with `problem` (approved) |
