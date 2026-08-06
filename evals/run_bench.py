@@ -114,6 +114,61 @@ def aggregate():
     return table
 
 
+def judge_summary():
+    """Aggregate *__judge__*.json into report lines; [] when no judge files."""
+    files = sorted(RAW.glob("*__judge__*.json"))
+    per_model, wins, ties, losses = {}, 0, 0, 0
+    skill_sum = base_sum = valid = 0
+    for p in files:
+        d = json.loads(p.read_text())
+        o1, o2 = d["order1_base_first"], d["order2_skill_first"]
+        if not o1 or not o2:
+            continue
+        skill = (o1["b_score"] + o2["a_score"]) / 2
+        base = (o1["a_score"] + o2["b_score"]) / 2
+        valid += 1
+        skill_sum += skill
+        base_sum += base
+        w = per_model.setdefault(d["model"], [0, 0, 0])
+        if skill > base:
+            wins += 1
+            w[0] += 1
+        elif skill == base:
+            ties += 1
+            w[1] += 1
+        else:
+            losses += 1
+            w[2] += 1
+    if not valid:
+        return []
+    lines = [
+        "",
+        "## Judge pass (blind pairwise)",
+        "",
+        f"For each model x scenario pair, {JUDGE_MODEL} scored the baseline text and",
+        "the skill text on a 0-10 rubric, twice with the texts in both orders. The",
+        "two scores were averaged to cancel position bias. The judge saw no labels.",
+        "",
+        f"Result: the skill output scored higher in {wins} of {valid} pairs, tied in",
+        f"{ties}, and lost in {losses}. Mean rubric score: {skill_sum / valid:.2f} "
+        f"with the skill, {base_sum / valid:.2f} without.",
+        "",
+        "| Model | Skill wins | Ties | Losses |",
+        "|---|---|---|---|",
+    ]
+    for m in [m for m in MODELS if m in per_model]:
+        w, t, l = per_model[m]
+        lines.append(f"| {m} | {w} | {t} | {l} |")
+    lines += [
+        "",
+        "Caveats: one judge model, judged once per order. The judge is a Claude",
+        "model and the texts are Claude output, so family bias is possible. Raw",
+        "judge files: results/raw/*__judge__*.json. Reproduce with",
+        "`python3 evals/run_bench.py --judge`.",
+    ]
+    return lines
+
+
 def report(table):
     ok = [r for r in table if "reduction_pct" in r]
     avg = round(sum(r["reduction_pct"] for r in ok) / max(1, len(ok)), 1)
@@ -132,6 +187,7 @@ def report(table):
             f"| {r['model']} | {r['baseline_viol_per_100w']} | {r['skill_viol_per_100w']} "
             f"| {r['reduction_pct']}% | {r['baseline_mean_sentence']} | {r['skill_mean_sentence']} "
             f"| {r['baseline_output_tokens']} -> {r['skill_output_tokens']} |")
+    lines += judge_summary()
     lines += [
         "",
         "## Honest number warnings",
