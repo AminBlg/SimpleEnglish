@@ -11,7 +11,7 @@
       "source": "./",
       "displayName": "Simple English",
       "description": "Write or rewrite technical text with ASD-STE100 Simplified Technical English: short sentences, one word one meaning, active voice, condition before command.",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": {
         "name": "AminBlg"
       },

@@ -1,6 +1,6 @@
 ---
 name: simple-english
-version: 1.1.0
+version: 1.2.0
 description: |
   Write or rewrite technical text with the rules of ASD-STE100 Simplified
   Technical English so it is clear, unambiguous, and free of AI slop. Use for
@@ -34,8 +34,6 @@ When asked to write or rewrite technical text:
 6. **Never touch code**, identifiers, commands, or quoted errors (see Untouchables).
 
 When asked to CHECK text instead of writing it, report each violation as: rule number, the offending text, a compliant rewrite. Cite only rule numbers that exist in this file. Do not cite rule numbers from memory: the numbering is unintuitive and models invent it (tested — an agent without this file cited "Rule 3.1: short sentences"; the real Rule 3.1 is about verb forms).
-
-**If the `asdste100` MCP tool is available**, use it to look up any word whose status is not sure before you make a decision on it. Start the `asdste100_word_find` tool with the exact word. The tool gives the approved/rejected status, the part of speech, and the alternative. Do not guess — make sure it is in the word list.
 
 ## Two Modes
 
@@ -203,8 +201,6 @@ GR-6 for software docs: "e.g." → "for example", "i.e." → "that is", and dele
 ## VOCABULARY DISCIPLINE
 
 The official dictionary (~900 approved words, ~1,200 banned words with alternatives) is copyrighted by ASD and is not reproduced here. Its mechanics apply without it: **one word, one meaning, one part of speech.**
-
-**If the `asdste100` MCP tool is available**, look up any word before ruling on it: `asdste100_word_find("word")`. The tool returns the exact dictionary status (approved/rejected), the approved part of speech, and the mandated alternative. Use it instead of relying on the examples below, which cover only a small sample.
 
 Known part-of-speech rulings, useful as patterns:
 

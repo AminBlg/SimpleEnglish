@@ -12,7 +12,9 @@
   <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/STE_violations-%E2%88%9272.9%25_measured-brightgreen?style=flat" alt="72.9% fewer violations, measured"></a>
   <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-6_Claude_models-blueviolet?style=flat" alt="6 models benchmarked"></a>
   <a href="https://agentskills.io"><img src="https://img.shields.io/badge/SKILL.md-open_standard-blue?style=flat" alt="Agent Skills"></a>
+  <a href="skills/simple-english/SKILL.md"><img src="https://img.shields.io/badge/version-1.2.0-blue?style=flat" alt="version 1.2.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat" alt="MIT"></a>
+  <a href="https://github.com/AminBlg/SimpleEnglish/stargazers"><img src="https://img.shields.io/github/stars/AminBlg/SimpleEnglish?style=flat&logo=github&color=yellow" alt="GitHub stars"></a>
 </p>
 
 <p align="center">
@@ -78,15 +80,6 @@ Left column is **real unedited Claude output**. Right column is the same model w
 </tr>
 </table>
 
-```
-┌── measured: 6 Claude models × 8 tasks × 2 conditions, 96 runs ──┐
-│  STE violations per 100 words     ▼ 72.9%  (every model won)    │
-│  output tokens                    ▼ on all 6 models             │
-│  mean sentence length             11.2 → 9.7 words              │
-│  "seamlessly" survived            0                             │
-└─────────────────────────────────────────────────────────────────┘
-```
-
 More rewrites in [`examples/before-after.md`](examples/before-after.md): READMEs, error messages, incident reports, release notes.
 
 ## 📦 Install
@@ -107,6 +100,8 @@ npx skills use AminBlg/SimpleEnglish@simple-english
 /plugin marketplace add AminBlg/SimpleEnglish
 /plugin install simple-english@simple-english
 ```
+
+**Output style** (Claude Code): the plugin also ships simple-english as an [output style](https://code.claude.com/docs/en/output-styles). The skill triggers when a writing task fits; the style is always on, for every reply. After you install the plugin, run `/config`, open **Output style**, and pick `simple-english`. Claude then writes all its prose in STE and codes as before.
 
 No SKILL.md support at all? Paste [`prompts/system-prompt.md`](prompts/system-prompt.md) into your system prompt, AGENTS.md, or `.cursorrules`. There is even a ~60-token version for tight budgets.
 
@@ -195,6 +190,7 @@ Built TDD-style against the **primary Issue 9 text** (2025), not blog summaries:
 - Baseline agents without the skill wrote 40-word sentences and **invented rule numbers**. One confidently cited "Rule 3.1: short sentences" (real Rule 3.1 is verb forms 💀)
 - Secondary sources online are wrong about the modals: `can` and `will` ARE approved. We checked the PDF.
 - The skill was written to close each recorded baseline failure, then re-tested until agents pass. Scenarios + recorded results: [`evals/pressure-tests.md`](evals/pressure-tests.md)
+- A community audit ([#4](https://github.com/AminBlg/SimpleEnglish/issues/4)) checked the vocabulary tables against the Issue 9 dictionary and found the consistency pass offered "pick one" where the dictionary had already chosen. We fixed it, then A/B-tested the fix: two agents, same input, strict mode. The agent with the old skill picked the rejected verb "run". The agent with the fixed skill wrote operate, do, erase, show, and make sure that. Zero rejected words survived.
 
 ## ❓ FAQ
 
@@ -205,6 +201,10 @@ Built TDD-style against the **primary Issue 9 text** (2025), not blog summaries:
 **Why not just prompt "write clearly"?** "Clearly" is an opinion. "No sentence over 20 words" is a spec. Agents follow specs. 📐
 
 **Why a 40-year-old aerospace standard?** Because it is not vibes. It is maintained (Issue 9, January 2025), numbered, and testable. And it happens to be a near-perfect negative of every AI writing tell.
+
+## ⭐ Star history
+
+<a href="https://star-history.com/#AminBlg/SimpleEnglish&Date"><img src="https://api.star-history.com/svg?repos=AminBlg/SimpleEnglish&type=Date" alt="Star history chart" width="600"></a>
 
 ## ⚖️ License and status
 
