@@ -166,6 +166,8 @@ Where it refuses to go: marketing copy, blog voice, brand writing. Flat on purpo
 | claude-sonnet-5 | 2.67 | 0.53 | 80% |
 | claude-sonnet-4-6 | 2.06 | 0.52 | 75% |
 
+A blind pairwise judge (claude-opus-4-8, both text orders, no labels) preferred the skill output in 38 of 48 pairs, with 4 ties and 6 losses. Mean rubric score: 8.3 with the skill, 6.1 without.
+
 Output tokens went DOWN on all six Claude models too. Deterministic regex linter, same rules for both conditions, honest-caveat list and full method in [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` — needs only a logged-in Claude Code CLI.
 
 ### Pi cross-check

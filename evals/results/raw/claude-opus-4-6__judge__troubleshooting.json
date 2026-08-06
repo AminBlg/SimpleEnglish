@@ -1,0 +1,12 @@
+{
+  "model": "claude-opus-4-6",
+  "scenario": "troubleshooting",
+  "order1_base_first": {
+    "a_score": 6,
+    "b_score": 8
+  },
+  "order2_skill_first": {
+    "a_score": 8,
+    "b_score": 6
+  }
+}

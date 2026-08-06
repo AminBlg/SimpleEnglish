@@ -24,3 +24,29 @@
 - No tool can guarantee ASD-STE100 compliance, including this one.
 
 Reproduce: `python3 evals/run_bench.py` (Claude Code CLI, logged in).
+
+## Judge pass (blind pairwise)
+
+A second measurement, independent of the regex linter. For each of the 48
+model x scenario pairs, claude-opus-4-8 scored the baseline text and the
+skill text on a 0-10 rubric: can a tired non-native reader misread a
+sentence, is every instruction executable as written, is filler present.
+Each pair was judged twice with the texts in both orders. The two scores
+were averaged to cancel position bias. The judge saw no labels.
+
+Result: the skill output scored higher in 38 of 48 pairs, tied in 4, and
+lost in 6. Mean rubric score: 8.31 with the skill, 6.12 without.
+
+| Model | Skill wins | Ties | Losses |
+|---|---|---|---|
+| claude-opus-4-8 | 5 | 1 | 2 |
+| claude-opus-4-7 | 7 | 1 | 0 |
+| claude-opus-4-6 | 8 | 0 | 0 |
+| claude-opus-4-5 | 6 | 0 | 2 |
+| claude-sonnet-5 | 5 | 2 | 1 |
+| claude-sonnet-4-6 | 7 | 0 | 1 |
+
+Caveats: one judge model, judged once per order. The judge is a Claude
+model and the texts are Claude output, so family bias is possible. Raw
+judge files: results/raw/*__judge__*.json. Reproduce with
+`python3 evals/run_bench.py --judge`.

@@ -1,0 +1,12 @@
+{
+  "model": "claude-sonnet-5",
+  "scenario": "readme-intro",
+  "order1_base_first": {
+    "a_score": 5,
+    "b_score": 8
+  },
+  "order2_skill_first": {
+    "a_score": 4,
+    "b_score": 7
+  }
+}
