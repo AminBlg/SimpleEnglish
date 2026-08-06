@@ -1,0 +1,37 @@
+{
+  "text": "```\nS3 upload failed: AccessDenied.\nThe IAM credentials lack the s3:PutObject permission on the target bucket.\nGrant s3:PutObject to the IAM role or user, then run sqlpipe again.\n```",
+  "input_tokens": 72,
+  "output_tokens": 518,
+  "reasoning_tokens": 470,
+  "total_tokens": 5262,
+  "cost_usd": 0,
+  "provider": "zai",
+  "model_id": "glm-5.2",
+  "stop_reason": "stop",
+  "duration_ms": 7706,
+  "model": "zai/glm-5.2:max",
+  "condition": "skill",
+  "scenario": "error-message",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 1,
+    "sentences": 0,
+    "mean_sentence_words": 0.0,
+    "longest_sentence_words": 0,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

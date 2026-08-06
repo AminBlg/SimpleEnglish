@@ -1,0 +1,37 @@
+{
+  "text": "sqlpipe is a data pipeline that moves rows from Postgres to S3. It has three main components: a reader process, a converter, and an uploader. The reader process streams rows from Postgres in batches. It sends each batch to the converter. The converter turns each batch into a Parquet row group. It sends each row group to the uploader. The uploader writes multipart objects to S3. It retries failed writes to S3. The reader and converter stages preserve the batch flow. The uploader receives completed row groups and assigns them to object parts. Each object contains data from one or more Parquet row groups. The stages separate source reading, format conversion, and object storage. This separation lets the uploader retry an S3 write without a new read from Postgres.",
+  "input_tokens": 4746,
+  "output_tokens": 1422,
+  "reasoning_tokens": 1259,
+  "total_tokens": 6168,
+  "cost_usd": 0.0026556,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-luna",
+  "stop_reason": "stop",
+  "duration_ms": 29258,
+  "model": "openai-codex/gpt-5.6-luna:medium",
+  "condition": "skill",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 129,
+    "sentences": 14,
+    "mean_sentence_words": 9.2,
+    "longest_sentence_words": 15,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "text": "sqlpipe is a streaming data pipeline that exports PostgreSQL tables to Amazon S3 as Parquet. A reader process maintains a database connection, executes the export query, and fetches rows in bounded batches to avoid exhausting memory. Each batch is passed to a converter, which applies schema-aware type mapping, encodes column data, and assembles Parquet row groups with configurable compression and sizing. Completed row-group data flows to an uploader, which creates S3 multipart uploads, sends parts concurrently or sequentially, and retries transient failures with exponential backoff. Bounded queues between stages provide backpressure, ensuring the reader does not outrun conversion or network throughput. Progress, row counts, and failures are logged, while upload state can be checkpointed so interrupted jobs resume safely or cleanly abort incomplete multipart objects.",
+  "input_tokens": 76,
+  "output_tokens": 204,
+  "reasoning_tokens": 37,
+  "total_tokens": 280,
+  "cost_usd": 0.00026,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-luna",
+  "stop_reason": "stop",
+  "duration_ms": 7512,
+  "model": "openai-codex/gpt-5.6-luna:medium",
+  "condition": "baseline",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 125,
+    "sentences": 6,
+    "mean_sentence_words": 20.8,
+    "longest_sentence_words": 25,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 1,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 0.8
+  }
+}

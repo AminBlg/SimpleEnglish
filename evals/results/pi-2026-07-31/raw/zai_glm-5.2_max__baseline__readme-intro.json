@@ -1,0 +1,37 @@
+{
+  "text": "**`sqlpipe`** is a fast, lightweight command-line tool designed to seamlessly synchronize PostgreSQL tables directly into Amazon S3 as Apache Parquet files. Built for modern data engineering workflows, it bridges the gap between transactional databases and cloud data lakes. Whether you are building an analytics pipeline or creating regular database backups, `sqlpipe` provides a reliable bridge for your data.\n\nBy converting row-based Postgres records into highly compressed, columnar Parquet format on the fly, the tool drastically reduces your S3 storage costs while maximizing query performance in downstream platforms like AWS Athena, Snowflake, or BigQuery. With simple configuration, robust incremental syncing, and zero required infrastructure, you can easily automate your data extraction and ensure your data lake is always up to date.",
+  "input_tokens": 73,
+  "output_tokens": 1430,
+  "reasoning_tokens": 1274,
+  "total_tokens": 1503,
+  "cost_usd": 0,
+  "provider": "zai",
+  "model_id": "glm-5.2",
+  "stop_reason": "stop",
+  "duration_ms": 14297,
+  "model": "zai/glm-5.2:max",
+  "condition": "baseline",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 122,
+    "sentences": 5,
+    "mean_sentence_words": 24.4,
+    "longest_sentence_words": 35,
+    "violations": {
+      "sentence_over_limit": 2,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 2,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 4,
+    "violations_per_100w": 3.28
+  }
+}

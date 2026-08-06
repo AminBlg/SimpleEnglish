@@ -1,0 +1,37 @@
+{
+  "text": "# sqlpipe v2.0\n\nsqlpipe v2.0 introduces a breaking API change, a new incremental processing option, and faster Parquet output.\n\n## Breaking change: `/v2/users`\n\nThe `name` field has been replaced with two fields:\n\n- `first_name`\n- `last_name`\n\nUpdate clients, schemas, and downstream transformations that reference `name`. Existing integrations may fail until they adopt the new response format.\n\n## Incremental processing\n\nUse the new `--incremental` flag to process only records added or changed since the previous run. This can reduce processing time and resource usage for recurring pipelines.\n\n```bash\nsqlpipe export --incremental\n```\n\n## Faster Parquet writes\n\nParquet output is now approximately 40% faster, improving throughput for large exports and reducing pipeline completion times.\n\nReview your API mappings and deployment scripts before upgrading to ensure compatibility with the new user schema and command-line options.",
+  "input_tokens": 89,
+  "output_tokens": 219,
+  "reasoning_tokens": 25,
+  "total_tokens": 308,
+  "cost_usd": 0.0002806,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-luna",
+  "stop_reason": "stop",
+  "duration_ms": 7778,
+  "model": "openai-codex/gpt-5.6-luna:medium",
+  "condition": "baseline",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 114,
+    "sentences": 8,
+    "mean_sentence_words": 14.0,
+    "longest_sentence_words": 20,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 1,
+      "perfect_tense": 1,
+      "ing_clause": 1,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 3,
+    "violations_per_100w": 2.63
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "text": "At 14:02 UTC, a deployment removed the cache warmup step. As a result, 12% of API requests failed with HTTP 502 between 14:02 and 14:31 UTC. The cache warmup step loads data into memory before the API starts. Without this step, the API did not respond to requests fast enough.\n\nThe operations team reverted the deployment at 14:27 UTC. All API requests succeeded again by 14:31 UTC.\n\nWe will add a check to the deployment process. This check will make sure that the cache warmup step runs before each deployment.",
+  "input_tokens": 93,
+  "output_tokens": 3365,
+  "reasoning_tokens": 3240,
+  "total_tokens": 8130,
+  "cost_usd": 0,
+  "provider": "zai",
+  "model_id": "glm-5.2",
+  "stop_reason": "stop",
+  "duration_ms": 36883,
+  "model": "zai/glm-5.2:max",
+  "condition": "skill",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 90,
+    "sentences": 8,
+    "mean_sentence_words": 11.2,
+    "longest_sentence_words": 16,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

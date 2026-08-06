@@ -1,0 +1,37 @@
+{
+  "text": "Between 14:02 and 14:31 UTC, a subset of users experienced elevated error rates on our API, with approximately 12% of requests failing with HTTP 502 (Bad Gateway) errors. The issue was traced back to a recent deployment that inadvertently removed the automated cache warmup step. This oversight caused origin servers to be overwhelmed by sudden traffic spikes. \n\nAt 14:27 UTC, our engineering team successfully reverted the problematic deployment. By 14:31 UTC, API error rates returned to normal levels and full service was restored. We are actively updating our deployment pipeline to prevent similar cache configuration oversights in the future.",
+  "input_tokens": 91,
+  "output_tokens": 1282,
+  "reasoning_tokens": 1150,
+  "total_tokens": 1373,
+  "cost_usd": 0,
+  "provider": "zai",
+  "model_id": "glm-5.2",
+  "stop_reason": "stop",
+  "duration_ms": 15329,
+  "model": "zai/glm-5.2:max",
+  "condition": "baseline",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 99,
+    "sentences": 6,
+    "mean_sentence_words": 16.5,
+    "longest_sentence_words": 28,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 1.01
+  }
+}

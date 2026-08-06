@@ -1,0 +1,37 @@
+{
+  "text": "sqlpipe is organized as a three-stage streaming pipeline that moves data from PostgreSQL to durable Parquet objects in S3. A reader process executes the source query and fetches rows in bounded batches, coordinating backpressure so memory use remains predictable. Each batch is passed to a converter, which maps PostgreSQL types to the target schema, encodes columns, and accumulates records into Parquet row groups. Completed row groups flow to an uploader that streams them into an S3 multipart upload, avoiding local staging and supporting large outputs. The uploader retries failed parts with bounded backoff, preserves part ordering, and completes the object only after all parts are acknowledged. Stage boundaries isolate database reads, CPU-intensive encoding, and network I/O, enabling independent tuning, concurrency, observability, cancellation, and recovery while maintaining end-to-end flow control.",
+  "input_tokens": 76,
+  "output_tokens": 533,
+  "reasoning_tokens": 360,
+  "total_tokens": 609,
+  "cost_usd": 0.01637,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-sol",
+  "stop_reason": "stop",
+  "duration_ms": 16667,
+  "model": "openai-codex/gpt-5.6-sol:medium",
+  "condition": "baseline",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 129,
+    "sentences": 6,
+    "mean_sentence_words": 21.5,
+    "longest_sentence_words": 24,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 1,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 0.78
+  }
+}

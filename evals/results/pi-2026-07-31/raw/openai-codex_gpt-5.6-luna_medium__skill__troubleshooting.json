@@ -1,0 +1,37 @@
+{
+  "text": "## Troubleshooting\n\n### Connection timeouts to Postgres\n\nsqlpipe reports `dial tcp: i/o timeout` when it cannot connect to the Postgres server.\n\n1. Make sure that the host running sqlpipe can reach the Postgres port.\n2. If the server uses a firewall, allow traffic from the sqlpipe host.\n3. If the server uses a private network, connect sqlpipe to that network.\n4. If the network is slow, increase `source.connect_timeout_seconds` in the configuration.\n5. If the timeout continues, read the server address and port in the sqlpipe log.\n\n### S3 permission errors\n\nsqlpipe reports an S3 permission error when AWS rejects an operation.\n\n1. Make sure that the AWS credentials belong to the correct account.\n2. Make sure that the IAM policy allows access to the bucket and object path.\n3. If sqlpipe reads data, allow `s3:GetObject`.\n4. If sqlpipe writes data, allow `s3:PutObject`.\n5. If sqlpipe lists objects, allow `s3:ListBucket` on the bucket.\n6. If the bucket uses encryption, allow access to the required KMS key.\n7. If the error continues, read the AWS error message in the sqlpipe log.",
+  "input_tokens": 4729,
+  "output_tokens": 779,
+  "reasoning_tokens": 514,
+  "total_tokens": 5508,
+  "cost_usd": 0.0018806,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-luna",
+  "stop_reason": "stop",
+  "duration_ms": 17756,
+  "model": "openai-codex/gpt-5.6-luna:medium",
+  "condition": "skill",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 167,
+    "sentences": 14,
+    "mean_sentence_words": 11.1,
+    "longest_sentence_words": 14,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 2,
+      "synonym_rotation": 0
+    },
+    "violations_total": 2,
+    "violations_per_100w": 1.2
+  }
+}

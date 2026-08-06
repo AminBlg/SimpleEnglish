@@ -1,0 +1,37 @@
+{
+  "text": "## Troubleshooting\n\n### Postgres connection timeouts\n\nIf `sqlpipe` times out while connecting to Postgres, verify the host, port, database name, and credentials in your connection string. Confirm that Postgres is running and accepting TCP connections on the configured port (usually `5432`). Check firewall rules, security groups, VPN access, and network policies between the machine running `sqlpipe` and the database. For managed databases, ensure your IP address is allowlisted. If SSL is required, include the appropriate SSL mode and certificates in the connection configuration. Test connectivity independently with `psql` to isolate whether the issue is with `sqlpipe` or the network.\n\n### S3 permission errors\n\nFor `AccessDenied` or permission-related S3 errors, verify the AWS credentials used by `sqlpipe`, including the active profile, environment variables, or IAM role. The identity needs permissions such as `s3:ListBucket`, `s3:GetObject`, and `s3:PutObject` for the target bucket and prefix. Also check bucket policies, KMS key permissions for encrypted objects, and the configured AWS region.",
+  "input_tokens": 59,
+  "output_tokens": 290,
+  "reasoning_tokens": 54,
+  "total_tokens": 349,
+  "cost_usd": 0.003598,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-terra",
+  "stop_reason": "stop",
+  "duration_ms": 9128,
+  "model": "openai-codex/gpt-5.6-terra:medium",
+  "condition": "baseline",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 150,
+    "sentences": 9,
+    "mean_sentence_words": 16.7,
+    "longest_sentence_words": 23,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 3
+    },
+    "violations_total": 4,
+    "violations_per_100w": 2.67
+  }
+}

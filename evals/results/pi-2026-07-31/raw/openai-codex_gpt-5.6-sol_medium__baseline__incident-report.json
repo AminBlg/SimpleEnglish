@@ -1,0 +1,37 @@
+{
+  "text": "Resolved: Elevated API 502 Errors\n\nBetween 14:02 and 14:31 UTC, approximately 12% of API requests failed with HTTP 502 errors. The incident began after a deployment unintentionally removed the cache warmup step, causing increased load on backend services and resulting in failed requests.\n\nWe identified the deployment as the cause and reverted it at 14:27 UTC. Error rates returned to normal by 14:31 UTC.\n\nWe have restored the cache warmup step and are adding deployment safeguards and monitoring to prevent similar regressions. We apologize for the disruption and appreciate your patience while we resolved the issue.",
+  "input_tokens": 87,
+  "output_tokens": 214,
+  "reasoning_tokens": 82,
+  "total_tokens": 301,
+  "cost_usd": 0.006855,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-sol",
+  "stop_reason": "stop",
+  "duration_ms": 9669,
+  "model": "openai-codex/gpt-5.6-sol:medium",
+  "condition": "baseline",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 96,
+    "sentences": 6,
+    "mean_sentence_words": 15.8,
+    "longest_sentence_words": 23,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 1,
+      "ing_clause": 1,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 2,
+    "violations_per_100w": 2.08
+  }
+}

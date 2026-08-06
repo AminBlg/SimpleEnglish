@@ -1,0 +1,37 @@
+{
+  "text": "error uploading file to S3: AccessDenied: Access Denied\n\tstatus code: 403, request id: <request-id>, host id: <host-id>",
+  "input_tokens": 67,
+  "output_tokens": 1100,
+  "reasoning_tokens": 1060,
+  "total_tokens": 1167,
+  "cost_usd": 0.033335000000000004,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-sol",
+  "stop_reason": "stop",
+  "duration_ms": 34673,
+  "model": "openai-codex/gpt-5.6-sol:medium",
+  "condition": "baseline",
+  "scenario": "error-message",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 17,
+    "sentences": 4,
+    "mean_sentence_words": 3.8,
+    "longest_sentence_words": 5,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

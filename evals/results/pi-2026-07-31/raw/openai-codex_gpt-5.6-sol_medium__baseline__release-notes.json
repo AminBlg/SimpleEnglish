@@ -1,0 +1,37 @@
+{
+  "text": "# sqlpipe v2.0\n\nsqlpipe v2.0 introduces API improvements, incremental processing, and major performance gains.\n\n## Breaking change\n\nThe `/v2/users` response no longer includes the `name` field. It has been replaced by separate `first_name` and `last_name` fields for more consistent user data handling. Update integrations, schemas, and queries that depend on `name` before upgrading.\n\n## New: Incremental processing\n\nA new `--incremental` flag processes only new or changed records, reducing unnecessary work in recurring pipelines and making scheduled syncs faster and more efficient.\n\n```bash\nsqlpipe run --incremental\n```\n\n## Faster Parquet writes\n\nParquet output is now up to 40% faster through improvements to buffering and serialization. No configuration changes are required to benefit from the performance upgrade.",
+  "input_tokens": 89,
+  "output_tokens": 206,
+  "reasoning_tokens": 29,
+  "total_tokens": 295,
+  "cost_usd": 0.006625,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-sol",
+  "stop_reason": "stop",
+  "duration_ms": 10315,
+  "model": "openai-codex/gpt-5.6-sol:medium",
+  "condition": "baseline",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 96,
+    "sentences": 7,
+    "mean_sentence_words": 13.7,
+    "longest_sentence_words": 24,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 1,
+      "ing_clause": 1,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 2,
+    "violations_per_100w": 2.08
+  }
+}

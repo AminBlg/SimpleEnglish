@@ -1,0 +1,37 @@
+{
+  "text": "sqlpipe is a streaming export pipeline with three decoupled stages. A reader process queries Postgres using a cursor and emits rows in configurable batches, avoiding full-table buffering. Batches flow through bounded channels to provide backpressure when downstream work slows. The converter maps Postgres types to Parquet schemas and encodes each batch as a Parquet row group, preserving ordering and recording file metadata. Completed row groups are passed to the uploader, which assembles Parquet output and uploads it to S3 using multipart upload APIs. Multipart parts are buffered only as needed, enabling large exports with predictable memory use. The uploader retries transient S3 failures with backoff and can resume or abort incomplete uploads safely. Stage-level metrics, structured errors, and coordinated shutdown allow failures to stop the pipeline cleanly while preserving diagnostic context.",
+  "input_tokens": 76,
+  "output_tokens": 203,
+  "reasoning_tokens": 34,
+  "total_tokens": 279,
+  "cost_usd": 0.002588,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-terra",
+  "stop_reason": "stop",
+  "duration_ms": 7220,
+  "model": "openai-codex/gpt-5.6-terra:medium",
+  "condition": "baseline",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 131,
+    "sentences": 8,
+    "mean_sentence_words": 16.4,
+    "longest_sentence_words": 23,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 1,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 0
+    },
+    "violations_total": 2,
+    "violations_per_100w": 1.53
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "text": "We are excited to announce sqlpipe v2.0! This major release delivers significant performance upgrades, powerful new command-line features, and necessary API refinements to improve your overall workflow.\n\n**\u26a0\ufe0f Breaking Change**\nThe /v2/users endpoint structure has been updated. The previously combined name field is now split into separate first_name and last_name properties. Please update your API integrations and client wrappers to maintain compatibility.\n\n**\u2728 New --incremental Flag**\nYou can now utilize the new --incremental flag to easily append data to existing tables. This allows you to seamlessly resume large pipelines without needing a full historical data refresh.\n\n**\u26a1\ufe0f 40% Faster Parquet Writes**\nUnder-the-hood I/O optimizations now make writing Parquet files 40% faster, significantly reducing pipeline execution times.\n\nUpgrade today to experience faster data syncing!",
+  "input_tokens": 92,
+  "output_tokens": 2178,
+  "reasoning_tokens": 2002,
+  "total_tokens": 2270,
+  "cost_usd": 0,
+  "provider": "zai",
+  "model_id": "glm-5.2",
+  "stop_reason": "stop",
+  "duration_ms": 23487,
+  "model": "zai/glm-5.2:max",
+  "condition": "baseline",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 123,
+    "sentences": 9,
+    "mean_sentence_words": 13.7,
+    "longest_sentence_words": 20,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 1,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 3,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 4,
+    "violations_per_100w": 3.25
+  }
+}

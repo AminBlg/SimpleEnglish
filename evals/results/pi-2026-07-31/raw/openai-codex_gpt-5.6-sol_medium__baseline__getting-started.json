@@ -1,0 +1,37 @@
+{
+  "text": "## Getting started\n\nInstall `sqlpipe` using the official installation script:\n\n```sh\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nAfter installation, verify that the CLI is available:\n\n```sh\nsqlpipe --help\n```\n\nNext, create a `sqlpipe.yaml` file in your project directory. Define the source, destination, and pipeline settings required for your data workflow. For example:\n\n```yaml\nsource:\n  type: postgres\n  connection: ${SOURCE_DATABASE_URL}\n\ndestination:\n  type: postgres\n  connection: ${DESTINATION_DATABASE_URL}\n\npipeline:\n  table: public.customers\n```\n\nSet any referenced environment variables before running the pipeline:\n\n```sh\nexport SOURCE_DATABASE_URL=\"postgres://user:password@localhost/source\"\nexport DESTINATION_DATABASE_URL=\"postgres://user:password@localhost/destination\"\n```\n\nStart your first run with:\n\n```sh\nsqlpipe run --config sqlpipe.yaml\n```\n\n`sqlpipe` will load the configuration, connect to the configured systems, and execute the pipeline. Check the command output for progress, completion details, or configuration errors. Avoid committing credentials to version control; use environment variables or your preferred secrets manager instead.",
+  "input_tokens": 85,
+  "output_tokens": 393,
+  "reasoning_tokens": 140,
+  "total_tokens": 478,
+  "cost_usd": 0.012215,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-sol",
+  "stop_reason": "stop",
+  "duration_ms": 13608,
+  "model": "openai-codex/gpt-5.6-sol:medium",
+  "condition": "baseline",
+  "scenario": "getting-started",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 92,
+    "sentences": 10,
+    "mean_sentence_words": 9.2,
+    "longest_sentence_words": 15,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 1,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 2
+    },
+    "violations_total": 3,
+    "violations_per_100w": 3.26
+  }
+}

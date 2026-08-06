@@ -1,0 +1,37 @@
+{
+  "text": "sqlpipe moves data from Postgres to S3 through three processes. The reader process reads Postgres rows in batches. It sends each batch to the converter process. The reader uses a batch limit to control memory use.\n\nThe converter changes each batch into a Parquet row group. The uploader receives completed row groups from the converter. It writes the row groups to S3 as parts of a multipart object. Each part can contain one or more Parquet row groups. If an upload attempt fails, the uploader retries the part. The three processes operate at the same time.",
+  "input_tokens": 4746,
+  "output_tokens": 1130,
+  "reasoning_tokens": 1010,
+  "total_tokens": 5876,
+  "cost_usd": 0.023052000000000003,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-terra",
+  "stop_reason": "stop",
+  "duration_ms": 24903,
+  "model": "openai-codex/gpt-5.6-terra:medium",
+  "condition": "skill",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 96,
+    "sentences": 10,
+    "mean_sentence_words": 9.6,
+    "longest_sentence_words": 13,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

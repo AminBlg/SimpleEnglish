@@ -1,0 +1,37 @@
+{
+  "text": "Sqlpipe is a robust data ingestion pipeline designed to seamlessly export large datasets from PostgreSQL to Amazon S3. The architecture consists of three highly efficient, decoupled stages: a Reader, a Converter, and an Uploader. First, the Reader process queries Postgres, utilizing server-side cursors to stream rows in memory-bounded batches without overwhelming the database. Next, these batches are ingested by the Converter, which efficiently transforms the structured relational data into compressed Parquet row groups, optimizing for analytical query performance. Finally, the Parquet row groups are handed off to the Uploader. This component reliably writes the data to S3 using multipart object uploads. To guarantee data integrity and resilience against transient network failures, the Uploader is equipped with configurable automatic retries and exponential backoff, ensuring a fault-tolerant data transfer.",
+  "input_tokens": 79,
+  "output_tokens": 1900,
+  "reasoning_tokens": 1732,
+  "total_tokens": 1979,
+  "cost_usd": 0,
+  "provider": "zai",
+  "model_id": "glm-5.2",
+  "stop_reason": "stop",
+  "duration_ms": 16604,
+  "model": "zai/glm-5.2:max",
+  "condition": "baseline",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 127,
+    "sentences": 8,
+    "mean_sentence_words": 15.9,
+    "longest_sentence_words": 26,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 1,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 3,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 5,
+    "violations_per_100w": 3.94
+  }
+}

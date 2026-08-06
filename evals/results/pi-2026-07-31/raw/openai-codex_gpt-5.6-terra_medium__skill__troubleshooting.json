@@ -1,0 +1,37 @@
+{
+  "text": "## Connection timeouts\n\nsqlpipe stops with `dial tcp: i/o timeout` when it cannot reach the Postgres port.\n\n1. Make sure that the host can reach the Postgres port.\n2. Make sure that the firewall allows traffic to port 5432.\n3. If the database is managed, make sure that it accepts connections from the sqlpipe IP address.\n4. If the network is slow, increase `source.connect_timeout_seconds` in the configuration.\n5. Run the command again.\n\n## S3 permission errors\n\nsqlpipe reports an S3 permission error when its AWS identity cannot access the bucket.\n\n1. Make sure that the IAM role has `s3:GetObject` permission for the source bucket.\n2. Make sure that the IAM role has `s3:PutObject` permission for the destination bucket.\n3. If the bucket uses KMS encryption, make sure that the IAM role has KMS permissions.\n4. Make sure that the AWS Region in the configuration matches the bucket Region.\n5. Run the command again.",
+  "input_tokens": 4729,
+  "output_tokens": 636,
+  "reasoning_tokens": 418,
+  "total_tokens": 5365,
+  "cost_usd": 0.01709,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-terra",
+  "stop_reason": "stop",
+  "duration_ms": 15135,
+  "model": "openai-codex/gpt-5.6-terra:medium",
+  "condition": "skill",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 143,
+    "sentences": 12,
+    "mean_sentence_words": 11.1,
+    "longest_sentence_words": 16,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 2,
+      "synonym_rotation": 0
+    },
+    "violations_total": 2,
+    "violations_per_100w": 1.4
+  }
+}

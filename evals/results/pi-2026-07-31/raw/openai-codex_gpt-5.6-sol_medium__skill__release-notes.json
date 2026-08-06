@@ -1,0 +1,37 @@
+{
+  "text": "# sqlpipe v2.0\n\nsqlpipe v2.0 changes the `/v2/users` response, adds incremental processing, and improves Parquet write performance.\n\n## Breaking change\n\nBREAKING CHANGE: Before you use `/v2/users` with version 2.0, update clients to read `first_name` and `last_name`.\n\nThe endpoint no longer returns the `name` field. Clients that require `name` will fail to read user names. The new fields provide the first and last name as separate values.\n\n## Incremental processing\n\nUse the new `--incremental` flag to process only data that changed after the previous run.\n\nThis flag reduces repeated work for pipelines with frequent updates.\n\n## Parquet performance\n\nParquet writes are 40% faster than in sqlpipe v1.x. This improvement reduces write time for large data sets. Actual performance depends on the data, storage, and system resources.",
+  "input_tokens": 4759,
+  "output_tokens": 1227,
+  "reasoning_tokens": 1034,
+  "total_tokens": 5986,
+  "cost_usd": 0.060605000000000006,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-sol",
+  "stop_reason": "stop",
+  "duration_ms": 33649,
+  "model": "openai-codex/gpt-5.6-sol:medium",
+  "condition": "skill",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 114,
+    "sentences": 11,
+    "mean_sentence_words": 10.4,
+    "longest_sentence_words": 15,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}
