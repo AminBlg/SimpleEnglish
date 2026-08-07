@@ -289,6 +289,8 @@ These are technical names (Rules 1.5, 8.6). Leave them exact, even when they bre
 - Product names, API endpoint names, config keys
 - Numbers with units — each counts as one word in the sentence limit
 
+Facts are untouchable too. Rewrite the style, not the content. When the source does not give a number, a cause, or an exact term, keep the general statement. Do not invent specifics to look concrete.
+
 ## Beyond Documentation
 
 Same rules, different targets. Full adaptations in `references/use-cases.md`:
