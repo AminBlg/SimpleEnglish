@@ -18,6 +18,11 @@
 </p>
 
 <p align="center">
+  <a href="https://trendshift.io/repositories/97933?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-97933" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/97933/daily?language=Python" alt="AminBlg%2FSimpleEnglish | Trendshift" width="250" height="55"/></a>
+  <a href="https://trendshift.io/repositories/97933?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-97933" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/97933/daily" alt="AminBlg%2FSimpleEnglish | Trendshift" width="250" height="55"/></a>
+</p>
+
+<p align="center">
   <a href="#-before--after">See it</a> ·
   <a href="#-install">Install</a> ·
   <a href="#-the-rules">The rules</a> ·
@@ -94,12 +99,13 @@ That is it. The [skills CLI](https://github.com/vercel-labs/skills) detects your
 npx skills use AminBlg/SimpleEnglish@simple-english
 ```
 
-**Claude Code plugin**: this repo is also a plugin marketplace. Run:
+**Claude Code plugin**: this repo is also a plugin marketplace. From your terminal:
 
+```bash
+claude plugin marketplace add AminBlg/SimpleEnglish && claude plugin install simple-english@simple-english
 ```
-/plugin marketplace add AminBlg/SimpleEnglish
-/plugin install simple-english@simple-english
-```
+
+Or inside Claude Code: `/plugin marketplace add AminBlg/SimpleEnglish`, then `/plugin install simple-english@simple-english`.
 
 **Output style** (Claude Code): the plugin also ships simple-english as an [output style](https://code.claude.com/docs/en/output-styles). The skill triggers when a writing task fits; the style is always on, for every reply. After you install the plugin, run `/config`, open **Output style**, and pick `simple-english`. Claude then writes all its prose in STE and codes as before.
 
