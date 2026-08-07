@@ -1,6 +1,5 @@
 ---
 name: simple-english
-version: 1.2.0
 description: |
   Write or rewrite technical text with the rules of ASD-STE100 Simplified
   Technical English so it is clear, unambiguous, and free of AI slop. Use for
@@ -14,6 +13,7 @@ license: MIT
 compatibility: claude-code cursor codex gemini-cli opencode
 metadata:
   standard: ASD-STE100 Issue 9 (2025-01-15)
+  version: 1.3.0
 ---
 
 # Simple English: Write Like an Aerospace Manual
@@ -26,14 +26,14 @@ Write for that tired reader. Each sentence must survive one read.
 
 When asked to write or rewrite technical text:
 
-1. **Select the mode** (pragmatic or strict, below).
+1. **Select the mode** (pragmatic or strict — the table that follows).
 2. **Classify each passage** as procedural or descriptive. Every other rule depends on this.
-3. **Correct your vocabulary before drafting.** In strict mode, use `make sure that` for the check/verify/confirm/ensure concept — the dictionary rejects all four as verbs. In pragmatic mode, pick one and keep it. Pick ONE noun for config/settings (all are valid technical nouns — pick one and keep it). Use no other word for these concepts in the whole document.
-4. **Apply the rules** from the catalog below.
+3. **Correct your vocabulary before drafting.** In strict mode, the dictionary rejects check/verify/confirm/ensure as verbs. Replace them by intent: `make sure that` (verify a state), `examine` (look for faults), `measure` (get a value). In pragmatic mode, pick one and keep it. Pick ONE noun for config/settings (all are valid technical nouns — pick one and keep it). Use no other word for these concepts in the whole document.
+4. **Apply the rules** from the catalog that follows.
 5. **Do the self-check** before you deliver. This step is not optional.
 6. **Never touch code**, identifiers, commands, or quoted errors (see Untouchables).
 
-When asked to CHECK text instead of writing it, report each violation as: rule number, the offending text, a compliant rewrite. Cite only rule numbers that exist in this file. Do not cite rule numbers from memory: the numbering is unintuitive and models invent it (tested — an agent without this file cited "Rule 3.1: short sentences"; the real Rule 3.1 is about verb forms).
+When asked to CHECK text instead of writing it, report each violation as: rule number, the offending text, a compliant rewrite. Cite only rule numbers that exist in this file. Do not cite rule numbers from memory: the numbering is unintuitive and models invent it (tested — an agent without this file cited "Rule 3.1: short sentences". The real Rule 3.1 is about verb forms).
 
 ## Two Modes
 
@@ -72,7 +72,7 @@ Do not mix the two in one passage. A "Getting started" section is procedural. An
 | 1.9 | When you pick a technical noun, pick a short and clear one. |
 | 1.10 | No regional, slang, or jargon words as technical nouns. |
 | 1.11 | One item, one name. Do not call it "config" here and "settings" there. |
-| 1.12 | You can use domain verbs as technical verbs ("deploy", "compile", "merge"). |
+| 1.12 | You can use domain verbs as technical verbs ("deploy", "compile", "merge"). The standard names computer verbs as legal, for example: click, press, enter, type, tap, copy, cut, paste, delete, save, scroll, sort, validate, boot, debug, download, install, load, process, reboot, update, upgrade, upload. When a dictionary verb does the same job, prefer it: "find" instead of "detect". |
 | 1.13 | Do not use technical verbs as nouns. |
 | 1.14 | Use American English spelling. |
 
@@ -102,14 +102,14 @@ Break long noun chains with prepositions (of, on, in, for):
 | 3.3 | Use the past participle only as an adjective ("the cached response"). |
 | 3.4 | No auxiliary verbs for complex constructions. No present perfect, no "is to be installed". |
 | 3.5 | Use an "-ing" form only as a technical noun or inside one ("logging", "the mounting bracket") — never as a verb. |
-| 3.6 | Active voice. In descriptive text, passive is legal only when the agent is unknown. |
+| 3.6 | Active voice. In descriptive text, passive is legal only when the agent is unknown. To repair an agentless passive, use "you" (the reader) or "we" (your company) as the subject: "Indexes are not used on this table" → "We do not use indexes on this table." |
 | 3.7 | Describe an action with a verb, not a noun ("compress the file", not "perform compression of the file"). |
 
 **Approved modals: can, will, must. Banned: should, would, may, might, could.**
-The standard rejects "could" even for possibility: write "an explosion can occur", never "could occur". For "should": a requirement becomes "must"; a suggestion is stated as fact or deleted. This matters double for agent instructions — models read "should" as optional.
+The standard rejects "could" even for possibility: write "an explosion can occur", never "could occur". For "should": a requirement becomes "must". A suggestion is stated as fact or deleted. This matters double for agent instructions — models read "should" as optional.
 
 **Before:** The migration has completed and the table is being rebuilt.
-**After:** The migration is complete. The database rebuilds the table.
+**After:** The migration completed. The database rebuilds the table.
 
 **Before:** The flag can be set in the config file, making restarts unnecessary.
 **After:** You can set the flag in the config file. Then a restart is not necessary.
@@ -123,9 +123,9 @@ The standard rejects "could" even for possibility: write "an explosion can occur
 |---|---|
 | 4.1 | Write short and clear sentences. |
 | 4.2 | Do not omit words or use contractions to shorten sentences. Keep articles, keep "that". |
-| 4.3 | Use a vertical list for complex text. |
+| 4.3 | Use a vertical list for complex text. Put a colon at the end of the lead-in. Start each item with an uppercase letter. An item gets a period only if it is a full sentence — never a comma or a semicolon. The last item gets a period. Do not mix instructions and facts in one list. Do not nest lists. |
 | 4.4 | Use connecting words between sentences on related topics ("Then", "As a result"). |
-| 4.5 | Put an article (the, a, an) or a demonstrative adjective (this, these) before nouns where applicable. |
+| 4.5 | Put an article (the, a, an) or a demonstrative adjective (this, these) before nouns where applicable. Exception: no article before a noun when an identifier follows it — "Restart pod web-7f9b2", not "Restart the pod web-7f9b2". |
 
 Rule 4.2 is the anti-terseness rule. STE is short sentences with complete grammar, not telegraph style:
 
@@ -137,10 +137,10 @@ Rule 4.2 is the anti-terseness rule. STE is short sentences with complete gramma
 | Rule | Instruction |
 |---|---|
 | 5.1 | Maximum 20 words per sentence. Warnings and cautions included. |
-| 5.2 | One instruction per sentence, unless two actions happen at the same time. |
+| 5.2 | One instruction per sentence, unless two actions happen at the same time. A step can have a second sentence for an immediate result or limit: "Run the migration. The migration must take less than 5 minutes." |
 | 5.3 | Write instructions in the imperative: "Run the migration." |
 | 5.4 | Put a required condition before the command, divided by a comma: "If the build fails, read the log." |
-| 5.5 | Notes give information, never instructions. Notes get the 25-word limit. |
+| 5.5 | Notes give information, never instructions, requirements, or limits. A limit belongs with its action in the work step. Notes get the 25-word limit. Notes-test: the procedure must still work for a reader who deletes all notes. |
 
 **Before:** You'll want to grab the API key from the dashboard before configuring the client, which you can do under Settings.
 **After:** Get the API key from the dashboard, under Settings. Then configure the client with this key.
@@ -156,13 +156,13 @@ Rule 4.2 is the anti-terseness rule. STE is short sentences with complete gramma
 | 6.5 | One topic per paragraph. |
 | 6.6 | Maximum six sentences per paragraph. |
 
-No imperative in descriptive text. Descriptions explain; procedures instruct.
+No imperative in descriptive text. Descriptions explain. Procedures instruct.
 
 ### Section 7 — Safety instructions (Rules 7.1-7.3)
 
 | Rule | Instruction |
 |---|---|
-| 7.1 | Use a word that shows the risk level ("WARNING" = injury, "CAUTION" = damage). |
+| 7.1 | Use a word that shows the risk level ("WARNING" = injury, "CAUTION" = damage). If the two risks occur together, use "WARNING". |
 | 7.2 | Start with a clear command or condition. |
 | 7.3 | Then give the risk or the possible result. |
 
@@ -178,7 +178,7 @@ Never bury the instruction after the explanation. The pattern transfers directly
 | 8.1 | All standard punctuation is legal except the semicolon. Write two sentences instead. |
 | 8.2 | Use hyphens to connect words that act as one unit. |
 | 8.3 | Parentheses are legal for references, item numbers, abbreviations, plural forms, explanations, alternatives. |
-| 8.4 | In a vertical list, the lead-in colon ends a sentence for word count. |
+| 8.4 | In a vertical list, the lead-in colon ends a sentence for word count. Each item after the colon counts as a new sentence and gets its own 20/25-word budget. |
 | 8.5 | Text inside parentheses counts as one word. |
 | 8.6 | Count as one word each: numbers, numbers with units, abbreviations, alphanumeric identifiers, quoted text, titles, labels, proper nouns. |
 | 8.7 | A hyphenated word counts as one word. |
@@ -194,13 +194,13 @@ Rule 8.6 matters for software text: `sqlpipe run --config sqlpipe.yaml` in backt
 | 9.3 | Do not build phrasal verbs ("go down" → "decrease", "set up" → "install" or "configure"). |
 | 9.4 | Keep one consistent style and terminology through the whole document. |
 
-General recommendations GR-1 to GR-8: keep the conjunction "that", be careful with "with", give pronouns clear referents, prefer "this + noun" over bare "this", avoid false friends, avoid Latin abbreviations, use inclusive language, and use the possessive apostrophe form only when you are sure it is correct (GR-8: if unsure, do not use it — non-native readers find it hard).
+General recommendations GR-1 to GR-8: keep the conjunction "that", be careful with "with", give pronouns clear referents, prefer "this + noun" over bare "this", avoid false friends, avoid Latin abbreviations, use inclusive language, and use the possessive apostrophe form only when you are sure it is correct (GR-8: if unsure, do not use it — non-native readers find it hard). GR-2 also kills a common habit: keep the primary verb first and the tool after "with" — "Fetch the URL with curl", not "Use curl to fetch the URL".
 
 GR-6 for software docs: "e.g." → "for example", "i.e." → "that is", and delete "etc." — name the items or write "and more".
 
 ## VOCABULARY DISCIPLINE
 
-The official dictionary (~900 approved words, ~1,200 banned words with alternatives) is copyrighted by ASD and is not reproduced here. Its mechanics apply without it: **one word, one meaning, one part of speech.**
+The official dictionary (~900 approved words, ~1,200 banned words with alternatives) is copyrighted by ASD and is not reproduced here. Its mechanics apply without it: **one word, one meaning, one part of speech.** Issue 9 adds a quick-reference list of approved verbs in the dictionary introduction — in strict mode, check your verbs against the official standard.
 
 Known part-of-speech rulings, useful as patterns:
 
@@ -219,9 +219,10 @@ Known part-of-speech rulings, useful as patterns:
 |---|---|
 | should (requirement) | must |
 | should (recommendation) | Delete it, or state it as fact: "X is better because Y." |
+| should (inverted conditional: "should a failure occur") | if: "If a failure occurs" |
 | may / might / could (possibility) | can |
 | may (permission) | can |
-| would (hypothetical) | Restructure: "If X occurs, Y occurs." |
+| would (hypothetical) | can, or restructure: "If X occurs, Y occurs." |
 
 ### Slop-to-simple substitutions
 
@@ -258,27 +259,48 @@ This table is ours, not the ASD dictionary. It maps the words AI-generated docs 
 
 ### Consistency pass
 
-Collapse synonym rotations to one term each (Rules 1.11, 9.4). The two lists below work differently.
+Collapse synonym rotations to one term each (Rules 1.11, 9.4). The two lists that follow work differently.
 
 **Technical nouns — not in the dictionary. Pick one and keep it consistent (both modes):**
 
 - config / configuration / settings / options → pick one
 
-**Dictionary rulings — the standard has already chosen. Use the approved word (strict mode); pick one and keep it consistent (pragmatic mode):**
+**Dictionary rulings — the standard has already chosen. Use the approved word (strict mode). Or pick one and keep it consistent (pragmatic mode):**
 
 | You wrote | Dictionary status | Use instead |
 |---|---|---|
-| check (verb) / verify / confirm / ensure | All rejected as verbs | `make sure that` (strict); pick one (pragmatic) |
+| check (verb) / verify / confirm / ensure | All rejected as verbs | Strict, by intent: `make sure that` (verify a state), `examine` (look for faults: "examine the log"), `measure` (get a value), or the noun: "do a check of". Pragmatic: pick one and keep it. |
 | validate | Not in dictionary | Use as technical verb (Rule 1.12), or replace with `make sure that` |
-| delete / drop (verb) / destroy | All rejected | `erase` (data), `remove` (physical); avoid `drop` and `destroy` |
+| delete / drop (verb) / destroy | All rejected as dictionary verbs | Strict: `erase` (data), `remove` (physical). In computer contexts `delete` is also a legal technical verb (Rule 1.12). Avoid `drop` and `destroy`. |
 | remove | Approved verb | Keep it |
 | run / execute | Both rejected | `operate` for run, `do` for execute (strict); pick one (pragmatic) |
 | invoke / launch | Not in dictionary | Use as technical verbs (Rule 1.12) |
-| display (verb) / render / present (verb) | All rejected | `show` (approved verb) |
+| display (verb) / render / present (verb) | All rejected | `show` covers most software cases. Official alternatives: display → `show`, render → `make`, present → `give` |
 | issue | Not in dictionary | Use as technical noun, or replace with `problem` (approved) |
 | failure | Rejected in general use; approved as TN for performance loss | Use only when it means a performance error: "a failure of the pump" |
 | error | Approved noun | Keep it |
 | problem | Approved noun | Keep it |
+
+### Recurring errors the standard names
+
+The dictionary introduction lists the words that writers get wrong most often. This is the software-relevant set, given as rulings only — the full list is part of the official dictionary.
+
+| You wrote | STE writes |
+|---|---|
+| however | but |
+| therefore | thus, as a result |
+| since (= because) | because |
+| any | Delete it, or restructure: "if you have any questions" → "if you have questions" |
+| now | Delete it: "now start the service" → "start the service" |
+| need to, have to | Imperative in procedures ("install"); "it is necessary to" in descriptive text |
+| perform | do |
+| insert | put (but SQL `INSERT` stays: it is quoted text) |
+| reach | get to, connect to |
+| avoid | prevent |
+| repeat | do … again |
+| acceptable | permitted — better, give the limit: "a latency of less than 200 ms" |
+| complete (adjective) | completed |
+| the example below, the section above | Name the target, or put the reference after it: "the example that follows" |
 
 ## Untouchables
 
@@ -287,6 +309,7 @@ These are technical names (Rules 1.5, 8.6). Leave them exact, even when they bre
 - Code blocks, inline code, identifiers, CLI commands, flags, file paths
 - Quoted error messages and log lines
 - Product names, API endpoint names, config keys
+- UI labels and button names ("click the **Save** button" — quoted text, counts as one word)
 - Numbers with units — each counts as one word in the sentence limit
 
 ## Beyond Documentation
@@ -302,12 +325,13 @@ Same rules, different targets. Full adaptations in `references/use-cases.md`:
 
 ## Self-Check Before You Deliver
 
-This step is not optional. Run these four checks on your draft:
+This step is not optional. Run these five checks on your draft:
 
 1. Count words in your three longest sentences. Over the 20/25 limit → split them.
-2. Search your draft for: `'ll`, `'re`, `'s` (contraction), `has been`, `have been`, `should`, `-ing` verbs after a comma, semicolons.
+2. Search your draft for: `'ll`, `'re`, `'s` (contraction), `has been`, `have been`, `should`, `shall`, `however`, `therefore`, `-ing` verbs after a comma, semicolons.
 3. Search for every `if` and `when`. Each one stands at the START of its sentence, before the command. "Increase the timeout if the network is slow" → "If the network is slow, increase the timeout."
-4. Search for the verbs you did NOT pick in Your Task step 3 (the check/verify/confirm set). Replace every hit with your chosen verb.
+4. Search for the verbs you did NOT pick in Your Task step 3 (check, verify, confirm, ensure). STRICT MODE: route each hit by intent — `make sure that`, `examine`, or `measure`. Pragmatic mode: replace each hit with your chosen verb.
+5. Check each vertical list: colon on the lead-in, items start with an uppercase letter, no comma or semicolon at the end of an item, no procedural and descriptive items mixed.
 
 Fix what you find, then deliver. For a full audit, run `references/checklist.md`.
 
@@ -319,13 +343,13 @@ Fix what you find, then deliver. For a full audit, run `references/checklist.md`
 
 **After (classified procedural, verb = "make sure", conditions first, one instruction per sentence):**
 
-> **Connection timeouts.** sqlpipe stops with `dial tcp: i/o timeout` when it cannot reach the Postgres port (5432 by default).
+> **Connection timeouts.** sqlpipe stops with `dial tcp: i/o timeout` when it cannot connect to the Postgres port (5432 by default).
 >
-> 1. Make sure that the host that runs sqlpipe can reach the Postgres port. A firewall or security group usually blocks it.
+> 1. Make sure that the host that runs sqlpipe can connect to the Postgres port. A firewall or security group usually blocks it.
 > 2. If the database is managed (RDS, Cloud SQL), make sure that the instance accepts connections from the IP of sqlpipe.
 > 3. If the network is slow, increase `source.connect_timeout_seconds` in the configuration.
 
-What changed: 40-word sentences split under 20; "you're" expanded; "check/confirm" collapsed to "make sure that"; every condition moved before its command; "etc." removed; code and error strings untouched.
+What changed: 40-word sentences split under 20. "you're" expanded. "check/confirm" collapsed to "make sure that". Every condition moved before its command. "etc." removed. Code and error strings untouched.
 
 ## Limits
 
