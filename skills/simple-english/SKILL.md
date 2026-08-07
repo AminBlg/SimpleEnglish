@@ -185,6 +185,11 @@ Never bury the instruction after the explanation. The pattern transfers directly
 
 Rule 8.6 matters for software text: `sqlpipe run --config sqlpipe.yaml` in backticks is quoted text and counts as one word. Long identifiers do not blow your sentence budget.
 
+**Em-dashes.** This check is from this skill, not from the standard. Flag every em-dash (`—`) outside code and quoted text. An em-dash splices two statements together but hides the logic junction between them: cause, contrast, example, or explanation. The reader must infer the writer's intent. Name the relation instead ("because", "but", "for example", "that is"), or write two sentences with a connecting word (Rule 4.4). Parentheses are legal for a short explanation (Rule 8.3). Treat a spaced hyphen or a double hyphen (` - `, `--`) used as a dash the same way.
+
+**Before:** The deploy failed — the disk was full.
+**After:** The deploy failed because the disk was full.
+
 ### Section 9 — Writing practices (Rules 9.1-9.4, GR-1 to GR-8)
 
 | Rule | Instruction |
@@ -293,7 +298,7 @@ The same rules apply to error messages, runbooks, incident reports, release note
 This step is not optional. Run these five checks on your draft:
 
 1. Count words in your three longest sentences. Over the 20/25 limit → split them.
-2. Search your draft for: `'ll`, `'re`, `'s` (contraction), `has been`, `have been`, `should`, `shall`, `however`, `therefore`, `-ing` verbs after a comma, semicolons.
+2. Search your draft for: `'ll`, `'re`, `'s` (contraction), `has been`, `have been`, `should`, `shall`, `however`, `therefore`, `-ing` verbs after a comma, semicolons, em-dashes.
 3. Search for every `if` and `when`. Each one stands at the START of its sentence, before the command. "Increase the timeout if the network is slow" → "If the network is slow, increase the timeout."
 4. Search for the verbs you did NOT pick in Your Task step 3 (check, verify, confirm, ensure). STRICT MODE: route each hit by intent — `make sure that`, `examine`, or `measure`. Pragmatic mode: replace each hit with your chosen verb.
 5. Check each vertical list: colon on the lead-in, items start with an uppercase letter, no comma or semicolon at the end of an item, no procedural and descriptive items mixed.
