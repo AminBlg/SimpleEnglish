@@ -12,7 +12,7 @@
   <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/STE_violations-%E2%88%9272.9%25_measured-brightgreen?style=flat" alt="72.9% fewer violations, measured"></a>
   <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-6_Claude_models-blueviolet?style=flat" alt="6 models benchmarked"></a>
   <a href="https://agentskills.io"><img src="https://img.shields.io/badge/SKILL.md-open_standard-blue?style=flat" alt="Agent Skills"></a>
-  <a href="skills/simple-english/SKILL.md"><img src="https://img.shields.io/badge/version-1.2.0-blue?style=flat" alt="version 1.2.0"></a>
+  <a href="skills/simple-english/SKILL.md"><img src="https://img.shields.io/badge/version-1.3.0-blue?style=flat" alt="version 1.3.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat" alt="MIT"></a>
   <a href="https://github.com/AminBlg/SimpleEnglish/stargazers"><img src="https://img.shields.io/github/stars/AminBlg/SimpleEnglish?style=flat&logo=github&color=yellow" alt="GitHub stars"></a>
 </p>
@@ -89,23 +89,56 @@ More rewrites in [`examples/before-after.md`](examples/before-after.md): READMEs
 
 ## 📦 Install
 
+Choose the installation that matches your agent:
+
+| Installation | Agents | Automatic session hook |
+|---|---|---|
+| Standalone skill | Cursor, Copilot, Gemini CLI, OpenCode, and other Agent Skills hosts | No |
+| Claude Code plugin | Claude Code | Yes |
+| Codex plugin | Codex CLI and Codex in the ChatGPT desktop app | Yes |
+
+The hook-enabled plugins require Node.js because the session hook runs a small Node script.
+
+### Standalone skill
+
 ```bash
 npx skills add AminBlg/SimpleEnglish
 ```
 
-That is it. The [skills CLI](https://github.com/vercel-labs/skills) detects your agents (Claude Code, Cursor, Codex, Copilot, Gemini CLI, and more) and installs for the ones you pick. Try before installing:
+The [skills CLI](https://github.com/vercel-labs/skills) detects your agents and installs the skill for the ones you pick. This method uses normal skill matching. It does not install the automatic session hook.
+
+Try the standalone skill before you install it:
 
 ```bash
 npx skills use AminBlg/SimpleEnglish@simple-english
 ```
 
-**Claude Code plugin**: this repo is also a plugin marketplace. From your terminal:
+### Claude Code plugin
+
+Install the plugin to get the skill and its automatic session hook:
 
 ```bash
 claude plugin marketplace add AminBlg/SimpleEnglish && claude plugin install simple-english@simple-english
 ```
 
 Or inside Claude Code: `/plugin marketplace add AminBlg/SimpleEnglish`, then `/plugin install simple-english@simple-english`.
+
+### Codex plugin
+
+Install the plugin to get the skill and its automatic session hook:
+
+```bash
+codex plugin marketplace add AminBlg/SimpleEnglish
+codex plugin add simple-english@simple-english
+```
+
+Or run `/plugins` in Codex CLI after you add the marketplace, then install **Simple English** from the `simple-english` tab.
+
+The Claude Code and Codex plugins load the skill automatically at session start. You do not need to name or invoke the skill. Its scope still limits the rules to technical-writing tasks.
+
+Codex asks you to review and trust the hook before its first run. Open `/hooks`, approve the Simple English hook, then start a new task.
+
+See [`src/hooks/README.md`](src/hooks/README.md) for details.
 
 **Output style** (Claude Code): the plugin also ships simple-english as an [output style](https://code.claude.com/docs/en/output-styles). The skill triggers when a writing task fits; the style is always on, for every reply. After you install the plugin, run `/config`, open **Output style**, and pick `simple-english`. Claude then writes all its prose in STE and codes as before.
 

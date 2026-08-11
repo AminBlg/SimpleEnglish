@@ -1,6 +1,6 @@
 ---
 name: simple-english
-version: 1.2.0
+version: 1.3.0
 description: |
   Write or rewrite technical text with the rules of ASD-STE100 Simplified
   Technical English so it is clear, unambiguous, and free of AI slop. Use for
