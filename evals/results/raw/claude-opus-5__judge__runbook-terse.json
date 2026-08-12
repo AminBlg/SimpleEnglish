@@ -1,0 +1,13 @@
+{
+  "model": "claude-opus-5",
+  "scenario": "runbook-terse",
+  "judge_effort": "low",
+  "order1_base_first": {
+    "a_score": 3,
+    "b_score": 8
+  },
+  "order2_skill_first": {
+    "a_score": 8,
+    "b_score": 9
+  }
+}
