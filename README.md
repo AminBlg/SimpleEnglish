@@ -27,6 +27,7 @@
   <a href="#-install">Install</a> ·
   <a href="#-the-rules">The rules</a> ·
   <a href="#-not-just-docs">Not just docs</a> ·
+  <a href="#-the-standard-compressed">Compressed</a> ·
   <a href="#-receipts">Receipts</a> ·
   <a href="#-faq">FAQ</a>
 </p>
@@ -191,6 +192,23 @@ The skill reduced measured violations on all four models. It shortened final tex
 
 See the [Pi results, method, raw responses, and reproduction command](evals/results/pi-2026-07-31/RESULTS.md). Run other configured models with `python3 evals/run_pi_bench.py --model PROVIDER/MODEL:THINKING`.
 
+## 📉 The standard, compressed
+
+[`package/`](package/README.md) is the whole rule set as a prompt payload.
+
+- **1,170,813 bytes → 50,948 bytes.** 434 pages of extracted PDF text, three files.
+- **196,973 tokens → 19,128 tokens. 10.3x.** Two tokenizers (o200k, cl100k) agree within 0.4%.
+- **1,395 tokens of rules.** [`ste-core.md`](package/ste-core.md): 53 rules, 9 sections, rule numbers preserved.
+- **2,008 word rulings.** 770 approved words. 1,238 not approved, each with its approved swaps.
+
+The 1,395-token core matches or beats this repo's own 4,969-token `SKILL.md` on both linters — 3.6x fewer tokens, same discipline. Add the 13,448-token word list and word-choice errors drop a further 78% on Sonnet 4.6.
+
+No symbolic notation, no gist tokens. The survey is in [`COMPRESSION-RESEARCH.md`](package/COMPRESSION-RESEARCH.md) and the verdict is that dense private syntax dies the moment you change model family — 0% operator fidelity on some models, 98% on others. The lever is deletion, not encoding.
+
+Method, parser fidelity gaps, and the honest limits: [`package/README.md`](package/README.md) and [`package/results/BENCH.md`](package/results/BENCH.md). Different linter from the benchmark above — read the two separately. Claude models only, so cross-family behavior is **untested**.
+
+The word lists are a derived index of the ASD dictionary with the examples dropped. Read **License and status** below before you redistribute them. 📄
+
 ## 🧾 Receipts
 
 Built TDD-style against the **primary Issue 9 text** (2025), not blog summaries:
@@ -202,7 +220,7 @@ Built TDD-style against the **primary Issue 9 text** (2025), not blog summaries:
 
 ## ❓ FAQ
 
-**Does this make output STE-certified?** No. Nothing does, because ASD certifies no tool. Default mode is pragmatic: structural rules + your domain vocabulary. Strict mode gets close; word-level rulings live in the official standard, a [free download](https://www.asd-ste100.org/request.html).
+**Does this make output STE-certified?** No. Nothing does, because ASD certifies no tool. Default mode is pragmatic: structural rules + your domain vocabulary. Strict mode gets close, and [`package/not-approved.tsv`](package/not-approved.tsv) gives it 1,238 word swaps to check against. That index is lossy — 1,238 words where the standard has 1,274, and 80 rows with no alternative — so the authoritative word-level rulings still live in the standard, a [free download](https://www.asd-ste100.org/request.html).
 
 **Will my docs sound robotic?** They will sound like Airbus manuals: flat and impossible to misread. For docs that is the whole point. Keep your voice for your blog. ✍️
 
@@ -216,4 +234,14 @@ Built TDD-style against the **primary Issue 9 text** (2025), not blog summaries:
 
 ## ⚖️ License and status
 
-MIT for everything here. The repo paraphrases the rules for teaching and reproduces **zero** spec text or dictionary content. Unofficial project, not affiliated with or endorsed by ASD or STEMG. ASD-STE100 is a registered trademark of ASD.
+MIT covers the code and the prose of this repo. MIT does not cover ASD-STE100 itself.
+
+The rules in [`SKILL.md`](skills/simple-english/SKILL.md) and [`package/ste-core.md`](package/ste-core.md) are a paraphrase. The rule numbers match the standard. The official wording is not here.
+
+[`package/`](package/README.md) ships word lists that come from the dictionary. `approved.txt` holds 770 headwords with the part of speech and **no definitions**. `not-approved.tsv` holds 1,238 words that are not approved, each with its approved alternatives. Both drop the example columns, which hold most of Part 2. A derived index, not a copy.
+
+ASD (AeroSpace and Defence Industries Association of Europe) publishes ASD-STE100. STEMG writes and maintains it. All rights in the standard stay with ASD. The standard gives the meanings, the examples, and the authoritative word-level rulings, and it is a [free download](https://www.asd-ste100.org/request.html).
+
+Unofficial project, not affiliated with or endorsed by ASD or STEMG. ASD-STE100 is a registered trademark of ASD. ASD or STEMG can ask for a change through an [issue](https://github.com/AminBlg/SimpleEnglish/issues). The maintainer answers.
+
+Provenance and the known gaps in the extraction: [`package/NOTICE.md`](package/NOTICE.md).

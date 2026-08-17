@@ -40,7 +40,7 @@ When asked to CHECK text instead of writing it, report each violation as: rule n
 | Mode | When | What you apply |
 |---|---|---|
 | **Pragmatic** (default) | Docs, READMEs, error messages — the user wants clear text | All structural rules. Domain words stay ("idempotent", "webhook"). |
-| **Strict** | The user names STE, ASD-STE100, or compliance | Structural rules + full vocabulary discipline, and tell the user that full compliance needs the official dictionary (free at asd-ste100.org). |
+| **Strict** | The user names STE, ASD-STE100, or compliance | Structural rules + full vocabulary discipline. If `package/not-approved.tsv` is available, check every content word against it and take the listed approved alternative. Then tell the user that that index is lossy and full compliance needs the official dictionary (free at asd-ste100.org). |
 
 ## Step 1: Classify the Text
 
@@ -200,7 +200,7 @@ GR-6 for software docs: "e.g." → "for example", "i.e." → "that is", and dele
 
 ## VOCABULARY DISCIPLINE
 
-The official dictionary (~900 approved words, ~1,200 banned words with alternatives) is copyrighted by ASD and is not reproduced here. Its mechanics apply without it: **one word, one meaning, one part of speech.**
+The official dictionary is copyrighted by ASD. This skill reproduces no part of it. The repo ships a derived index at [`package/`](../../package/README.md): headwords, parts of speech, and approved swaps, with no definitions and no examples. It is lossy, and the standard stays the authority. Its mechanics apply without either: **one word, one meaning, one part of speech.**
 
 Known part-of-speech rulings, useful as patterns:
 
