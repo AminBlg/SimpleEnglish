@@ -1,5 +1,6 @@
 ---
 name: simple-english
+version: 1.3.0
 description: |
   Write or rewrite technical text with the rules of ASD-STE100 Simplified
   Technical English so it is clear, unambiguous, and free of AI slop. Use for
@@ -13,7 +14,6 @@ license: MIT
 compatibility: claude-code cursor codex gemini-cli opencode
 metadata:
   standard: ASD-STE100 Issue 9 (2025-01-15)
-  version: 1.3.0
 ---
 
 # Simple English: Write Like an Aerospace Manual
@@ -275,7 +275,7 @@ Collapse synonym rotations to one term each (Rules 1.11, 9.4). The two lists tha
 | remove | Approved verb | Keep it |
 | run / execute | Both rejected | `operate` for run, `do` for execute (strict); pick one (pragmatic) |
 | invoke / launch | Not in dictionary | Use as technical verbs (Rule 1.12) |
-| display (verb) / render / present (verb) | All rejected | `show` covers most software cases. Official alternatives: display → `show`, render → `make`, present → `give` |
+| display (verb) / render / present (verb) | All rejected | `show` covers most software cases. Official alternatives: display → `show`, render → `make`, present → `give`, `show` |
 | issue | Not in dictionary | Use as technical noun, or replace with `problem` (approved) |
 | failure | Rejected in general use; approved as TN for performance loss | Use only when it means a performance error: "a failure of the pump" |
 | error | Approved noun | Keep it |
@@ -291,11 +291,11 @@ The dictionary introduction lists the words that writers get wrong most often. T
 | therefore | thus, as a result |
 | since (= because) | because |
 | any | Delete it, or restructure: "if you have any questions" → "if you have questions" |
-| now | Delete it: "now start the service" → "start the service" |
+| now | at this time — better, delete it: "now start the service" → "start the service" |
 | need to, have to | Imperative in procedures ("install"); "it is necessary to" in descriptive text |
 | perform | do |
 | insert | put (but SQL `INSERT` stays: it is quoted text) |
-| reach | get to, connect to |
+| reach | get, get to |
 | avoid | prevent |
 | repeat | do … again |
 | acceptable | permitted — better, give the limit: "a latency of less than 200 ms" |

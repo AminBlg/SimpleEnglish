@@ -18,9 +18,9 @@ Search the draft for each pattern. Every hit outside code blocks and quoted text
 | `e.g.`, `i.e.`, `etc.` | Latin abbreviation (GR-6) | "for example", "that is", name the items. |
 | `simply`, `easily`, `seamlessly`, `robust` | Filler (no fact) | Delete. |
 | ` if `, ` when ` (mid-sentence) | Trailing condition (Rule 5.4) | Move the condition to the start of the sentence, add a comma. |
-| `however`, `therefore`, `since` (= because), `now` | Recurring errors (dictionary introduction) | but / thus, as a result / because / delete |
+| `however`, `therefore`, `since` (= because), `now` | Recurring errors (dictionary introduction) | but / thus, as a result / because / at this time (better, delete) |
 | `need to`, `have to` | Recurring errors | Imperative in procedures; `it is necessary to` in descriptive text |
-| `perform`, `insert`, `reach`, `avoid`, `repeat`, `acceptable` | Recurring errors | do / put / get to, connect to / prevent / do … again / permitted |
+| `perform`, `insert`, `reach`, `avoid`, `repeat`, `acceptable` | Recurring errors | do / put / get, get to / prevent / do … again / permitted |
 | `the example below`, `the section above` | "below" and "above" as adverbs are not approved | Name the target, or write `…that follows` |
 | ` is complete`, ` are complete` | "complete" as an adjective is not approved | completed (adjective), or full / all |
 
