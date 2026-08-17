@@ -9,8 +9,8 @@
 </p>
 
 <p align="center">
-  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/STE_violations-%E2%88%9272.9%25_measured-brightgreen?style=flat" alt="72.9% fewer violations, measured"></a>
-  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-6_Claude_models-blueviolet?style=flat" alt="6 models benchmarked"></a>
+  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/STE_violations-%E2%88%9274.6%25_measured-brightgreen?style=flat" alt="74.6% fewer violations, measured"></a>
+  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-7_Claude_models-blueviolet?style=flat" alt="7 models benchmarked"></a>
   <a href="https://agentskills.io"><img src="https://img.shields.io/badge/SKILL.md-open_standard-blue?style=flat" alt="Agent Skills"></a>
   <a href="skills/simple-english/SKILL.md"><img src="https://img.shields.io/badge/version-1.2.0-blue?style=flat" alt="version 1.2.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat" alt="MIT"></a>
@@ -161,10 +161,11 @@ Where it refuses to go: marketing copy, blog voice, brand writing. Flat on purpo
 
 ## 📊 Benchmarks
 
-**72.9% fewer STE violations per 100 words with the skill on, averaged across 6 models × 8 writing tasks (96 generations, measured).**
+**74.6% fewer STE violations per 100 words with the skill on, averaged across 7 models × 8 writing tasks (112 generations, measured).**
 
 | Model | Baseline viol/100w | Skill viol/100w | Reduction |
 |---|---|---|---|
+| claude-opus-5 | 2.13 | 0.32 | 85% |
 | claude-opus-4-8 | 1.05 | 0.62 | 41% |
 | claude-opus-4-7 | 2.28 | 0.42 | 82% |
 | claude-opus-4-6 | 2.24 | 0.40 | 82% |
@@ -172,9 +173,9 @@ Where it refuses to go: marketing copy, blog voice, brand writing. Flat on purpo
 | claude-sonnet-5 | 2.67 | 0.53 | 80% |
 | claude-sonnet-4-6 | 2.06 | 0.52 | 75% |
 
-A blind pairwise judge (claude-opus-4-8, both text orders, no labels) preferred the skill output in 38 of 48 pairs, with 4 ties and 6 losses. Mean rubric score: 8.3 with the skill, 6.1 without.
+A blind pairwise judge (claude-opus-4-8, both text orders, no labels) preferred the skill output in 45 of 56 pairs, with 5 ties and 6 losses. Mean rubric score: 8.1 with the skill, 6.0 without.
 
-Output tokens went DOWN on all six Claude models too. Deterministic regex linter, same rules for both conditions, honest-caveat list and full method in [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` — needs only a logged-in Claude Code CLI.
+Output tokens went DOWN on all seven Claude models too. Deterministic regex linter, same rules for both conditions, reasoning effort pinned to `low`, honest-caveat list and full method in [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` — needs only a logged-in Claude Code CLI.
 
 ### Pi cross-check
 
