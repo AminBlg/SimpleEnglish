@@ -1,0 +1,19 @@
+{
+  "description": "Load Simple English rules automatically for each Codex session.",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "^(startup|resume|clear|compact)$",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${PLUGIN_ROOT}/src/hooks/simple-english-activate.js\"",
+            "timeout": 5,
+            "statusMessage": "Loading Simple English...",
+            "additionalContextLimit": 0
+          }
+        ]
+      }
+    ]
+  }
+}

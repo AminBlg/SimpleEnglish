@@ -1,0 +1,28 @@
+{
+  "name": "simple-english",
+  "version": "1.3.0",
+  "description": "Write or rewrite technical text with ASD-STE100 Simplified Technical English: short sentences, one word one meaning, active voice, condition before command.",
+  "author": {
+    "name": "AminBlg"
+  },
+  "homepage": "https://github.com/AminBlg/SimpleEnglish",
+  "repository": "https://github.com/AminBlg/SimpleEnglish",
+  "license": "MIT",
+  "keywords": ["technical-writing", "documentation", "ste", "asd-ste100"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Simple English",
+    "shortDescription": "Write clear technical text with ASD-STE100 rules.",
+    "longDescription": "Load Simplified Technical English rules automatically for documentation, procedures, error messages, runbooks, release notes, and incident reports.",
+    "developerName": "AminBlg",
+    "category": "Productivity",
+    "capabilities": ["Write"],
+    "websiteURL": "https://github.com/AminBlg/SimpleEnglish",
+    "defaultPrompt": [
+      "Rewrite this technical text in Simple English.",
+      "Write this procedure with ASD-STE100 rules.",
+      "Check this document for Simple English violations."
+    ],
+    "brandColor": "#2563EB"
+  }
+}
