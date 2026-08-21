@@ -1,0 +1,11 @@
+{
+  "text": "Make sure that the backup exists before you run the migration.",
+  "input_tokens": 2,
+  "output_tokens": 19,
+  "duration_ms": 2319,
+  "cost_usd": 0.36057849999999997,
+  "model": "claude-opus-4-8",
+  "condition": "core",
+  "scenario": "runbook-terse",
+  "type": "procedural"
+}

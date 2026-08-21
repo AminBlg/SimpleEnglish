@@ -5,7 +5,7 @@
 <p align="center">
   An agent skill that forces LLMs to write docs in <a href="https://www.asd-ste100.org/">ASD-STE100 Simplified Technical English</a>:<br>
   the controlled language aerospace has used since 1983 so a tired mechanic <em>cannot</em> misread an instruction.<br>
-  AI slop dies as a side effect. 💀
+  AI slop dies as a side effect.
 </p>
 
 <p align="center">
@@ -18,7 +18,6 @@
 </p>
 
 <p align="center">
-  <a href="https://trendshift.io/repositories/97933?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-97933" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/97933/daily?language=Python" alt="AminBlg%2FSimpleEnglish | Trendshift" width="250" height="55"/></a>
   <a href="https://trendshift.io/repositories/97933?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-97933" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/97933/daily" alt="AminBlg%2FSimpleEnglish | Trendshift" width="250" height="55"/></a>
 </p>
 
@@ -132,7 +131,7 @@ Then ask for any technical writing, or say: *"rewrite this with simple-english"*
 
 53 numbered rules, 9 sections, written in 1983 by people whose readers die when a sentence is ambiguous. The ones doing the heavy lifting:
 
-| Rule | What it kills 🪦 |
+| Rule | What it kills |
 |---|---|
 | Max 20 words per instruction, 25 per description | The run-on sentence |
 | One word = one meaning, whole document | check/verify/confirm/validate roulette |
@@ -144,20 +143,20 @@ Then ask for any technical writing, or say: *"rewrite this with simple-english"*
 | One instruction per sentence | Steps nobody can follow at 2 a.m. |
 | Keep articles, keep "that" | Telegraph style. STE is short, not terse |
 
-Full paraphrased set with software examples: [`SKILL.md`](skills/simple-english/SKILL.md). Yes, this README breaks half of them. Marketing is explicitly out of STE scope. The skill knows that and stays in the docs. 😌
+Full paraphrased set with software examples: [`SKILL.md`](skills/simple-english/SKILL.md). Yes, this README breaks half of them. Marketing is explicitly out of STE scope. The skill knows that and stays in the docs.
 
 ## 🧰 Not just docs
 
 The skill ships adaptations ([`use-cases.md`](skills/simple-english/references/use-cases.md)) for:
 
-- 🚨 **Error messages**: what happened → why → what to do, in that order
-- 📟 **Runbooks**: STE's home turf; a runbook IS a maintenance manual
-- 🧯 **Incident reports**: simple past murders "we have identified an issue that may have impacted"
-- 📣 **Release notes**: breaking changes as warnings: command first, risk second
-- 🤖 **Your AGENTS.md / prompts**: a system prompt is a procedure for a reader that cannot ask questions. Models read "should" as optional. STE bans "should". Think about it.
-- 🌍 **Translation prep**: STE's original job: readable for non-natives, cheap to localize
+- **Error messages**: what happened → why → what to do, in that order
+- **Runbooks**: STE's home turf; a runbook IS a maintenance manual
+- **Incident reports**: simple past murders "we have identified an issue that may have impacted"
+- **Release notes**: breaking changes as warnings: command first, risk second
+- **Your AGENTS.md / prompts**: a system prompt is a procedure for a reader that cannot ask questions. Models read "should" as optional. STE bans "should".
+- **Translation prep**: STE's original job: readable for non-natives, cheap to localize
 
-Where it refuses to go: marketing copy, blog voice, brand writing. Flat on purpose. ✋
+Where it refuses to go: marketing copy, blog voice, brand writing. Flat on purpose.
 
 ## 📊 Benchmarks
 
@@ -196,7 +195,7 @@ See the [Pi results, method, raw responses, and reproduction command](evals/resu
 
 Built TDD-style against the **primary Issue 9 text** (2025), not blog summaries:
 
-- Baseline agents without the skill wrote 40-word sentences and **invented rule numbers**. One confidently cited "Rule 3.1: short sentences" (real Rule 3.1 is verb forms 💀)
+- Baseline agents without the skill wrote 40-word sentences and **invented rule numbers**. One confidently cited "Rule 3.1: short sentences" (real Rule 3.1 is verb forms)
 - Secondary sources online are wrong about the modals: `can` and `will` ARE approved. We checked the PDF.
 - The skill was written to close each recorded baseline failure, then re-tested until agents pass. Scenarios + recorded results: [`evals/pressure-tests.md`](evals/pressure-tests.md)
 - A community audit ([#4](https://github.com/AminBlg/SimpleEnglish/issues/4)) checked the vocabulary tables against the Issue 9 dictionary and found the consistency pass offered "pick one" where the dictionary had already chosen. We fixed it, then A/B-tested the fix: two agents, same input, strict mode. The agent with the old skill picked the rejected verb "run". The agent with the fixed skill wrote operate, do, erase, show, and make sure that. Zero rejected words survived.
@@ -205,9 +204,9 @@ Built TDD-style against the **primary Issue 9 text** (2025), not blog summaries:
 
 **Does this make output STE-certified?** No. Nothing does, because ASD certifies no tool. Default mode is pragmatic: structural rules + your domain vocabulary. Strict mode gets close; word-level rulings live in the official standard, a [free download](https://www.asd-ste100.org/request.html).
 
-**Will my docs sound robotic?** They will sound like Airbus manuals: flat and impossible to misread. For docs that is the whole point. Keep your voice for your blog. ✍️
+**Will my docs sound robotic?** They will sound like Airbus manuals: flat and impossible to misread. For docs that is the whole point. Keep your voice for your blog.
 
-**Why not just prompt "write clearly"?** "Clearly" is an opinion. "No sentence over 20 words" is a spec. Agents follow specs. 📐
+**Why not just prompt "write clearly"?** "Clearly" is an opinion. "No sentence over 20 words" is a spec. Agents follow specs.
 
 **Why a 40-year-old aerospace standard?** Because it is not vibes. It is maintained (Issue 9, January 2025), numbered, and testable. And it happens to be a near-perfect negative of every AI writing tell.
 

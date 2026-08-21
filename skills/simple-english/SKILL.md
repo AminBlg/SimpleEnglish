@@ -1,6 +1,5 @@
 ---
 name: simple-english
-version: 1.3.0
 description: |
   Write or rewrite technical text with the rules of ASD-STE100 Simplified
   Technical English so it is clear, unambiguous, and free of AI slop. Use for
@@ -13,6 +12,7 @@ description: |
 license: MIT
 compatibility: claude-code cursor codex gemini-cli opencode
 metadata:
+  version: "1.3.0"
   standard: ASD-STE100 Issue 9 (2025-01-15)
 ---
 
@@ -33,7 +33,7 @@ When asked to write or rewrite technical text:
 5. **Do the self-check** before you deliver. This step is not optional.
 6. **Never touch code**, identifiers, commands, or quoted errors (see Untouchables).
 
-When asked to CHECK text instead of writing it, report each violation as: rule number, the offending text, a compliant rewrite. Cite only rule numbers that exist in this file. Do not cite rule numbers from memory: the numbering is unintuitive and models invent it (tested — an agent without this file cited "Rule 3.1: short sentences". The real Rule 3.1 is about verb forms).
+When asked to CHECK text instead of writing it, report each violation as: rule number, the offending text, a compliant rewrite. Cite only rule numbers that exist in this file. Do not cite rule numbers from memory. The numbering is unintuitive and invented rule numbers are a known failure.
 
 ## Two Modes
 
@@ -316,14 +316,7 @@ Facts are untouchable too. Rewrite the style, not the content. When the source d
 
 ## Beyond Documentation
 
-Same rules, different targets. Full adaptations in `references/use-cases.md`:
-
-- **Error messages**: state what happened (simple past), the cause if known, then the fix as an imperative. No "Oops", no "Please ensure", no apology filler.
-- **Runbooks**: STE's home turf. Imperative steps, conditions first, warnings before the step.
-- **Incident reports**: simple past only. "We have identified an issue that may have impacted" becomes "Between 14:02 and 14:31 UTC, 12% of requests failed."
-- **Release notes**: breaking changes follow the warning pattern — command first, risk second.
-- **Agent instructions (prompts, AGENTS.md)**: a system prompt is a procedure for a reader that cannot ask questions. One instruction per sentence, no "should", condition first.
-- **Translation prep**: STE's original job. One meaning per word plus complete grammar removes most translation ambiguity.
+The same rules apply to error messages, runbooks, incident reports, release notes, commit messages, agent instructions, support macros, UI copy, and translation prep. Read `references/use-cases.md` when the task is one of these. It gives the pattern for each.
 
 ## Self-Check Before You Deliver
 
@@ -357,7 +350,7 @@ What changed: 40-word sentences split under 20. "you're" expanded. "check/confir
 
 STE is for technical facts and instructions. Do not apply it to marketing copy, blog voice, or brand writing — it deletes persuasion by design. When a user asks for STE on marketing text, say so and offer it for the docs instead.
 
-This skill is an unofficial aid. It is not affiliated with or endorsed by ASD or STEMG, and no tool can guarantee STE compliance. ASD-STE100 is a registered trademark of ASD. The official standard is a free download at asd-ste100.org.
+No tool can guarantee STE compliance. If the user asks for a compliance claim, say that.
 
 ## References
 

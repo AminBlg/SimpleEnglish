@@ -1,0 +1,11 @@
+{
+  "text": "## Troubleshooting\n\n### Connection Timeouts (Postgres)\n\nA connection timeout occurs when sqlpipe does not connect to the Postgres server in the specified time.\n\nDo these steps:\n\n1. Make sure that the host address and port number in the connection string are correct.\n2. Make sure that the Postgres server is on and that you can connect to it.\n3. If a firewall is between sqlpipe and the server, make sure that port 5432 is open.\n4. Increase the `--timeout` value.\n5. Start sqlpipe again.\n\n### S3 Permission Errors\n\nAn S3 permission error occurs when the AWS credentials do not have the necessary permissions for the target bucket.\n\nDo these steps:\n\n1. Make sure that the IAM role or user has `s3:GetObject` and `s3:PutObject` permissions.\n2. Make sure that the AWS region in the configuration agrees with the bucket region.\n3. Run `aws s3 ls s3://bucket-name` to make sure that the credentials have access to the bucket.",
+  "input_tokens": 3,
+  "output_tokens": 6842,
+  "duration_ms": 103570,
+  "cost_usd": 0.459603,
+  "model": "claude-sonnet-4-6",
+  "condition": "core+dict",
+  "scenario": "troubleshooting",
+  "type": "procedural"
+}

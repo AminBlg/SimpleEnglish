@@ -1,0 +1,11 @@
+{
+  "text": "sqlpipe is a command-line tool that reads tables from a Postgres database and writes them to an Amazon S3 bucket as Parquet files. It runs as a single binary with no external dependencies. You configure it with a simple set of flags: the database connection string, the table names, and the target S3 path.\n\nParquet is a columnar file format. Analytics tools such as Amazon Athena, Snowflake, and DuckDB read Parquet files directly without a load step. sqlpipe helps teams move Postgres data to a data lake without a pipeline service or a complex transformation layer. Each sync run reads data from the source table and writes a new set of Parquet files to the target S3 path.",
+  "input_tokens": 3,
+  "output_tokens": 3670,
+  "duration_ms": 53207,
+  "cost_usd": 0.32611500000000004,
+  "model": "claude-sonnet-4-6",
+  "condition": "core",
+  "scenario": "readme-intro",
+  "type": "descriptive"
+}
