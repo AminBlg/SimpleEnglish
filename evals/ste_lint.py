@@ -3,7 +3,8 @@
 
 Counts mechanical violations that a regex can catch: sentence length,
 contractions, banned modals, perfect tenses, "-ing" clauses, semicolons,
-Latin abbreviations, slop words, trailing conditions, synonym rotation.
+em-dashes, Latin abbreviations, slop words, trailing conditions, synonym
+rotation.
 
 Known ceiling: this is a regex pass, not a grammar parser. It undercounts
 (no passive-voice detection, no part-of-speech checks) and it can miscount
@@ -30,6 +31,7 @@ SLOP = re.compile(
     r"comprehensive|powerful|blazingly|streamlin\w*|facilitat\w*|"
     r"performant|plethora|myriad|delve|crucial|pivotal)\b", re.I)
 TRAILING_COND = re.compile(r"\w[^.!?\n]{3,}\s\b(if|when)\b\s", re.I)
+DASH = re.compile(r"—|–|(?<= )--(?= )|(?<=[^\s\d]) - (?=[^\s\d])")
 ROTATION_SETS = [
     ("check-verify", re.compile(r"\b(check|verify|confirm|validate|ensure)\w*\b", re.I)),
     ("config-settings", re.compile(r"\b(config|configuration|settings)\b", re.I)),
@@ -63,6 +65,7 @@ def lint(text, text_type):
     counts["perfect_tense"] = len([m for m in PERFECT.finditer(body)])
     counts["ing_clause"] = len(ING_CLAUSE.findall(body))
     counts["semicolon"] = body.count(";")
+    counts["em_dash"] = len(DASH.findall(body))
     counts["latin_abbrev"] = len(LATIN.findall(body))
     counts["slop_word"] = len(SLOP.findall(body))
     counts["trailing_condition"] = sum(
@@ -97,10 +100,22 @@ CLEAN_FIXTURE = """The system retries a failed upload automatically. This proces
 
 If failures continue, make sure that your credentials are correct. If the problem continues, contact support."""
 
+# Only the first three dashes should be flagged as logic junctions.
+DASH_FIXTURE = """The deploy failed — the disk was full.
+The upload failed -- the token expired.
+The retry failed - the port was closed.
+Do not use --force against production.
+The window is 5 - 10 minutes.
+Use the `--config sqlpipe.yaml` flag.
+Remove the panel:
+   -   Loosen the four bolts.
+"""
+
 
 def self_test():
     slop = lint(SLOP_FIXTURE, "procedural")
     clean = lint(CLEAN_FIXTURE, "procedural")
+    dashes = lint(DASH_FIXTURE, "procedural")
     assert slop["violations"]["sentence_over_limit"] >= 1, slop
     assert slop["violations"]["banned_modal"] >= 1, slop
     assert slop["violations"]["contraction"] >= 1, slop
@@ -112,6 +127,7 @@ def self_test():
     assert slop["violations"]["trailing_condition"] >= 1, slop
     assert slop["violations"]["synonym_rotation"] >= 1, slop
     assert clean["violations_total"] == 0, clean
+    assert dashes["violations"]["em_dash"] == 3, dashes
     print("self-test OK:", slop["violations_total"], "violations in slop fixture, 0 in clean")
 
 
