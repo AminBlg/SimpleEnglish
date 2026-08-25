@@ -100,7 +100,7 @@ CLEAN_FIXTURE = """The system retries a failed upload automatically. This proces
 
 If failures continue, make sure that your credentials are correct. If the problem continues, contact support."""
 
-# Only the first three dashes should be flagged as logic junctions.
+# Only the first three dashes must be flagged as logic junctions.
 DASH_FIXTURE = """The deploy failed — the disk was full.
 The upload failed -- the token expired.
 The retry failed - the port was closed.
