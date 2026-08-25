@@ -106,7 +106,21 @@ claude plugin marketplace add AminBlg/SimpleEnglish && claude plugin install sim
 
 Or inside Claude Code: `/plugin marketplace add AminBlg/SimpleEnglish`, then `/plugin install simple-english@simple-english`.
 
-**Output style** (Claude Code): the plugin also ships simple-english as an [output style](https://code.claude.com/docs/en/output-styles). The skill triggers when a writing task fits; the style is always on, for every reply. After you install the plugin, run `/config`, open **Output style**, and pick `simple-english`. Claude then writes all its prose in STE and codes as before.
+**Output style** (Claude Code): the plugin also ships simple-english as an [output style](https://code.claude.com/docs/en/output-styles). When a writing task fits, the skill triggers. The style applies to every reply.
+
+Claude Code gives each plugin output style the name `<plugin>:<style>`. The name of this one is `simple-english:simple-english`. The short name `simple-english` does not resolve, and Claude Code ignores it without an error.
+
+To use the style in one project, run `/config`. Open **Output style**. Select `simple-english:simple-english`. Claude Code saves this choice to `.claude/settings.local.json` in that project only.
+
+To use the style in all projects, put this in `~/.claude/settings.json`:
+
+```json
+{
+  "outputStyle": "simple-english:simple-english"
+}
+```
+
+Then start Claude Code again. Claude writes all prose in STE and codes as before.
 
 No SKILL.md support at all? Paste [`prompts/system-prompt.md`](prompts/system-prompt.md) into your system prompt, AGENTS.md, or `.cursorrules`. There is even a ~60-token version for tight budgets.
 
