@@ -1,0 +1,11 @@
+{
+  "text": "Between 14:02 and 14:31 UTC, 12% of API requests failed. The requests stopped with the HTTP 502 error. A deploy caused this failure. The deploy removed the cache warmup step. At 14:27, we reverted the deploy. Then the error rate decreased. At 14:31, all requests operated correctly again. We are sorry for this problem. To prevent this problem again, we will make the cache warmup step a mandatory part of each deploy. We will also monitor the cache more closely.",
+  "input_tokens": 2,
+  "output_tokens": 165,
+  "duration_ms": 11021,
+  "cost_usd": 0.6261685,
+  "model": "claude-opus-4-8",
+  "condition": "core+dict",
+  "scenario": "incident-report",
+  "type": "descriptive"
+}

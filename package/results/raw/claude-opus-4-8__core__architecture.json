@@ -1,0 +1,11 @@
+{
+  "text": "sqlpipe moves data from Postgres to S3 in three stages.\n\nThe reader process gets rows from Postgres. It reads the rows in batches. Each batch holds a set number of rows.\n\nThe converter receives each batch. It changes the batch into a Parquet row group. The row group keeps the data in a column format.\n\nThe uploader writes the row groups to S3. It sends the data as multipart objects. If an upload fails, the uploader tries the operation again. This retry logic makes the transfer reliable.\n\nThe three stages run as a pipeline. The reader, the converter, and the uploader work at the same time. This design keeps the memory use low. It also makes the throughput high.",
+  "input_tokens": 2,
+  "output_tokens": 617,
+  "duration_ms": 10438,
+  "cost_usd": 0.3758485,
+  "model": "claude-opus-4-8",
+  "condition": "core",
+  "scenario": "architecture",
+  "type": "descriptive"
+}

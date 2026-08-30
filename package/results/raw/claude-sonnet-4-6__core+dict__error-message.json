@@ -1,0 +1,11 @@
+{
+  "text": "Error: S3 upload did not complete. AccessDenied: the IAM credentials do not have the s3:PutObject permission. Add the s3:PutObject permission to the IAM policy for this bucket. Then try the upload again.",
+  "input_tokens": 3,
+  "output_tokens": 1505,
+  "duration_ms": 27221,
+  "cost_usd": 0.2755767,
+  "model": "claude-sonnet-4-6",
+  "condition": "core+dict",
+  "scenario": "error-message",
+  "type": "procedural"
+}
