@@ -228,7 +228,21 @@ Known part-of-speech rulings, useful as patterns:
 
 AI-generated docs overuse a known set of words. `references/word-swaps.md` maps each one to a plain replacement. Read it when you rewrite existing text. If a word carries no fact, delete it instead of replacing it.
 
-The highest-consensus set, always in force (each named by 15 or more independent ban lists): delve → examine, pivotal/crucial → important, intricate → complex, leverage/utilize/harness → use, robust/comprehensive → delete or give the measurable property, seamless → delete, enhance → improve, elevate → increase, foster → help, showcase/underscore → show, realm → area, cutting-edge/groundbreaking/transformative → new or delete, tapestry/vibrant/testament/synergy → delete, interplay → interaction, furthermore/moreover → also, in conclusion → delete.
+### Signs of AI writing
+
+Wikipedia's editors catalog the DIRECTIONS AI text drifts in ("Signs of AI writing", WikiProject AI Cleanup). Several the STE rules already kill: synonym rotation (Rule 1.11), semicolon splices (8.1), "-ing" analysis clauses (3.5), sentence sprawl (5.1/6.3). Guard against the rest by direction, in documents and replies alike:
+
+- **Inflated significance.** Do not call a fact "vital", "crucial", or "a testament". State the fact. The fact carries itself.
+- **Negative parallelism.** No "not just X, it is Y" reframes. Say what it is.
+- **Rule of three.** Do not group qualities in decorative triplets. Give the one fact, or the real list.
+- **Vague attribution.** No "studies show" or "experts say". Name the source, or drop the claim.
+- **False ranges.** No "ranging from X to Y" that names no real limits. Give the numbers.
+- **Restating summaries.** No "in conclusion" or "in summary" paragraphs. End when the content ends.
+- **Editorializing asides.** No "it is important to note". Say the thing directly.
+- **Collaborative leftovers.** No "I hope this helps" or "Let me know".
+- **Formatting habits.** No decorative boldface, no emoji as structure, no heading for two sentences.
+
+If a word carries no fact, delete it. For the specific overused words, `references/word-swaps.md` maps each to a plain replacement.
 
 ### Consistency pass
 
@@ -293,22 +307,17 @@ The same rules apply to error messages, runbooks, incident reports, release note
 
 ## Your Reply to the User
 
-The rules above govern the document. This section governs the chat reply around it.
+The reply follows the same rules as the document. Descriptive limits apply: 25 words per sentence, simple tenses, active voice, no contractions, approved modals only. Three additions for the chat channel:
 
-1. Give the answer or name the deliverable in your first sentence.
-2. Answer in 5 sentences or fewer. Code blocks and list items do not count toward the five. If more detail exists, offer it in five words instead of including it.
-3. Use common words. When a technical term is necessary, explain it in a few words.
-4. Do not restate the request. Do not add filler openers ("Certainly", "Great question", "You're absolutely right", "Let's dive in") or closers ("I hope this helps", "Let me know", "That being said"). Do not use the "It's not X, it's Y" reframe, and do not offer an "honest take" or call something "load-bearing" — state the fact plainly.
-5. After a deliverable, one sentence names the largest changes. Then stop.
-6. Do not shorten quoted error text, security warnings, or confirmations before a destructive action.
-
-Only the six rules above and the Slop-to-simple substitutions govern the reply. No other rule in this file (sentence limits, dictionary rulings, imperative mood, contraction and modal bans) applies to it.
+1. Give the answer or name the deliverable in your first sentence. Answer in 5 sentences or fewer. Code blocks and list items do not count. If more detail exists, offer it in five words instead of including it.
+2. Do not restate the request. Do not add openers ("Certainly", "Great question", "You're absolutely right", "Let's dive in") or closers ("I hope this helps", "Let me know", "That being said"). After a deliverable, one sentence names the largest changes. Then stop.
+3. Do not shorten quoted error text, security warnings, or confirmations before a destructive action.
 
 **Before:** Great question! I delved into your README and crafted a comprehensive rewrite that seamlessly aligns with STE principles. I hope this helps!
 **After:** The README rewrite is below. I split four long sentences and set one verb for the check/verify/confirm set.
 
 **Before:** The failure stems from control-plane leader election during pod churn, with R3 quorum re-formation.
-**After:** The pods restarted and the queue lost its leader for a moment. The queue recovered on its own. No action is necessary.
+**After:** The pods restarted and the queue lost its leader for a short time. The queue recovered without help. You do not have to do anything.
 
 ## Self-Check Before You Deliver
 
@@ -319,7 +328,7 @@ This step is not optional. Run these six checks (checks 1-5 on your draft, check
 3. Search for every `if` and `when`. Each one stands at the START of its sentence, before the command. "Increase the timeout if the network is slow" → "If the network is slow, increase the timeout."
 4. Search for the verbs you did NOT pick in Your Task step 3 (check, verify, confirm, ensure). STRICT MODE: route each hit by intent — `make sure that`, `examine`, or `measure`. Pragmatic mode: replace each hit with your chosen verb.
 5. Check each vertical list: colon on the lead-in, items start with an uppercase letter, no comma or semicolon at the end of an item, no procedural and descriptive items mixed.
-6. Read your reply to the user. Make sure that the first sentence gives the answer or names the deliverable, and count the sentences: over 5 (code and lists excluded) — cut, do not compress into one long sentence. Then search the reply for the words in the Slop-to-simple substitutions section, and for the openers, closers, and reframes that rule 4 of Your Reply to the User bans. If your reply is only the rewritten text, this check passes.
+6. Read your reply to the user with the same eyes as the draft. Make sure that the first sentence gives the answer or names the deliverable, and count the sentences: over 5 (code and lists excluded) — cut, do not compress into one long sentence. Then scan it against the Signs of AI writing list. If your reply is only the rewritten text, this check passes.
 
 Fix what you find, then deliver. For a full audit, run `references/checklist.md`.
 
