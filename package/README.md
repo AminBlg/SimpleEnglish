@@ -95,7 +95,8 @@ Two independent tools. Read their scores separately, never as one number.
   contractions, banned modals, perfect tenses, "-ing" clauses, semicolons.
   It does not look at word choice.
 - `ste_dict_lint.py` counts words that are not approved. It does not look at
-  the mechanical rules.
+  the mechanical rules. It also reports a third number: `slop_per_100w`, hits
+  from `slop.tsv`, the LLM-tell lexicon.
 
 ```
 python3 ste_dict_lint.py file.md
@@ -114,6 +115,18 @@ dictionary does not list them. The tool therefore reports two numbers.
 `not_approved_per_100w` counts every hit. `residual_per_100w` removes 27
 technical nouns of software documentation. Use `residual` for software text,
 and extend `TECHNICAL_NOUNS` for another subject field.
+
+### `slop.tsv` - the LLM-tell lexicon
+
+The STE dictionary predates language models and does not rule on their tell
+words: `delve`, `tapestry`, `seamless`. `slop.tsv` covers that gap. It holds the terms
+named by 8 or more of 122 independent published ban lists
+(linters, agent skills, style guides, frequency research), harvested and
+verified in August 2026. Columns: term, count of lists that name it, plain
+replacement. Terms that the STE dictionary already rules on are excluded, and
+so is every term below the 8-list consensus floor. One blog
+post's opinion does not make a ban. The dictionary count and the slop count never overlap:
+a word in both lexicons counts as a dictionary hit only.
 
 No tool in this package is a compliance verdict.
 

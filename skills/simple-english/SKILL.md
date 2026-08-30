@@ -40,7 +40,7 @@ When asked to CHECK text instead of writing it, report each violation as: rule n
 | Mode | When | What you apply |
 |---|---|---|
 | **Pragmatic** (default) | Docs, READMEs, error messages — the user wants clear text | All structural rules. Domain words stay ("idempotent", "webhook"). |
-| **Strict** | The user names STE, ASD-STE100, or compliance | Structural rules + full vocabulary discipline. If `package/not-approved.tsv` is available, check every content word against it and take the listed approved alternative. Then tell the user that that index is lossy and full compliance needs the official dictionary (free at asd-ste100.org). |
+| **Strict** | The user names STE, ASD-STE100, or compliance | Structural rules + full vocabulary discipline. If `package/not-approved.tsv` is available, check every content word against it and take the listed approved alternative. Then tell the user, one time per conversation and in one sentence, that the index is lossy and that full compliance needs the official dictionary (free at asd-ste100.org). |
 
 ## Step 1: Classify the Text
 
@@ -76,7 +76,7 @@ Do not mix the two in one passage. A "Getting started" section is procedural. An
 | 1.13 | Do not use technical verbs as nouns. |
 | 1.14 | Use American English spelling. |
 
-In pragmatic mode, rules 1.5, 1.8, and 1.12 do the heavy lifting: your domain vocabulary is legal. The ones agents break are 1.7, 1.11, and 1.13.
+In pragmatic mode, rules 1.5, 1.8, and 1.12 make your domain vocabulary legal. The ones agents break are 1.7, 1.11, and 1.13.
 
 **Before:** You can webhook the event, then do a deploy.
 **After:** Send the event to the webhook. Then deploy the service.
@@ -227,6 +227,9 @@ Known part-of-speech rulings, useful as patterns:
 ### Slop-to-simple substitutions
 
 AI-generated docs overuse a known set of words. `references/word-swaps.md` maps each one to a plain replacement. Read it when you rewrite existing text. If a word carries no fact, delete it instead of replacing it.
+
+The highest-consensus set, always in force (each named by 15 or more independent ban lists): delve → examine, pivotal/crucial → important, intricate → complex, leverage/utilize/harness → use, robust/comprehensive → delete or give the measurable property, seamless → delete, enhance → improve, elevate → increase, foster → help, showcase/underscore → show, realm → area, cutting-edge/groundbreaking/transformative → new or delete, tapestry/vibrant/testament/synergy → delete, interplay → interaction, furthermore/moreover → also, in conclusion → delete.
+
 ### Consistency pass
 
 Collapse synonym rotations to one term each (Rules 1.11, 9.4). The two lists that follow work differently.
@@ -288,15 +291,35 @@ Facts are untouchable too. Rewrite the style, not the content. When the source d
 
 The same rules apply to error messages, runbooks, incident reports, release notes, commit messages, agent instructions, support macros, UI copy, and translation prep. Read `references/use-cases.md` when the task is one of these. It gives the pattern for each.
 
+## Your Reply to the User
+
+The rules above govern the document. This section governs the chat reply around it.
+
+1. Give the answer or name the deliverable in your first sentence.
+2. Answer in 5 sentences or fewer. Code blocks and list items do not count toward the five. If more detail exists, offer it in five words instead of including it.
+3. Use common words. When a technical term is necessary, explain it in a few words.
+4. Do not restate the request. Do not add filler openers ("Certainly", "Great question", "You're absolutely right", "Let's dive in") or closers ("I hope this helps", "Let me know", "That being said"). Do not use the "It's not X, it's Y" reframe, and do not offer an "honest take" or call something "load-bearing" — state the fact plainly.
+5. After a deliverable, one sentence names the largest changes. Then stop.
+6. Do not shorten quoted error text, security warnings, or confirmations before a destructive action.
+
+Only the six rules above and the Slop-to-simple substitutions govern the reply. No other rule in this file (sentence limits, dictionary rulings, imperative mood, contraction and modal bans) applies to it.
+
+**Before:** Great question! I delved into your README and crafted a comprehensive rewrite that seamlessly aligns with STE principles. I hope this helps!
+**After:** The README rewrite is below. I split four long sentences and set one verb for the check/verify/confirm set.
+
+**Before:** The failure stems from control-plane leader election during pod churn, with R3 quorum re-formation.
+**After:** The pods restarted and the queue lost its leader for a moment. The queue recovered on its own. No action is necessary.
+
 ## Self-Check Before You Deliver
 
-This step is not optional. Run these five checks on your draft:
+This step is not optional. Run these six checks (checks 1-5 on your draft, check 6 on your reply):
 
 1. Count words in your three longest sentences. Over the 20/25 limit → split them.
 2. Search your draft for: `'ll`, `'re`, `'s` (contraction), `has been`, `have been`, `should`, `shall`, `however`, `therefore`, `-ing` verbs after a comma, semicolons.
 3. Search for every `if` and `when`. Each one stands at the START of its sentence, before the command. "Increase the timeout if the network is slow" → "If the network is slow, increase the timeout."
 4. Search for the verbs you did NOT pick in Your Task step 3 (check, verify, confirm, ensure). STRICT MODE: route each hit by intent — `make sure that`, `examine`, or `measure`. Pragmatic mode: replace each hit with your chosen verb.
 5. Check each vertical list: colon on the lead-in, items start with an uppercase letter, no comma or semicolon at the end of an item, no procedural and descriptive items mixed.
+6. Read your reply to the user. Make sure that the first sentence gives the answer or names the deliverable, and count the sentences: over 5 (code and lists excluded) — cut, do not compress into one long sentence. Then search the reply for the words in the Slop-to-simple substitutions section, and for the openers, closers, and reframes that rule 4 of Your Reply to the User bans. If your reply is only the rewritten text, this check passes.
 
 Fix what you find, then deliver. For a full audit, run `references/checklist.md`.
 
