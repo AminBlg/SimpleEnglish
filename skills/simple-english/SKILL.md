@@ -224,25 +224,21 @@ Known part-of-speech rulings, useful as patterns:
 | may (permission) | can |
 | would (hypothetical) | can, or restructure: "If X occurs, Y occurs." |
 
-### Slop-to-simple substitutions
-
-AI-generated docs overuse a known set of words. `references/word-swaps.md` maps each one to a plain replacement. Read it when you rewrite existing text. If a word carries no fact, delete it instead of replacing it.
-
 ### Signs of AI writing
 
-Wikipedia's editors catalog the DIRECTIONS AI text drifts in ("Signs of AI writing", WikiProject AI Cleanup). Several the STE rules already kill: synonym rotation (Rule 1.11), semicolon splices (8.1), "-ing" analysis clauses (3.5), sentence sprawl (5.1/6.3). Guard against the rest by direction, in documents and replies alike:
+AI text drifts in known directions (catalog: Wikipedia "Signs of AI writing", WikiProject AI Cleanup, and frequency research). The STE rules already remove some of them: "-ing" analysis clauses (Rule 3.5), synonym rotation (Rules 1.11, 9.4), semicolons (8.1), sentence sprawl (5.1/6.3). Guard against the rest by direction, in documents and replies alike:
 
-- **Inflated significance.** Do not call a fact "vital", "crucial", or "a testament". State the fact. The fact carries itself.
-- **Negative parallelism.** No "not just X, it is Y" reframes. Say what it is.
-- **Rule of three.** Do not group qualities in decorative triplets. Give the one fact, or the real list.
-- **Vague attribution.** No "studies show" or "experts say". Name the source, or drop the claim.
-- **False ranges.** No "ranging from X to Y" that names no real limits. Give the numbers.
-- **Restating summaries.** No "in conclusion" or "in summary" paragraphs. End when the content ends.
-- **Editorializing asides.** No "it is important to note". Say the thing directly.
-- **Collaborative leftovers.** No "I hope this helps" or "Let me know".
-- **Formatting habits.** No decorative boldface, no emoji as structure, no heading for two sentences.
+- Inflated significance. Do not call a fact "vital", "crucial", or "a testament". State the fact. The fact carries itself.
+- Negative parallelism. No "not just X, it is Y" reframes. Say what it is.
+- Rule of three. Do not group qualities in decorative triplets. Give the one fact, or the real list.
+- Vague attribution. No "studies show" or "experts say". Name the source, or drop the claim.
+- False ranges. No "ranging from X to Y" that names no real limits. Give the numbers.
+- Restating summaries. No "in conclusion" or "in summary" paragraphs. End when the content ends.
+- Editorializing asides. No "it is important to note". Say the thing directly.
+- Collaborative leftovers. No "I hope this helps" or "Let me know".
+- Formatting habits. No boldface as decoration, no bold lead-ins on list items, no emoji as structure, no heading for two sentences. Bold is for warnings and UI labels.
 
-If a word carries no fact, delete it. For the specific overused words, `references/word-swaps.md` maps each to a plain replacement.
+For the specific overused words, read `references/word-swaps.md` when you rewrite existing text. It maps each one to a plain replacement. If a word carries no fact, delete it instead.
 
 ### Consistency pass
 
@@ -309,7 +305,7 @@ The same rules apply to error messages, runbooks, incident reports, release note
 
 The reply follows the same rules as the document. Descriptive limits apply: 25 words per sentence, simple tenses, active voice, no contractions, approved modals only. Three additions for the chat channel:
 
-1. Give the answer or name the deliverable in your first sentence. Answer in 5 sentences or fewer. Code blocks and list items do not count. If more detail exists, offer it in five words instead of including it.
+1. Give the answer or name the deliverable in your first sentence. Answer in 5 sentences or fewer. Code blocks and list items do not count. If more detail exists, name it in five words and stop.
 2. Do not restate the request. Do not add openers ("Certainly", "Great question", "You're absolutely right", "Let's dive in") or closers ("I hope this helps", "Let me know", "That being said"). After a deliverable, one sentence names the largest changes. Then stop.
 3. Do not shorten quoted error text, security warnings, or confirmations before a destructive action.
 
