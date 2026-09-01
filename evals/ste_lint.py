@@ -29,7 +29,10 @@ SLOP = re.compile(
     r"\b(simply|seamlessly|effortlessly|robust|leverag\w*|utiliz\w*|"
     r"comprehensive|powerful|blazingly|streamlin\w*|facilitat\w*|"
     r"performant|plethora|myriad|delve|crucial|pivotal)\b", re.I)
-TRAILING_COND = re.compile(r"\w[^.!?\n]{3,}\s\b(if|when)\b\s", re.I)
+# Linear scan; lint() checks ">= 4 chars before the match" instead of the old
+# prefix pattern, whose backtracking was quadratic on long sentences
+# (a punctuation-free 8,000-word input took ~7s; now sub-millisecond).
+TRAILING_COND = re.compile(r"\s(if|when)\s", re.I)
 ROTATION_SETS = [
     ("check-verify", re.compile(r"\b(check|verify|confirm|validate|ensure)\w*\b", re.I)),
     ("config-settings", re.compile(r"\b(config|configuration|settings)\b", re.I)),
@@ -65,8 +68,17 @@ def lint(text, text_type):
     counts["semicolon"] = body.count(";")
     counts["latin_abbrev"] = len(LATIN.findall(body))
     counts["slop_word"] = len(SLOP.findall(body))
-    counts["trailing_condition"] = sum(
-        1 for s in sents if TRAILING_COND.search(s) and not re.match(r"^(if|when)\b", s, re.I))
+    def trailing_cond(s):
+        m = TRAILING_COND.search(s)
+        if not m:
+            return False
+        # The whitespace before "if" may be a newline (a wrapped sentence), but
+        # the 4-char prefix must sit on the same line as that whitespace. A
+        # heading, a blank line, then "If ..." is condition-first, not trailing.
+        line_start = s.rfind("\n", 0, m.start()) + 1
+        return m.start() - line_start >= 4 and not re.match(r"^(if|when)\b", s, re.I)
+
+    counts["trailing_condition"] = sum(1 for s in sents if trailing_cond(s))
     rotation = 0
     for _, rx in ROTATION_SETS:
         stems = {m.group(1).lower().rstrip("s") for m in rx.finditer(body)}
@@ -115,18 +127,41 @@ def self_test():
     print("self-test OK:", slop["violations_total"], "violations in slop fixture, 0 in clean")
 
 
+USAGE = "usage: ste_lint.py [--type procedural|descriptive] [--gate] (FILE|-) | --self-test"
+
+
 def main():
     args = sys.argv[1:]
     if "--self-test" in args:
         self_test()
-        return
+        return 0
+    gate = "--gate" in args
+    if gate:
+        args.remove("--gate")
     text_type = "descriptive"
     if "--type" in args:
-        text_type = args[args.index("--type") + 1]
-    src = args[-1]
-    text = sys.stdin.read() if src == "-" else open(src).read()
-    print(json.dumps(lint(text, text_type), indent=2))
+        i = args.index("--type")
+        if i + 1 >= len(args):
+            sys.exit("missing value after --type\n" + USAGE)
+        text_type = args[i + 1]
+        del args[i:i + 2]
+    if text_type not in LIMITS:
+        sys.exit("unknown --type %r (expected procedural or descriptive)\n%s" % (text_type, USAGE))
+    if len(args) != 1:
+        sys.exit(USAGE)
+    src = args[0]
+    if src == "-":
+        text = sys.stdin.read()
+    else:
+        try:
+            with open(src, encoding="utf-8") as fh:
+                text = fh.read()
+        except OSError as err:
+            sys.exit(str(err))
+    report = lint(text, text_type)
+    print(json.dumps(report, indent=2))
+    return 1 if gate and report["violations_total"] else 0
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())
