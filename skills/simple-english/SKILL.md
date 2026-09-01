@@ -32,7 +32,7 @@ When asked to write or rewrite text:
 1. **Select the mode** (Plain or Strict, the table that follows). In Strict mode, read `references/strict-vocabulary.md` before you draft.
 2. **Classify each passage** as procedural or descriptive. Every other rule depends on this.
 3. **Pick one term per concept** and keep it for the whole document: one of config/settings/options, one of check/verify/confirm/validate.
-4. **Define each technical term at its first use**, in the same sentence, in ten words or fewer.
+4. **Define a technical term at its first use** when a reader outside the field needs it: concept words, not product names or the tool the document is about.
 5. **Apply the Plain English rules and the catalog** that follow.
 6. **Do the self-check** before you deliver. This step is not optional.
 7. **Never touch code**, identifiers, commands, or quoted errors (see Untouchables).
@@ -43,7 +43,7 @@ When asked to CHECK text instead of writing it, report each violation as: rule n
 
 | Mode | When | What you apply |
 |---|---|---|
-| **Plain** (default) | The user wants clear text: docs, READMEs, error messages, answers | The Plain English rules and every structural rule in the catalog. Domain words stay ("idempotent", "webhook"), defined at first use. |
+| **Plain** (default) | The user wants clear text: docs, READMEs, error messages, answers | The Plain English rules and every structural rule in the catalog. Domain words stay ("idempotent", "webhook"); concept words get a short definition at first use. |
 | **Strict** | The user names STE, ASD-STE100, or compliance | Plain mode plus the dictionary discipline in `references/strict-vocabulary.md`. Document only: the reply to the user stays Plain. |
 
 ## Step 1: Classify the Text
@@ -62,7 +62,7 @@ Do not mix the two in one passage. A "Getting started" section is procedural. An
 These six rules are the layman layer. They are the readability rules that STE assumes and plain-language guides state.
 
 1. **Common word over jargon.** When a plain word exists, use it: "use" not "utilize", "start" not "initiate", "help" not "facilitate". `references/word-swaps.md` has the map.
-2. **Define each technical term at its first use.** Put the definition in the same sentence, in ten words or fewer, in parentheses where possible: "a webhook (an HTTP call the service sends when an event occurs)". Text in parentheses counts as one word (Rule 8.5). Define only what a reader outside the field does not know. Do not define "file", "server", or "command". After the definition, use the term the same way every time (Rule 1.11).
+2. **Define a technical term at its first use when the reader needs it.** The reader is smart and outside your field, but the document sets what they already know: do not define the tool the document is about, product names, or standard names (Postgres, S3, HTTP, JSON). Define the concept words: "idempotent (safe to run twice)", "a webhook (an HTTP call sent when an event occurs)". Keep a definition under ten words, at most one per sentence. If it pushes the sentence over the limit, give the definition its own sentence. Never use a synonym of a chosen term inside a definition (Rule 1.11).
 3. **Address the reader as "you" and name the actor.** Every sentence says who does what (Rule 3.6): "You run the migration. The database rebuilds the table."
 4. **Lead with the point.** The first sentence of a section, and of a reply, states the result or what the reader must do. Explanation follows.
 5. **One idea per sentence, one topic per paragraph** (Rules 5.2, 6.1, 6.5).
@@ -257,7 +257,7 @@ Facts are untouchable too. Rewrite the style, not the content. When the source d
 
 The reply is Plain mode, in every mode: 25 words per sentence, simple tenses, active voice, no contractions, approved modals only. Three additions for the chat channel:
 
-1. Give the answer or name the deliverable in your first sentence. Answer in 5 sentences or fewer. Code blocks and list items do not count. If a technical term is necessary, define it in the same sentence. If more detail exists, name it in five words and stop.
+1. Give the answer or name the deliverable in your first sentence. Answer in 5 sentences or fewer. Code blocks and list items do not count. If a concept term is necessary, define it in a few words. If more detail exists, name it in five words and stop.
 2. Do not restate the request. Do not add openers ("Certainly", "Great question", "You're absolutely right", "Let's dive in") or closers ("I hope this helps", "Let me know", "That being said"). After a deliverable, one sentence names the largest changes. Then stop.
 3. Do not shorten quoted error text, security warnings, or confirmations before a destructive action.
 
