@@ -55,7 +55,7 @@ When asked to CHECK text instead of writing it, report each violation as: rule n
 | Sentence limit | **20 words** (Rule 5.1) | **25 words** (Rule 6.3) |
 | Unit rule | One instruction per sentence (5.2) | One topic per paragraph (6.5), max six sentences per paragraph (6.6) |
 
-Do not mix the two in one passage. A "Getting started" section is procedural. An "Architecture" section is descriptive. A note inside a procedure is descriptive (25-word limit, no imperative).
+Do not mix the two in one passage. A "Getting started" section is procedural: headed, numbered where steps follow each other, imperative. An "Architecture" section is descriptive.
 
 ## Plain English for Readers Outside the Field
 
@@ -220,7 +220,7 @@ General recommendations: keep "that" (GR-1), primary verb first and the tool aft
 
 ## Signs of AI Writing
 
-AI text drifts in known directions (catalog: Wikipedia "Signs of AI writing" and frequency research). The rules above already remove some: "-ing" analysis clauses (Rule 3.5), synonym rotation (1.11, 9.4), semicolons (8.1), dashes (Section 8), sentence sprawl (5.1, 6.3). Guard against the rest by direction, in documents and replies alike:
+AI text drifts in known directions (Wikipedia "Signs of AI writing"). The rules above remove some already. Guard against the rest by direction, in documents and replies alike:
 
 - Inflated significance: no "vital", "crucial", "a testament". State the fact.
 - Negative parallelism: no "not just X, it is Y".
@@ -262,8 +262,8 @@ The reply is Plain mode, in every mode: 25 words per sentence, simple tenses, ac
 2. Do not restate the request. Do not add openers ("Certainly", "Great question", "You're absolutely right", "Let's dive in") or closers ("I hope this helps", "Let me know", "That being said"). After a deliverable, one sentence names the largest changes. Then stop.
 3. Do not shorten quoted error text, security warnings, or confirmations before a destructive action.
 
-**Before:** The failure stems from control-plane leader election during pod churn, with R3 quorum re-formation.
-**After:** The pods restarted and the queue lost its leader for a short time. The queue recovered without help. You do not have to do anything.
+**Before:** The failure stems from control-plane leader election during pod churn.
+**After:** The pods restarted and the queue lost its leader for a short time. It recovered without help. You do not have to do anything.
 
 ## Self-Check Before You Deliver
 
@@ -277,6 +277,21 @@ This step is not optional. Run these six checks (checks 1-5 on your draft, check
 6. Read your reply with the same eyes. The first sentence gives the answer, each technical term has a definition, and the reply has 5 sentences or fewer (code and lists excluded). Over 5: cut, do not compress. Then scan it against the Signs of AI Writing. If your reply is only the rewritten text, this check passes.
 
 Fix what you find, then deliver. For a full audit, run `references/checklist.md`.
+
+## Full Example
+
+**Before (real AI output):**
+
+> **Connection timeouts.** If sqlpipe hangs or fails with `dial tcp: i/o timeout`, check that the host running sqlpipe can reach the Postgres port (usually 5432) — this is often a security group or firewall rule blocking the connection. If you're connecting to a managed database (RDS, Cloud SQL, etc.), confirm the instance allows connections from sqlpipe's IP.
+
+**After (procedural, headed, numbered, one verb):**
+
+> ## Connection timeouts
+>
+> sqlpipe stops with `dial tcp: i/o timeout` when it cannot connect to the Postgres port (5432 by default).
+>
+> 1. Make sure that the host that runs sqlpipe can connect to the Postgres port. A firewall or security group usually blocks it.
+> 2. If the database is managed (RDS, Cloud SQL), make sure that the instance accepts connections from the IP of sqlpipe.
 
 ## Limits
 
