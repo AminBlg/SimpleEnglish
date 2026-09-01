@@ -1,0 +1,35 @@
+{
+  "text": "## sqlpipe v2.0 Release Notes\n\n**Breaking Change**\n\nThe `name` field on `/v2/users` responses has been split into `first_name` and `last_name`. Update any code that reads `name` before upgrading.\n\n**New: `--incremental` Flag**\n\nPass `--incremental` to sync only rows modified since the last run. Reduces transfer volume on large tables and cuts pipeline runtimes significantly on repeat executions.\n\n**40% Faster Parquet Writes**\n\nParquet output is now substantially faster due to columnar batching improvements. Pipelines writing to Parquet-backed storage will see the speedup automatically with no configuration changes.\n\n**Upgrading**\n\n1. Replace all `name` field references with `first_name` and `last_name`.\n2. Update your sqlpipe binary.\n3. Optionally add `--incremental` to recurring sync jobs.",
+  "input_tokens": 3,
+  "output_tokens": 213,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 6888,
+  "cost_usd": 0.0130806,
+  "model": "claude-sonnet-4-6",
+  "condition": "baseline",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 106,
+    "sentences": 9,
+    "mean_sentence_words": 11.3,
+    "longest_sentence_words": 16,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 1,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 0.94
+  }
+}

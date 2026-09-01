@@ -1,0 +1,32 @@
+{
+  "text": "## sqlpipe v2.0 Release Notes\n\n### Breaking Change\n\nThe `name` field in `/v2/users` responses no longer exists. It is now two fields: `first_name` and `last_name`.\n\n**CAUTION: Update all code that reads the `name` field before you upgrade.** Requests to `/v2/users` will fail if you expect `name`.\n\n### New Feature: Incremental Loads\n\nUse the `--incremental` flag to load only new and changed rows. This reduces transfer time for large datasets.\n\n### Faster Parquet Writes\n\nsqlpipe now writes Parquet files 40% faster than in v1. No configuration changes are necessary.\n\n### Upgrade Steps\n\n1. Update all references to `name` in your code. Use `first_name` and `last_name` instead.\n2. Test your pipelines against a non-production environment.\n3. Upgrade sqlpipe to v2.0.",
+  "input_tokens": 3,
+  "output_tokens": 221,
+  "duration_ms": 6468,
+  "cost_usd": 0.14920229999999998,
+  "model": "claude-sonnet-4-6",
+  "condition": "skill",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 100,
+    "sentences": 12,
+    "mean_sentence_words": 8.0,
+    "longest_sentence_words": 21,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 1.0
+  }
+}

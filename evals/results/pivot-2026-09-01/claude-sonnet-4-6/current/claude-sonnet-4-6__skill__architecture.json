@@ -1,0 +1,32 @@
+{
+  "text": "sqlpipe moves data from Postgres to S3 in three stages.\n\nThe reader connects to a Postgres database and streams rows in batches. It does not load the full table into memory. Each batch passes to the converter as soon as the reader fills it.\n\nThe converter receives each batch and writes it as a Parquet row group. Parquet stores data in a columnar format. This format reduces file size and speeds up downstream queries.\n\nThe uploader receives each row group and writes it to S3 as a multipart object. If a part upload fails, the uploader retries that part. When all parts are complete, the uploader commits the object.\n\nThe three stages run as a pipeline. The reader, the converter, and the uploader work in parallel so that no stage waits for another to finish.",
+  "input_tokens": 3,
+  "output_tokens": 179,
+  "duration_ms": 5826,
+  "cost_usd": 0.14851229999999999,
+  "model": "claude-sonnet-4-6",
+  "condition": "skill",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 135,
+    "sentences": 12,
+    "mean_sentence_words": 11.2,
+    "longest_sentence_words": 19,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

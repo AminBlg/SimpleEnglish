@@ -1,0 +1,3 @@
+## sqlpipe v2.0 Release Notes
+
+The `name` field of the `/v2/users` endpoint splits into `first_name` and `last_name`. You must update your code because this change breaks backward compatibility. We add a new flag called `--incremental`. You can use this flag to run data syncs that only add new or changed records. Parquet file writes now run 40% faster. This speed improves performance for large data exports.

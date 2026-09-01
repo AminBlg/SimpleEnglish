@@ -1,0 +1,48 @@
+SSL validation fails because curl cannot verify the server's certificate chain. The chain is incomplete or signed by a private CA that your system does not trust.
+
+**What is happening**
+
+curl checks the server's certificate against trusted CA certificates on your machine. If the server uses a certificate signed by an internal or private CA, that CA root certificate is not in your system trust store. curl rejects the connection.
+
+**Fix options, in order of preference**
+
+1. **Add the CA certificate to your system trust store** (permanent, correct fix).
+
+   Get the internal CA certificate file (a `.crt` or `.pem` file) from your IT or platform team. Then run:
+
+   ```bash
+   # Arch Linux / most systemd distros
+   sudo trust anchor --store internal-ca.crt
+   sudo update-ca-trust
+   ```
+
+   After this, curl and all other tools trust the CA automatically.
+
+2. **Pass the CA certificate directly to curl** (per-command, no system change).
+
+   ```bash
+   curl --cacert /path/to/internal-ca.crt https://your-internal-api
+   ```
+
+   Set `CURL_CA_BUNDLE=/path/to/internal-ca.crt` in your shell profile to avoid repeating the flag.
+
+3. **Disable verification** (unsafe, development only).
+
+   ```bash
+   curl -k https://your-internal-api
+   ```
+
+   Do not use `-k` in scripts or CI. It removes all certificate validation.
+
+**How to get the CA certificate**
+
+If IT cannot give you the file, extract it from the server directly:
+
+```bash
+openssl s_client -connect your-internal-api:443 -showcerts </dev/null 2>/dev/null \
+  | openssl x509 -out internal-ca.crt
+```
+
+Check the result with `openssl x509 -in internal-ca.crt -text -noout` before trusting it. Confirm the issuer matches your internal CA.
+
+Option 1 is the correct fix. Options 2 and 3 are workarounds.

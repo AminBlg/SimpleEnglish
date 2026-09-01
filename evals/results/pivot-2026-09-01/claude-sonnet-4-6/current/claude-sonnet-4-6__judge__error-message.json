@@ -1,0 +1,12 @@
+{
+  "model": "claude-sonnet-4-6",
+  "scenario": "error-message",
+  "order1_base_first": {
+    "a_score": 9,
+    "b_score": 5
+  },
+  "order2_skill_first": {
+    "a_score": 9,
+    "b_score": 4
+  }
+}

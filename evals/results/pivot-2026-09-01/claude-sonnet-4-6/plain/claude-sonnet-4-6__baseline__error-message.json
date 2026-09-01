@@ -1,0 +1,35 @@
+{
+  "text": "Not something I can verify \u2014 I don't have access to sqlpipe's source or docs, and fabricating an exact error string would be a confident wrong answer.\n\nCheck with:\n```\ngrep -r \"AccessDenied\\|PutObject\\|s3.*upload\" <sqlpipe-source>\n```\nor run `sqlpipe` against a bucket with a deny policy and capture stderr.",
+  "input_tokens": 3,
+  "output_tokens": 92,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 4349,
+  "cost_usd": 0.011258999999999998,
+  "model": "claude-sonnet-4-6",
+  "condition": "baseline",
+  "scenario": "error-message",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 42,
+    "sentences": 3,
+    "mean_sentence_words": 14.0,
+    "longest_sentence_words": 27,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 1,
+      "banned_modal": 1,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 1,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 1
+    },
+    "violations_total": 5,
+    "violations_per_100w": 11.9
+  }
+}

@@ -1,0 +1,23 @@
+Consumer lag of 2 million means consumers are 2 million messages behind producers.
+
+**Whether that is bad depends on three things:**
+
+1. **Message rate.** If producers write 100,000 messages per second and lag is 2 million, consumers are 20 seconds behind. If producers write 1,000 per second, consumers are 33 minutes behind.
+
+2. **Lag trend.** Stable lag at 2 million is a steady-state delay. Lag that grows over time means consumers cannot keep up — that is the real problem.
+
+3. **Topic purpose.** A metrics topic with old data matters less than a payments or order topic where users wait for results.
+
+**User impact depends on what that topic drives:**
+
+- **Real-time features** (notifications, order status, fraud checks): users see delays equal to the lag divided by your consumption rate.
+- **Async background jobs** (reports, emails, indexing): users may not notice at all.
+- **Payment or inventory writes**: lag here can mean stale state, double-processing risk, or visible failures.
+
+**Check these first:**
+
+- Run `kafka-consumer-groups.sh --describe` and look at the `LAG` column trend over 5–10 minutes.
+- Check consumer CPU, memory, and thread count — a slow consumer is the most common cause.
+- Check if a consumer group is paused or has stopped committing offsets.
+
+If lag is growing and the topic drives user-visible actions, treat it as an incident now.

@@ -1,0 +1,32 @@
+{
+  "text": "I can't verify this from memory \u2014 sqlpipe's exact error strings would require checking their source code or docs, and I don't have a live endpoint to test against.\n\nWhat would settle it: grep the sqlpipe source for `AccessDenied` or `PutObject` error handling, or run a test upload with misconfigured credentials.\n\nWant me to search their GitHub repo for the actual error text?",
+  "input_tokens": 3,
+  "output_tokens": 92,
+  "duration_ms": 4507,
+  "cost_usd": 0.1159293,
+  "model": "claude-sonnet-4-6",
+  "condition": "baseline",
+  "scenario": "error-message",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 63,
+    "sentences": 4,
+    "mean_sentence_words": 15.8,
+    "longest_sentence_words": 29,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 2,
+      "banned_modal": 2,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 1
+    },
+    "violations_total": 6,
+    "violations_per_100w": 9.52
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "text": "**Troubleshooting**\n\n**Connection Timeouts to PostgreSQL**\n\nIf sqlpipe times out connecting to Postgres, verify the host and port are reachable: `psql -h <host> -p <port> -U <user> -c '\\q'`. Common causes:\n\n- Firewall or security group blocking port 5432\n- `connect_timeout` too low \u2014 set `PGCONNECT_TIMEOUT=30` in your environment\n- SSL mismatch \u2014 try appending `?sslmode=require` or `?sslmode=disable` to the connection string\n- Postgres `max_connections` exhausted \u2014 check `pg_stat_activity`\n\n**S3 Permission Errors**\n\n`AccessDenied` errors typically mean the IAM identity lacks required permissions. The bucket policy or IAM role must allow `s3:GetObject`, `s3:PutObject`, and `s3:ListBucket` on the target bucket and prefix.\n\n- Confirm credentials are active: `aws sts get-caller-identity`\n- Check the bucket region matches your configured region\n- If using a VPC endpoint, ensure the endpoint policy allows the operation\n- KMS-encrypted buckets additionally require `kms:GenerateDataKey` and `kms:Decrypt`",
+  "input_tokens": 3,
+  "output_tokens": 296,
+  "duration_ms": 7815,
+  "cost_usd": 0.09745530000000001,
+  "model": "claude-sonnet-4-6",
+  "condition": "baseline",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 130,
+    "sentences": 7,
+    "mean_sentence_words": 17.4,
+    "longest_sentence_words": 47,
+    "violations": {
+      "sentence_over_limit": 2,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 3
+    },
+    "violations_total": 6,
+    "violations_per_100w": 4.62
+  }
+}

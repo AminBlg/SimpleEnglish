@@ -1,0 +1,9 @@
+sqlpipe v2.0 Release Notes
+
+This release changes the `/v2/users` API response. The `name` field splits into two fields: `first_name` and `last_name`. This change breaks backward compatibility. Update your code to use the new fields.
+
+We add a new flag: `--incremental`. Use this flag to run incremental syncs. This feature reduces the amount of data processed.
+
+Parquet writes now run 40% faster. This improvement speeds up data export and reduces waiting time.
+
+Update to sqlpipe v2.0 to use these new features and improvements. Review your integration for the API change to avoid errors.

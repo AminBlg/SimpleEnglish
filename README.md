@@ -83,7 +83,7 @@ More rewrites in [`examples/before-after.md`](examples/before-after.md): READMEs
 
 ## Benchmarks
 
-**74.6% fewer STE violations per 100 words with the skill on, averaged across 7 Claude models × 8 writing tasks (112 generations).** Deterministic regex linter, same rules for both conditions, reasoning effort pinned to `low`. Method, caveats, and raw files: [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` and a logged-in Claude Code CLI.
+**74.6% fewer STE violations per 100 words with the skill on, averaged across 7 Claude models × 8 writing tasks (112 generations).** Measured on skill 1.3.0. The 2.0.0 pivot (Plain by default) was checked against 1.3.0 on two models, the reply set, and a blind judge: documents at parity, replies with 43% fewer violations. Details: [`evals/results/pivot-2026-09-01/RESULTS.md`](evals/results/pivot-2026-09-01/RESULTS.md). Deterministic regex linter, same rules for both conditions, reasoning effort pinned to `low`. Method, caveats, and raw files: [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` and a logged-in Claude Code CLI.
 
 | Model | Baseline viol/100w | Skill viol/100w | Reduction |
 |---|---|---|---|

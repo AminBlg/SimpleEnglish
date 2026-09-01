@@ -1,0 +1,3 @@
+upload failed: AccessDenied: Access Denied
+	status code: 403, request id: <request-id>, host id: <host-id>
+check if your AWS credentials have s3:PutObject permission for the target bucket.

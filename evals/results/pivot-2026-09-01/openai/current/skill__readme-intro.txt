@@ -1,0 +1,3 @@
+sqlpipe is a command-line tool. It copies data from Postgres tables to S3 storage. It saves the data in Parquet file format. This format helps with fast queries and efficient storage.
+
+You can use sqlpipe to back up data or move data for analysis. The tool supports incremental syncs to keep data up to date. You run it by giving a configuration file with your database and S3 details. sqlpipe works with any Postgres database that you can reach from your machine. It makes data transfer simple and reliable.

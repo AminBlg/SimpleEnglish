@@ -1,0 +1,4 @@
+upload failed: AccessDenied: Access Denied  
+status code: 403, request id: <request-id>, host id: <host-id>  
+failed to upload file to s3://<bucket>/<key>: AccessDenied  
+missing required permission: s3:PutObject

@@ -1,0 +1,32 @@
+{
+  "text": "sqlpipe syncs Postgres tables to S3 as Parquet files. It reads from one or more tables, converts each row to the Parquet format, and writes the result to an S3 bucket. You can run sqlpipe on a schedule or call it from a script.\n\nsqlpipe is a single binary with no runtime dependencies. You configure it with a YAML file that lists the source tables, the S3 destination, and the sync options. sqlpipe connects to Postgres, reads the data, and writes Parquet files to S3. If a sync fails, sqlpipe exits with a non-zero code and writes the error to standard error.",
+  "input_tokens": 3,
+  "output_tokens": 149,
+  "duration_ms": 5350,
+  "cost_usd": 0.14803829999999998,
+  "model": "claude-sonnet-4-6",
+  "condition": "skill",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 102,
+    "sentences": 7,
+    "mean_sentence_words": 14.6,
+    "longest_sentence_words": 22,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

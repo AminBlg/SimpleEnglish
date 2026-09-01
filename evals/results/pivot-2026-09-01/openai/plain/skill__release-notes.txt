@@ -1,0 +1,9 @@
+# sqlpipe 2.0 Release Notes
+
+sqlpipe 2.0 splits the `name` field of the /v2/users endpoint into two fields: `first_name` and `last_name`. You must update your code to use these new fields. This change is not backward compatible.
+
+We added a new `--incremental` flag. Use this flag to load only new or changed data. This flag helps reduce load time and resource use.
+
+Parquet file writes are now 40 percent faster. This improvement speeds up data export and saves time.
+
+Make sure that your workflows and scripts adapt to these changes. Review the updated API and command-line documentation for details.

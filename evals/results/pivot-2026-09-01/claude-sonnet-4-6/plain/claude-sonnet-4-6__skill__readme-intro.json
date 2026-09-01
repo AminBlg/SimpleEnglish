@@ -1,0 +1,35 @@
+{
+  "text": "sqlpipe copies Postgres tables to S3 as Parquet files. You run one command. sqlpipe reads the tables you specify, converts each row to the Parquet format (a compressed column-based file format that tools such as Athena, Spark, and DuckDB read directly), and writes the result to your S3 bucket.\n\nsqlpipe does not require a separate server or agent. You install one binary, point it at a Postgres database and an S3 bucket, and run the sync. The tool reads each table in batches, so it works on large tables without loading all rows into memory at once.",
+  "input_tokens": 3,
+  "output_tokens": 141,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 5379,
+  "cost_usd": 0.153084,
+  "model": "claude-sonnet-4-6",
+  "condition": "skill",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 97,
+    "sentences": 6,
+    "mean_sentence_words": 16.2,
+    "longest_sentence_words": 36,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 1.03
+  }
+}

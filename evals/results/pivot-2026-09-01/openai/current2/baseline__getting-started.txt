@@ -1,0 +1,19 @@
+# Getting Started with sqlpipe
+
+To begin using **sqlpipe**, start by installing the tool using the following command:
+
+```bash
+curl -sSL https://get.sqlpipe.dev | sh
+```
+
+This script downloads and installs the latest version of sqlpipe on your system.
+
+Next, create and configure your `sqlpipe.yaml` configuration file. This file defines your data sources, SQL queries, and output settings. A properly configured `sqlpipe.yaml` enables sqlpipe to connect to databases, process queries, and handle results efficiently. Refer to the documentation for configuration details and examples.
+
+Once your configuration file is ready, run sqlpipe with the following command:
+
+```bash
+sqlpipe run --config sqlpipe.yaml
+```
+
+This command runs the pipeline as defined in your configuration file, executing SQL queries and streaming data accordingly. For additional options and advanced usage, consult the official sqlpipe documentation.

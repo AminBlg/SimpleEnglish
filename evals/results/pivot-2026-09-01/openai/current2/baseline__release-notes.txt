@@ -1,0 +1,9 @@
+sqlpipe v2.0 Release Notes
+
+This major update introduces a breaking change: the `name` field in the `/v2/users` endpoint has been split into separate `first_name` and `last_name` fields to improve clarity and data structure. Please update any integrations accordingly.
+
+A highly requested feature, the new `--incremental` flag, has been added to support incremental data loading, enhancing efficiency for large datasets.
+
+Additionally, we've optimized Parquet write operations, achieving a 40% speed increase. This improvement significantly reduces processing time and resource usage for Parquet exports.
+
+We recommend reviewing the updated API schema and testing pipelines to ensure smooth transition. Thank you for using sqlpipe!

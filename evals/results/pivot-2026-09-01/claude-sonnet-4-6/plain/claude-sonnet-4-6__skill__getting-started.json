@@ -1,0 +1,35 @@
+{
+  "text": "## Getting Started\n\nInstall sqlpipe by running this command in your terminal:\n\n```\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nAfter the install completes, create a file named `sqlpipe.yaml`. This file is the configuration for sqlpipe. It tells sqlpipe which databases to connect to and what data to move.\n\nA minimal `sqlpipe.yaml` looks like this:\n\n```yaml\nsource:\n  type: postgres\n  url: postgres://user:pass@source-host:5432/mydb\n\ndestination:\n  type: postgres\n  url: postgres://user:pass@dest-host:5432/mydb\n```\n\nMake sure that each database URL is correct before you continue.\n\nTo run sqlpipe, use this command:\n\n```\nsqlpipe run --config sqlpipe.yaml\n```\n\nsqlpipe reads the configuration file, connects to the source database, and writes the data to the destination database.\n\nIf the command fails, read the error message. It names the connection or configuration problem.",
+  "input_tokens": 3,
+  "output_tokens": 240,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 8133,
+  "cost_usd": 0.15024899999999997,
+  "model": "claude-sonnet-4-6",
+  "condition": "skill",
+  "scenario": "getting-started",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 95,
+    "sentences": 10,
+    "mean_sentence_words": 9.5,
+    "longest_sentence_words": 18,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

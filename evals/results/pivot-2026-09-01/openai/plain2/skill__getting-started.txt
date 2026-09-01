@@ -1,0 +1,13 @@
+## Getting started
+
+Install sqlpipe by running this command in your terminal:  
+`curl -sSL https://get.sqlpipe.dev | sh`
+
+Create the configuration file named `sqlpipe.yaml`. This file holds the settings for sqlpipe. Edit it to match your environment.  
+
+Run sqlpipe with this command:  
+`sqlpipe run --config sqlpipe.yaml`
+
+Sqlpipe reads the configuration file. Then it starts the data pipeline.  
+
+Use this process to prepare sqlpipe. Then you can run pipelines safely and repeatably.

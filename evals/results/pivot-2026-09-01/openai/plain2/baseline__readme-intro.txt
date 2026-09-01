@@ -1,0 +1,3 @@
+sqlpipe is a command-line interface (CLI) tool designed to streamline the process of syncing PostgreSQL tables to Amazon S3 by exporting data as Parquet files. It provides a simple yet powerful way to extract, transform, and load your relational data into cloud storage, making it easy to integrate with data lakes, analytics pipelines, and machine learning workflows. 
+
+With sqlpipe, users can automate periodic data exports, ensuring that their S3 buckets always contain the latest snapshots of their Postgres tables in a highly efficient, columnar storage format. Designed for reliability and speed, sqlpipe handles data type conversions and large datasets seamlessly, allowing you to focus on building insights rather than managing data transfers.

@@ -1,0 +1,19 @@
+Before sharding, check if you actually need it. Sharding is the most expensive fix.
+
+**Do these first, in order:**
+
+1. `EXPLAIN (ANALYZE, BUFFERS)` on your slow query. Confirm the bottleneck — sequential scan, index miss, lock contention, or network.
+
+2. Add the right index. A missing index on a 40M-row table is the most common cause of slow reads.
+
+3. Check `pg_stat_user_tables` for `seq_scan` count. High seq scans on a large table = missing index, not missing shards.
+
+4. If reads are analytics/reporting: add a read replica and route those queries there. Zero schema change.
+
+5. If the table has stale rows: run `VACUUM ANALYZE`. Bloat causes slow scans.
+
+6. Partition the table by a natural range (date, ID range). Postgres native, no new infrastructure, query planner prunes partitions automatically.
+
+**Only then consider sharding** — if you have write throughput exhausting one primary, or the dataset does not fit on one machine. 40M rows is not large by Postgres standards. A well-indexed table at that size reads fast on commodity hardware.
+
+What does `EXPLAIN ANALYZE` show on the slow query?
