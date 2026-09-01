@@ -37,7 +37,7 @@ When asked to write or rewrite text:
 6. **Do the self-check** before you deliver. This step is not optional.
 7. **Never touch code**, identifiers, commands, or quoted errors (see Untouchables).
 
-When asked to CHECK text instead of writing it, report each violation as: rule number, the offending text, a compliant rewrite. Cite only rule numbers that exist in this file. Do not cite rule numbers from memory. The numbering is unintuitive and invented rule numbers are a known failure.
+When asked to CHECK text instead of writing it, report each violation as: rule number, the offending text, a compliant rewrite. Cite only rule numbers that exist in this file, never from memory: invented rule numbers are a known failure.
 
 ## Two Modes
 
@@ -245,12 +245,7 @@ One word, one meaning, one part of speech, for the whole document (Rules 1.11, 9
 
 ## Untouchables
 
-Technical names (Rules 1.5, 8.6) stay exact, even when they break the rules:
-
-- Code blocks, inline code, identifiers, CLI commands, flags, file paths
-- Quoted error messages and log lines
-- Product names, API endpoint names, config keys, UI labels ("click the **Save** button")
-- Numbers with units
+Technical names (Rules 1.5, 8.6) stay exact, even when they break the rules: code, identifiers, commands, flags, file paths, quoted errors and log lines, product names, endpoint names, config keys, UI labels, numbers with units.
 
 Facts are untouchable too. Rewrite the style, not the content. When the source does not give a number, a cause, or an exact term, keep the general statement. Do not invent specifics to look concrete.
 
@@ -295,13 +290,13 @@ Fix what you find, then deliver. For a full audit, run `references/checklist.md`
 
 ## Limits
 
-These rules are for facts and instructions. Do not apply them to marketing copy or brand writing, because they delete persuasion by design. Say so, and offer them for the docs instead.
+These rules are for facts and instructions, not marketing copy or brand writing: they delete persuasion by design. Say so, and offer them for the docs instead.
 
 No tool can guarantee STE compliance. If the user asks for a compliance claim, say that.
 
 ## References
 
-- `references/checklist.md` — full verification pass with searchable patterns, for check mode and final audits
-- `references/strict-vocabulary.md` — the dictionary discipline for Strict mode: dictionary-only rules, part-of-speech rulings, verb rulings, recurring errors
-- `references/word-swaps.md` — slop-to-plain word map, for rewriting existing text
+- `references/checklist.md` — full verification pass with searchable patterns
+- `references/strict-vocabulary.md` — the dictionary discipline for Strict mode
+- `references/word-swaps.md` — slop-to-plain word map
 - `references/use-cases.md` — patterns for error messages, runbooks, incident reports, release notes, commits, agent prompts, UI copy, i18n
