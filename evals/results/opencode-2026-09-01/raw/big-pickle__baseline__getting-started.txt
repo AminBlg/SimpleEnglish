@@ -1,0 +1,39 @@
+## Getting Started
+
+### Install
+
+Install sqlpipe with one command:
+
+```sh
+curl -sSL https://get.sqlpipe.dev | sh
+```
+
+The script downloads the binary and places it in your PATH. Verify the installation:
+
+```sh
+sqlpipe --version
+```
+
+### Configure
+
+Create a `sqlpipe.yaml` file in your project directory. This file defines your database connections and pipeline steps. Start with a minimal configuration:
+
+```yaml
+source:
+  type: postgres
+  connection: postgresql://user:pass@localhost:5432/mydb
+
+sink:
+  type: csv
+  path: ./output/
+```
+
+### Run
+
+Execute the pipeline:
+
+```sh
+sqlpipe run --config sqlpipe.yaml
+```
+
+sqlpipe reads from the source, transforms the data, and writes to the sink. Check the terminal output for status and any errors. For additional options, run `sqlpipe run --help`.
