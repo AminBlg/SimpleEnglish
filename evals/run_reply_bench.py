@@ -73,10 +73,21 @@ def generate(prompt, system, model, effort):
     if effort:
         cmd += ["--effort", effort]
     r = subprocess.run(cmd + [prompt], capture_output=True, text=True, timeout=300)
+    return extract_result(r.stdout)
+
+
+def extract_result(stdout):
+    """claude -p --output-format json returns one object or a list of events."""
     try:
-        return json.loads(r.stdout).get("result", "")
+        data = json.loads(stdout)
     except Exception:  # noqa: BLE001
-        return r.stdout.strip()
+        return stdout.strip()
+    if isinstance(data, dict):
+        return data.get("result", "")
+    for item in reversed(data):
+        if isinstance(item, dict) and item.get("type") == "result":
+            return item.get("result", "")
+    return ""
 
 
 def main():
