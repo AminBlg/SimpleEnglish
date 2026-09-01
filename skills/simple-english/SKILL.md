@@ -33,7 +33,7 @@ When asked to write or rewrite text:
 2. **Classify each passage** as procedural or descriptive. Every other rule depends on this.
 3. **Fix your vocabulary before you draft.** Use `make sure that` for check/verify/confirm/validate/ensure as verbs, and `configuration` for config/settings/options. Use no other word for these concepts in the whole document.
 4. **Define a technical term at its first use** when a reader outside the field needs it: concept words, not product names or the tool the document is about.
-5. **Apply the Plain English rules and the catalog** that follow.
+5. **Apply the catalog** that follows. For replies and explanations for outsiders, apply the Plain English rules first.
 6. **Do the self-check** before you deliver. This step is not optional.
 7. **Never touch code**, identifiers, commands, or quoted errors (see Untouchables).
 
@@ -43,7 +43,7 @@ When asked to CHECK text instead of writing it, report each violation as: rule n
 
 | Mode | When | What you apply |
 |---|---|---|
-| **Plain** (default) | The user wants clear text: docs, READMEs, error messages, answers | The Plain English rules and every structural rule in the catalog. Domain words stay ("idempotent", "webhook"); concept words get a short definition at first use. |
+| **Plain** (default) | The user wants clear text: docs, READMEs, error messages, answers | Every structural rule in the catalog. Domain words stay ("idempotent", "webhook"). Replies and explanations for outsiders also get the Plain English rules. |
 | **Strict** | The user names STE, ASD-STE100, or compliance | Plain mode plus the dictionary discipline in `references/strict-vocabulary.md`. Document only: the reply to the user stays Plain. |
 
 ## Step 1: Classify the Text
@@ -57,9 +57,9 @@ When asked to CHECK text instead of writing it, report each violation as: rule n
 
 Do not mix the two in one passage. A "Getting started" section is procedural. An "Architecture" section is descriptive. A note inside a procedure is descriptive (25-word limit, no imperative).
 
-## Plain English Rules
+## Plain English for Readers Outside the Field
 
-The layman layer: what STE assumes and plain-language guides state. In Plain mode they add to the catalog, never replace it.
+Apply these six rules to your reply to the user and to explanations written for readers outside the field. Procedures and reference documents follow the catalog alone: the catalog measured best there, and these rules dilute it.
 
 1. **Common word over jargon.** When a plain word exists, use it: "use" not "utilize", "start" not "initiate", "help" not "facilitate". `references/word-swaps.md` has the map.
 2. **Define a technical term at its first use when the reader needs it.** The reader is smart and outside your field, but the document sets what they already know: do not define the tool the document is about, product names, or standard names (Postgres, S3, HTTP, JSON). Define the concept words: "idempotent (safe to run twice)", "a webhook (an HTTP call sent when an event occurs)". Keep a definition under ten words, at most one per sentence. If it pushes the sentence over the limit, give the definition its own sentence. Never use a synonym of a chosen term inside a definition (Rule 1.11).
@@ -67,8 +67,6 @@ The layman layer: what STE assumes and plain-language guides state. In Plain mod
 4. **Lead with the point.** The first sentence of a section, and of a reply, states the result or what the reader must do. Explanation follows.
 5. **One idea per sentence, one topic per paragraph** (Rules 5.2, 6.1, 6.5).
 6. **Say what is true, not how important it is.** "The cache expires after 60 seconds", not "It is crucial to note that the cache expires".
-
-These rules change words, not structure. A procedure keeps its numbered imperative steps, and a verb stays a verb: "Run this command", never "by running this command".
 
 **Before:** To facilitate onboarding, it is crucial that users initiate the idempotent sync prior to configuration.
 **After:** Before you configure the client, start the sync. The sync is idempotent (you can run it again without side effects).
@@ -225,14 +223,14 @@ General recommendations: keep "that" (GR-1), primary verb first and the tool aft
 AI text drifts in known directions (catalog: Wikipedia "Signs of AI writing" and frequency research). The rules above already remove some: "-ing" analysis clauses (Rule 3.5), synonym rotation (1.11, 9.4), semicolons (8.1), dashes (Section 8), sentence sprawl (5.1, 6.3). Guard against the rest by direction, in documents and replies alike:
 
 - Inflated significance: no "vital", "crucial", "a testament". State the fact.
-- Negative parallelism: no "not just X, it is Y". Say what it is.
-- Rule of three: no decorative triplets. Give the one fact, or the real list.
+- Negative parallelism: no "not just X, it is Y".
+- Rule of three: no decorative triplets.
 - Vague attribution: no "studies show". Name the source, or drop the claim.
-- False ranges: no "ranging from X to Y" without real limits. Give the numbers.
-- Restating summaries: no "in conclusion" paragraphs. End when the content ends.
-- Editorializing asides: no "it is important to note". Say it directly.
+- False ranges: no "ranging from X to Y" without real limits.
+- Restating summaries: no "in conclusion" paragraphs.
+- Editorializing asides: no "it is important to note".
 - Collaborative leftovers: no "I hope this helps", no "Let me know".
-- Formatting habits: no bold as decoration, no bold lead-ins on list items, no emoji as structure, no heading for two sentences.
+- Formatting habits: no bold as decoration, no bold lead-ins, no emoji as structure, no heading for two sentences.
 
 For the specific overused words, `references/word-swaps.md` maps each one to a plain replacement. Read it when you rewrite existing text. If a word carries no fact, delete it instead.
 
@@ -243,6 +241,7 @@ One word, one meaning, one part of speech, for the whole document (Rules 1.11, 9
 - The settings file is `configuration`, never config, settings, or options in the same document.
 - The verify concept is `make sure that`, never check, verify, confirm, validate, or ensure as verbs. Strict mode routes the rest with `references/strict-vocabulary.md`.
 - When a plain word does the job, take it over the technical one, and define the technical one when you must keep it.
+- Common swaps: however → but, therefore → as a result, since (= because) → because, perform → do, avoid → prevent, repeat → do again, acceptable → permitted, now → delete it.
 
 ## Untouchables
 
