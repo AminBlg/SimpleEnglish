@@ -34,7 +34,7 @@ SLOP = re.compile(
 # prefix pattern, whose backtracking was quadratic on long sentences
 # (a punctuation-free 8,000-word input took ~7s; now sub-millisecond).
 TRAILING_COND = re.compile(r"\s(if|when)\s", re.I)
-DASH = re.compile(r"—|–|(?<= )--(?= )|(?<=[^\s\d]) - (?=[^\s\d])")
+DASH = re.compile(r"—|(?<!\d)–(?!\d)|(?<= )--(?= )|(?<=[^\s\d]{2}) - (?=[^\s\d]{2})")
 ROTATION_SETS = [
     ("check-verify", re.compile(r"\b(check|verify|confirm|validate|ensure)\w*\b", re.I)),
     ("config-settings", re.compile(r"\b(config|configuration|settings)\b", re.I)),
@@ -118,6 +118,8 @@ The upload failed -- the token expired.
 The retry failed - the port was closed.
 Do not use --force against production.
 The window is 5 - 10 minutes.
+The range is 5–10 minutes, over the 2024–2025 season.
+Write x - y = z on the board.
 Use the `--config sqlpipe.yaml` flag.
 Remove the panel:
    -   Loosen the four bolts.
