@@ -185,6 +185,11 @@ Never bury the instruction after the explanation. The pattern transfers directly
 
 Rule 8.6 matters for software text: `sqlpipe run --config sqlpipe.yaml` in backticks is quoted text and counts as one word. Long identifiers do not blow your sentence budget.
 
+**Em-dashes.** This check is from this skill, not from the standard. Flag every em-dash (`—`) and en-dash (`–`) outside code and quoted text. An em-dash splices two statements together but hides the logic junction between them: cause, contrast, example, or explanation. The reader must infer the writer's intent. Name the relation instead ("because", "but", "for example", "that is"), or write two sentences with a connecting word (Rule 4.4). Parentheses are legal for a short explanation (Rule 8.3). When a spaced hyphen or a double hyphen (` - `, `--`) joins two statements, treat it as a dash. Rule 8.2 has a note on this form: a dash is at times written as a hyphen with a space on each side. Do not flag these two forms. A dash that identifies an item in a vertical list is permitted (Rule 4.3). A CLI flag such as `--force` is code, so it stays exact.
+
+**Before:** The deploy failed — the disk was full.
+**After:** The deploy failed because the disk was full.
+
 ### Section 9 — Writing practices (Rules 9.1-9.4, GR-1 to GR-8)
 
 | Rule | Instruction |
