@@ -31,7 +31,7 @@ When asked to write or rewrite text:
 
 1. **Select the mode** (Plain or Strict, the table that follows). In Strict mode, read `references/strict-vocabulary.md` before you draft.
 2. **Classify each passage** as procedural or descriptive. Every other rule depends on this.
-3. **Pick one term per concept** and keep it for the whole document: one of config/settings/options, one of check/verify/confirm/validate.
+3. **Fix your vocabulary before you draft.** Use `make sure that` for check/verify/confirm/validate/ensure as verbs, and `configuration` for config/settings/options. Use no other word for these concepts in the whole document.
 4. **Define a technical term at its first use** when a reader outside the field needs it: concept words, not product names or the tool the document is about.
 5. **Apply the Plain English rules and the catalog** that follow.
 6. **Do the self-check** before you deliver. This step is not optional.
@@ -238,8 +238,8 @@ For the specific overused words, `references/word-swaps.md` maps each one to a p
 
 One word, one meaning, one part of speech, for the whole document (Rules 1.11, 9.4).
 
-- Technical nouns are not in the dictionary. Pick one of config/configuration/settings/options and keep it.
-- Plain mode: pick one of check/verify/confirm/validate and keep it. Strict mode: the dictionary has already chosen. Use `references/strict-vocabulary.md`.
+- The settings file is `configuration`, never config, settings, or options in the same document.
+- The verify concept is `make sure that`, never check, verify, confirm, validate, or ensure as verbs. Strict mode routes the rest with `references/strict-vocabulary.md`.
 - When a plain word does the job, take it over the technical one, and define the technical one when you must keep it.
 
 ## Untouchables
@@ -271,7 +271,7 @@ This step is not optional. Run these six checks (checks 1-5 on your draft, check
 1. Count words in your three longest sentences. Over the 20/25 limit → split them.
 2. Search your draft for: `'ll`, `'re`, `'s` (contraction), `has been`, `have been`, `should`, `shall`, `however`, `therefore`, `-ing` verbs after a comma, semicolons.
 3. Search for every `if` and `when`. Each one stands at the START of its sentence, before the command. "Increase the timeout if the network is slow" → "If the network is slow, increase the timeout."
-4. Search for the verbs you did NOT pick (check, verify, confirm, ensure, validate) and replace each with your chosen verb. Strict mode: route each hit with `references/strict-vocabulary.md`.
+4. Search for check, verify, confirm, ensure, and validate as verbs, and for config, settings, and options. Replace each hit with `make sure that` or `configuration`. Strict mode: route the rest with `references/strict-vocabulary.md`.
 5. Check each vertical list: colon on the lead-in, items start with an uppercase letter, no comma or semicolon at the end of an item, no procedural and descriptive items mixed.
 6. Read your reply with the same eyes. The first sentence gives the answer, each technical term has a definition, and the reply has 5 sentences or fewer (code and lists excluded). Over 5: cut, do not compress. Then scan it against the Signs of AI Writing. If your reply is only the rewritten text, this check passes.
 
