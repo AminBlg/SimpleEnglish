@@ -40,7 +40,7 @@ When asked to CHECK text instead of writing it, report each violation as: rule n
 | Mode | When | What you apply |
 |---|---|---|
 | **Pragmatic** (default) | Docs, READMEs, error messages — the user wants clear text | All structural rules. Domain words stay ("idempotent", "webhook"). |
-| **Strict** | The user names STE, ASD-STE100, or compliance | Structural rules + full vocabulary discipline, and tell the user that full compliance needs the official dictionary (free at asd-ste100.org). |
+| **Strict** | The user names STE, ASD-STE100, or compliance | Structural rules + full vocabulary discipline, and tell the user, one time per conversation and in one sentence, that full compliance needs the official dictionary (free at asd-ste100.org). |
 
 ## Step 1: Classify the Text
 
@@ -76,7 +76,7 @@ Do not mix the two in one passage. A "Getting started" section is procedural. An
 | 1.13 | Do not use technical verbs as nouns. |
 | 1.14 | Use American English spelling. |
 
-In pragmatic mode, rules 1.5, 1.8, and 1.12 do the heavy lifting: your domain vocabulary is legal. The ones agents break are 1.7, 1.11, and 1.13.
+In pragmatic mode, rules 1.5, 1.8, and 1.12 make your domain vocabulary legal. The ones agents break are 1.7, 1.11, and 1.13.
 
 **Before:** You can webhook the event, then do a deploy.
 **After:** Send the event to the webhook. Then deploy the service.
@@ -229,9 +229,22 @@ Known part-of-speech rulings, useful as patterns:
 | may (permission) | can |
 | would (hypothetical) | can, or restructure: "If X occurs, Y occurs." |
 
-### Slop-to-simple substitutions
+### Signs of AI writing
 
-AI-generated docs overuse a known set of words. `references/word-swaps.md` maps each one to a plain replacement. Read it when you rewrite existing text. If a word carries no fact, delete it instead of replacing it.
+AI text drifts in known directions (catalog: Wikipedia "Signs of AI writing", WikiProject AI Cleanup, and frequency research). The STE rules already remove some of them: "-ing" analysis clauses (Rule 3.5), synonym rotation (Rules 1.11, 9.4), semicolons (8.1), sentence sprawl (5.1/6.3). Guard against the rest by direction, in documents and replies alike:
+
+- Inflated significance. Do not call a fact "vital", "crucial", or "a testament". State the fact. The fact carries itself.
+- Negative parallelism. No "not just X, it is Y" reframes. Say what it is.
+- Rule of three. Do not group qualities in decorative triplets. Give the one fact, or the real list.
+- Vague attribution. No "studies show" or "experts say". Name the source, or drop the claim.
+- False ranges. No "ranging from X to Y" that names no real limits. Give the numbers.
+- Restating summaries. No "in conclusion" or "in summary" paragraphs. End when the content ends.
+- Editorializing asides. No "it is important to note". Say the thing directly.
+- Collaborative leftovers. No "I hope this helps" or "Let me know".
+- Formatting habits. No boldface as decoration, no bold lead-ins on list items, no emoji as structure, no heading for two sentences. Bold is for warnings and UI labels.
+
+For the specific overused words, read `references/word-swaps.md` when you rewrite existing text. It maps each one to a plain replacement. If a word carries no fact, delete it instead.
+
 ### Consistency pass
 
 Collapse synonym rotations to one term each (Rules 1.11, 9.4). The two lists that follow work differently.
@@ -293,15 +306,30 @@ Facts are untouchable too. Rewrite the style, not the content. When the source d
 
 The same rules apply to error messages, runbooks, incident reports, release notes, commit messages, agent instructions, support macros, UI copy, and translation prep. Read `references/use-cases.md` when the task is one of these. It gives the pattern for each.
 
+## Your Reply to the User
+
+The reply follows the same rules as the document. Descriptive limits apply: 25 words per sentence, simple tenses, active voice, no contractions, approved modals only. Three additions for the chat channel:
+
+1. Give the answer or name the deliverable in your first sentence. Answer in 5 sentences or fewer. Code blocks and list items do not count. If more detail exists, name it in five words and stop.
+2. Do not restate the request. Do not add openers ("Certainly", "Great question", "You're absolutely right", "Let's dive in") or closers ("I hope this helps", "Let me know", "That being said"). After a deliverable, one sentence names the largest changes. Then stop.
+3. Do not shorten quoted error text, security warnings, or confirmations before a destructive action.
+
+**Before:** Great question! I delved into your README and crafted a comprehensive rewrite that seamlessly aligns with STE principles. I hope this helps!
+**After:** The README rewrite is below. I split four long sentences and set one verb for the check/verify/confirm set.
+
+**Before:** The failure stems from control-plane leader election during pod churn, with R3 quorum re-formation.
+**After:** The pods restarted and the queue lost its leader for a short time. The queue recovered without help. You do not have to do anything.
+
 ## Self-Check Before You Deliver
 
-This step is not optional. Run these five checks on your draft:
+This step is not optional. Run these six checks (checks 1-5 on your draft, check 6 on your reply):
 
 1. Count words in your three longest sentences. Over the 20/25 limit → split them.
 2. Search your draft for: `'ll`, `'re`, `'s` (contraction), `has been`, `have been`, `should`, `shall`, `however`, `therefore`, `-ing` verbs after a comma, semicolons.
 3. Search for every `if` and `when`. Each one stands at the START of its sentence, before the command. "Increase the timeout if the network is slow" → "If the network is slow, increase the timeout."
 4. Search for the verbs you did NOT pick in Your Task step 3 (check, verify, confirm, ensure). STRICT MODE: route each hit by intent — `make sure that`, `examine`, or `measure`. Pragmatic mode: replace each hit with your chosen verb.
 5. Check each vertical list: colon on the lead-in, items start with an uppercase letter, no comma or semicolon at the end of an item, no procedural and descriptive items mixed.
+6. Read your reply to the user with the same eyes as the draft. Make sure that the first sentence gives the answer or names the deliverable, and count the sentences: over 5 (code and lists excluded) — cut, do not compress into one long sentence. Then scan it against the Signs of AI writing list. If your reply is only the rewritten text, this check passes.
 
 Fix what you find, then deliver. For a full audit, run `references/checklist.md`.
 
