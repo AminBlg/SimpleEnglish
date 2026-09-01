@@ -70,7 +70,13 @@ def lint(text, text_type):
     counts["slop_word"] = len(SLOP.findall(body))
     def trailing_cond(s):
         m = TRAILING_COND.search(s)
-        return bool(m) and m.start() >= 4 and not re.match(r"^(if|when)\b", s, re.I)
+        if not m:
+            return False
+        # The whitespace before "if" may be a newline (a wrapped sentence), but
+        # the 4-char prefix must sit on the same line as that whitespace. A
+        # heading, a blank line, then "If ..." is condition-first, not trailing.
+        line_start = s.rfind("\n", 0, m.start()) + 1
+        return m.start() - line_start >= 4 and not re.match(r"^(if|when)\b", s, re.I)
 
     counts["trailing_condition"] = sum(1 for s in sents if trailing_cond(s))
     rotation = 0
