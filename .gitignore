@@ -1,2 +1,6 @@
 __pycache__/
 *.pyc
+package/results/raw/
+ste9.txt
+dict.json
+*.pdf

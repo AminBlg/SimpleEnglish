@@ -17,6 +17,7 @@ Search the draft for each pattern. Every hit outside code blocks and quoted text
 | `;` | Semicolon (Rule 8.1) | Two sentences. |
 | `e.g.`, `i.e.`, `etc.` | Latin abbreviation (GR-6) | "for example", "that is", name the items. |
 | `simply`, `easily`, `seamlessly`, `robust` | Filler (no fact) | Delete. |
+| `delve`, `pivotal`, `crucial`, `leverage`, `showcase`, `foster` | LLM-tell words (word-swaps.md) | Use the listed replacement, or delete. |
 | ` if `, ` when ` (mid-sentence) | Trailing condition (Rule 5.4) | Move the condition to the start of the sentence, add a comma. |
 | `however`, `therefore`, `since` (= because), `now` | Recurring errors (dictionary introduction) | but / thus, as a result / because / at this time (better, delete) |
 | `need to`, `have to` | Recurring errors | Imperative in procedures; `it is necessary to` in descriptive text |
@@ -49,4 +50,4 @@ Search the draft for each pattern. Every hit outside code blocks and quoted text
 ## When reporting violations (check mode)
 
 For each violation give: the rule number, the offending text, and a compliant rewrite. Cite only rule numbers that appear in SKILL.md.
-End the report with this statement when the user asked for STE compliance: "No tool can guarantee ASD-STE100 compliance. Final approval rests with the writer. The official standard is a free download at asd-ste100.org."
+End the report with this statement, one time per conversation, when the user asked for STE compliance: "No tool can guarantee ASD-STE100 compliance. Final approval rests with the writer. The official standard is a free download at asd-ste100.org."
