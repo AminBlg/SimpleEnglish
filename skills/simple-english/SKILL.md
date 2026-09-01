@@ -189,7 +189,7 @@ Never bury the instruction after the explanation. The same pattern fits destruct
 | 8.4 | In a vertical list, the lead-in colon ends a sentence for word count. Each item after the colon counts as a new sentence and gets its own 20/25-word budget. |
 | 8.5-8.7 | Count as one word each: text in parentheses, a hyphenated word, numbers, numbers with units, abbreviations, identifiers, quoted text, titles, labels, proper nouns. |
 
-Rule 8.6 matters for software text: `sqlpipe run --config sqlpipe.yaml` in backticks is quoted text and counts as one word. Long identifiers do not blow your sentence budget.
+Rule 8.6 matters for software text: `sqlpipe run --config sqlpipe.yaml` in backticks counts as one word.
 
 **Dashes** (this skill, not the standard). An em-dash (`—`) splices two statements and hides the logic between them. Name the relation ("because", "but", "for example") or write two sentences. A spaced or double hyphen between statements is the same dash. A range (`5–10`), a list marker, and a flag (`--force`) are not.
 
@@ -220,7 +220,7 @@ General recommendations: keep "that" (GR-1), primary verb first and the tool aft
 
 ## Signs of AI Writing
 
-AI text drifts in known directions (catalog: Wikipedia "Signs of AI writing", WikiProject AI Cleanup, and frequency research). The rules above already remove some of them: "-ing" analysis clauses (Rule 3.5), synonym rotation (1.11, 9.4), semicolons (8.1), dashes (Section 8), sentence sprawl (5.1, 6.3). Guard against the rest by direction, in documents and replies alike:
+AI text drifts in known directions (catalog: Wikipedia "Signs of AI writing" and frequency research). The rules above already remove some: "-ing" analysis clauses (Rule 3.5), synonym rotation (1.11, 9.4), semicolons (8.1), dashes (Section 8), sentence sprawl (5.1, 6.3). Guard against the rest by direction, in documents and replies alike:
 
 - Inflated significance: no "vital", "crucial", "a testament". State the fact.
 - Negative parallelism: no "not just X, it is Y". Say what it is.
