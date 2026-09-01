@@ -1,15 +1,20 @@
 {
   "name": "simple-english",
   "displayName": "Simple English",
-  "description": "Write or rewrite technical text with ASD-STE100 Simplified Technical English: short sentences, one word one meaning, active voice, condition before command.",
-  "version": "1.3.0",
+  "description": "Write plain, layman-readable English with the discipline of ASD-STE100 Simplified Technical English: short sentences, one word one meaning, active voice, condition before command, terms defined at first use.",
+  "version": "2.0.0",
   "author": {
     "name": "AminBlg"
   },
   "homepage": "https://github.com/AminBlg/SimpleEnglish",
   "repository": "https://github.com/AminBlg/SimpleEnglish",
   "license": "MIT",
-  "keywords": ["technical-writing", "documentation", "ste", "asd-ste100"],
+  "keywords": [
+    "technical-writing",
+    "documentation",
+    "ste",
+    "asd-ste100"
+  ],
   "hooks": {
     "SessionStart": [
       {
@@ -19,6 +24,30 @@
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/src/hooks/simple-english-activate.js\"",
             "timeout": 5,
             "statusMessage": "Loading Simple English..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/src/hooks/lint_hook.py\"",
+            "timeout": 10,
+            "statusMessage": "Simple English: checking the file..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/src/hooks/lint_hook.py\"",
+            "timeout": 10
           }
         ]
       }

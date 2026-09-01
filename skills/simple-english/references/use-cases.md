@@ -15,7 +15,7 @@ Pattern: state what happened (past simple), state the cause if known, give the c
 
 ## Runbooks and standard operating procedures
 
-Mode: strict-leaning procedural. This is what STE was made for — an on-call runbook is a maintenance manual.
+Mode: Plain, procedural, with the 20-word limit enforced hard. This is what STE was made for — an on-call runbook is a maintenance manual.
 
 - Every step imperative, one instruction per step, conditions first.
 - Warnings before the step, command first, risk second.

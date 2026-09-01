@@ -46,7 +46,9 @@ Search the draft for each pattern. Every hit outside code blocks and quoted text
 11. **Limits with actions.** A result or limit comes directly after its action in the work step — not in a note (Rules 5.2, 5.5).
 12. **Notes test.** Delete all notes, then read the procedure. The reader must still be able to do it correctly (Rule 5.5).
 13. **Completeness.** Articles present, "that" present after "make sure", no telegraph style (Rule 4.2).
-14. **Untouchables intact.** Code, identifiers, quoted errors, UI labels, and proper nouns are unchanged.
+14. **Plain words.** Each technical term has a definition at its first use. Common words replaced jargon where a common word exists.
+15. **Strict mode only.** Run the two tables in `references/strict-vocabulary.md` against the draft.
+16. **Untouchables intact.** Code, identifiers, quoted errors, UI labels, and proper nouns are unchanged.
 
 ## When reporting violations (check mode)
 
