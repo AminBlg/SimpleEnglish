@@ -59,7 +59,7 @@ Do not mix the two in one passage. A "Getting started" section is procedural. An
 
 ## Plain English Rules
 
-These six rules are the layman layer: what STE assumes and plain-language guides state.
+The layman layer: what STE assumes and plain-language guides state.
 
 1. **Common word over jargon.** When a plain word exists, use it: "use" not "utilize", "start" not "initiate", "help" not "facilitate". `references/word-swaps.md` has the map.
 2. **Define a technical term at its first use when the reader needs it.** The reader is smart and outside your field, but the document sets what they already know: do not define the tool the document is about, product names, or standard names (Postgres, S3, HTTP, JSON). Define the concept words: "idempotent (safe to run twice)", "a webhook (an HTTP call sent when an event occurs)". Keep a definition under ten words, at most one per sentence. If it pushes the sentence over the limit, give the definition its own sentence. Never use a synonym of a chosen term inside a definition (Rule 1.11).
@@ -73,7 +73,7 @@ These six rules are the layman layer: what STE assumes and plain-language guides
 
 ## THE RULE CATALOG
 
-53 rules in 9 sections, paraphrased from ASD-STE100 Issue 9 with software examples. Rules marked (S) need the dictionary and apply in Strict mode only; `references/strict-vocabulary.md` explains them. The official wording is in the free standard at asd-ste100.org.
+53 rules in 9 sections, paraphrased from ASD-STE100 Issue 9 with software examples. Rules marked (S) are Strict mode only (see `references/strict-vocabulary.md`). The official wording is in the free standard at asd-ste100.org.
 
 ### Section 1 — Words (Rules 1.1-1.14)
 
@@ -288,4 +288,4 @@ No tool can guarantee STE compliance. If the user asks for a compliance claim, s
 - `references/checklist.md` — full verification pass with searchable patterns, for check mode and final audits
 - `references/strict-vocabulary.md` — the dictionary discipline for Strict mode: dictionary-only rules, part-of-speech rulings, verb rulings, recurring errors
 - `references/word-swaps.md` — slop-to-plain word map, for rewriting existing text
-- `references/use-cases.md` — patterns for error messages, runbooks, incident reports, release notes, commits, agent prompts, UI copy, and translation prep
+- `references/use-cases.md` — patterns for error messages, runbooks, incident reports, release notes, commits, agent prompts, UI copy, i18n
