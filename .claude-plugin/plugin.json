@@ -9,5 +9,19 @@
   "homepage": "https://github.com/AminBlg/SimpleEnglish",
   "repository": "https://github.com/AminBlg/SimpleEnglish",
   "license": "MIT",
-  "keywords": ["technical-writing", "documentation", "ste", "asd-ste100"]
+  "keywords": ["technical-writing", "documentation", "ste", "asd-ste100"],
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/src/hooks/simple-english-activate.js\"",
+            "timeout": 5,
+            "statusMessage": "Loading Simple English..."
+          }
+        ]
+      }
+    ]
+  }
 }
