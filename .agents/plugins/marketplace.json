@@ -1,0 +1,16 @@
+{
+  "name": "simple-english",
+  "interface": {
+    "displayName": "Simple English"
+  },
+  "plugins": [
+    {
+      "name": "simple-english",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

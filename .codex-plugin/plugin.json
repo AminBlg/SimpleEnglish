@@ -8,15 +8,23 @@
   "homepage": "https://github.com/AminBlg/SimpleEnglish",
   "repository": "https://github.com/AminBlg/SimpleEnglish",
   "license": "MIT",
-  "keywords": ["technical-writing", "documentation", "ste", "asd-ste100"],
+  "keywords": [
+    "technical-writing",
+    "documentation",
+    "ste",
+    "asd-ste100"
+  ],
   "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
   "interface": {
     "displayName": "Simple English",
     "shortDescription": "Write clear technical text with ASD-STE100 rules.",
     "longDescription": "Load Simplified Technical English rules automatically for documentation, procedures, error messages, runbooks, release notes, and incident reports.",
     "developerName": "AminBlg",
     "category": "Productivity",
-    "capabilities": ["Write"],
+    "capabilities": [
+      "Write"
+    ],
     "websiteURL": "https://github.com/AminBlg/SimpleEnglish",
     "defaultPrompt": [
       "Rewrite this technical text in Simple English.",

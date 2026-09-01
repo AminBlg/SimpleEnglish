@@ -3,36 +3,42 @@
 const fs = require('node:fs');
 const path = require('node:path');
 
+// Claude Code caps hook stdout at 10,000 characters. Anything above that is
+// written to a file and replaced by a preview, which defeats the hook.
+const MAX_CHARS = 9500;
+
 const FALLBACK_CONTEXT = `SIMPLE ENGLISH SKILL ACTIVE AUTOMATICALLY
 
 Apply ASD-STE100 Simplified Technical English to technical-writing tasks. Use short sentences, active voice, one term for one meaning, and conditions before commands. Do not change code, identifiers, commands, or quoted errors.`;
 
-function skillCandidates(pluginRoot, hookDirectory) {
-  const candidates = [];
+const HEADER = [
+  'SIMPLE ENGLISH SKILL ACTIVE AUTOMATICALLY',
+  '',
+  'Follow these writing rules without waiting for the user to name the skill. The full skill, with the rule catalog and the check mode, is at skills/simple-english/SKILL.md in this plugin. Read it for a compliance check or for strict mode.',
+  '',
+].join('\n');
 
+function candidates(pluginRoot, hookDirectory, relative) {
+  const roots = [];
   if (pluginRoot) {
-    candidates.push(path.join(pluginRoot, 'skills', 'simple-english', 'SKILL.md'));
+    roots.push(pluginRoot);
   }
-
-  candidates.push(
-    path.join(hookDirectory, '..', '..', 'skills', 'simple-english', 'SKILL.md'),
-    path.join(hookDirectory, '..', 'skills', 'simple-english', 'SKILL.md'),
-  );
-
-  return candidates;
+  roots.push(path.join(hookDirectory, '..', '..'), path.join(hookDirectory, '..'));
+  return roots.map((root) => path.join(root, ...relative));
 }
 
-function readFirstFile(candidates) {
-  for (const candidate of candidates) {
+function promptCandidates(pluginRoot, hookDirectory) {
+  return candidates(pluginRoot, hookDirectory, ['prompts', 'system-prompt.md']);
+}
+
+function readFirstFile(list) {
+  for (const candidate of list) {
     try {
       return fs.readFileSync(candidate, 'utf8');
     } catch (error) {
-      if (error.code !== 'ENOENT' && error.code !== 'ENOTDIR') {
-        throw error;
-      }
+      // Missing, unreadable, or a directory: try the next candidate.
     }
   }
-
   return '';
 }
 
@@ -40,25 +46,21 @@ function stripFrontmatter(content) {
   return content.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '');
 }
 
-function buildContext(skillContent) {
-  if (!skillContent) {
+function buildContext(promptText) {
+  if (!promptText) {
     return FALLBACK_CONTEXT;
   }
-
-  return [
-    'SIMPLE ENGLISH SKILL ACTIVE AUTOMATICALLY',
-    '',
-    'Use the following skill without waiting for the user to name or invoke it. Keep its scope, modes, and exceptions authoritative.',
-    '',
-    stripFrontmatter(skillContent).trim(),
-  ].join('\n');
+  const out = HEADER + stripFrontmatter(promptText).trim();
+  if (out.length > MAX_CHARS) {
+    process.stderr.write(`simple-english hook: payload is ${out.length} characters, over the ${MAX_CHARS} cap; sending the fallback ruleset\n`);
+    return FALLBACK_CONTEXT;
+  }
+  return out;
 }
 
 function main() {
   const pluginRoot = process.env.PLUGIN_ROOT || process.env.CLAUDE_PLUGIN_ROOT;
-  const candidates = skillCandidates(pluginRoot, __dirname);
-  const skillContent = readFirstFile(candidates);
-  process.stdout.write(buildContext(skillContent));
+  process.stdout.write(buildContext(readFirstFile(promptCandidates(pluginRoot, __dirname))));
 }
 
 if (require.main === module) {
@@ -67,8 +69,9 @@ if (require.main === module) {
 
 module.exports = {
   FALLBACK_CONTEXT,
+  MAX_CHARS,
   buildContext,
+  promptCandidates,
   readFirstFile,
-  skillCandidates,
   stripFrontmatter,
 };
