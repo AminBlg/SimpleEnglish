@@ -1,0 +1,3 @@
+**sqlpipe** is a command-line tool that syncs data from Postgres tables to Amazon S3 in Parquet format. It reads rows from any SQL query or table, encodes them as columnar Parquet files, and uploads them to an S3 bucket — giving you a fast, dependency-light way to build data lakes, feed analytics pipelines, or back up datasets without heavyweight ETL frameworks.
+
+Point it at a connection string and a query, and sqlpipe handles batching, compression, schema inference, and multi-part upload automatically. Runs as a single static binary with no runtime requirements beyond network access to Postgres and S3.
