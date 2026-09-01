@@ -1,0 +1,35 @@
+{
+  "text": "## sqlpipe v2.0 Release Notes\n\n**Breaking change:** The `name` field in the `/v2/users` response no longer exists. It splits into two fields: `first_name` and `last_name`. Update any code that reads `name` before you upgrade.\n\n**New: `--incremental` flag**\n\nPass `--incremental` to write only rows that changed since the last run. This reduces write volume for large datasets.\n\n**Faster Parquet writes**\n\nParquet write speed increased by 40%. No configuration changes are required.\n\n---\n\n**Upgrade steps:**\n\n1. Find every reference to the `name` field in `/v2/users` responses.\n2. Replace each reference with `first_name`, `last_name`, or both.\n3. Make sure that your tests pass.\n4. Upgrade sqlpipe.",
+  "input_tokens": 3,
+  "output_tokens": 197,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 5656,
+  "cost_usd": 0.154038,
+  "model": "claude-sonnet-4-6",
+  "condition": "skill",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 101,
+    "sentences": 12,
+    "mean_sentence_words": 8.0,
+    "longest_sentence_words": 14,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

@@ -18,6 +18,7 @@ Usage:
   python3 ste_lint.py --self-test
 """
 import json
+import pathlib
 import re
 import sys
 
@@ -26,10 +27,31 @@ PERFECT = re.compile(r"\b(has|have|had)\s+been\b|\b(has|have)\s+\w+ed\b", re.I)
 CONTRACTION = re.compile(r"\b\w+(n't|'ll|'re|'ve|'d)\b|\bit's\b|\byou're\b", re.I)
 ING_CLAUSE = re.compile(r",\s*(mak|allow|enabl|ensur|highlight|creat|provid|offer|help|reduc|improv|lead|caus|result)ing\b", re.I)
 LATIN = re.compile(r"\b(e\.g\.|i\.e\.|etc\.?)(?=[\s,)]|$)", re.I)
-SLOP = re.compile(
+SLOP_CORE = re.compile(
     r"\b(simply|seamlessly|effortlessly|robust|leverag\w*|utiliz\w*|"
     r"comprehensive|powerful|blazingly|streamlin\w*|facilitat\w*|"
     r"performant|plethora|myriad|delve|crucial|pivotal)\b", re.I)
+SLOP_TSV = pathlib.Path(__file__).resolve().parent / "slop.tsv"
+
+
+def slop_pattern():
+    """Union of the measured core list and evals/slop.tsv (term, count, swap).
+
+    The TSV is the 69-term LLM-tell lexicon: words named by 8 or more of 122
+    published ban lists. Falls back to the core list when the file is absent.
+    """
+    terms = []
+    if SLOP_TSV.exists():
+        for line in SLOP_TSV.read_text(encoding="utf-8").splitlines():
+            term = line.split("\t")[0].strip().lower()
+            if term:
+                terms.append(re.escape(term).replace(r"\ ", r"\s+") + r"\w*")
+    if not terms:
+        return SLOP_CORE
+    return re.compile(SLOP_CORE.pattern[:-len(r")\b")] + "|" + "|".join(terms) + r")\b", re.I)
+
+
+SLOP = slop_pattern()
 # Linear scan; lint() checks ">= 4 chars before the match" instead of the old
 # prefix pattern, whose backtracking was quadratic on long sentences
 # (a punctuation-free 8,000-word input took ~7s; now sub-millisecond).
@@ -141,6 +163,7 @@ def self_test():
     assert slop["violations"]["trailing_condition"] >= 1, slop
     assert slop["violations"]["synonym_rotation"] >= 1, slop
     assert clean["violations_total"] == 0, clean
+    assert lint("We delve into the landscape.", "descriptive")["violations"]["slop_word"] == 2
     assert dashes["violations"]["em_dash"] == 3, dashes
     print("self-test OK:", slop["violations_total"], "violations in slop fixture, 0 in clean")
 

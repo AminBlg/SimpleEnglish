@@ -1,0 +1,35 @@
+{
+  "text": "## Incident Report \u2014 2026-09-01\n\n**Duration:** 14:02 \u2013 14:31 UTC\n\n**Impact:** 12% of API requests failed with HTTP 502.\n\n**Cause:** A deploy at 14:02 UTC removed the cache warmup step. Without warmup, the cache was empty when requests arrived. The service returned 502 errors while it tried to build the cache under live traffic.\n\n**Resolution:** We reverted the deploy at 14:27 UTC. The cache warmed up and error rates returned to normal by 14:31 UTC.\n\n**Next steps:** We will add a check to make sure that the warmup step is present before any deploy reaches production.",
+  "input_tokens": 3,
+  "output_tokens": 160,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 5328,
+  "cost_usd": 0.15347100000000002,
+  "model": "claude-sonnet-4-6",
+  "condition": "skill",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 91,
+    "sentences": 7,
+    "mean_sentence_words": 13.0,
+    "longest_sentence_words": 21,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 1,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 0
+    },
+    "violations_total": 2,
+    "violations_per_100w": 2.2
+  }
+}

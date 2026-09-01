@@ -1,0 +1,4 @@
+ERROR: Upload to S3 failed with AccessDenied.  
+Make sure that the IAM credentials have the s3:PutObject permission.  
+Check the AWS policy attached to the credentials.  
+Correct the permissions and try again.

@@ -1,0 +1,52 @@
+{
+ "summary": {
+  "n": 8,
+  "plain_wins": 3,
+  "ties": 0,
+  "plain_losses": 5,
+  "mean_old": 7.81,
+  "mean_plain": 7.44
+ },
+ "pairs": [
+  {
+   "file": "old__cache.txt",
+   "old": 7.0,
+   "plain": 7.5
+  },
+  {
+   "file": "old__cert-error.txt",
+   "old": 8.5,
+   "plain": 7.0
+  },
+  {
+   "file": "old__migration.txt",
+   "old": 7.0,
+   "plain": 8.0
+  },
+  {
+   "file": "old__oom.txt",
+   "old": 7.0,
+   "plain": 8.0
+  },
+  {
+   "file": "old__pick-db.txt",
+   "old": 8.0,
+   "plain": 7.0
+  },
+  {
+   "file": "old__queue-lag.txt",
+   "old": 8.0,
+   "plain": 7.5
+  },
+  {
+   "file": "old__rate-limit.txt",
+   "old": 8.5,
+   "plain": 7.0
+  },
+  {
+   "file": "old__why-timeout.txt",
+   "old": 8.5,
+   "plain": 7.5
+  }
+ ]
+}

@@ -1,0 +1,35 @@
+{
+  "text": "## Troubleshooting\n\n**Connection timeouts to PostgreSQL**\n\nIf sqlpipe times out connecting to PostgreSQL, check that the host, port, and credentials in your connection string are correct. Verify the database server is reachable from the machine running sqlpipe: `psql \"your-connection-string\"`. If the server is remote, confirm that firewalls and security groups allow traffic on port 5432. For SSL errors, add `?sslmode=require` or `?sslmode=disable` to the connection string to match the server's configuration. Increase the connection timeout with `--pg-timeout` if the server is slow to respond.\n\n**S3 permission errors**\n\nPermission errors against S3 usually mean the IAM credentials lack required permissions or target the wrong bucket. Confirm the IAM user or role has `s3:GetObject`, `s3:PutObject`, and `s3:ListBucket` on the target bucket. Check that `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and `AWS_REGION` are set correctly in the environment. If using a custom endpoint, pass `--s3-endpoint` explicitly. For bucket policy conflicts, verify no explicit deny overrides the IAM allow.",
+  "input_tokens": 3,
+  "output_tokens": 283,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 9003,
+  "cost_usd": 0.014121599999999998,
+  "model": "claude-sonnet-4-6",
+  "condition": "baseline",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 153,
+    "sentences": 11,
+    "mean_sentence_words": 13.9,
+    "longest_sentence_words": 24,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 2
+    },
+    "violations_total": 4,
+    "violations_per_100w": 2.61
+  }
+}

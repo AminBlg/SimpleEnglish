@@ -1,0 +1,18 @@
+Consumer lag of 2 million means consumers are 2 million messages behind producers.
+
+**Is it bad?** Depends on three things:
+
+1. **Message rate.** At 1M msg/s, lag of 2M = 2 seconds behind. At 1K msg/s, lag of 2M = 33 minutes behind. The number alone tells you nothing without the rate.
+2. **Is lag growing or stable?** Stable lag means consumers keep up but started late. Growing lag means consumers cannot keep up — that is the dangerous case.
+3. **What do those messages do?** Real-time alerts or payments delayed by minutes = users notice. Async analytics = probably fine.
+
+**For users:** If lag is growing and messages affect user-facing features (notifications, order status, session events), users see stale data or delayed actions. The delay equals lag divided by consume rate.
+
+**Check these now:**
+
+- `kafka-consumer-groups.sh --describe` — is lag growing per partition?
+- Consumer CPU and memory — are consumers healthy?
+- Partition count vs. consumer count — are all partitions assigned?
+- Producer rate spike — did something upstream flood the topic?
+
+If lag is growing: add consumer instances (up to partition count) or find the slow consumer and fix it.

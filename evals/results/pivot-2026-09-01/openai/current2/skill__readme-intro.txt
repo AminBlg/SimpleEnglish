@@ -1,0 +1,3 @@
+sqlpipe is a command-line tool that copies data from Postgres tables to Amazon S3. It exports the data as Parquet files. This tool helps you back up your data or use it for analysis outside the database.
+
+sqlpipe connects to your Postgres database. Then it extracts the tables you select. Next, it writes the data to S3 in an efficient columnar format. You can run sqlpipe manually or automate it in scripts. It works well for large data sets and frequent updates.

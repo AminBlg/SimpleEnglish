@@ -10,8 +10,8 @@
       "name": "simple-english",
       "source": "./",
       "displayName": "Simple English",
-      "description": "Write or rewrite technical text with ASD-STE100 Simplified Technical English: short sentences, one word one meaning, active voice, condition before command.",
-      "version": "1.3.0",
+      "description": "Write plain, layman-readable English with the discipline of ASD-STE100 Simplified Technical English: short sentences, one word one meaning, active voice, condition before command, terms defined at first use.",
+      "version": "2.0.0",
       "author": {
         "name": "AminBlg"
       },

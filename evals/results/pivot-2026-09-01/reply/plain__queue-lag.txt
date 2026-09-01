@@ -1,0 +1,18 @@
+Consumer lag of 2 million means your consumers are 2 million messages behind producers. Whether that is bad depends on two numbers you need to check right now.
+
+**Check these first:**
+
+1. **Lag rate** — run `kafka-consumer-groups.sh --describe` and watch it over 60 seconds. If lag grows, consumers cannot keep up. If lag holds steady, consumers process at production rate but started late.
+2. **Message throughput** — how many messages per second does your topic receive? Lag ÷ throughput = estimated time to catch up.
+
+**What users feel:**
+
+- **Real-time features** (notifications, alerts, dashboards) show stale data. The delay equals lag ÷ throughput.
+- **Order processing, payments, inventory** — if those pipelines run on this consumer group, orders sit unprocessed for that same window.
+- **Read-only analytics** — usually fine unless the query depends on fresh data.
+
+**The dangerous case** — lag grows faster than consumers process. That means you need more consumer instances or the consumers are crashing and not recovering.
+
+**Immediate action:** Compare `CURRENT-OFFSET` to `LOG-END-OFFSET` per partition. If one partition holds all the lag, a single stuck or slow consumer is the cause. Add a consumer to that partition group or restart the stuck one.
+
+2 million is not a number — it is a rate problem or a backlog problem. The 60-second trend tells you which one.

@@ -3,16 +3,16 @@
 </p>
 
 <p align="center">
-  An agent skill that makes LLMs write in <a href="https://www.asd-ste100.org/">ASD-STE100 Simplified Technical English</a>:<br>
+  An agent skill that makes LLMs write plain English with the discipline of <a href="https://www.asd-ste100.org/">ASD-STE100 Simplified Technical English</a>:<br>
   the controlled language aerospace has used since 1983 so a tired mechanic <em>cannot</em> misread an instruction.<br>
-  AI slop dies as a side effect.
+  Layman-readable by default, STE-strict on request. AI slop dies as a side effect.
 </p>
 
 <p align="center">
   <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/STE_violations-%E2%88%9274.6%25_measured-brightgreen?style=flat" alt="74.6% fewer violations, measured"></a>
   <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-7_Claude_models-blueviolet?style=flat" alt="7 models benchmarked"></a>
   <a href="https://agentskills.io"><img src="https://img.shields.io/badge/SKILL.md-open_standard-blue?style=flat" alt="Agent Skills"></a>
-  <a href="skills/simple-english/SKILL.md"><img src="https://img.shields.io/badge/version-1.3.0-blue?style=flat" alt="version 1.3.0"></a>
+  <a href="skills/simple-english/SKILL.md"><img src="https://img.shields.io/badge/version-2.0.0-blue?style=flat" alt="version 2.0.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat" alt="MIT"></a>
   <a href="https://github.com/AminBlg/SimpleEnglish/stargazers"><img src="https://img.shields.io/github/stars/AminBlg/SimpleEnglish?style=flat&logo=github&color=yellow" alt="GitHub stars"></a>
 </p>
@@ -83,7 +83,7 @@ More rewrites in [`examples/before-after.md`](examples/before-after.md): READMEs
 
 ## Benchmarks
 
-**74.6% fewer STE violations per 100 words with the skill on, averaged across 7 Claude models × 8 writing tasks (112 generations).** Deterministic regex linter, same rules for both conditions, reasoning effort pinned to `low`. Method, caveats, and raw files: [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` and a logged-in Claude Code CLI.
+**74.6% fewer STE violations per 100 words with the skill on, averaged across 7 Claude models × 8 writing tasks (112 generations).** Measured on skill 1.3.0. The 2.0.0 pivot (Plain by default) was checked against 1.3.0 on two models, the reply set, and a blind judge: documents at parity, replies with 43% fewer violations. Details: [`evals/results/pivot-2026-09-01/RESULTS.md`](evals/results/pivot-2026-09-01/RESULTS.md). Deterministic regex linter, same rules for both conditions, reasoning effort pinned to `low`. Method, caveats, and raw files: [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` and a logged-in Claude Code CLI.
 
 | Model | Baseline viol/100w | Skill viol/100w | Reduction |
 |---|---|---|---|
@@ -125,7 +125,7 @@ Every number above reproduces from committed raw files. Score any raw directory 
 | One instruction per sentence | Steps nobody can follow at 2 a.m. |
 | Keep articles, keep "that" | Telegraph style. STE is short, not terse |
 
-Two modes. **Pragmatic** (default) applies the structural rules and keeps your domain words. **Strict** adds the dictionary vocabulary discipline when you name STE or compliance. The skill also covers error messages, runbooks, incident reports, release notes, agent prompts, and translation prep: [`use-cases.md`](skills/simple-english/references/use-cases.md). It does not touch marketing copy, on purpose.
+Two modes. **Plain** (default) writes for a smart reader outside the field: the structural rules, common words, every technical term defined at first use, answer-first replies. **Strict** adds the STE dictionary discipline to the document when you name STE or compliance. The skill also covers error messages, runbooks, incident reports, release notes, agent prompts, and translation prep: [`use-cases.md`](skills/simple-english/references/use-cases.md). It does not touch marketing copy, on purpose.
 
 ## FAQ
 

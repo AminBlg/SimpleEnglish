@@ -18,6 +18,7 @@ Search the draft for each pattern. Every hit outside code blocks and quoted text
 | `—`, `–`, or ` - ` / ` -- ` between two statements | Dash: implied logic junction (skill check, Section 8). Not a violation: a dash that identifies a list item (Rule 4.3), a CLI flag (`--force`), a range (`5 - 10`) | Name the relation ("because", "but", "for example", "that is"), or write two sentences. |
 | `e.g.`, `i.e.`, `etc.` | Latin abbreviation (GR-6) | "for example", "that is", name the items. |
 | `simply`, `easily`, `seamlessly`, `robust` | Filler (no fact) | Delete. |
+| `delve`, `pivotal`, `crucial`, `leverage`, `showcase`, `foster` | LLM-tell words (word-swaps.md) | Use the listed replacement, or delete. |
 | ` if `, ` when ` (mid-sentence) | Trailing condition (Rule 5.4) | Move the condition to the start of the sentence, add a comma. |
 | `however`, `therefore`, `since` (= because), `now` | Recurring errors (dictionary introduction) | but / thus, as a result / because / at this time (better, delete) |
 | `need to`, `have to` | Recurring errors | Imperative in procedures; `it is necessary to` in descriptive text |
@@ -45,9 +46,11 @@ Search the draft for each pattern. Every hit outside code blocks and quoted text
 11. **Limits with actions.** A result or limit comes directly after its action in the work step — not in a note (Rules 5.2, 5.5).
 12. **Notes test.** Delete all notes, then read the procedure. The reader must still be able to do it correctly (Rule 5.5).
 13. **Completeness.** Articles present, "that" present after "make sure", no telegraph style (Rule 4.2).
-14. **Untouchables intact.** Code, identifiers, quoted errors, UI labels, and proper nouns are unchanged.
+14. **Plain words.** Each technical term has a definition at its first use. Common words replaced jargon where a common word exists.
+15. **Strict mode only.** Run the two tables in `references/strict-vocabulary.md` against the draft.
+16. **Untouchables intact.** Code, identifiers, quoted errors, UI labels, and proper nouns are unchanged.
 
 ## When reporting violations (check mode)
 
 For each violation give: the rule number, the offending text, and a compliant rewrite. Cite only rule numbers that appear in SKILL.md.
-End the report with this statement when the user asked for STE compliance: "No tool can guarantee ASD-STE100 compliance. Final approval rests with the writer. The official standard is a free download at asd-ste100.org."
+End the report with this statement, one time per conversation, when the user asked for STE compliance: "No tool can guarantee ASD-STE100 compliance. Final approval rests with the writer. The official standard is a free download at asd-ste100.org."

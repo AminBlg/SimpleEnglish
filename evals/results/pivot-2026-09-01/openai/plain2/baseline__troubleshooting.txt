@@ -1,0 +1,7 @@
+## Troubleshooting
+
+### Connection Timeouts to Postgres  
+If sqlpipe encounters connection timeouts when connecting to your Postgres database, first verify that the database server is running and accessible from your network. Check the connection string for correct host, port, username, and password settings. Ensure that any firewalls or security groups allow traffic on the Postgres port (default 5432). Increasing the connection timeout setting in sqlpipe may help if network latency is high. Additionally, confirm that SSL settings match the server configuration, as mismatches can cause connection failures.
+
+### S3 Permission Errors  
+Permission errors when accessing Amazon S3 typically indicate insufficient IAM permissions on the credentials used. Verify that the IAM user or role attached to sqlpipe has the necessary permissions such as `s3:PutObject`, `s3:GetObject`, and `s3:ListBucket` for the specific S3 buckets involved. Check for correct bucket names and prefixes in your configuration. Also, ensure that any bucket policies or ACLs do not restrict access. Using AWS CLI or SDK tools to test S3 access can help isolate permission issues before retrying with sqlpipe.

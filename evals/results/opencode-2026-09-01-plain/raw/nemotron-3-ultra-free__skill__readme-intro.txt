@@ -1,0 +1,3 @@
+sqlpipe is a command-line tool that copies PostgreSQL tables to Amazon S3 as Parquet files. Parquet is a file format that stores data by column, which compresses well and reads fast.
+
+You run sqlpipe once or on a schedule. It reads the table, converts each row, and writes the files to your S3 bucket. The tool handles large tables by streaming data in batches. It also tracks which rows have been copied so you can resume after an interruption.

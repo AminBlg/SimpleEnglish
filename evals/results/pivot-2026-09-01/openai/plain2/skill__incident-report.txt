@@ -1,0 +1,1 @@
+Between 14:02 and 14:31 UTC, 12% of API requests failed with HTTP 502 errors. This started after we deployed a change that removed the cache warmup step. The cache warmup step prepares the cache to respond quickly. We reverted the deploy at 14:27 UTC. After the revert, the failure rate went back to normal. We are investigating how the cache warmup affects request success.

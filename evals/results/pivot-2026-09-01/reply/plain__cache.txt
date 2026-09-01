@@ -1,0 +1,11 @@
+Redis TTL set to 10 minutes. When you write a new price to the database, the old cached value stays until it expires.
+
+Fix: delete (or update) the cache key on every price write.
+
+```python
+def update_price(product_id, new_price):
+    db.execute("UPDATE prices SET price = ? WHERE id = ?", new_price, product_id)
+    redis.delete(f"price:{product_id}")
+```
+
+If you write to the DB and delete from Redis in separate steps, a crash between them leaves stale data. Wrap both in a try/finally or use a write-through pattern — update Redis and DB together, or delete first.

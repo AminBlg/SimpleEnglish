@@ -1,0 +1,25 @@
+## Getting started
+
+### Install sqlpipe
+
+Run this command:
+
+```bash
+curl -sSL https://get.sqlpipe.dev | sh
+```
+
+The script downloads the binary and adds it to your PATH.
+
+### Configure sqlpipe
+
+Create a file named `sqlpipe.yaml` in your working directory. The configuration defines the source database, the destination database, and the tables to copy.
+
+### Run the pipeline
+
+Run this command:
+
+```bash
+sqlpipe run --config sqlpipe.yaml
+```
+
+sqlpipe reads the configuration and copies the data.
