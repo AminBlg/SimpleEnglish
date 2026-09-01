@@ -59,7 +59,7 @@ Do not mix the two in one passage. A "Getting started" section is procedural. An
 
 ## Plain English Rules
 
-These six rules are the layman layer. They are the readability rules that STE assumes and plain-language guides state.
+These six rules are the layman layer: what STE assumes and plain-language guides state.
 
 1. **Common word over jargon.** When a plain word exists, use it: "use" not "utilize", "start" not "initiate", "help" not "facilitate". `references/word-swaps.md` has the map.
 2. **Define a technical term at its first use when the reader needs it.** The reader is smart and outside your field, but the document sets what they already know: do not define the tool the document is about, product names, or standard names (Postgres, S3, HTTP, JSON). Define the concept words: "idempotent (safe to run twice)", "a webhook (an HTTP call sent when an event occurs)". Keep a definition under ten words, at most one per sentence. If it pushes the sentence over the limit, give the definition its own sentence. Never use a synonym of a chosen term inside a definition (Rule 1.11).
