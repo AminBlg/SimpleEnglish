@@ -1,0 +1,19 @@
+**Incident Report — API 502 Errors**
+
+**Date:** [Date] — **Duration:** 14:02–14:31 UTC (29 minutes)
+
+**Summary**
+
+A routine deployment removed the cache warmup step, causing approximately 12% of API requests to return HTTP 502 errors. The issue was identified at 14:15 UTC and the deploy was reverted at 14:27 UTC. Full service recovery was confirmed at 14:31 UTC.
+
+**Impact**
+
+During the incident window, affected users experienced intermittent 502 responses when making API requests. Successful requests were unaffected.
+
+**Root Cause**
+
+A configuration change in the deployment pipeline excluded the cache warmup procedure, resulting in upstream connection failures for a portion of traffic.
+
+**Resolution**
+
+The deployment was rolled back. We are adding automated checks to prevent deploys that skip the cache warmup step from reaching production.

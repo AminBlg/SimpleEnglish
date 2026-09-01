@@ -1,0 +1,13 @@
+## sqlpipe v2.0 Release Notes
+
+### Breaking Change
+
+The `name` field in the `/v2/users` endpoint is now two fields: `first_name` and `last_name`. You must update your code to read these new fields. The old `name` field is removed.
+
+### New Feature
+
+A new `--incremental` flag enables incremental data processing. You can use this flag to process only new or changed records. This reduces processing time for large datasets.
+
+### Performance Improvement
+
+Parquet write speed increased by 40 percent. This improvement applies to all Parquet output operations. The speedup comes from a new streaming writer implementation.

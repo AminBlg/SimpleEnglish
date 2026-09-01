@@ -1,0 +1,6 @@
+Composing your 100-word incident report — applying simplified English.
+Incident Report – API Failures on 2026-09-01
+
+Between 14:02 and 14:31 UTC, 12% of API requests failed with HTTP 502. A deploy at 14:02 removed the cache warmup step. Without warmup, the cache did not serve traffic and requests failed. We reverted the deploy at 14:27. Errors decreased after the revert. By 14:31 the service returned to normal operation.
+
+All systems operate normally. We will add a check that prevents deploys without the warmup step. We will also improve alerts for HTTP 502 errors. We will review the deploy process and share results next week. We apologize for the impact and appreciate your patience.

@@ -1,0 +1,22 @@
+Troubleshooting
+
+Postgres connection timeouts
+
+sqlpipe shows `dial tcp: i/o timeout`. This error means that it cannot connect to Postgres.
+
+Follow these steps:
+
+1. Make sure that the host that runs sqlpipe can connect to the Postgres port (5432 by default).
+2. If you use a managed database (RDS or Cloud SQL), make sure that the database accepts connections from the IP address of sqlpipe.
+3. If the network is slow, increase `source.connect_timeout_seconds` in the configuration.
+
+S3 permission errors
+
+sqlpipe shows `403 Forbidden` or `AccessDenied`. This error means that it cannot read from or write to S3.
+
+Follow these steps:
+
+1. Make sure that the IAM role or access keys have permission to the bucket and prefix.
+2. Make sure that the bucket policy does not block the principal.
+3. If you use SSE-KMS encryption, make sure that the principal has permission to use the KMS key.
+4. Run `sqlpipe validate --config sqlpipe.yaml` to test access before you run the transfer.

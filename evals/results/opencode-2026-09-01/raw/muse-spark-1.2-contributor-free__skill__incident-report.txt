@@ -1,0 +1,16 @@
+Incident Report: API Errors Between 14:02 and 14:31 UTC
+
+Between 14:02 and 14:31 UTC, 12 percent of API requests failed with HTTP 502.
+A deploy at 14:02 removed the cache warmup step.
+Requests that needed cold cache data failed as a result.
+
+The failure affected the main API endpoint only.
+Other services operated normally.
+We reverted the deploy at 14:27 UTC.
+The error rate returned to normal at 14:31 UTC.
+No data loss occurred.
+
+Requests that succeeded returned correct data.
+We apologize for the disruption.
+We will add validation for the cache warmup step to the deploy checks.
+We will publish a full post-mortem by 2026-09-03.

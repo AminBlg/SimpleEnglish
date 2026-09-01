@@ -16,7 +16,15 @@ and the 69-term slop lexicon). One generation per cell unless stated.
 | gpt-4.1-mini, 2 runs | 1.3.0 | 3.75 | 0.67 (9/1351w) | 82.2% | `openai/current*/` |
 | gpt-4.1-mini, 2 runs | 2.0.0 | 4.55 | 0.72 (8/1105w) | 84.1% | `openai/plain*/` |
 
-An opencode run on nemotron-3-ultra and muse-spark-1.2 (named non-Claude families) was still running when this page was written; its rows land in a follow-up commit under `evals/results/opencode-2026-09-01-plain/`.
+Opencode, same two models, 1.3.0 from `opencode-2026-09-01/` and 2.0.0 from `opencode-2026-09-01-plain/`:
+
+| Model | Baseline viol/100w | Skill viol/100w | Reduction |
+|---|---:|---:|---:|
+| muse-spark-1.2-contributor-free | 1.31 | 0.25 | 81.1% |
+| nemotron-3-ultra-free | 2.36 | 0.53 | 77.6% |
+| pooled | 1.76 | 0.36 | 79.4% |
+
+(1.3.0 rows for the same models sit in the seven-model table.)
 
 Skill-side rates differ by 0.15 (Claude) and 0.05 (gpt) per 100 words, one
 violation either way. Both are inside single-run noise: the two gpt-4.1-mini

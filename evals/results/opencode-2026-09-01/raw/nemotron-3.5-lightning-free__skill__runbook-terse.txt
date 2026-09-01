@@ -1,0 +1,1 @@
+Make sure that the backup exists before running the migration.

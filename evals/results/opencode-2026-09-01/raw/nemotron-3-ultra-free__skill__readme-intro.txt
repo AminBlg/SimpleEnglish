@@ -1,0 +1,3 @@
+sqlpipe is a command-line tool that copies Postgres tables to Amazon S3 as Apache Parquet files. The tool reads data from a source database and writes partitioned datasets to an S3 bucket. You configure the tool with a YAML file that specifies database connections, target buckets, and table selection rules.
+
+Each sync operation runs as a single transaction to keep data consistent across the source and target. sqlpipe supports incremental syncs that capture only changed rows, schema evolution that handles column changes, and parallel extraction for large tables. The tool runs on Linux, macOS, and Windows. Monitoring and logging are built in to help you track sync progress and diagnose issues.

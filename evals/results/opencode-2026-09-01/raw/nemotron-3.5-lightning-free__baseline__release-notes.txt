@@ -1,0 +1,9 @@
+sqlpipe v2.0 launches with breaking changes, a new incremental mode, and markedly faster Parquet output.
+
+- **Breaking**: The `name` field in `/v2/users` is replaced by `first_name` and `last_name`. Adjust your downstream consumers to map these new fields.
+
+- **`--incremental` flag**: Enables incremental loads by tracking processed records, so subsequent runs skip already‑ingested data and reduce runtime.
+
+- **40% faster Parquet writes**: Optimized columnar serialization and batch commits cut write latency by roughly four‑tenths compared to v1.
+
+Additional improvements include richer error payloads, expanded type support, and minor stability fixes. A migration guide is available online, detailing mapping scripts and upgrade steps. Upgrade now to benefit from the streamlined pipeline and performance boost; strongly recommended.

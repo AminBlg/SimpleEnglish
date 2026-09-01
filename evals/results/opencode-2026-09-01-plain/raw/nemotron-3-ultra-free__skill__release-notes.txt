@@ -1,0 +1,5 @@
+sqlpipe v2.0 changes the `/v2/users` endpoint. The `name` field is now split into `first_name` and `last_name`. This is a breaking change. You must update your code to use the new fields.
+
+A new `--incremental` flag runs only the changes since the last run. The flag reads the last sync timestamp from the state file. Use this flag to save time on large datasets.
+
+Parquet writes are now 40% faster. Parquet is a columnar file format. The improvement comes from a new batch writer that reduces memory allocations. The writer also uses parallel compression by default.

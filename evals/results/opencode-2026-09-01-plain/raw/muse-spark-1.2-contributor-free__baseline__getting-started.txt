@@ -1,0 +1,17 @@
+Writing your Getting Started guide — applying Simplified Technical English.
+Getting Started
+
+sqlpipe moves data from a source to a target. You define each pipe in a configuration file. The configuration file uses YAML format. This procedure shows how to install sqlpipe and run your first pipe.
+
+1. Install sqlpipe. Run `curl -sSL https://get.sqlpipe.dev | sh`.
+2. Make sure that the installation completed without errors.
+3. If the shell reports a permission error, run the command again with elevated permissions.
+4. Create the configuration file `sqlpipe.yaml` in your work directory.
+5. Open `sqlpipe.yaml`. Add the source and the target.
+6. Make sure that the connection values are correct.
+7. Save the configuration file.
+8. Run `sqlpipe run --config sqlpipe.yaml`.
+9. Examine the output for errors.
+10. If the run fails, examine the log. Then correct the configuration file. Then run the command again.
+
+Note: sqlpipe reads the configuration file at start. If you change the configuration file, run the command again.

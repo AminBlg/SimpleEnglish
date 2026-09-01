@@ -1,0 +1,8 @@
+Simplifying your release notes to spec — loading the STE rules.
+Sqlpipe 2.0 is available. This release includes a breaking change, a new flag, and faster Parquet writes.
+
+The `/v2/users` endpoint no longer returns the `name` field. It returns `first_name` and `last_name` instead. If your code reads `name`, you must update it to read the two new fields before you upgrade. We made this change to support correct sort and search by last name.
+
+The new `--incremental` flag copies only new or changed rows since the last run. You can use this flag to reduce copy time for large tables. The flag stores the last state and resumes from that state on the next run.
+
+Parquet writes are 40% faster than in version 1.x. As a result, large exports complete in less time.

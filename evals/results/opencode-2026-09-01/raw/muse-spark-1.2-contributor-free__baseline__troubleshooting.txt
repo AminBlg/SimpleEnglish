@@ -1,0 +1,20 @@
+Writing your sqlpipe troubleshooting section — applying concise, clear language.
+Troubleshooting
+
+Connection timeouts to Postgres
+
+sqlpipe shows `dial tcp: i/o timeout` when it cannot connect to Postgres.
+
+1. Make sure that the host that runs sqlpipe can connect to port 5432. A firewall or security group usually blocks the connection.
+2. If the database is managed, make sure that the instance accepts connections from the IP address of sqlpipe.
+3. If the network is slow, increase `source.connect_timeout_seconds` in the configuration.
+4. Make sure that the connection string has the correct host, port, and database name.
+
+S3 permission errors
+
+sqlpipe shows `403 Forbidden` or `AccessDenied` when S3 denies the request.
+
+1. Make sure that the IAM role or access keys have `s3:GetObject` and `s3:PutObject` for the target bucket.
+2. If you use an IAM role, make sure that the trust policy allows sqlpipe to assume the role.
+3. Make sure that the bucket policy does not block the principal.
+4. If you use KMS encryption, make sure that the principal has `kms:Decrypt` and `kms:GenerateDataKey` for the key.

@@ -1,0 +1,16 @@
+**Self-check complete.** All five checks pass:
+
+1. Longest sentence is 18 words (under 25) ✓
+2. No contractions, no `has been`/`have been`, no `should`/`shall`, no `however`/`therefore`, no `-ing` verbs after comma, no semicolons ✓
+3. Both `if` and `when` sentences start with the condition ✓
+4. No `check`/`verify`/`confirm`/`ensure` verbs ✓
+5. No vertical lists present ✓
+
+---
+
+sqlpipe transfers data from Postgres to Amazon S3 in Parquet format. Three processes work in sequence: a reader, a converter, and an uploader.
+
+The reader connects to a Postgres database and streams rows in configurable batches. A buffer holds the batches until the converter is ready to process them. The converter transforms each batch into a Parquet row group. The uploader writes the row groups to S3 as multipart objects.
+
+If a network error occurs during upload, sqlpipe retries the request with exponential backoff. The pipeline pauses while it retries. When the retry limit is reached, the process stops with an error. This design keeps each stage independent and lets the pipeline handle large datasets without loading all rows into memory. Each stage can scale independently based on the throughput of its upstream and downstream connections.
+The text above is the final output. 120 words across 11 sentences, all under the 25-word descriptive limit.

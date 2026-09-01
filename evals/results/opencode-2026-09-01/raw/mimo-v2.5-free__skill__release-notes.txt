@@ -1,0 +1,13 @@
+# sqlpipe v2.0
+
+## Breaking change
+
+The `name` field of `/v2/users` is removed. It is replaced by two fields: `first_name` and `last_name`.
+
+If your API client reads the `name` field, update it to use the new fields. If your database stores the `name` column, run the migration script in the upgrade guide to split existing values.
+
+## New
+
+The `--incremental` flag lets you sync only new and changed rows. Use this flag to skip unchanged data and shorten run times.
+
+Parquet writes are 40% faster.

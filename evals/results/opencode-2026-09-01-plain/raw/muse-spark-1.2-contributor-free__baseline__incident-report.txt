@@ -1,0 +1,7 @@
+Incident Report – API Errors (2026-09-01)
+
+Between 14:02 and 14:31 UTC, 12% of API requests returned HTTP 502. The cause was a deploy that removed the cache warmup step. Without warmup, the cache had no data. Requests went to the backend and overloaded it.
+
+We reverted the deploy at 14:27 UTC. Errors decreased after the revert. Service became normal at 14:31 UTC. No data loss occurred.
+
+We will add a check to prevent deploys without cache warmup. We will also add an alert for high 502 rates. We will review the deploy process this week. We apologize for the disruption.

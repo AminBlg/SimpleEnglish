@@ -1,0 +1,3 @@
+sqlpipe: S3 upload failed: AccessDenied
+The IAM credentials lack the `s3:PutObject` permission.
+Grant this permission for the target bucket and object path.

@@ -1,0 +1,1 @@
+Sourcing the exact AccessDenied wording — pulling sqlpipe's error text now.

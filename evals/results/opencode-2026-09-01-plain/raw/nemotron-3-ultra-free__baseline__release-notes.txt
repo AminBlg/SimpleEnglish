@@ -1,0 +1,22 @@
+sqlpipe v2.0.0
+
+**Breaking Changes**
+- `/v2/users` endpoint: `name` field replaced with `first_name` and `last_name`. Update your consumers.
+
+**New Features**
+- `--incremental` flag enables incremental syncs for supported sources. Reads only changed rows since last run, reducing load and latency.
+
+**Performance**
+- Parquet writes are ~40% faster via columnar batch flushing and reduced allocation overhead. Larger datasets see proportionally greater gains.
+
+**Migration**
+```bash
+# Before
+curl /v2/users | jq '.[] | .name'
+
+# After
+curl /v2/users | jq '.[] | "\(.first_name) \(.last_name)"'
+```
+
+**Full Changelog**
+See `CHANGELOG.md` for complete diff.

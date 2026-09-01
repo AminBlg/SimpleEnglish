@@ -1,0 +1,5 @@
+sqlpipe moves data from Postgres to Parquet files on S3 through a three-stage pipeline. A reader process executes a query against Postgres and streams results in configurable batch sizes, keeping memory usage steady regardless of table size. Each batch hands off to a converter, which transforms the relational rows into Parquet row groups, applying column encoding and compression as it writes. The converter manages the Parquet file lifecycle, flushing complete row groups to the uploader.
+
+The uploader accepts serialized Parquet data and writes it to S3 as multipart uploads, buffering parts in memory and managing the multipart lifecycle. It retries failed part uploads with exponential backoff, and only completes the multipart upload once all parts succeed, guaranteeing that no partial or corrupt file appears in S3.
+
+The stages run concurrently, connected by bounded channels, so a slow S3 upload doesn't stall the Postgres reader.

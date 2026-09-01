@@ -1,0 +1,1 @@
+At 14:02 UTC, 12% of API requests returned HTTP 502 errors. The cause was a deploy that removed the cache warmup step. At 14:27 UTC, we reverted the deploy. The error rate returned to normal by 14:31 UTC. The cache warmup step has been restored in the deploy process.

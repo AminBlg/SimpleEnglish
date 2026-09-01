@@ -1,0 +1,13 @@
+**sqlpipe Architecture**
+
+sqlpipe moves data from Postgres to S3 in three stages: read, convert, and upload. Each stage runs as a separate process.
+
+The reader connects to Postgres and streams rows in batches. It reads one batch at a time and sends each batch to the converter. The reader does not load the full table into memory.
+
+The converter turns each batch into a Parquet row group. Parquet is a columnar format that compresses data well. The converter writes each row group to a temporary file.
+
+The uploader sends row groups to S3 as multipart objects. It retries uploads that fail because of network errors. It does not retry uploads that fail because of permission errors.
+
+The architecture runs all three stages at the same time. The reader, converter, and uploader each process a different batch. This design gives high throughput without large memory use.
+
+sqlpipe transfers data from Postgres to S3 reliably. It handles network failures and keeps memory use low. It moves large tables without loading them all at once.

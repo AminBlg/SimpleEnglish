@@ -1,0 +1,15 @@
+sqlpipe v2.0.0 — Breaking Changes & Performance
+
+**Breaking: User name field split**
+The `/v2/users` endpoint no longer returns a `name` field. It now returns `first_name` and `last_name` as separate fields. Update your integrations accordingly.
+
+**New: Incremental syncs**
+Added `--incremental` flag to enable delta-based exports. Only changed rows are processed, reducing runtime and load on source systems. Use with `--since` to set the watermark.
+
+**Performance: 40% faster Parquet writes**
+Parquet output now uses optimized columnar batching and SIMD-accelerated encoding. Large exports see ~40% throughput improvement with lower memory pressure.
+
+**Other changes**
+- Minimum Go version bumped to 1.22
+- Deprecated `sqlpipe export --legacy` (removed in v3)
+- Fixed timezone handling in timestamp columns (PR #312)

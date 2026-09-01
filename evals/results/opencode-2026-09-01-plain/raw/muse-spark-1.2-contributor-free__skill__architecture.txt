@@ -1,0 +1,5 @@
+sqlpipe copies data from Postgres to S3 (object storage) without local disk use. The system has three stages in a pipeline: a reader, a converter, and an uploader.
+
+The reader streams rows from Postgres in batches with a server-side cursor (a pointer that returns rows on demand). The converter turns each batch into a Parquet row group (a columnar storage unit). Parquet (a columnar file format) stores columns together, which compresses well and speeds reads.
+
+The uploader writes the file to S3 with multipart upload (a method that sends an object in parts). It sends each part as soon as the converter produces it. If a part fails, the uploader retries the part until it succeeds or reaches the limit. The three stages run at the same time, so memory stays low.

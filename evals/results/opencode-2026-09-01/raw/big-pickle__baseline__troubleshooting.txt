@@ -1,0 +1,9 @@
+## Troubleshooting
+
+### Connection Timeout to PostgreSQL
+
+If sqlpipe fails with a connection timeout, verify that the Postgres server is running and accepting connections on the expected host and port. Common causes include a firewall blocking the port, the `listen_addresses` setting excluding your client IP, or an incorrect connection string. Test connectivity manually with `psql` using the same parameters. If the server is reachable but slow to respond, increase the connection timeout with the `--timeout` flag or check for resource contention such as maxed-out connections or heavy queries blocking the server.
+
+### S3 Permission Errors
+
+S3 errors typically appear as `AccessDenied` or `403 Forbidden` when sqlpipe tries to read from or write to a bucket. Confirm that the IAM user or role has the required `s3:GetObject`, `s3:PutObject`, and `s3:ListBucket` permissions for the target bucket and prefix. Check that the bucket policy does not explicitly deny the operation, and verify the region matches your configured endpoint. If using a session token, ensure it has not expired.

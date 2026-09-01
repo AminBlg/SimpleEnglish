@@ -1,0 +1,7 @@
+**Incident Report**
+
+Between 14:02 and 14:31 UTC, 12% of API requests failed with HTTP 502 errors. A deployment at 14:02 removed the cache warmup step. The origin server returned 502 responses for cache-missed requests during peak load.
+
+We identified the cause at 14:20 and reverted the deploy at 14:27. Error rates dropped to normal within four minutes of the revert.
+
+We will add a post-deploy cache warmup validation step to prevent similar failures.

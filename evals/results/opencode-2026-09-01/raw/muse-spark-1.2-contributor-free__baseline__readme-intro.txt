@@ -1,0 +1,3 @@
+sqlpipe is a fast, focused CLI that syncs Postgres tables to S3 as Parquet files. It connects directly to your database, extracts entire tables or specific schemas, and writes them to S3 in columnar Parquet format ready for Athena, DuckDB, Spark, and other analytics engines.
+
+Designed for simple, repeatable data pipelines, sqlpipe handles Postgres type mapping, Snappy compression, and partitioned writes out of the box. Run full or incremental syncs with a single command, schedule it via cron or CI, and keep your data lake in sync without daemons or extra infrastructure. Configure your source and destination once, then run `sqlpipe sync` for consistent, production-ready exports. It is written in Go, installs as a single binary, and needs no dependencies.

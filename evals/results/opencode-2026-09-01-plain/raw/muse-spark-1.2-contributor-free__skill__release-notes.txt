@@ -1,0 +1,9 @@
+sqlpipe v2.0 is available.
+
+This release splits the name field, adds an incremental flag, and speeds up Parquet writes.
+
+Breaking change: The /v2/users endpoint no longer returns name. It returns first_name and last_name instead. You must update your code to read the two new fields. If you send name in requests, the API will reject the request. You can restore the old value by joining first_name and last_name in your code.
+
+New feature: The `--incremental` flag runs only new or changed rows. You can add the flag to `sqlpipe run` to reduce load and time. The flag copies all rows on the first run and then copies only changes.
+
+Performance: Parquet (a columnar file format) writes are 40% faster. The faster writes apply to all Parquet outputs without configuration changes. The change lowers CPU use and completes sooner.

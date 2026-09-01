@@ -1,0 +1,8 @@
+Rewrite ready — applying plain-English rules for your 120-word sqlpipe notes.
+sqlpipe v2.0 is available. This release includes a breaking change, a new feature, and faster Parquet writes.
+
+/v2/users no longer uses the `name` field. The field is now two fields: `first_name` and `last_name`. If you use `/v2/users`, update your client to send `first_name` and `last_name`. Requests that send `name` will fail.
+
+The release adds the `--incremental` flag. If you run `sqlpipe` with `--incremental`, the tool copies only new or changed rows. As a result, large syncs complete faster and use less bandwidth.
+
+Parquet writes are 40% faster than in v1. This improvement applies to all Parquet outputs. No configuration change is necessary. See the migration guide for examples. We thank you for your feedback on this release.

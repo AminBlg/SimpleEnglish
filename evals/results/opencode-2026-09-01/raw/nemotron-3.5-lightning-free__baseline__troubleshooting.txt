@@ -1,0 +1,15 @@
+**Troubleshooting**
+
+**PostgreSQL connection timeouts**  
+- Verify the host, port, and database name in `sqlpipe config`.  
+- Ensure the Postgres server accepts TCP connections on the specified port (default 5432) and that firewalls allow inbound traffic from the client’s IP.  
+- Check `pg_hba.conf` for matching authentication rules; switch to `trust` or `md5`/`scram-sha-256` as needed.  
+- Increase the client‑side `connect_timeout` (or the `SQLPIPE_PG_TIMEOUT` env var) if the server requires more time to start up or reach the max‑connections limit.  
+- Confirm that the PostgreSQL service is running and that `max_connections` isn’t exceeded; use `SELECT * FROM pg_stat_activity;` to diagnose busy sessions.
+
+**S3 permission errors**  
+- Validate that the AWS credentials (access key, secret, region) are correct and have `s3:GetObject`, `s3:PutObject`, and `s3:ListBucket` permissions for the target bucket.  
+- Ensure the bucket policy and IAM policy allow the principal used by sqlpipe; temporarily add a broad `Allow` for `*` to isolate policy‑denied operations.  
+- Check that the bucket’s ACL or Object Lock isn’t blocking the requested operation.  
+- Set `SQLPIPE_S3_ENDPOINT`, `SQLPIPE_S3_ACCESS_KEY_ID`, and `SQLPIPE_S3_SECRET_ACCESS_KEY` explicitly, and confirm network connectivity (e.g., no corporate proxy blocking S3 endpoints).  
+- If using VPC endpoints, confirm the route table and security groups permit traffic to the S3 service.

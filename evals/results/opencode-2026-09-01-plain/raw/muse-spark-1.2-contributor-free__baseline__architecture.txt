@@ -1,0 +1,10 @@
+Drafting your 130-word sqlpipe overview in Simplified Technical English.
+Sqlpipe moves data from Postgres to S3. It uses three stages. Each stage has a single job.
+
+The reader connects to Postgres. It runs the query and streams rows. It groups rows into batches. It sends each batch to the converter through a channel.
+
+The converter receives each batch. It maps Postgres types to Parquet types. It compresses the batch into a Parquet row group. It sends the row group to the uploader.
+
+The uploader receives row groups. It starts a multipart upload to S3. It uploads each row group as one part. If a part fails, it retries the part. When all parts succeed, it completes the upload. If the upload fails, it aborts the upload.
+
+This pipeline keeps memory low and throughput high for large data sets.

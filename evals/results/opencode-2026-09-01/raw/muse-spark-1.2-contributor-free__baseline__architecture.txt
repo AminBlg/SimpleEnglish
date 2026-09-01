@@ -1,0 +1,6 @@
+Writing your 130-word overview — shaping the Postgres-to-S3 pipeline into plain, direct prose.
+sqlpipe moves data from Postgres to S3 through three stages. The stages are the reader, the converter, and the uploader, and each stage runs as a separate process.
+
+The reader streams rows from Postgres in batches through a server-side cursor. The cursor keeps memory use bounded. The reader sends each batch to the converter through a bounded queue. The converter writes each batch as one Parquet row group and accumulates groups into a single file in memory.
+
+The converter sends the file to the uploader when the file reaches the target size. The uploader splits the file into parts and uploads parts to S3 in parallel. If a part upload fails, the uploader retries that part with exponential backoff. The uploader completes the multipart upload only after all parts succeed.

@@ -1,0 +1,17 @@
+# sqlpipe v2.0
+
+## Breaking change: user name fields
+
+The `name` field of `/v2/users` is now two fields: `first_name` and `last_name`. If your code reads the `name` field, update it to use the new fields.
+
+## New: incremental mode
+
+A new `--incremental` flag lets you sync only the rows that changed since the last run. This reduces data transfer and run time.
+
+## Faster Parquet writes
+
+Parquet writes are 40% faster in v2.0. No action is necessary. The performance gain applies to all Parquet exports.
+
+## Upgrade
+
+To upgrade, stop sqlpipe, pull the new version, and start the service. Test your integration after you upgrade to confirm compatibility with the new user fields.

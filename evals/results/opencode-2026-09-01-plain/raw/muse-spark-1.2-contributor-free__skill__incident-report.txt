@@ -1,0 +1,5 @@
+At 14:02 UTC we deployed a change that removed the cache warmup step. Cache warmup loads data into fast storage before traffic arrives. Without it, the API returned HTTP 502 (gateway error) for 12% of requests.
+
+Our monitors alerted us at 14:05 UTC and we started the revert. We reverted the deploy at 14:27 UTC. Error rates returned to normal by 14:31 UTC after the cache filled.
+
+We apologize for the disruption. You did not need to take action. We make sure that future deploys pass the warmup check. We will publish a follow-up after we complete the review.

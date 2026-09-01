@@ -1,0 +1,19 @@
+**Getting started**
+
+sqlpipe moves data from one database to another. It supports PostgreSQL, MySQL, and Microsoft SQL Server.
+
+This section shows you how to install sqlpipe, configure it, and run your first migration.
+
+Run this command to install sqlpipe:
+
+`curl -sSL https://get.sqlpipe.dev | sh`
+
+After you install sqlpipe, edit the file `sqlpipe.yaml`. Then enter the connection details for your source and destination databases. The source database is where your data comes from. The destination database is where sqlpipe sends the data.
+
+You can set additional options in `sqlpipe.yaml`, such as the number of rows to transfer per batch and the timeout value for database connections.
+
+Run this command to start your first migration:
+
+`sqlpipe run --config sqlpipe.yaml`
+
+sqlpipe reads the configuration file. Then it moves data from the source to the destination. A progress bar shows the status of the migration. To stop the migration, press Ctrl+C.

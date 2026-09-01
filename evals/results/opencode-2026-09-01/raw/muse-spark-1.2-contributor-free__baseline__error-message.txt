@@ -1,0 +1,1 @@
+Looking for sqlpipe's exact S3 AccessDenied text — checking the source.

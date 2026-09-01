@@ -1,0 +1,3 @@
+S3 upload failed with AccessDenied. The IAM identity lacks permission for s3:PutObject.
+Make sure that the IAM identity has permission for s3:PutObject on this bucket.
+Make sure that the bucket policy allows this action.

@@ -1,0 +1,19 @@
+## Getting started
+
+sqlpipe copies data between databases. It uses a simple configuration file to define the source and destination.
+
+1. Install sqlpipe.
+
+```sh
+curl -sSL https://get.sqlpipe.dev | sh
+```
+
+2. Create a file named `sqlpipe.yaml` and add the configuration for your source and destination databases.
+
+3. Run the migration.
+
+```sh
+sqlpipe run --config sqlpipe.yaml
+```
+
+sqlpipe connects to both databases and copies the data. The process takes time that depends on the size of the data.

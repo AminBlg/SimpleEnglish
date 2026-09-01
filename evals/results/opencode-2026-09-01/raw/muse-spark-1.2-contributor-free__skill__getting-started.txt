@@ -1,0 +1,22 @@
+Rewrite queued — applying aerospace STE rules to shape your 150-word guide.
+Getting started
+
+Use this section to install sqlpipe, create a configuration, and do the first run. The steps work on Linux and macOS.
+
+To install and run sqlpipe for the first time, do these steps:
+
+1. Install sqlpipe with `curl -sSL https://get.sqlpipe.dev | sh`.
+2. Make sure that the command completed without errors.
+3. Create the file `sqlpipe.yaml` in the root of your project.
+4. Open `sqlpipe.yaml` and add your source and target.
+5. Make sure that the host, port, and credentials are correct.
+6. Run sqlpipe with `sqlpipe run --config sqlpipe.yaml`.
+7. Examine the log output for errors.
+
+If the command fails, examine the log and correct the configuration. Then run the command again.
+
+If you need an example configuration, copy `sqlpipe.yaml.example` to `sqlpipe.yaml` and edit the values.
+
+If the network is slow, increase the timeout value in `sqlpipe.yaml`.
+
+To update sqlpipe, run the install command again.

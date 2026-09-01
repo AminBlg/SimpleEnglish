@@ -1,0 +1,3 @@
+sqlpipe is a command-line tool that copies Postgres tables to S3 as Parquet files. It reads rows from the source table and writes columnar files to the target bucket. Each file keeps the schema and types from Postgres. The tool works with large tables and keeps memory use low. You can run it on a schedule or as part of a pipeline.
+
+sqlpipe connects directly to Postgres and does not need extra services. It converts Postgres types to Parquet types automatically. It splits large tables into parts and uploads the parts in parallel. If a run stops, the tool resumes from the last checkpoint. You configure the source, the target, and the schedule in one configuration file.

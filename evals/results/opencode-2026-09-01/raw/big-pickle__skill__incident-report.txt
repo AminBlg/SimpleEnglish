@@ -1,0 +1,9 @@
+# API incident report
+
+**Status:** Resolved.
+
+On 2026-08-24, between 14:02 and 14:31 UTC, 12% of API requests failed with HTTP 502. The failures began after a deploy removed the cache warmup step.
+
+We detected the issue at 14:05 and investigated. We reverted the deploy at 14:27. The cache warmup step became active again at 14:31 with complete recovery.
+
+We updated our deploy process. The change adds a check for the cache warmup step before any deploy goes live.

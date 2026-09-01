@@ -1,0 +1,1 @@
+sqlpipe cannot upload to S3. The IAM credentials do not have the s3:PutObject permission. Add this permission to the IAM policy and try again.

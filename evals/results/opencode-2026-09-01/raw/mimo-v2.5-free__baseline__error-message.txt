@@ -1,0 +1,1 @@
+sqlpipe does not support S3 as a target type. It transfers data between databases (PostgreSQL, MySQL, MSSQL, Oracle, Snowflake). There is no S3 upload functionality in the codebase, so no such error message exists.

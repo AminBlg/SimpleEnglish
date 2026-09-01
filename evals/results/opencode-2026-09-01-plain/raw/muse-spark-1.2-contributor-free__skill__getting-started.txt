@@ -1,0 +1,18 @@
+## Getting started
+
+sqlpipe moves data between databases. You define the source and target in a configuration file. sqlpipe then copies data from the source to the target.
+
+Follow these steps to install sqlpipe and run your first pipe.
+
+1. Install sqlpipe with `curl -sSL https://get.sqlpipe.dev | sh`.
+2. Make sure that the install command completed without errors.
+3. Run `sqlpipe --version` to make sure that sqlpipe is installed.
+4. Create the configuration file `sqlpipe.yaml` in your project directory.
+5. Open `sqlpipe.yaml` and define your source and target.
+6. Use the example in the repository as a template for `sqlpipe.yaml`.
+7. Add connection details for each database to the configuration file.
+8. Make sure that the configuration file contains valid YAML.
+9. Run your first pipe with `sqlpipe run --config sqlpipe.yaml`.
+10. If the run fails, read the output and correct the configuration file.
+
+If the pipe completes, sqlpipe shows the number of rows that it copied.

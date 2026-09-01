@@ -1,0 +1,52 @@
+# Getting Started
+
+## Install
+
+```bash
+curl -sSL https://get.sqlpipe.dev | sh
+```
+
+Verify the installation:
+
+```bash
+sqlpipe version
+```
+
+## Configure
+
+Create a `sqlpipe.yaml` file in your project root:
+
+```yaml
+source:
+  type: postgres
+  host: localhost
+  port: 5432
+  database: mydb
+  user: ${DB_USER}
+  password: ${DB_PASS}
+
+destination:
+  type: bigquery
+  project: my-project
+  dataset: analytics
+  credentials: /path/to/key.json
+
+tables:
+  - name: users
+    mode: incremental
+    cursor: updated_at
+  - name: orders
+    mode: full
+```
+
+Use environment variables for secrets. See the [configuration reference](https://sqlpipe.dev/docs/config) for all options.
+
+## Run
+
+Execute your first pipeline:
+
+```bash
+sqlpipe run --config sqlpipe.yaml
+```
+
+sqlpipe will connect to the source, extract data, and load it into the destination. Check the output for sync status and row counts.

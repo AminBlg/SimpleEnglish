@@ -1,0 +1,3 @@
+sqlpipe is a command-line tool that syncs PostgreSQL tables to Amazon S3 as Parquet files. It runs a SELECT query on your database, streams the result through a Parquet encoder, and writes the output directly to an S3 bucket. No staging disk, no temporary tables, no intermediate services.
+
+Use sqlpipe to build data lakes, feed analytics warehouses, archive table snapshots, or move data between systems. It supports incremental exports via WHERE clauses, custom column selection, and configurable row-group sizing. Auth uses standard Postgres connection strings and AWS credentials, so it fits into existing CI pipelines and shell scripts without extra dependencies.

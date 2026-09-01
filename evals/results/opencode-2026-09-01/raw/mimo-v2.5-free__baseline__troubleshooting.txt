@@ -1,0 +1,9 @@
+## Troubleshooting
+
+### Connection Timeouts to PostgreSQL
+
+If sqlpipe times out connecting to Postgres, verify the host, port, and database name in your configuration. Ensure the PostgreSQL server is running and accepting connections. Check that `pg_hba.conf` allows connections from your client IP. If you're behind a VPN or firewall, confirm that port 5432 (or your custom port) is open. Test connectivity with `psql` before running sqlpipe. For remote databases, verify DNS resolution and check for network latency. If using SSL, ensure certificate paths are correct and not expired.
+
+### S3 Permission Errors
+
+S3 permission errors typically indicate the IAM credentials lack required permissions. The service account needs `s3:PutObject`, `s3:GetObject`, and `s3:ListBucket` on the target bucket. Verify your AWS credentials are configured correctly via environment variables, `~/.aws/credentials`, or IAM roles. Check that the bucket policy allows uploads from your account. If using a VPC endpoint, ensure the endpoint policy grants access. For server-side encryption, confirm the KMS key policy permits the service account to use it.

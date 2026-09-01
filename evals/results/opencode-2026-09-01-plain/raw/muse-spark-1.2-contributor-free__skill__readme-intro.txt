@@ -1,0 +1,5 @@
+sqlpipe copies Postgres tables to S3 as Parquet files (a columnar format for fast scans).
+
+You run one command and sqlpipe exports each table to one file per run. The tool reads only rows that changed since the last sync, so syncs stay fast. You store the result in S3 for use by warehouses, notebooks, and queries.
+
+sqlpipe compresses each file and writes it as Parquet, which keeps storage low and reads fast. You control tables, schedules, and prefixes in one configuration file. sqlpipe runs on your host, in CI, or as a container, and it needs only Postgres and S3 credentials. If a sync fails, you can run it again and it writes only new or changed data.

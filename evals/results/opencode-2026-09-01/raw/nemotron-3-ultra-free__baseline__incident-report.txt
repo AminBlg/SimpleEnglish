@@ -1,0 +1,7 @@
+**Incident Report — API 502 Errors (2026-09-01)**
+
+**Duration:** 14:02–14:31 UTC (29 minutes)  
+**Impact:** ~12% of API requests returned HTTP 502  
+**Root Cause:** A deployment at 14:02 removed the cache warmup step, leaving upstream services unable to handle cold-start traffic.  
+**Resolution:** The deploy was reverted at 14:27; error rates normalized by 14:31.  
+**Follow-up:** Cache warmup will be added as a required gate in the deploy pipeline. Post-deploy smoke tests now validate warmup completion. No data loss occurred.

@@ -1,0 +1,3 @@
+sqlpipe has three main processes that move data from Postgres to S3. The reader process streams Postgres rows in batches. The converter process turns each batch into a Parquet row group. The uploader process writes multipart objects to S3 with retries.
+
+The reader gets rows from Postgres. It sends each batch to the converter. The converter makes a Parquet row group from each batch. It sends each row group to the uploader. The uploader writes each row group as a multipart object to S3. If a write fails, the uploader retries the operation until it succeeds. Data flows in one direction through the pipeline.

@@ -1,0 +1,7 @@
+sqlpipe copies data from Postgres to S3 as Parquet files. The system has three stages that operate as a pipeline. Each stage processes one batch at a time and passes it to the next stage.
+
+The reader connects to Postgres and streams rows in batches. It uses a server-side cursor to keep the full result set out of memory. You set the batch size and the query in the configuration.
+
+The converter receives each batch and writes it as a Parquet row group. The row group keeps the column types from Postgres and compresses the data for storage.
+
+The uploader writes row groups to S3 as multipart objects. It retries a failed part with exponential backoff until the upload completes or it hits the retry limit. A temporary network error does not cause data loss.

@@ -1,0 +1,31 @@
+# Getting Started
+
+Install sqlpipe with a single command:
+
+```sh
+curl -sSL https://get.sqlpipe.dev | sh
+```
+
+Create a `sqlpipe.yaml` configuration file in your project root. Define your source and destination databases along with the table schemas and migration rules:
+
+```yaml
+source:
+  type: postgres
+  host: localhost
+  port: 5432
+  database: mydb
+
+destination:
+  type: sqlite
+  path: ./output.db
+```
+
+Run your first migration:
+
+```sh
+sqlpipe run --config sqlpipe.yaml
+```
+
+sqlpipe connects to the source database, applies your schema and data rules, and writes the result to the destination. Check the output for a summary of rows transferred and any errors encountered.
+
+For advanced options, run `sqlpipe --help` or see the full documentation at `docs.sqlpipe.dev`.

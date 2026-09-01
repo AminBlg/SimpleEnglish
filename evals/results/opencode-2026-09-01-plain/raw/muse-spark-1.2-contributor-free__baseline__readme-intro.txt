@@ -1,0 +1,4 @@
+Drafting your README intro — ~120 words on Postgres → S3 sync.
+sqlpipe is a CLI tool that copies Postgres tables to S3 as Parquet files. It gives you a simple way to move data from a live database to low-cost storage for analysis. You define the tables in a config file, and sqlpipe does the work. The tool keeps the data in sync without complex setup.
+
+You can run sqlpipe on a schedule or trigger it from CI. It reads rows from Postgres, writes columnar Parquet files, and uploads them to S3 with safe retries. It tracks progress with checkpoints, so each run copies only new or changed rows. As a result, large tables stay current without full exports, and downstream tools can read the Parquet files directly.

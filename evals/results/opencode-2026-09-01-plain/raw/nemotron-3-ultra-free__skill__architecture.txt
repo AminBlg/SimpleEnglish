@@ -1,0 +1,5 @@
+sqlpipe moves data from Postgres to S3 as Parquet files.
+
+A reader process connects to Postgres and streams rows in batches. A converter process takes each batch and turns it into a Parquet row group (a columnar chunk of rows). An uploader process writes the row groups to S3 as multipart objects (files split into parts for large uploads). The uploader retries failed uploads until they succeed.
+
+The three processes run as separate stages. Each stage passes data to the next stage through memory buffers. This design lets sqlpipe handle large tables without loading all rows into memory at once.

@@ -1,0 +1,19 @@
+Release notes in Simple English, ~120 words. Return only the text.
+
+---
+
+# sqlpipe 2.0
+
+**Breaking change: user names.** The `name` field of `/v2/users` split into two fields. Use `first_name` and `last_name` in your data. Old requests that use `name` fail, so update your code before you upgrade.
+
+**New flag:** `--incremental`. The flag processes only the rows that changed since the last run. A full run still does all rows.
+
+**Faster Parquet writes.** Writes are now 40 percent faster. Large exports finish sooner and use less time.
+
+**Upgrade notes.**
+
+- Test the new `/v2/users` fields in a staging environment first.
+- Add `--incremental` to your scheduled runs to cut runtime.
+- Review your pipelines that use Parquet output. The output format has not changed.
+
+Upgrade from version 1.x with care. The breaking change affects all users of the API.

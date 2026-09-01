@@ -1,0 +1,22 @@
+Drafting your getting-started guide — applying simplified language for a clear 150-word install & run.
+Getting started
+
+This section shows how to install and run sqlpipe for the first time.
+Sqlpipe is a command-line tool that copies data between databases.
+You need curl and a POSIX-compatible shell.
+
+1. Install sqlpipe. Run `curl -sSL https://get.sqlpipe.dev | sh` in your shell.
+2. Make sure that the installation works. Run `sqlpipe --version`.
+3. Create the configuration file. Copy the example to `sqlpipe.yaml`.
+4. Edit `sqlpipe.yaml`. Set the source, the target, and the query.
+5. In `sqlpipe.yaml`, set `source.connection` to your source database.
+6. Set `target.connection` to your target database.
+7. Set `query` to the SQL that selects the data.
+8. Make sure that `sqlpipe.yaml` contains valid values for your database.
+9. Keep `sqlpipe.yaml` in your project root for easy access.
+10. Run the pipeline. Run `sqlpipe run --config sqlpipe.yaml`.
+
+The pipeline copies rows from the source to the target.
+If the command fails, examine the log output for errors.
+After the run, sqlpipe shows a summary in the shell.
+If you need help, run `sqlpipe --help`.

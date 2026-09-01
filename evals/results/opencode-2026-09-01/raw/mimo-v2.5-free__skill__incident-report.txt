@@ -1,0 +1,9 @@
+**Incident Report: API 502 Errors**
+
+Between 14:02 and 14:31 UTC, approximately 12% of API requests returned HTTP 502 errors.
+
+A deploy at 14:02 UTC removed the cache warmup step. This caused the cache to miss frequently. As a result, the backend did not respond before the timeout.
+
+We reverted the deploy at 14:27 UTC. The error rate returned to normal by 14:31 UTC.
+
+No data was lost during the incident. All cached data remained intact.

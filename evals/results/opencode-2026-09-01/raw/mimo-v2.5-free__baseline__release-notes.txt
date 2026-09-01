@@ -1,0 +1,9 @@
+## sqlpipe v2.0
+
+**Breaking change:** The `name` field on `/v2/users` has been removed. Use `first_name` and `last_name` instead. This change improves consistency with downstream systems and eliminates ambiguous parsing for multi-byte names.
+
+**New: `--incremental` flag.** Run sqlpipe with `--incremental` to process only new or changed records since the last run. This reduces redundant reads on large tables and simplifies scheduled sync jobs.
+
+**Performance:** Parquet write speed is now 40% faster, cutting end-to-end export time for large datasets significantly.
+
+Upgrade early to benefit from the incremental mode and faster writes. Refer to the migration guide for details on the `/v2/users` schema change.

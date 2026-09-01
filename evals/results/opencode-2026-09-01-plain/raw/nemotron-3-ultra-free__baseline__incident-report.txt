@@ -1,0 +1,11 @@
+**Incident Report — API 502 Errors (2026-09-01)**
+
+**Impact:** Between 14:02 and 14:31 UTC, approximately 12% of API requests returned HTTP 502 errors.
+
+**Root Cause:** A deployment at 14:02 removed the cache warmup step, leaving cache nodes cold. Requests routed to unwarmed nodes failed upstream health checks.
+
+**Resolution:** The deployment was reverted at 14:27. Cache warmup completed by 14:31, restoring normal error rates.
+
+**Action Items:** Add pre-deploy validation for cache warmup presence; implement canary analysis on error-rate delta post-deploy.
+
+No data loss occurred. We apologize for the disruption.
