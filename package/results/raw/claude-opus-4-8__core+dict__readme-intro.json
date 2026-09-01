@@ -1,0 +1,11 @@
+{
+  "text": "sqlpipe is a command-line tool. It moves data from Postgres tables to Amazon S3. The tool writes the data as Parquet files.\n\nYou give sqlpipe the names of the tables. The tool reads the rows and makes the Parquet files. Then it sends the files to a bucket in S3. sqlpipe makes sure that the S3 data agrees with the Postgres tables.\n\nThe tool is small and easy to use. You control it from the command line. You do not write code.",
+  "input_tokens": 2,
+  "output_tokens": 798,
+  "duration_ms": 16576,
+  "cost_usd": 0.6125835,
+  "model": "claude-opus-4-8",
+  "condition": "core+dict",
+  "scenario": "readme-intro",
+  "type": "descriptive"
+}

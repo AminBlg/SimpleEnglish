@@ -1,0 +1,11 @@
+{
+  "text": "**Incident Report \u2014 2026-08-12**\n\nBetween 14:02 and 14:31 UTC, 12% of API requests failed with HTTP 502 errors.\n\nA deploy at 14:02 UTC removed the cache warmup step. Without the warmup step, the cache was cold when the service started. Cold-cache requests reached the origin servers before the servers were ready. The origin servers returned HTTP 502 errors.\n\nThe team identified the cause at 14:20 UTC. At 14:27 UTC, the team reverted the deploy. Error rates returned to normal at 14:31 UTC.\n\nThe team will add a check to prevent deploys that remove required warmup steps.",
+  "input_tokens": 3,
+  "output_tokens": 1294,
+  "duration_ms": 23547,
+  "cost_usd": 0.1775457,
+  "model": "claude-sonnet-4-6",
+  "condition": "core",
+  "scenario": "incident-report",
+  "type": "descriptive"
+}

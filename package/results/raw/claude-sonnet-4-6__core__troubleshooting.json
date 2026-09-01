@@ -1,0 +1,11 @@
+{
+  "text": "## Troubleshooting\n\n**Connection Timeouts to Postgres**\n\nA connection timeout occurs when sqlpipe does not receive a response from the Postgres server.\n\nDo these steps to find the cause:\n\n1. Check that the Postgres server runs and accepts connections on the correct port.\n2. Check that the firewall permits traffic on port 5432.\n3. Set the `--connect-timeout` flag to a higher value.\n4. Run the command again.\n5. If the timeout continues, check the network connection between the client and the server.\n\n**S3 Permission Errors**\n\nAn S3 permission error occurs when the AWS credentials do not have the required permissions on the target S3 bucket.\n\nDo these steps:\n\n1. Check that the AWS credentials in your environment are valid.\n2. Check that the IAM policy permits `s3:PutObject` and `s3:GetObject` on the target bucket.\n3. Check that the bucket name and the region in the command are correct.\n4. If the error continues, read the AWS CloudTrail logs for information about the denied request.",
+  "input_tokens": 3,
+  "output_tokens": 1601,
+  "duration_ms": 25970,
+  "cost_usd": 0.1787667,
+  "model": "claude-sonnet-4-6",
+  "condition": "core",
+  "scenario": "troubleshooting",
+  "type": "procedural"
+}

@@ -1,0 +1,11 @@
+{
+  "text": "```\nError: The upload to S3 failed with AccessDenied.\nThe IAM credentials do not have permission for the s3:PutObject action.\nAdd s3:PutObject to the IAM policy, then do the upload again.\n```",
+  "input_tokens": 2,
+  "output_tokens": 411,
+  "duration_ms": 8620,
+  "cost_usd": 0.37054849999999995,
+  "model": "claude-opus-4-8",
+  "condition": "core",
+  "scenario": "error-message",
+  "type": "procedural"
+}

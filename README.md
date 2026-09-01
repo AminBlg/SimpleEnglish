@@ -5,12 +5,12 @@
 <p align="center">
   An agent skill that forces LLMs to write docs in <a href="https://www.asd-ste100.org/">ASD-STE100 Simplified Technical English</a>:<br>
   the controlled language aerospace has used since 1983 so a tired mechanic <em>cannot</em> misread an instruction.<br>
-  AI slop dies as a side effect. 💀
+  AI slop dies as a side effect.
 </p>
 
 <p align="center">
-  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/STE_violations-%E2%88%9272.9%25_measured-brightgreen?style=flat" alt="72.9% fewer violations, measured"></a>
-  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-6_Claude_models-blueviolet?style=flat" alt="6 models benchmarked"></a>
+  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/STE_violations-%E2%88%9274.6%25_measured-brightgreen?style=flat" alt="74.6% fewer violations, measured"></a>
+  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-7_Claude_models-blueviolet?style=flat" alt="7 models benchmarked"></a>
   <a href="https://agentskills.io"><img src="https://img.shields.io/badge/SKILL.md-open_standard-blue?style=flat" alt="Agent Skills"></a>
   <a href="skills/simple-english/SKILL.md"><img src="https://img.shields.io/badge/version-1.3.0-blue?style=flat" alt="version 1.3.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat" alt="MIT"></a>
@@ -18,7 +18,6 @@
 </p>
 
 <p align="center">
-  <a href="https://trendshift.io/repositories/97933?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-97933" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/97933/daily?language=Python" alt="AminBlg%2FSimpleEnglish | Trendshift" width="250" height="55"/></a>
   <a href="https://trendshift.io/repositories/97933?utm_source=trendshift-badge&amp;utm_medium=badge&amp;utm_campaign=badge-trendshift-97933" target="_blank" rel="noopener noreferrer"><img src="https://trendshift.io/api/badge/trendshift/repositories/97933/daily" alt="AminBlg%2FSimpleEnglish | Trendshift" width="250" height="55"/></a>
 </p>
 
@@ -140,7 +139,21 @@ Codex asks you to review and trust the hook before its first run. Open `/hooks`,
 
 See [`src/hooks/README.md`](src/hooks/README.md) for details.
 
-**Output style** (Claude Code): the plugin also ships simple-english as an [output style](https://code.claude.com/docs/en/output-styles). The skill triggers when a writing task fits; the style is always on, for every reply. After you install the plugin, run `/config`, open **Output style**, and pick `simple-english`. Claude then writes all its prose in STE and codes as before.
+**Output style** (Claude Code): the plugin also ships simple-english as an [output style](https://code.claude.com/docs/en/output-styles). When a writing task fits, the skill triggers. The style applies to every reply.
+
+Claude Code gives each plugin output style the name `<plugin>:<style>`. The name of this one is `simple-english:simple-english`. The short name `simple-english` does not resolve, and Claude Code ignores it without an error.
+
+To use the style in one project, run `/config`. Open **Output style**. Select `simple-english:simple-english`. Claude Code saves this choice to `.claude/settings.local.json` in that project only.
+
+To use the style in all projects, put this in `~/.claude/settings.json`:
+
+```json
+{
+  "outputStyle": "simple-english:simple-english"
+}
+```
+
+Then start Claude Code again. Claude writes all prose in STE and codes as before.
 
 No SKILL.md support at all? Paste [`prompts/system-prompt.md`](prompts/system-prompt.md) into your system prompt, AGENTS.md, or `.cursorrules`. There is even a ~60-token version for tight budgets.
 
@@ -165,7 +178,7 @@ Then ask for any technical writing, or say: *"rewrite this with simple-english"*
 
 53 numbered rules, 9 sections, written in 1983 by people whose readers die when a sentence is ambiguous. The ones doing the heavy lifting:
 
-| Rule | What it kills 🪦 |
+| Rule | What it kills |
 |---|---|
 | Max 20 words per instruction, 25 per description | The run-on sentence |
 | One word = one meaning, whole document | check/verify/confirm/validate roulette |
@@ -177,27 +190,28 @@ Then ask for any technical writing, or say: *"rewrite this with simple-english"*
 | One instruction per sentence | Steps nobody can follow at 2 a.m. |
 | Keep articles, keep "that" | Telegraph style. STE is short, not terse |
 
-Full paraphrased set with software examples: [`SKILL.md`](skills/simple-english/SKILL.md). Yes, this README breaks half of them. Marketing is explicitly out of STE scope. The skill knows that and stays in the docs. 😌
+Full paraphrased set with software examples: [`SKILL.md`](skills/simple-english/SKILL.md). Yes, this README breaks half of them. Marketing is explicitly out of STE scope. The skill knows that and stays in the docs.
 
 ## 🧰 Not just docs
 
 The skill ships adaptations ([`use-cases.md`](skills/simple-english/references/use-cases.md)) for:
 
-- 🚨 **Error messages**: what happened → why → what to do, in that order
-- 📟 **Runbooks**: STE's home turf; a runbook IS a maintenance manual
-- 🧯 **Incident reports**: simple past murders "we have identified an issue that may have impacted"
-- 📣 **Release notes**: breaking changes as warnings: command first, risk second
-- 🤖 **Your AGENTS.md / prompts**: a system prompt is a procedure for a reader that cannot ask questions. Models read "should" as optional. STE bans "should". Think about it.
-- 🌍 **Translation prep**: STE's original job: readable for non-natives, cheap to localize
+- **Error messages**: what happened → why → what to do, in that order
+- **Runbooks**: STE's home turf; a runbook IS a maintenance manual
+- **Incident reports**: simple past murders "we have identified an issue that may have impacted"
+- **Release notes**: breaking changes as warnings: command first, risk second
+- **Your AGENTS.md / prompts**: a system prompt is a procedure for a reader that cannot ask questions. Models read "should" as optional. STE bans "should".
+- **Translation prep**: STE's original job: readable for non-natives, cheap to localize
 
-Where it refuses to go: marketing copy, blog voice, brand writing. Flat on purpose. ✋
+Where it refuses to go: marketing copy, blog voice, brand writing. Flat on purpose.
 
 ## 📊 Benchmarks
 
-**72.9% fewer STE violations per 100 words with the skill on, averaged across 6 models × 8 writing tasks (96 generations, measured).**
+**74.6% fewer STE violations per 100 words with the skill on, averaged across 7 models × 8 writing tasks (112 generations, measured).**
 
 | Model | Baseline viol/100w | Skill viol/100w | Reduction |
 |---|---|---|---|
+| claude-opus-5 | 2.13 | 0.32 | 85% |
 | claude-opus-4-8 | 1.05 | 0.62 | 41% |
 | claude-opus-4-7 | 2.28 | 0.42 | 82% |
 | claude-opus-4-6 | 2.24 | 0.40 | 82% |
@@ -205,9 +219,9 @@ Where it refuses to go: marketing copy, blog voice, brand writing. Flat on purpo
 | claude-sonnet-5 | 2.67 | 0.53 | 80% |
 | claude-sonnet-4-6 | 2.06 | 0.52 | 75% |
 
-A blind pairwise judge (claude-opus-4-8, both text orders, no labels) preferred the skill output in 38 of 48 pairs, with 4 ties and 6 losses. Mean rubric score: 8.3 with the skill, 6.1 without.
+A blind pairwise judge (claude-opus-4-8, both text orders, no labels) preferred the skill output in 45 of 56 pairs, with 5 ties and 6 losses. Mean rubric score: 8.1 with the skill, 6.0 without.
 
-Output tokens went DOWN on all six Claude models too. Deterministic regex linter, same rules for both conditions, honest-caveat list and full method in [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` — needs only a logged-in Claude Code CLI.
+Output tokens went DOWN on all seven Claude models too. Deterministic regex linter, same rules for both conditions, reasoning effort pinned to `low`, honest-caveat list and full method in [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` — needs only a logged-in Claude Code CLI.
 
 ### Pi cross-check
 
@@ -228,7 +242,7 @@ See the [Pi results, method, raw responses, and reproduction command](evals/resu
 
 Built TDD-style against the **primary Issue 9 text** (2025), not blog summaries:
 
-- Baseline agents without the skill wrote 40-word sentences and **invented rule numbers**. One confidently cited "Rule 3.1: short sentences" (real Rule 3.1 is verb forms 💀)
+- Baseline agents without the skill wrote 40-word sentences and **invented rule numbers**. One confidently cited "Rule 3.1: short sentences" (real Rule 3.1 is verb forms)
 - Secondary sources online are wrong about the modals: `can` and `will` ARE approved. We checked the PDF.
 - The skill was written to close each recorded baseline failure, then re-tested until agents pass. Scenarios + recorded results: [`evals/pressure-tests.md`](evals/pressure-tests.md)
 - A community audit ([#4](https://github.com/AminBlg/SimpleEnglish/issues/4)) checked the vocabulary tables against the Issue 9 dictionary and found the consistency pass offered "pick one" where the dictionary had already chosen. We fixed it, then A/B-tested the fix: two agents, same input, strict mode. The agent with the old skill picked the rejected verb "run". The agent with the fixed skill wrote operate, do, erase, show, and make sure that. Zero rejected words survived.
@@ -237,9 +251,9 @@ Built TDD-style against the **primary Issue 9 text** (2025), not blog summaries:
 
 **Does this make output STE-certified?** No. Nothing does, because ASD certifies no tool. Default mode is pragmatic: structural rules + your domain vocabulary. Strict mode gets close; word-level rulings live in the official standard, a [free download](https://www.asd-ste100.org/request.html).
 
-**Will my docs sound robotic?** They will sound like Airbus manuals: flat and impossible to misread. For docs that is the whole point. Keep your voice for your blog. ✍️
+**Will my docs sound robotic?** They will sound like Airbus manuals: flat and impossible to misread. For docs that is the whole point. Keep your voice for your blog.
 
-**Why not just prompt "write clearly"?** "Clearly" is an opinion. "No sentence over 20 words" is a spec. Agents follow specs. 📐
+**Why not just prompt "write clearly"?** "Clearly" is an opinion. "No sentence over 20 words" is a spec. Agents follow specs.
 
 **Why a 40-year-old aerospace standard?** Because it is not vibes. It is maintained (Issue 9, January 2025), numbered, and testable. And it happens to be a near-perfect negative of every AI writing tell.
 

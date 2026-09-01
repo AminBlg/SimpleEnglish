@@ -1,0 +1,11 @@
+{
+  "text": "Error: the upload to Amazon S3 did not complete.\nThe IAM credentials do not have the \"s3:PutObject\" permission.\nAdd this permission to the IAM policy.\nThen start the upload again.",
+  "input_tokens": 2,
+  "output_tokens": 651,
+  "duration_ms": 13621,
+  "cost_usd": 0.6174585,
+  "model": "claude-opus-4-8",
+  "condition": "core+dict",
+  "scenario": "error-message",
+  "type": "procedural"
+}

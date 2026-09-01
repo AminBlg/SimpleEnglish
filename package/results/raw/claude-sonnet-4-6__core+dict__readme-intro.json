@@ -1,0 +1,11 @@
+{
+  "text": "sqlpipe is a command-line tool that reads tables from a Postgres database and writes them to an S3 bucket as Parquet files. You specify one or more tables in a single command, and sqlpipe writes one Parquet file for each table. The tool connects to the database, reads all rows, and writes the output file to the S3 path that you give.\n\nYou can use sqlpipe to load Postgres data into a data lake or to make it available to analytics tools. You can run sqlpipe one time or on a schedule. sqlpipe does not change the source data.",
+  "input_tokens": 3,
+  "output_tokens": 2997,
+  "duration_ms": 46223,
+  "cost_usd": 0.2889627,
+  "model": "claude-sonnet-4-6",
+  "condition": "core+dict",
+  "scenario": "readme-intro",
+  "type": "descriptive"
+}

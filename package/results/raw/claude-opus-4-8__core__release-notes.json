@@ -1,0 +1,11 @@
+{
+  "text": "sqlpipe v2.0 Release Notes\n\nWarning: This release changes the /v2/users API. Update your integration before you upgrade.\n\nBreaking change: The `name` field splits into two fields, `first_name` and `last_name`. The `name` field is no longer available. Change your requests and your response parsing to use the two new fields.\n\nNew feature: The `--incremental` flag is now available. This flag tells sqlpipe to process only the new or changed rows. Use this flag to make repeated runs faster.\n\nPerformance: Parquet writes are now 40% faster. sqlpipe gives this result with no change to your configuration.\n\nTo upgrade, install v2.0 and test the /v2/users change in a safe environment first.",
+  "input_tokens": 2,
+  "output_tokens": 398,
+  "duration_ms": 9020,
+  "cost_usd": 0.34973350000000003,
+  "model": "claude-opus-4-8",
+  "condition": "core",
+  "scenario": "release-notes",
+  "type": "descriptive"
+}

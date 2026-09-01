@@ -1,0 +1,11 @@
+{
+  "text": "## Getting Started\n\nsqlpipe is a command-line tool for data transfer between databases. This section shows you how to install sqlpipe, configure it, and run your first transfer.\n\n**Install sqlpipe**\n\nRun this command in a terminal:\n\n```\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nThe script installs the sqlpipe binary on your system. After you install sqlpipe, make sure that sqlpipe is on the system path:\n\n```\nsqlpipe --version\n```\n\n**Configure sqlpipe**\n\nMake a new file named `sqlpipe.yaml` in your working directory. This file tells sqlpipe how to connect to your data sources and destinations. Add the necessary connection settings to the file. For a full list of settings, refer to the configuration documentation.\n\n**Run sqlpipe**\n\nTo start sqlpipe, run this command:\n\n```\nsqlpipe run --config sqlpipe.yaml\n```\n\nsqlpipe reads `sqlpipe.yaml` and starts the data transfer. If the output shows an error, make sure the connection settings in `sqlpipe.yaml` are correct.",
+  "input_tokens": 3,
+  "output_tokens": 6326,
+  "duration_ms": 95911,
+  "cost_usd": 0.3480357,
+  "model": "claude-sonnet-4-6",
+  "condition": "core+dict",
+  "scenario": "getting-started",
+  "type": "procedural"
+}

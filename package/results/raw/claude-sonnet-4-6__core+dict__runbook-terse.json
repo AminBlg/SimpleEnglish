@@ -1,0 +1,11 @@
+{
+  "text": "Make sure that the backup exists before you run the migration.",
+  "input_tokens": 3,
+  "output_tokens": 15,
+  "duration_ms": 3190,
+  "cost_usd": 0.2531427,
+  "model": "claude-sonnet-4-6",
+  "condition": "core+dict",
+  "scenario": "runbook-terse",
+  "type": "procedural"
+}

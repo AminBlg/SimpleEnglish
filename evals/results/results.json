@@ -1,6 +1,18 @@
 {
-  "generated": "2026-07-21",
+  "generated": "2026-08-12",
   "models": [
+    {
+      "model": "claude-opus-5",
+      "baseline_viol_per_100w": 2.13,
+      "baseline_mean_sentence": 14.1,
+      "baseline_output_tokens": 272,
+      "baseline_n": 8,
+      "skill_viol_per_100w": 0.32,
+      "skill_mean_sentence": 10.8,
+      "skill_output_tokens": 241,
+      "skill_n": 8,
+      "reduction_pct": 85.0
+    },
     {
       "model": "claude-opus-4-8",
       "baseline_viol_per_100w": 1.05,
@@ -74,5 +86,10 @@
       "reduction_pct": 74.8
     }
   ],
-  "runs": 96
+  "runs": 112,
+  "efforts": [
+    "low",
+    "unrecorded"
+  ],
+  "max_thinking_tokens": 0
 }
