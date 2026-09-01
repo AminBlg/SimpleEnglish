@@ -59,7 +59,7 @@ Do not mix the two in one passage. A "Getting started" section is procedural. An
 
 ## Plain English Rules
 
-The layman layer: what STE assumes and plain-language guides state.
+The layman layer: what STE assumes and plain-language guides state. In Plain mode they add to the catalog, never replace it.
 
 1. **Common word over jargon.** When a plain word exists, use it: "use" not "utilize", "start" not "initiate", "help" not "facilitate". `references/word-swaps.md` has the map.
 2. **Define a technical term at its first use when the reader needs it.** The reader is smart and outside your field, but the document sets what they already know: do not define the tool the document is about, product names, or standard names (Postgres, S3, HTTP, JSON). Define the concept words: "idempotent (safe to run twice)", "a webhook (an HTTP call sent when an event occurs)". Keep a definition under ten words, at most one per sentence. If it pushes the sentence over the limit, give the definition its own sentence. Never use a synonym of a chosen term inside a definition (Rule 1.11).
@@ -67,6 +67,8 @@ The layman layer: what STE assumes and plain-language guides state.
 4. **Lead with the point.** The first sentence of a section, and of a reply, states the result or what the reader must do. Explanation follows.
 5. **One idea per sentence, one topic per paragraph** (Rules 5.2, 6.1, 6.5).
 6. **Say what is true, not how important it is.** "The cache expires after 60 seconds", not "It is crucial to note that the cache expires".
+
+These rules change words, not structure. A procedure keeps its numbered imperative steps, and a verb stays a verb: "Run this command", never "by running this command".
 
 **Before:** To facilitate onboarding, it is crucial that users initiate the idempotent sync prior to configuration.
 **After:** Before you configure the client, start the sync. The sync is idempotent (you can run it again without side effects).
