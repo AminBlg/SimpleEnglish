@@ -1,0 +1,37 @@
+{
+  "text": "## Getting started\n\nInstall SQLPipe with the official installer:\n\n```sh\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nVerify that the command is available:\n\n```sh\nsqlpipe --help\n```\n\nNext, create a `sqlpipe.yaml` file in your project directory. Define your source, destination, and pipeline options. For example:\n\n```yaml\nsource:\n  type: postgres\n  connection: ${SOURCE_DATABASE_URL}\n\ndestination:\n  type: warehouse\n  connection: ${DESTINATION_DATABASE_URL}\n\npipeline:\n  include:\n    - public.customers\n    - public.orders\n```\n\nKeep credentials out of the configuration file by referencing environment variables, as shown above. Export those variables in your shell or load them through your preferred secret manager.\n\nRun your first pipeline with:\n\n```sh\nsqlpipe run --config sqlpipe.yaml\n```\n\nSQLPipe reads the configuration, connects to the specified systems, and executes the pipeline. Use `sqlpipe run --help` to review available options, and check the command output for progress, warnings, and errors. Adjust `sqlpipe.yaml` as needed, then rerun the command.",
+  "input_tokens": 85,
+  "output_tokens": 276,
+  "reasoning_tokens": 34,
+  "total_tokens": 361,
+  "cost_usd": 0.00034819999999999995,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-luna",
+  "stop_reason": "stop",
+  "duration_ms": 8693,
+  "model": "openai-codex/gpt-5.6-luna:medium",
+  "condition": "baseline",
+  "scenario": "getting-started",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 100,
+    "sentences": 11,
+    "mean_sentence_words": 9.1,
+    "longest_sentence_words": 16,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 1
+    },
+    "violations_total": 1,
+    "violations_per_100w": 1.0
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "model": "claude-sonnet-5",
+  "scenario": "runbook-terse",
+  "order1_base_first": {
+    "a_score": 9,
+    "b_score": 4
+  },
+  "order2_skill_first": {
+    "a_score": 3,
+    "b_score": 9
+  }
+}

@@ -1,0 +1,40 @@
+**What is happening**
+
+The container uses more memory than its limit allows. Kubernetes kills it when it hits that limit. The status `OOMKilled` means the Linux kernel's Out-Of-Memory killer terminated the process.
+
+**Find the limit and current usage**
+
+```bash
+kubectl describe pod <pod-name>
+```
+
+Look for:
+
+- `Limits.memory` — the hard ceiling
+- `Last State: OOMKilled` — confirms the cause
+
+```bash
+kubectl top pod <pod-name>
+```
+
+This shows current memory usage. Compare it to the limit.
+
+**What to change**
+
+1. Raise the memory limit in your pod spec:
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"
+```
+
+2. Set `requests` lower than `limits`. Kubernetes uses `requests` for scheduling and `limits` as the kill threshold.
+
+3. If usage keeps growing, you have a memory leak. Profile the app — raising the limit only delays the next kill.
+
+**Quick rule**
+
+Start with a limit 2x the steady-state usage you observe with `kubectl top`. Then watch for 24 hours. If usage climbs without stabilizing, the problem is the app, not the limit.

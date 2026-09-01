@@ -1,0 +1,32 @@
+{
+  "text": "## Getting Started\n\n### Installation\n\nInstall sqlpipe with a single command:\n\n```bash\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\n### Configuration\n\nCreate a `sqlpipe.yaml` file in your project directory. This file defines your data sources, destinations, and pipeline behavior:\n\n```yaml\nsource:\n  type: postgres\n  url: postgres://user:password@localhost:5432/mydb\n\ndestination:\n  type: snowflake\n  url: snowflake://user:password@account/db/schema\n\npipeline:\n  table: orders\n  mode: full\n```\n\nAdjust the `type` and connection fields to match your databases. See the full configuration reference for available options.\n\n### First Run\n\nExecute your pipeline:\n\n```bash\nsqlpipe run --config sqlpipe.yaml\n```\n\nsqlpipe will connect to your source, extract the data, and load it into the destination. Progress and row counts are printed to stdout. On success, the process exits with code 0.",
+  "input_tokens": 3,
+  "output_tokens": 234,
+  "duration_ms": 8493,
+  "cost_usd": 0.0129372,
+  "model": "claude-sonnet-4-6",
+  "condition": "baseline",
+  "scenario": "getting-started",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 76,
+    "sentences": 9,
+    "mean_sentence_words": 8.4,
+    "longest_sentence_words": 15,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

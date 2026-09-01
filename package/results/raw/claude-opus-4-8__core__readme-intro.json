@@ -1,0 +1,11 @@
+{
+  "text": "sqlpipe is a command-line tool. It copies your Postgres tables to Amazon S3. sqlpipe writes each table as one or more Parquet files.\n\nThe tool reads the rows from a table. Then it changes the rows to the Parquet format. Then it sends the files to your S3 bucket. You give sqlpipe the connection details for the database and the bucket. sqlpipe does the full sync with one command. You can sync one table or many tables.\n\nParquet is a columnar format. Many analytics tools read Parquet directly. Your data is available to these tools after each sync.",
+  "input_tokens": 2,
+  "output_tokens": 770,
+  "duration_ms": 13617,
+  "cost_usd": 0.52085,
+  "model": "claude-opus-4-8",
+  "condition": "core",
+  "scenario": "readme-intro",
+  "type": "descriptive"
+}

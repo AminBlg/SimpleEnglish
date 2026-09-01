@@ -1,0 +1,37 @@
+{
+  "text": "# sqlpipe\n\nsqlpipe is a command-line tool that syncs Postgres tables to S3 as Parquet files. It reads table data from a Postgres database. It writes the data to an S3 bucket as Parquet files.\n\nUse sqlpipe in data pipelines that need Postgres table data in S3. The Parquet files store the exported data in a columnar format. Systems that read Parquet files from S3 can use this data for analysis, storage, or other processing.",
+  "input_tokens": 4740,
+  "output_tokens": 623,
+  "reasoning_tokens": 516,
+  "total_tokens": 5363,
+  "cost_usd": 0.016956,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-terra",
+  "stop_reason": "stop",
+  "duration_ms": 14857,
+  "model": "openai-codex/gpt-5.6-terra:medium",
+  "condition": "skill",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 73,
+    "sentences": 6,
+    "mean_sentence_words": 12.2,
+    "longest_sentence_words": 17,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

@@ -1,0 +1,10 @@
+[
+  {"id": "why-timeout", "term": "idempotent", "prompt": "My deploy script retries a POST to /v2/orders on timeout. Is that safe? The endpoint is idempotent, whatever that means exactly. Explain briefly."},
+  {"id": "pick-db", "term": "sharding", "prompt": "We have 40 million rows in one Postgres table and reads are slow. Someone said sharding. What should I do first?"},
+  {"id": "cert-error", "term": "TLS", "prompt": "curl says 'SSL certificate problem: unable to get local issuer certificate' against our internal API. What is happening and how do I fix it?"},
+  {"id": "queue-lag", "term": "consumer lag", "prompt": "Our Kafka dashboard shows consumer lag climbing to 2 million. Is that bad? What does it mean for users?"},
+  {"id": "oom", "term": "OOMKilled", "prompt": "A Kubernetes pod keeps restarting with status OOMKilled. Explain what is going on and what I change."},
+  {"id": "rate-limit", "term": "token bucket", "prompt": "We want to rate-limit an API to 100 requests per minute per user. A colleague suggested a token bucket. Explain it in plain terms and say if it fits."},
+  {"id": "migration", "term": "backfill", "prompt": "We added a NOT NULL column to a 20 GB table and the migration hangs. The DBA says we need a backfill. What is that and what do I do?"},
+  {"id": "cache", "term": "cache invalidation", "prompt": "Users see stale prices for up to 10 minutes after we update them. We use Redis in front of the database. Why, and what is the fix?"}
+]

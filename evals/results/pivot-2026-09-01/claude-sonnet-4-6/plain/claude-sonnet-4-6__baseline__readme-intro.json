@@ -1,0 +1,35 @@
+{
+  "text": "sqlpipe streams Postgres tables to S3 as Parquet files. Point it at a database and a bucket, and it handles column type mapping, batching, and upload \u2014 no intermediate files, no manual schema work.\n\nBuilt for engineers who want their Postgres data queryable in Athena, DuckDB, or any Parquet-aware tool without standing up a full ETL pipeline. Runs as a one-shot export or on a schedule, and supports incremental syncs via a watermark column so only new or updated rows move on each run.",
+  "input_tokens": 3,
+  "output_tokens": 124,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 5336,
+  "cost_usd": 0.011739900000000001,
+  "model": "claude-sonnet-4-6",
+  "condition": "baseline",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 84,
+    "sentences": 4,
+    "mean_sentence_words": 21.0,
+    "longest_sentence_words": 27,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 1,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 2,
+    "violations_per_100w": 2.38
+  }
+}

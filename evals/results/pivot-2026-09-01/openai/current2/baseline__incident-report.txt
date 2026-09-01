@@ -1,0 +1,3 @@
+**Incident Report: API Failures Due to Cache Warmup Removal**
+
+Between 14:02 and 14:31 UTC, approximately 12% of API requests returned HTTP 502 errors. This issue was traced to a recent deployment that removed the cache warmup step, causing increased latency and failures in request handling. The deployment was reverted at 14:27 UTC, after which error rates returned to normal levels. We apologize for the disruption and are reviewing our deployment processes to prevent similar issues in the future. Thank you for your understanding and patience.

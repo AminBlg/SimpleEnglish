@@ -1,0 +1,168 @@
+{
+  "generated": "2026-07-31",
+  "models": [
+    {
+      "model": "zai/glm-5.2:max",
+      "baseline": {
+        "violations_per_100w": 2.56,
+        "weighted_violations_per_100w": 3.55,
+        "violations_total": 27,
+        "mean_sentence_words": 13.7,
+        "mean_final_words": 95.0,
+        "provider_output_tokens": 10808,
+        "reasoning_tokens": 9624,
+        "approximate_final_text_tokens": 1184,
+        "cost_usd": 0,
+        "duration_seconds": 121.9,
+        "runs": 8
+      },
+      "skill": {
+        "violations_per_100w": 0.4,
+        "weighted_violations_per_100w": 0.58,
+        "violations_total": 4,
+        "mean_sentence_words": 9.3,
+        "mean_final_words": 86.6,
+        "provider_output_tokens": 21396,
+        "reasoning_tokens": 20367,
+        "approximate_final_text_tokens": 1029,
+        "cost_usd": 0,
+        "duration_seconds": 230.4,
+        "runs": 8
+      },
+      "reduction_pct": 84.4,
+      "scenario_outcomes": {
+        "improved": 6,
+        "tied": 2,
+        "worsened": 0
+      },
+      "cost_usd": 0,
+      "duration_seconds": 352.3
+    },
+    {
+      "model": "openai-codex/gpt-5.6-sol:medium",
+      "baseline": {
+        "violations_per_100w": 1.33,
+        "weighted_violations_per_100w": 1.68,
+        "violations_total": 12,
+        "mean_sentence_words": 12.3,
+        "mean_final_words": 89.5,
+        "provider_output_tokens": 3036,
+        "reasoning_tokens": 1829,
+        "approximate_final_text_tokens": 1207,
+        "cost_usd": 0.094015,
+        "duration_seconds": 117.7,
+        "runs": 8
+      },
+      "skill": {
+        "violations_per_100w": 0.16,
+        "weighted_violations_per_100w": 0.25,
+        "violations_total": 2,
+        "mean_sentence_words": 9.8,
+        "mean_final_words": 100.5,
+        "provider_output_tokens": 8948,
+        "reasoning_tokens": 7711,
+        "approximate_final_text_tokens": 1237,
+        "cost_usd": 0.440895,
+        "duration_seconds": 257.1,
+        "runs": 8
+      },
+      "reduction_pct": 88.0,
+      "scenario_outcomes": {
+        "improved": 5,
+        "tied": 3,
+        "worsened": 0
+      },
+      "cost_usd": 0.53491,
+      "duration_seconds": 374.8
+    },
+    {
+      "model": "openai-codex/gpt-5.6-terra:medium",
+      "baseline": {
+        "violations_per_100w": 1.69,
+        "weighted_violations_per_100w": 2.14,
+        "violations_total": 13,
+        "mean_sentence_words": 13.4,
+        "mean_final_words": 76.0,
+        "provider_output_tokens": 1731,
+        "reasoning_tokens": 709,
+        "approximate_final_text_tokens": 1022,
+        "cost_usd": 0.021946,
+        "duration_seconds": 62.7,
+        "runs": 8
+      },
+      "skill": {
+        "violations_per_100w": 0.48,
+        "weighted_violations_per_100w": 0.64,
+        "violations_total": 4,
+        "mean_sentence_words": 9.9,
+        "mean_final_words": 78.6,
+        "provider_output_tokens": 5458,
+        "reasoning_tokens": 4477,
+        "approximate_final_text_tokens": 981,
+        "cost_usd": 0.134478,
+        "duration_seconds": 128.8,
+        "runs": 8
+      },
+      "reduction_pct": 71.6,
+      "scenario_outcomes": {
+        "improved": 4,
+        "tied": 3,
+        "worsened": 1
+      },
+      "cost_usd": 0.156424,
+      "duration_seconds": 191.5
+    },
+    {
+      "model": "openai-codex/gpt-5.6-luna:medium",
+      "baseline": {
+        "violations_per_100w": 1.28,
+        "weighted_violations_per_100w": 1.7,
+        "violations_total": 12,
+        "mean_sentence_words": 13.7,
+        "mean_final_words": 88.2,
+        "provider_output_tokens": 1968,
+        "reasoning_tokens": 807,
+        "approximate_final_text_tokens": 1161,
+        "cost_usd": 0.002479,
+        "duration_seconds": 65.6,
+        "runs": 8
+      },
+      "skill": {
+        "violations_per_100w": 0.42,
+        "weighted_violations_per_100w": 0.65,
+        "violations_total": 5,
+        "mean_sentence_words": 10.2,
+        "mean_final_words": 96.2,
+        "provider_output_tokens": 5070,
+        "reasoning_tokens": 3914,
+        "approximate_final_text_tokens": 1156,
+        "cost_usd": 0.013673,
+        "duration_seconds": 120.5,
+        "runs": 8
+      },
+      "reduction_pct": 67.2,
+      "scenario_outcomes": {
+        "improved": 5,
+        "tied": 2,
+        "worsened": 1
+      },
+      "cost_usd": 0.016152,
+      "duration_seconds": 186.1
+    }
+  ],
+  "runs": 64,
+  "scenarios_per_condition": 8,
+  "conditions": [
+    "baseline",
+    "skill"
+  ],
+  "system_prompt": "Return only the final text requested by the user.",
+  "isolation": {
+    "tools": "disabled",
+    "skills": "disabled",
+    "prompt_templates": "disabled",
+    "extensions": "disabled",
+    "context_files": "disabled",
+    "session_persistence": "disabled"
+  }
+}

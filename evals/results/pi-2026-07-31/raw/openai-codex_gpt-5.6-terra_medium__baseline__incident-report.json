@@ -1,0 +1,37 @@
+{
+  "text": "**Resolved \u2014 Elevated API Errors**\n\nBetween 14:02 and 14:31 UTC, approximately 12% of API requests failed with HTTP 502 errors. The issue began after a deployment removed a required cache warmup step, causing backend services to experience elevated load during cache initialization.\n\nWe identified the deployment as the source of the failures and reverted it at 14:27 UTC. Error rates returned to normal by 14:31 UTC.\n\nWe are restoring the cache warmup step, adding deployment validation to detect its absence, and reviewing safeguards to reduce the impact of similar changes.",
+  "input_tokens": 87,
+  "output_tokens": 122,
+  "reasoning_tokens": 0,
+  "total_tokens": 209,
+  "cost_usd": 0.0016380000000000001,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-terra",
+  "stop_reason": "stop",
+  "duration_ms": 5790,
+  "model": "openai-codex/gpt-5.6-terra:medium",
+  "condition": "baseline",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 90,
+    "sentences": 5,
+    "mean_sentence_words": 18.0,
+    "longest_sentence_words": 24,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 1,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 1.11
+  }
+}

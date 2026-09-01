@@ -1,0 +1,35 @@
+{
+  "text": "sqlpipe moves data from Postgres to S3 in three pipelined stages.\n\n**Reader** opens a single Postgres connection and executes the target query with a server-side cursor, streaming rows in configurable batches. Each batch is a slice of typed Go structs handed to the converter via a channel.\n\n**Converter** receives each batch and encodes it as a Parquet row group using the inferred schema from Postgres column metadata. Numeric, timestamp, and nullable types map to their Parquet equivalents; the encoded row group is written to an in-memory buffer.\n\n**Uploader** drains those buffers and pushes them to S3 via multipart upload. Each row group becomes one part. Failed parts are retried with exponential backoff; the multipart session is aborted on unrecoverable error to avoid orphaned parts accumulating storage charges.\n\nAll three stages run concurrently; backpressure propagates through bounded channels.",
+  "input_tokens": 3,
+  "output_tokens": 215,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 7012,
+  "cost_usd": 0.013107599999999997,
+  "model": "claude-sonnet-4-6",
+  "condition": "baseline",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 137,
+    "sentences": 9,
+    "mean_sentence_words": 15.2,
+    "longest_sentence_words": 22,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 3,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 3,
+    "violations_per_100w": 2.19
+  }
+}

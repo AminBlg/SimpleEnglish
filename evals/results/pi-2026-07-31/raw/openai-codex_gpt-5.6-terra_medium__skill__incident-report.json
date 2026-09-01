@@ -1,0 +1,37 @@
+{
+  "text": "Between 14:02 and 14:31 UTC, 12% of API requests failed with HTTP 502 errors. A deployment at 14:02 removed the cache warmup step. Some API servers did not have cached data when they received requests. These servers returned HTTP 502 errors while they loaded the data. We reverted the deployment at 14:27 UTC. The error rate returned to normal at 14:31 UTC.\n\nWe will add a deployment check for the cache warmup step. We will also monitor cache warmup completion during future deployments.",
+  "input_tokens": 4757,
+  "output_tokens": 590,
+  "reasoning_tokens": 470,
+  "total_tokens": 5347,
+  "cost_usd": 0.016594,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-terra",
+  "stop_reason": "stop",
+  "duration_ms": 14231,
+  "model": "openai-codex/gpt-5.6-terra:medium",
+  "condition": "skill",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 83,
+    "sentences": 8,
+    "mean_sentence_words": 10.4,
+    "longest_sentence_words": 14,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 1,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 0
+    },
+    "violations_total": 2,
+    "violations_per_100w": 2.41
+  }
+}

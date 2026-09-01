@@ -1,9 +1,21 @@
 {
-  "generated": "2026-08-03",
+  "generated": "2026-08-12",
   "models": [
     {
+      "model": "claude-opus-5",
+      "baseline_viol_per_100w": 2.13,
+      "baseline_mean_sentence": 14.1,
+      "baseline_output_tokens": 272,
+      "baseline_n": 8,
+      "skill_viol_per_100w": 0.32,
+      "skill_mean_sentence": 10.8,
+      "skill_output_tokens": 241,
+      "skill_n": 8,
+      "reduction_pct": 85.0
+    },
+    {
       "model": "claude-opus-4-8",
-      "baseline_viol_per_100w": 2.34,
+      "baseline_viol_per_100w": 1.05,
       "baseline_mean_sentence": 10.7,
       "baseline_output_tokens": 260,
       "baseline_n": 8,
@@ -11,23 +23,23 @@
       "skill_mean_sentence": 10.0,
       "skill_output_tokens": 235,
       "skill_n": 8,
-      "reduction_pct": 73.5
+      "reduction_pct": 41.0
     },
     {
       "model": "claude-opus-4-7",
-      "baseline_viol_per_100w": 2.81,
+      "baseline_viol_per_100w": 2.28,
       "baseline_mean_sentence": 13.0,
       "baseline_output_tokens": 243,
       "baseline_n": 8,
-      "skill_viol_per_100w": 0.41,
+      "skill_viol_per_100w": 0.42,
       "skill_mean_sentence": 10.8,
       "skill_output_tokens": 226,
       "skill_n": 8,
-      "reduction_pct": 85.4
+      "reduction_pct": 81.6
     },
     {
       "model": "claude-opus-4-6",
-      "baseline_viol_per_100w": 3.14,
+      "baseline_viol_per_100w": 2.24,
       "baseline_mean_sentence": 10.9,
       "baseline_output_tokens": 185,
       "baseline_n": 8,
@@ -35,23 +47,23 @@
       "skill_mean_sentence": 9.0,
       "skill_output_tokens": 176,
       "skill_n": 8,
-      "reduction_pct": 87.3
+      "reduction_pct": 82.1
     },
     {
       "model": "claude-opus-4-5-20251101",
-      "baseline_viol_per_100w": 2.94,
+      "baseline_viol_per_100w": 2.55,
       "baseline_mean_sentence": 11.1,
       "baseline_output_tokens": 196,
       "baseline_n": 8,
-      "skill_viol_per_100w": 0.71,
+      "skill_viol_per_100w": 0.57,
       "skill_mean_sentence": 8.5,
       "skill_output_tokens": 159,
       "skill_n": 8,
-      "reduction_pct": 75.9
+      "reduction_pct": 77.6
     },
     {
       "model": "claude-sonnet-5",
-      "baseline_viol_per_100w": 3.76,
+      "baseline_viol_per_100w": 2.67,
       "baseline_mean_sentence": 10.0,
       "baseline_output_tokens": 266,
       "baseline_n": 8,
@@ -59,20 +71,25 @@
       "skill_mean_sentence": 9.7,
       "skill_output_tokens": 205,
       "skill_n": 8,
-      "reduction_pct": 85.9
+      "reduction_pct": 80.1
     },
     {
       "model": "claude-sonnet-4-6",
-      "baseline_viol_per_100w": 2.65,
+      "baseline_viol_per_100w": 2.06,
       "baseline_mean_sentence": 11.7,
       "baseline_output_tokens": 168,
       "baseline_n": 8,
-      "skill_viol_per_100w": 0.51,
+      "skill_viol_per_100w": 0.52,
       "skill_mean_sentence": 10.2,
       "skill_output_tokens": 162,
       "skill_n": 8,
-      "reduction_pct": 80.8
+      "reduction_pct": 74.8
     }
   ],
-  "runs": 96
+  "runs": 112,
+  "efforts": [
+    "low",
+    "unrecorded"
+  ],
+  "max_thinking_tokens": 0
 }

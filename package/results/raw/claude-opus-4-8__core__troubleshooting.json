@@ -1,0 +1,11 @@
+{
+  "text": "# Troubleshooting\n\n## Connection timeouts to Postgres\n\nIf `sqlpipe` cannot connect to Postgres, a timeout error occurs. Make sure that the database host and port are correct. If the host is correct, make sure that the network permits traffic on the port. Increase the `--timeout` value for a slow network. Make sure that the Postgres server accepts remote connections.\n\n## S3 permission errors\n\nIf `sqlpipe` cannot read from or write to S3, a permission error occurs. Make sure that the credentials are correct. Make sure that the IAM policy gives access to the bucket. The policy must include these actions:\n\n- `s3:GetObject`\n- `s3:PutObject`\n- `s3:ListBucket`\n\nIf the error continues, make sure that the bucket region matches the `--region` value. For a bucket with encryption, make sure that the credentials include `kms:Decrypt`.",
+  "input_tokens": 2,
+  "output_tokens": 493,
+  "duration_ms": 10110,
+  "cost_usd": 0.37251850000000003,
+  "model": "claude-opus-4-8",
+  "condition": "core",
+  "scenario": "troubleshooting",
+  "type": "procedural"
+}

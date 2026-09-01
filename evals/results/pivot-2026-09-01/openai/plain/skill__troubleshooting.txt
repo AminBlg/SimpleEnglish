@@ -1,0 +1,12 @@
+## Troubleshooting Connection Timeouts and Permission Errors
+
+sqlpipe stops and shows `dial tcp: i/o timeout` when it cannot connect to the Postgres port (5432 by default).  
+1. Make sure that the host running sqlpipe can connect to the Postgres port. Firewalls or security groups often block this connection.  
+2. If the database is managed (RDS, Cloud SQL), make sure that the instance accepts connections from sqlpipe’s IP address.  
+
+sqlpipe shows permission errors when accessing S3 storage.  
+1. Make sure that your AWS credentials have permission to read and write to the S3 bucket used by sqlpipe.  
+2. Make sure that the bucket name in the configuration matches the actual S3 bucket name.  
+3. If you use IAM roles or policies, make sure that they allow access from the host running sqlpipe.  
+
+These steps often resolve timeout and permission errors in sqlpipe connections.

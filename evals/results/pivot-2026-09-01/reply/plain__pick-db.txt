@@ -1,0 +1,27 @@
+Before sharding, check if you actually need it.
+
+**Do this first:**
+
+1. Run `EXPLAIN (ANALYZE, BUFFERS)` on your slow queries. Find what is slow: sequential scan, index miss, lock wait, or network.
+2. Make sure that the right indexes exist for your query patterns.
+3. Check `pg_stat_user_tables` — are you hitting disk or cache?
+
+```sql
+SELECT relname, seq_scan, idx_scan, n_live_tup
+FROM pg_stat_user_tables
+WHERE relname = 'your_table';
+```
+
+40 million rows is not large for Postgres. A single well-indexed table handles hundreds of millions of rows. Sharding adds enormous operational complexity and is almost never the first fix.
+
+**Cheaper fixes to try first, in order:**
+
+1. Add or fix indexes (covering indexes for your hot queries)
+2. Add a read replica and send read traffic there
+3. Partition the table by a range column (date, ID range) — Postgres native, no app changes required
+4. Tune `work_mem`, `shared_buffers`, and `effective_cache_size`
+5. Materialize expensive aggregates
+
+Sharding belongs at step 6, after all of the above fail under real load.
+
+What does `EXPLAIN ANALYZE` show on the slow query?

@@ -1,0 +1,37 @@
+{
+  "text": "## Troubleshooting\n\n### Postgres connection timeouts\n\nIf `sqlpipe` times out while connecting to Postgres:\n\n- Confirm the hostname, port, database, and credentials in your connection string.\n- Verify that Postgres is running and accepting remote connections.\n- Test network access with `nc -vz <host> 5432` or connect using `psql`.\n- Check firewalls, VPNs, security groups, and Kubernetes network policies.\n- Ensure `pg_hba.conf` permits the client address and `listen_addresses` includes the required interface.\n- If SSL is required, verify the SSL mode and certificate paths.\n- Increase the connection timeout only after ruling out network or configuration issues.\n\n### S3 permission errors\n\nFor `AccessDenied`, `403`, or upload failures:\n\n- Confirm the active identity with `aws sts get-caller-identity`.\n- Verify the bucket name, region, and object prefix.\n- Ensure the IAM identity allows required actions such as `s3:GetObject`, `s3:PutObject`, and `s3:ListBucket`.\n- Review bucket policies, permission boundaries, and organization service control policies.\n- For encrypted buckets, grant access to the relevant KMS key.\n- Check whether temporary AWS credentials have expired.",
+  "input_tokens": 59,
+  "output_tokens": 344,
+  "reasoning_tokens": 84,
+  "total_tokens": 403,
+  "cost_usd": 0.010615000000000001,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-sol",
+  "stop_reason": "stop",
+  "duration_ms": 15007,
+  "model": "openai-codex/gpt-5.6-sol:medium",
+  "condition": "baseline",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 161,
+    "sentences": 15,
+    "mean_sentence_words": 9.9,
+    "longest_sentence_words": 16,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 1,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 3
+    },
+    "violations_total": 4,
+    "violations_per_100w": 2.48
+  }
+}

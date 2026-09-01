@@ -1,0 +1,32 @@
+A backfill is a process that writes data into rows that already exist in the table.
+
+When you add a NOT NULL column to a table that has existing rows, those rows have no value for the new column. The database must fill those rows before it can enforce the NOT NULL rule. On a 20 GB table, doing this in one transaction locks the table and blocks all reads and writes until it finishes.
+
+Do this instead:
+
+1. Cancel the hanging migration now.
+2. Add the column as nullable first, with no NOT NULL constraint.
+3. Write the backfill as small batches. For example, update 1,000 rows at a time with a short pause between each batch. This keeps the table available.
+4. After all rows have a value, add a DEFAULT so new rows are covered automatically.
+5. Add the NOT NULL constraint last. In Postgres 11 and later, a NOT NULL constraint on a column that already has a default and no null values is a metadata-only change and does not lock the table.
+
+Example sequence for Postgres:
+
+```sql
+-- Step 1: add nullable
+ALTER TABLE your_table ADD COLUMN new_col text;
+
+-- Step 2: backfill in batches (run this in a script loop)
+UPDATE your_table
+SET new_col = 'default_value'
+WHERE new_col IS NULL
+  AND id BETWEEN :batch_start AND :batch_end;
+
+-- Step 3: add default for new rows
+ALTER TABLE your_table ALTER COLUMN new_col SET DEFAULT 'default_value';
+
+-- Step 4: add NOT NULL constraint (fast on Postgres 11+)
+ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL;
+```
+
+The batch size depends on your row width and index load. Start at 1,000 and watch replication lag. If lag grows, reduce the batch size or increase the pause.

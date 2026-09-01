@@ -1,0 +1,11 @@
+{
+  "text": "# Troubleshooting\n\n## Postgres connection timeouts\n\nsqlpipe stops with a `connection timeout` message when it cannot reach the database. First, make sure that the host and the port are correct. Then, examine the network path to the server. If a firewall blocks the port, open the port or use a different route. If the server load is high, increase the `--timeout` value.\n\n## S3 permission errors\n\nsqlpipe shows an `AccessDenied` message when the credentials do not have sufficient rights. Make sure that the IAM policy permits the `s3:GetObject` and `s3:PutObject` actions. Also, make sure that the bucket policy does not deny your account. If the credentials are old, get new keys and set them again.\n\nNote: Each error message includes the exact resource. Refer to this message to find the cause.",
+  "input_tokens": 2,
+  "output_tokens": 944,
+  "duration_ms": 15010,
+  "cost_usd": 0.6164735,
+  "model": "claude-opus-4-8",
+  "condition": "core+dict",
+  "scenario": "troubleshooting",
+  "type": "procedural"
+}

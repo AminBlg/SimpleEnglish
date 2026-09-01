@@ -1,0 +1,10 @@
+Idempotent means you can send the same request multiple times and get the same result. The server produces no extra side effects on the second or third call.
+
+For a POST to `/v2/orders`, "idempotent" means the API uses a deduplication key (usually a client-supplied `Idempotency-Key` header or a unique field in the body). If the server sees the same key again, it returns the previous result instead of creating a second order.
+
+**Your retry is safe only if** you send the same idempotency key on every retry attempt. If you generate a new key each time, the server treats each retry as a fresh request and can create duplicate orders.
+
+Check two things before you rely on this:
+
+1. Your script sends the same key on retries, not a freshly generated one.
+2. The API docs confirm that `/v2/orders` actually honors that key — "idempotent" in marketing copy does not always mean the server enforces it.

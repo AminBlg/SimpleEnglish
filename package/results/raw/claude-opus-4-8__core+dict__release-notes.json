@@ -1,0 +1,11 @@
+{
+  "text": "# sqlpipe v2.0 Release Notes\n\nThe `/v2/users` endpoint has a breaking change. We divided the `name` field into two fields: `first_name` and `last_name`. We removed the old `name` field. You must change your code before you use this version.\n\nThis version adds the `--incremental` flag. The flag tells sqlpipe to read only the new records. Use this flag to decrease the time for large tasks.\n\nParquet writes are 40% faster than in v1. This change decreases the write time for large data exports.",
+  "input_tokens": 2,
+  "output_tokens": 1640,
+  "duration_ms": 26929,
+  "cost_usd": 0.6341235,
+  "model": "claude-opus-4-8",
+  "condition": "core+dict",
+  "scenario": "release-notes",
+  "type": "descriptive"
+}

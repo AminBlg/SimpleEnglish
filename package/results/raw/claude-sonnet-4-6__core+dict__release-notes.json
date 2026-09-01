@@ -1,0 +1,11 @@
+{
+  "text": "sqlpipe v2.0\n\n**Warning: Breaking Change in /v2/users**\n\nThe `/v2/users` endpoint no longer gives the `name` field. In v2.0, it gives two fields: `first_name` and `last_name`. Update all code that reads the `name` field before you upgrade to v2.0. If you do not update your code, the `/v2/users` endpoint will give an error.\n\n**New: --incremental Flag**\n\nThe `--incremental` flag moves only the rows that changed after the last run. Use this flag to move only new or changed rows. This flag decreases the time to move large tables.\n\n**Faster Parquet Writes**\n\nParquet write speed is 40% faster in v2.0. The faster write speed applies to all write operations. No configuration changes are necessary.",
+  "input_tokens": 3,
+  "output_tokens": 9182,
+  "duration_ms": 140828,
+  "cost_usd": 0.3908637,
+  "model": "claude-sonnet-4-6",
+  "condition": "core+dict",
+  "scenario": "release-notes",
+  "type": "descriptive"
+}

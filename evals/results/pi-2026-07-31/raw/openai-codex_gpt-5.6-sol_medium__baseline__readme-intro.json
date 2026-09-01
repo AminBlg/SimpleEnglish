@@ -1,0 +1,37 @@
+{
+  "text": "sqlpipe is a command-line tool for syncing PostgreSQL tables to Amazon S3 as Parquet files. It turns relational data into a compact, columnar format that is easy to store, query, and integrate with modern analytics workflows. Use it to export application data, build lightweight data pipelines, create durable snapshots, or prepare datasets for tools that read Parquet directly.\n\nDesigned for scripts, scheduled jobs, and CI/CD environments, sqlpipe keeps database-to-object-storage workflows simple and repeatable. Point it at a Postgres database, select the tables you need, and write the results to an S3 destination without building a custom exporter. Whether you are moving a single table or maintaining a broader data lake, sqlpipe provides a straightforward CLI for getting PostgreSQL data into S3.",
+  "input_tokens": 70,
+  "output_tokens": 237,
+  "reasoning_tokens": 74,
+  "total_tokens": 307,
+  "cost_usd": 0.00746,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-sol",
+  "stop_reason": "stop",
+  "duration_ms": 12309,
+  "model": "openai-codex/gpt-5.6-sol:medium",
+  "condition": "baseline",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 121,
+    "sentences": 6,
+    "mean_sentence_words": 20.2,
+    "longest_sentence_words": 24,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

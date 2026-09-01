@@ -1,0 +1,37 @@
+{
+  "text": "API Request Failures\n\nBetween 14:02 and 14:31 UTC, 12% of API requests failed with HTTP 502 responses. A deployment removed the cache warmup step. As a result, the API servers received traffic before their caches were ready.\n\nWe identified the deployment as the cause and reverted it at 14:27 UTC. The error rate then decreased to its normal level. By 14:31 UTC, API request success rates returned to normal.\n\nWe monitored the API after the recovery and found no additional failures. We restored the cache warmup step in the deployment process. We also added a release check to prevent this error.",
+  "input_tokens": 917,
+  "output_tokens": 917,
+  "reasoning_tokens": 779,
+  "total_tokens": 5674,
+  "cost_usd": 0.034015,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-sol",
+  "stop_reason": "stop",
+  "duration_ms": 25933,
+  "model": "openai-codex/gpt-5.6-sol:medium",
+  "condition": "skill",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 101,
+    "sentences": 9,
+    "mean_sentence_words": 11.2,
+    "longest_sentence_words": 17,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

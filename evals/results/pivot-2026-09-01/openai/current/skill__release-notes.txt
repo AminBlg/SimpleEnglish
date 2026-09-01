@@ -1,0 +1,9 @@
+sqlpipe version 2.0 Release Notes
+
+This release changes the user API. The `/v2/users` endpoint no longer uses the `name` field. It splits into two new fields: `first_name` and `last_name`. You must update your code to use these fields. This change breaks backward compatibility.
+
+A new flag `--incremental` is available. Use this flag to run incremental data loads. This change can reduce the processing time and resource use for repeated loads.
+
+We improved Parquet writes by 40%. The writing process is now faster and more efficient. This improvement can speed up data export tasks.
+
+Update to version 2.0 to use these new features and improvements. Make sure that you adapt your integrations to the new API fields.

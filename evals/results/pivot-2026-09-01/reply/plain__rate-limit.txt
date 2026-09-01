@@ -1,0 +1,13 @@
+Token bucket: each user gets a bucket that holds 100 tokens. One token = one request. Tokens refill at a steady rate — 100 per minute, or about 1.67 per second.
+
+When a request arrives, the system takes one token from the bucket. If the bucket is empty, the request is rejected (or queued).
+
+**Why it fits your case well:**
+
+- It allows short bursts. A user who was idle can spend saved tokens quickly, up to the bucket's capacity.
+- It enforces a hard ceiling over time. No user can sustain more than 100 requests per minute.
+- It is simple to implement. Redis has a pattern for this with a single counter and a timestamp.
+
+**One trade-off to know:** the burst allowance can be a problem if you want strict, even spacing. If a user sends 100 requests in the first second, the bucket allows it. A sliding window counter prevents that, but is more complex.
+
+For a 100 req/min-per-user limit where occasional bursts are acceptable, token bucket fits.

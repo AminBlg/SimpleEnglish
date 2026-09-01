@@ -1,0 +1,37 @@
+{
+  "text": "**sqlpipe** is a command-line tool that syncs data from Postgres tables to S3. It writes each table as Parquet files in an S3 bucket that you specify. sqlpipe reads rows from your database in batches. It converts each batch to Parquet format and uploads the files to S3. You can run sqlpipe once or on a schedule. It stores its settings in a YAML configuration file.\n\nParquet is a columnar file format. It compresses data more efficiently than CSV or JSON. This makes Parquet files smaller and faster to query. Tools such as Athena, DuckDB, and Spark can read the files directly from S3. You do not need to download the files before you query them.",
+  "input_tokens": 4747,
+  "output_tokens": 5176,
+  "reasoning_tokens": 5026,
+  "total_tokens": 9923,
+  "cost_usd": 0,
+  "provider": "zai",
+  "model_id": "glm-5.2",
+  "stop_reason": "stop",
+  "duration_ms": 52519,
+  "model": "zai/glm-5.2:max",
+  "condition": "skill",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 116,
+    "sentences": 11,
+    "mean_sentence_words": 10.5,
+    "longest_sentence_words": 14,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 1
+    },
+    "violations_total": 1,
+    "violations_per_100w": 0.86
+  }
+}

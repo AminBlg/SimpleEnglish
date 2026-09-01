@@ -1,0 +1,53 @@
+**Backfill** = populate existing rows with a value for the new column, because those rows were created before the column existed.
+
+Here is why the migration hangs: Postgres must rewrite every row on disk when you add a `NOT NULL` column with no default. On a 20 GB table, that rewrites 20 GB under a table lock. Everything that touches that table waits.
+
+---
+
+**The safe 3-step pattern**
+
+Do each step as a separate migration.
+
+**Step 1.** Add the column as nullable with a default.
+
+```sql
+ALTER TABLE your_table
+  ADD COLUMN new_col integer DEFAULT 0;
+```
+
+This is instant. Postgres records the default in the catalog; it does not rewrite rows.
+
+**Step 2.** Backfill existing rows in batches.
+
+```sql
+UPDATE your_table
+SET new_col = 0
+WHERE new_col IS NULL
+  AND id BETWEEN 1 AND 100000;
+-- repeat for each batch
+```
+
+Run this in batches of 10,000–100,000 rows. Each batch acquires a short lock, then releases it. Other queries keep running between batches. This is the backfill.
+
+**Step 3.** After all rows have a value, add the constraint.
+
+```sql
+ALTER TABLE your_table
+  ALTER COLUMN new_col SET NOT NULL;
+```
+
+On Postgres 12+, if the database can verify no `NULL` values exist, this step is also fast (a metadata-only change, no row scan).
+
+---
+
+**First, cancel the hanging migration** before you do anything else. Find its PID and terminate it.
+
+```sql
+SELECT pid, query, state, wait_event
+FROM pg_stat_activity
+WHERE query ILIKE '%alter table%';
+
+SELECT pg_cancel_backend(<pid>);
+```
+
+Then run the 3-step pattern above.

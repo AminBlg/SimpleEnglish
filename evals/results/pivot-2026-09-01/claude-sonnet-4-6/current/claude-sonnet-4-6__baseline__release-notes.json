@@ -1,0 +1,32 @@
+{
+  "text": "**sqlpipe v2.0 Release Notes**\n\n**Breaking Changes**\n\n- `/v2/users` response: `name` field removed. Replaced by `first_name` and `last_name`. Update any client code that reads `name` before upgrading.\n\n**New Features**\n\n- `--incremental` flag: sync only rows modified since the last run. Cuts transfer volume on large tables and makes scheduled pipelines significantly cheaper to operate.\n\n**Performance**\n\n- Parquet write throughput improved by 40%. Achieved through batch column encoding and reduced intermediate allocations. No configuration changes required to benefit.\n\n**Upgrading**\n\nSearch your codebase for `.name` accesses on user objects returned from `/v2/users` and replace them with `.first_name` and `.last_name`. All other v1 fields carry over unchanged.",
+  "input_tokens": 3,
+  "output_tokens": 193,
+  "duration_ms": 6087,
+  "cost_usd": 0.11757630000000001,
+  "model": "claude-sonnet-4-6",
+  "condition": "baseline",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 105,
+    "sentences": 12,
+    "mean_sentence_words": 8.5,
+    "longest_sentence_words": 21,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

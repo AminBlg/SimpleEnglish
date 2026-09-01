@@ -1,0 +1,37 @@
+{
+  "text": "# sqlpipe\n\nsqlpipe is a command-line tool for exporting PostgreSQL tables to Amazon S3 as efficient, analytics-ready Parquet files. It streams data directly from Postgres, handles large tables without requiring local staging, and organizes output for use with tools such as Athena, Spark, DuckDB, and Snowflake.\n\nDesigned for simple, repeatable data synchronization, sqlpipe lets you select tables or queries, configure S3 destinations, and run exports in scripts, cron jobs, or CI pipelines.",
+  "input_tokens": 70,
+  "output_tokens": 145,
+  "reasoning_tokens": 38,
+  "total_tokens": 215,
+  "cost_usd": 0.00188,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-terra",
+  "stop_reason": "stop",
+  "duration_ms": 6506,
+  "model": "openai-codex/gpt-5.6-terra:medium",
+  "condition": "baseline",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 70,
+    "sentences": 3,
+    "mean_sentence_words": 23.3,
+    "longest_sentence_words": 27,
+    "violations": {
+      "sentence_over_limit": 2,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 2,
+    "violations_per_100w": 2.86
+  }
+}

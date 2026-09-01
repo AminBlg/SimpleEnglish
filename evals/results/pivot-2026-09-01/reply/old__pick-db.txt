@@ -1,0 +1,13 @@
+Sharding is almost certainly not the right first step. Check these first:
+
+1. **EXPLAIN ANALYZE** on the slow query. Most slow reads are missing indexes, not missing shards.
+2. **pg_stat_user_indexes** — confirm indexes exist and are actually used.
+3. **pg_stat_user_tables** — check `n_dead_tup`. High dead tuples = bloat = slow reads. Run `VACUUM ANALYZE`.
+4. **Partial indexes** if queries filter on a low-cardinality column (`WHERE status = 'active'`).
+5. **Connection pooling** (PgBouncer) if you're opening many short-lived connections.
+
+40M rows is not big for Postgres. A well-indexed table handles billions.
+
+Sharding adds enormous operational complexity — split-brain risk, cross-shard joins become app code, schema changes multiply. Only reach for it after: indexes optimized, query planner fed fresh stats, hardware headroom confirmed, and read replicas tried.
+
+Paste the slow query and its `EXPLAIN ANALYZE` output and I can tell you exactly what's missing.

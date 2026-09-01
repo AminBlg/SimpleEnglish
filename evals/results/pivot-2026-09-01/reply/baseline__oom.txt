@@ -1,0 +1,42 @@
+**OOMKilled** = the Linux kernel killed the pod's container because it used more memory than its limit.
+
+**Why it happens:**
+
+The container's memory usage crossed the `resources.limits.memory` value. The kernel's OOM killer terminated the process. Kubernetes then restarts the container, creating the restart loop you see.
+
+**Diagnose first:**
+
+```bash
+# See the limit and current usage
+kubectl describe pod <pod-name>
+
+# See peak memory before the kill
+kubectl top pod <pod-name>
+
+# Check previous container's exit reason
+kubectl get pod <pod-name> -o jsonpath='{.status.containerStatuses[0].lastState}'
+```
+
+**What to change:**
+
+1. **Raise the memory limit** — if the app legitimately needs more memory:
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"   # raise this
+```
+
+2. **Find the leak** — if usage grows over time, the app has a memory leak. Profile it; do not just raise the limit.
+
+3. **Set JVM/runtime heap explicitly** — JVM, Node.js, and Go runtimes do not always respect container limits by default.
+
+   For JVM: add `-XX:MaxRAMPercentage=75.0` so the heap stays below the container limit.
+
+   For Node.js: add `--max-old-space-size=<MB>`.
+
+4. **Check `requests` vs `limits`** — if `requests` is much lower than `limits`, the pod gets scheduled on a node that cannot actually support its peak usage. Set them equal or close together for memory-intensive workloads.
+
+**One rule:** raise the limit only after you confirm the actual peak usage with `kubectl top`. Raising blindly masks leaks.

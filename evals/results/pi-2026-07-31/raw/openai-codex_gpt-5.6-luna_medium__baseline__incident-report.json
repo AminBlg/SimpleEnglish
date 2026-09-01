@@ -1,0 +1,37 @@
+{
+  "text": "Between 14:02 and 14:31 UTC, approximately 12% of API requests returned HTTP 502 errors. The incident was caused by a deployment that unintentionally removed the cache warmup step, resulting in elevated load on backend services and intermittent request failures. We identified the issue and reverted the deployment at 14:27 UTC. Error rates began recovering immediately, and service was fully restored by 14:31 UTC. We are reviewing deployment safeguards and adding checks to ensure required cache warmup steps are preserved in future releases. We apologize for the disruption and appreciate your patience.",
+  "input_tokens": 87,
+  "output_tokens": 162,
+  "reasoning_tokens": 38,
+  "total_tokens": 249,
+  "cost_usd": 0.0002118,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-luna",
+  "stop_reason": "stop",
+  "duration_ms": 6815,
+  "model": "openai-codex/gpt-5.6-luna:medium",
+  "condition": "baseline",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 91,
+    "sentences": 6,
+    "mean_sentence_words": 15.2,
+    "longest_sentence_words": 25,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 1,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 1
+    },
+    "violations_total": 2,
+    "violations_per_100w": 2.2
+  }
+}

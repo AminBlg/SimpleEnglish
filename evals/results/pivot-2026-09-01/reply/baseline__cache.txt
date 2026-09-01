@@ -1,0 +1,19 @@
+Redis cache TTL is 10 minutes. Stale reads happen because you write the new price to the database but the old value stays in Redis until it expires.
+
+**Fix: write-through or cache invalidation on update.**
+
+On every price write, also delete (or overwrite) the Redis key:
+
+```python
+def update_price(item_id, new_price):
+    db.update("UPDATE items SET price = ? WHERE id = ?", new_price, item_id)
+    redis.delete(f"price:{item_id}")  # next read repopulates from DB
+```
+
+Or overwrite instead of delete if you want to keep the cache warm:
+
+```python
+    redis.set(f"price:{item_id}", new_price, ex=600)
+```
+
+Delete is simpler and safer under concurrent writes. Overwrite risks a race if two updates arrive out of order — the later DB write could lose to an earlier Redis write depending on timing.

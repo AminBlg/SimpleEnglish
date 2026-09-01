@@ -1,0 +1,37 @@
+{
+  "text": "AccessDenied: Access Denied\nUser is not authorized to perform: s3:PutObject",
+  "input_tokens": 67,
+  "output_tokens": 580,
+  "reasoning_tokens": 555,
+  "total_tokens": 647,
+  "cost_usd": 0.007094,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-terra",
+  "stop_reason": "stop",
+  "duration_ms": 14814,
+  "model": "openai-codex/gpt-5.6-terra:medium",
+  "condition": "baseline",
+  "scenario": "error-message",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 10,
+    "sentences": 1,
+    "mean_sentence_words": 8.0,
+    "longest_sentence_words": 8,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

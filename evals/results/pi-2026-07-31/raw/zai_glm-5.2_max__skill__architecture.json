@@ -1,0 +1,37 @@
+{
+  "text": "sqlpipe moves data from Postgres to S3 in three stages. A reader process, a converter, and an uploader form the pipeline. Each stage does one task and sends its output to the next stage.\n\nA reader process connects to Postgres and reads table rows in batches. Each batch contains a fixed number of rows. The reader sends each batch to the converter.\n\nA converter receives each batch from the reader. It writes the batch as a Parquet row group. This stage changes the row format from Postgres to Parquet. The converter sends each row group to the uploader.\n\nAn uploader writes each Parquet row group to S3 as a multipart object. If an upload fails, the uploader retries the transfer. The uploader stops after a maximum number of retries.",
+  "input_tokens": 81,
+  "output_tokens": 2431,
+  "reasoning_tokens": 2275,
+  "total_tokens": 7184,
+  "cost_usd": 0,
+  "provider": "zai",
+  "model_id": "glm-5.2",
+  "stop_reason": "stop",
+  "duration_ms": 23616,
+  "model": "zai/glm-5.2:max",
+  "condition": "skill",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 129,
+    "sentences": 13,
+    "mean_sentence_words": 9.9,
+    "longest_sentence_words": 13,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

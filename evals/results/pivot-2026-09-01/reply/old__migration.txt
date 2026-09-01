@@ -1,0 +1,53 @@
+**Backfill** = writing a value into the new column for every existing row.
+
+When you add a `NOT NULL` column without a default, the database must give every existing row a value before it allows the constraint. On a 20 GB table, that rewrites every row in one transaction — which is why it hangs.
+
+---
+
+**What happened**
+
+Postgres (and most databases) handle this in one of two ways:
+
+1. Old behavior: rewrite the whole table immediately. Holds a lock the entire time.
+2. Postgres 11+: a constant default is stored in the catalog, not written to disk. Fast. But a non-constant default still triggers the full rewrite.
+
+If your migration hung, you hit the slow path.
+
+---
+
+**What to do**
+
+Do these steps in order. Each step is safe to run independently.
+
+1. Cancel or roll back the hanging migration.
+2. Add the column as `NULL` first — this is instant:
+   ```sql
+   ALTER TABLE your_table ADD COLUMN new_col integer;
+   ```
+3. Backfill in batches to avoid one giant transaction:
+   ```sql
+   UPDATE your_table
+   SET new_col = 0
+   WHERE id BETWEEN 1 AND 10000;
+   -- Repeat with the next range.
+   ```
+   Pick a batch size of 1,000–10,000 rows. Commit after each batch.
+4. After all rows have a value, add the `NOT NULL` constraint:
+   ```sql
+   ALTER TABLE your_table
+   ALTER COLUMN new_col SET NOT NULL;
+   ```
+
+On Postgres 12+, step 4 is fast because Postgres validates the constraint without a full table scan if you use `NOT VALID` first and then `VALIDATE`:
+```sql
+ALTER TABLE your_table
+  ADD CONSTRAINT new_col_not_null CHECK (new_col IS NOT NULL) NOT VALID;
+
+ALTER TABLE your_table
+  VALIDATE CONSTRAINT new_col_not_null;
+```
+`NOT VALID` adds the constraint without scanning old rows. `VALIDATE` scans but takes a weaker lock — reads and writes continue.
+
+---
+
+**Key rule:** Never add a `NOT NULL` column with a backfill in one transaction on a large table. Always split it into three separate steps: add nullable, backfill in batches, enforce the constraint.

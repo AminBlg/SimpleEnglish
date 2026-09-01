@@ -1,0 +1,23 @@
+## Troubleshooting
+
+### Postgres Connection Timeouts
+
+**Symptom:** `dial tcp: i/o timeout` or `context deadline exceeded` when connecting.
+
+**Causes & Fixes:**
+- **Network/firewall:** Verify the Postgres host/port is reachable (`nc -zv host 5432`). Check security groups, VPC peering, and pg_hba.conf.
+- **Connection pool exhaustion:** Increase `max_connections` on the server or reduce sqlpipe's `--concurrency`.
+- **Idle timeout:** Set `--connect-timeout` (default 10s) and `--query-timeout` higher for slow networks.
+- **SSL mode mismatch:** Use `--sslmode=require` or `disable` to match server config.
+- **DNS resolution:** Use IP address instead of hostname to rule out DNS issues.
+
+### S3 Permission Errors
+
+**Symptom:** `AccessDenied` or `403 Forbidden` on `PutObject`/`GetObject`.
+
+**Causes & Fixes:**
+- **Missing IAM permissions:** Ensure the role/user has `s3:PutObject`, `s3:GetObject`, `s3:ListBucket` on the target bucket/prefix.
+- **Bucket policy deny:** Check for explicit `Deny` statements restricting principals or conditions (e.g., `aws:SourceVpce`).
+- **KMS key access:** If bucket uses SSE-KMS, grant `kms:Encrypt`/`Decrypt` on the CMK.
+- **Wrong region:** Set `--s3-region` to match bucket region; us-east-1 requires explicit region for some operations.
+- **Expired credentials:** Refresh session tokens; use `--profile` or env vars (`AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_SESSION_TOKEN`).

@@ -1,0 +1,11 @@
+{
+  "text": "Sqlpipe move Postgres data to Parquet on S3. Three parts run as pipeline.\n\nThe reader connects to Postgres. It gets rows in batches. Each batch keeps memory low. The reader sends each batch to the converter.\n\nThe converter gets a batch of rows. It makes a Parquet row group from the batch. It gives correct data types to each column. The converter sends each row group to the uploader.\n\nThe uploader gets the row groups. It writes the data to S3 as a multipart object. If a part upload fails, the uploader tries again. This retry logic prevents data loss.\n\nThe three parts operate at the same time. Thus one batch moves through the converter while the reader gets the next batch. This parallel flow gives good speed.",
+  "input_tokens": 2,
+  "output_tokens": 236,
+  "duration_ms": 6413,
+  "cost_usd": 0.5783434999999999,
+  "model": "claude-opus-4-8",
+  "condition": "core+dict",
+  "scenario": "architecture",
+  "type": "descriptive"
+}

@@ -1,0 +1,32 @@
+{
+  "text": "sqlpipe moves data from Postgres to S3 in three pipelined stages.\n\n**Reader** opens a single transaction with `REPEATABLE READ` isolation and streams rows using a server-side cursor, yielding typed batches of configurable size. Backpressure from downstream stages controls cursor fetch rate.\n\n**Converter** receives each batch and maps Postgres wire types to Arrow schema equivalents, accumulating rows into a Parquet row group. When a group reaches the target size, it serializes the buffer using columnar encoding and passes the byte slice downstream. Schema is inferred once at startup from column metadata.\n\n**Uploader** initiates an S3 multipart upload per output file, writing each serialized row group as a part. Failed part uploads retry with exponential backoff. Once all parts land, it calls `CompleteMultipartUpload`. Partial uploads are aborted on pipeline cancellation to avoid orphaned S3 storage.",
+  "input_tokens": 3,
+  "output_tokens": 211,
+  "duration_ms": 6789,
+  "cost_usd": 0.1177863,
+  "model": "claude-sonnet-4-6",
+  "condition": "baseline",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 133,
+    "sentences": 10,
+    "mean_sentence_words": 13.3,
+    "longest_sentence_words": 21,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

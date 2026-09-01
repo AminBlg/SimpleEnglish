@@ -1,0 +1,48 @@
+SSL handshake fails because curl cannot verify the server's certificate chain. The server presents a certificate signed by an internal CA, but curl's trust store does not contain that CA.
+
+**What is happening**
+
+When curl connects, it checks that the server's certificate is signed by a trusted CA. Your internal API uses a certificate from a private CA. That CA is not in curl's default trust store, so curl rejects the connection.
+
+**Fix options**
+
+1. **Add the internal CA to curl's trust store (recommended)**
+
+   Get the internal CA certificate file (ask your IT or platform team for it). Then run:
+
+   ```bash
+   curl --cacert /path/to/internal-ca.crt https://your-internal-api/
+   ```
+
+   To make this permanent, add the CA to the system trust store:
+
+   ```bash
+   # Arch Linux
+   sudo trust anchor /path/to/internal-ca.crt
+   ```
+
+   After that, curl uses it automatically.
+
+2. **Set the CA file for all curl calls** by adding this to `~/.curlrc`:
+
+   ```
+   cacert = /path/to/internal-ca.crt
+   ```
+
+3. **Skip verification (do not use in production)**
+
+   ```bash
+   curl -k https://your-internal-api/
+   ```
+
+   This disables certificate verification entirely. Use it only to confirm that the certificate is the problem, not as a real fix.
+
+**To get the CA certificate**
+
+If you do not have the file yet, run this to see what certificate the server sends:
+
+```bash
+openssl s_client -connect your-internal-api:443 -showcerts 2>/dev/null | openssl x509 -noout -issuer -subject
+```
+
+That shows the issuer. Ask your IT team for the PEM file for that issuer.

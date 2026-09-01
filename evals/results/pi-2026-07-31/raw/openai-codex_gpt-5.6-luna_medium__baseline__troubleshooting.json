@@ -1,0 +1,37 @@
+{
+  "text": "## Troubleshooting\n\n### Postgres connection timeouts\n\nVerify that the hostname, port, database name, and credentials supplied to `sqlpipe` are correct. Confirm Postgres is running and accepting TCP connections, then test reachability from the same machine:\n\n```bash\nnc -vz <host> 5432\n```\n\nCheck firewall rules, security groups, VPN access, and `pg_hba.conf`. If Postgres is private, run `sqlpipe` from an approved network or use the required tunnel. DNS failures may indicate an incorrect hostname or unavailable resolver. Increase the connection timeout only after network access is confirmed, and review `sqlpipe` logs for TLS or authentication errors.\n\n### S3 permission errors\n\nConfirm the bucket and region, and ensure the configured AWS identity is the one intended:\n\n```bash\naws sts get-caller-identity\naws s3 ls s3://<bucket>/<prefix>\n```\n\nThe identity typically needs permission to list the bucket and read or write objects, including multipart-upload actions for large files. Check IAM policies, bucket policies, encryption-key permissions, and any organization or VPC endpoint restrictions. Ensure the object prefix is correct and that credentials have not expired.",
+  "input_tokens": 59,
+  "output_tokens": 292,
+  "reasoning_tokens": 43,
+  "total_tokens": 351,
+  "cost_usd": 0.0003622,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-luna",
+  "stop_reason": "stop",
+  "duration_ms": 9049,
+  "model": "openai-codex/gpt-5.6-luna:medium",
+  "condition": "baseline",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 144,
+    "sentences": 10,
+    "mean_sentence_words": 14.4,
+    "longest_sentence_words": 20,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 1,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 3
+    },
+    "violations_total": 4,
+    "violations_per_100w": 2.78
+  }
+}

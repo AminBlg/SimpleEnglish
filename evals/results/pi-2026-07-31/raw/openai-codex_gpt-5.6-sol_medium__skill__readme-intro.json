@@ -1,0 +1,37 @@
+{
+  "text": "# sqlpipe\n\nsqlpipe is a CLI tool that syncs Postgres tables to S3 as Parquet files. It reads rows from Postgres and converts the data to the Parquet format. Then it writes the Parquet files to an S3 bucket. Parquet provides compact columnar storage for data analysis. S3 provides durable object storage for exports and downstream data jobs.\n\nTeams can use sqlpipe to move relational data into an S3 data lake or archive. The files work with query engines, data warehouses, and other tools that support Parquet on S3. sqlpipe provides one command-line workflow for repeatable table exports. You can run it from a terminal, a scheduled job, or a CI pipeline. This workflow removes the need for a custom export script.",
+  "input_tokens": 4740,
+  "output_tokens": 1715,
+  "reasoning_tokens": 1552,
+  "total_tokens": 6455,
+  "cost_usd": 0.07515000000000001,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-sol",
+  "stop_reason": "stop",
+  "duration_ms": 48356,
+  "model": "openai-codex/gpt-5.6-sol:medium",
+  "condition": "skill",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 120,
+    "sentences": 10,
+    "mean_sentence_words": 12.0,
+    "longest_sentence_words": 16,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

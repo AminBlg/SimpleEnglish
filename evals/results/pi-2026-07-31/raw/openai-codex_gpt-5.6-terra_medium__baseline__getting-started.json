@@ -1,0 +1,37 @@
+{
+  "text": "## Getting started\n\nInstall `sqlpipe` with:\n\n```sh\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nConfirm the installation:\n\n```sh\nsqlpipe --version\n```\n\nNext, create a `sqlpipe.yaml` configuration file. Define your source and destination connections, then add the pipelines or jobs you want sqlpipe to run. Keep credentials out of version control by using environment variables or your preferred secret manager.\n\nExample workflow:\n\n```yaml\nsource: postgres://$SOURCE_DATABASE_URL\ndestination: postgres://$DESTINATION_DATABASE_URL\n\npipelines:\n  - name: sync_customers\n    query: SELECT * FROM customers\n    target: customers\n```\n\nSet any required environment variables, then run your first pipeline:\n\n```sh\nsqlpipe run --config sqlpipe.yaml\n```\n\nsqlpipe reads the configuration, connects to the configured systems, and executes the defined pipeline. Use `--help` to explore available commands and options:\n\n```sh\nsqlpipe --help\n```",
+  "input_tokens": 85,
+  "output_tokens": 241,
+  "reasoning_tokens": 28,
+  "total_tokens": 326,
+  "cost_usd": 0.003062,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-terra",
+  "stop_reason": "stop",
+  "duration_ms": 8159,
+  "model": "openai-codex/gpt-5.6-terra:medium",
+  "condition": "baseline",
+  "scenario": "getting-started",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 78,
+    "sentences": 9,
+    "mean_sentence_words": 8.7,
+    "longest_sentence_words": 17,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

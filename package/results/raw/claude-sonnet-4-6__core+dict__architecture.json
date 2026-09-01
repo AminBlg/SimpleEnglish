@@ -1,0 +1,11 @@
+{
+  "text": "sqlpipe has three components: a reader, a converter, and an uploader. Each component operates as an isolated process.\n\nThe reader connects to a Postgres database. It streams rows in batches. Each batch contains a specified number of rows. The reader sends each batch to the converter.\n\nThe converter receives each batch and writes it as a Parquet row group. A row group is a set of column data for the rows in the batch. The converter sends each completed row group to the uploader.\n\nThe uploader writes each row group to an S3 object. It uses the S3 multipart upload API to send the data in parts. If a part does not complete, the uploader sends that part again. The uploader stops when it sends all row groups.",
+  "input_tokens": 3,
+  "output_tokens": 6171,
+  "duration_ms": 88004,
+  "cost_usd": 0.3603807,
+  "model": "claude-sonnet-4-6",
+  "condition": "core+dict",
+  "scenario": "architecture",
+  "type": "descriptive"
+}

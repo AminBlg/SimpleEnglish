@@ -1,0 +1,37 @@
+{
+  "text": "## sqlpipe v2.0\n\nsqlpipe v2.0 introduces important API and performance improvements.\n\n### Breaking change: `/v2/users`\nThe `name` field has been replaced with separate `first_name` and `last_name` fields. Update clients, schemas, and downstream transformations that read or write user names.\n\n### New incremental mode\nA new `--incremental` flag enables incremental processing workflows, helping reduce work when operating on previously processed data.\n\n### Faster Parquet output\nParquet writes are now approximately 40% faster, improving throughput for export and pipeline workloads.\n\nPlease review integrations before upgrading, especially any consumers of the `/v2/users` response.",
+  "input_tokens": 89,
+  "output_tokens": 141,
+  "reasoning_tokens": 0,
+  "total_tokens": 230,
+  "cost_usd": 0.0018700000000000001,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-terra",
+  "stop_reason": "stop",
+  "duration_ms": 7174,
+  "model": "openai-codex/gpt-5.6-terra:medium",
+  "condition": "baseline",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 75,
+    "sentences": 6,
+    "mean_sentence_words": 12.5,
+    "longest_sentence_words": 17,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 1,
+      "ing_clause": 2,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 0
+    },
+    "violations_total": 4,
+    "violations_per_100w": 5.33
+  }
+}

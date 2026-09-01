@@ -1,0 +1,21 @@
+**Why:** Redis cache has a TTL of ~10 minutes. Price updates write to the DB but don't invalidate the cache. Reads hit Redis first, so users see the old value until TTL expires.
+
+**Fix:** Write-through or cache invalidation on update.
+
+Simplest — invalidate on write:
+
+```python
+def update_price(product_id, new_price):
+    db.execute("UPDATE products SET price = ? WHERE id = ?", new_price, product_id)
+    redis.delete(f"price:{product_id}")  # next read repopulates
+```
+
+If you need atomic DB+cache update:
+
+```python
+def update_price(product_id, new_price):
+    db.execute("UPDATE products SET price = ? WHERE id = ?", new_price, product_id)
+    redis.set(f"price:{product_id}", new_price, ex=600)  # write-through
+```
+
+Invalidation is simpler and correct. Write-through risks DB/cache divergence if the write fails partway.

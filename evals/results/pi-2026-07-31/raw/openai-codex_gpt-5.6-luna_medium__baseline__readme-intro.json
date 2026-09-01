@@ -1,0 +1,37 @@
+{
+  "text": "sqlpipe is a command-line tool for moving data from PostgreSQL tables to Amazon S3 object storage as Parquet files. It is designed for reliable exports that fit into analytics pipelines, data lakes, and backups. With configuration, sqlpipe connects to your database, reads tables or queries, and writes partitioned output to S3 while keeping your schema and type information intact.\n\nUse sqlpipe for repeatable, incremental-friendly table synchronization without building custom scripts or managing temporary files. It supports practical controls for credentials, concurrency, filtering, and output layout, making it suitable for local workflows and production jobs alike. Parquet output can be consumed by engines such as Spark, DuckDB, Athena, and other tools across the modern data stack.",
+  "input_tokens": 70,
+  "output_tokens": 759,
+  "reasoning_tokens": 606,
+  "total_tokens": 829,
+  "cost_usd": 0.0009247999999999999,
+  "provider": "openai-codex",
+  "model_id": "gpt-5.6-luna",
+  "stop_reason": "stop",
+  "duration_ms": 17134,
+  "model": "openai-codex/gpt-5.6-luna:medium",
+  "condition": "baseline",
+  "scenario": "readme-intro",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 115,
+    "sentences": 6,
+    "mean_sentence_words": 19.2,
+    "longest_sentence_words": 25,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 1,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 0.87
+  }
+}

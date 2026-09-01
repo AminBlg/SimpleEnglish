@@ -1,0 +1,19 @@
+# Getting Started
+
+This section explains how to install and run sqlpipe.
+
+1. Install sqlpipe. Open a terminal and run this command:
+   
+   `curl -sSL https://get.sqlpipe.dev | sh`
+
+2. Create the configuration file `sqlpipe.yaml`. Edit this file to set the source and target databases. Use the example in the documentation as a guide.
+
+3. Run sqlpipe using the configuration file. Enter this command:
+   
+   `sqlpipe run --config sqlpipe.yaml`
+
+4. Watch the output for any errors. If sqlpipe stops with an error, examine the message and fix the problem in the configuration.
+
+5. After the first run, check that the data moved correctly. Then you can schedule sqlpipe to run regularly.
+
+This procedure sets up sqlpipe quickly. Make sure that your database credentials in `sqlpipe.yaml` are correct before you run the command.

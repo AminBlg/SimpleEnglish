@@ -1,0 +1,11 @@
+{
+  "text": "**Incident Report \u2014 2026-08-12**\n\nBetween 14:02 UTC and 14:31 UTC, HTTP 502 errors occurred for 12% of API requests. The incident continued for 29 minutes.\n\n**Cause**\n\nAt 14:02 UTC, a deploy removed the cache warmup step from the startup procedure. Without the cache warmup step, the API cache was cold at the start. The cold cache caused the API to send HTTP 502 errors.\n\n**Resolution**\n\nAt 14:27 UTC, we reverted the deploy. At 14:31 UTC, the HTTP 502 error rate went to zero.\n\n**Next steps**\n\nWe will add a check to the deploy procedure to make sure that the cache warmup step is not removed.",
+  "input_tokens": 3,
+  "output_tokens": 10400,
+  "duration_ms": 152142,
+  "cost_usd": 0.42134970000000005,
+  "model": "claude-sonnet-4-6",
+  "condition": "core+dict",
+  "scenario": "incident-report",
+  "type": "descriptive"
+}

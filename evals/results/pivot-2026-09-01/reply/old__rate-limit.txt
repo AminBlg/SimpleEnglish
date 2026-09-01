@@ -1,0 +1,13 @@
+Token bucket gives each user a bucket that holds 100 tokens. One token = one request. The bucket refills at 100 tokens per minute (roughly 1.67 per second). Each request takes one token. If the bucket is empty, the request fails or waits.
+
+It fits this requirement well. Three reasons:
+
+- It allows short bursts. A user who was idle can send 100 requests at once, then must wait for refills. This is usually the right behavior for APIs.
+- It is stateless per user. You store only two numbers: current token count and last refill timestamp.
+- The math is simple. On each request, compute tokens earned since last check, add them (capped at 100), then subtract one.
+
+The main alternative is a fixed window counter (count requests in the current 60-second window). It is simpler to implement but has a known edge case: a user can send 100 requests at 11:59 and 100 more at 12:00, giving 200 requests in two seconds. Token bucket does not have this problem.
+
+If you want to prevent bursting entirely and enforce exactly 1.67 requests per second, use a leaky bucket instead. That is stricter and less forgiving for normal clients.
+
+For 100 requests per minute per user, token bucket is the right choice.
