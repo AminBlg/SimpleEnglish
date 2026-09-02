@@ -9,8 +9,8 @@
 </p>
 
 <p align="center">
-  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/STE_violations-%E2%88%9274.6%25_measured-brightgreen?style=flat" alt="74.6% fewer violations, measured"></a>
-  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-7_Claude_models-blueviolet?style=flat" alt="7 models benchmarked"></a>
+  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/STE_violations-%E2%88%9276.1%25_measured-brightgreen?style=flat" alt="76.1% fewer violations, measured"></a>
+  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-9_Claude_models-blueviolet?style=flat" alt="9 models benchmarked"></a>
   <a href="https://agentskills.io"><img src="https://img.shields.io/badge/SKILL.md-open_standard-blue?style=flat" alt="Agent Skills"></a>
   <a href="skills/simple-english/SKILL.md"><img src="https://img.shields.io/badge/version-2.0.0-blue?style=flat" alt="version 2.0.0"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat" alt="MIT"></a>
@@ -83,10 +83,12 @@ More rewrites in [`examples/before-after.md`](examples/before-after.md): READMEs
 
 ## Benchmarks
 
-**74.6% fewer STE violations per 100 words with the skill on, averaged across 7 Claude models × 8 writing tasks (112 generations).** Measured on skill 1.3.0. The 2.0.0 pivot (Plain by default) was checked against 1.3.0 on two models, the reply set, and a blind judge: documents at parity, replies with 43% fewer violations. Details: [`evals/results/pivot-2026-09-01/RESULTS.md`](evals/results/pivot-2026-09-01/RESULTS.md). Deterministic regex linter, same rules for both conditions, reasoning effort pinned to `low`. Method, caveats, and raw files: [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` and a logged-in Claude Code CLI.
+**76.1% fewer STE violations per 100 words with the skill on, averaged across 9 Claude models × 8 writing tasks (144 generations).** Each row uses the skill version from the day we measured it. That is 1.0.0 for the six oldest rows, 1.2.0 for claude-opus-5, and 2.0.0 for both Fable rows. The 2.0.0 pivot (Plain by default) was checked against 1.3.0 on two models, the reply set, and a blind judge: documents at parity, replies with 43% fewer violations. Details: [`evals/results/pivot-2026-09-01/RESULTS.md`](evals/results/pivot-2026-09-01/RESULTS.md). Deterministic regex linter, same rules for both conditions, reasoning effort pinned to `low`. Method, caveats, and raw files: [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` and a logged-in Claude Code CLI.
 
 | Model | Baseline viol/100w | Skill viol/100w | Reduction |
 |---|---|---|---|
+| claude-fable-5-1 | 1.77 | 0.33 | 81% |
+| claude-fable-5 | 2.73 | 0.51 | 81% |
 | claude-opus-5 | 2.13 | 0.32 | 85% |
 | claude-opus-4-8 | 1.05 | 0.62 | 41% |
 | claude-opus-4-7 | 2.28 | 0.42 | 82% |
@@ -95,7 +97,7 @@ More rewrites in [`examples/before-after.md`](examples/before-after.md): READMEs
 | claude-sonnet-5 | 2.67 | 0.53 | 80% |
 | claude-sonnet-4-6 | 2.06 | 0.52 | 75% |
 
-A blind pairwise judge (claude-opus-4-8, both text orders, no labels) preferred the skill output in 45 of 56 pairs, with 5 ties and 6 losses. Output tokens went down on all seven models.
+A blind pairwise judge (claude-opus-4-8, both text orders, no labels) preferred the skill output in 61 of 72 pairs, with 5 ties and 6 losses. Output tokens went down on all nine models.
 
 **Other harnesses**, same 8 tasks, same linter, one run per cell:
 

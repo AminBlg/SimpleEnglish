@@ -1,0 +1,35 @@
+{
+  "text": "I can't give you the verbatim text. No copy of the sqlpipe source is available in this environment, and I don't have file search or shell tools loaded here to check, so anything I wrote as \"exact\" would be a guess presented as fact.\n\nWhat I can say with confidence is the shape of it. sqlpipe wraps the AWS SDK error, so the output is sqlpipe's own prefix followed by the SDK's AccessDenied text, roughly:\n\n```\nerror uploading to s3: operation error S3: PutObject, https response error StatusCode: 403, RequestID: <id>, HostID: <id>, api error AccessDenied: Access Denied\n```\n\nThe second half (from \"operation error\" onward) is stable AWS SDK for Go v2 wording. The prefix is sqlpipe's and is the part I can't confirm.\n\nTo get the real string, grep the sqlpipe repo for the S3 upload call:\n\n```\ngrep -rn \"PutObject\\|Upload(\" --include=*.go .\n```\n\nThe `fmt.Errorf` or log call surrounding that hit is the message you want. If you point me at a checkout of the repo, I'll pull the exact lines.",
+  "input_tokens": 115,
+  "output_tokens": 861,
+  "thinking_tokens": 298,
+  "effort": "low",
+  "duration_ms": 25542,
+  "cost_usd": 0.23950724999999998,
+  "model": "claude-fable-5-1",
+  "condition": "baseline",
+  "scenario": "error-message",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 143,
+    "sentences": 9,
+    "mean_sentence_words": 15.9,
+    "longest_sentence_words": 37,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 4,
+      "banned_modal": 1,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 1
+    },
+    "violations_total": 7,
+    "violations_per_100w": 4.9
+  }
+}

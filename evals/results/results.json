@@ -1,6 +1,30 @@
 {
-  "generated": "2026-08-12",
+  "generated": "2026-09-02",
   "models": [
+    {
+      "model": "claude-fable-5-1",
+      "baseline_viol_per_100w": 1.77,
+      "baseline_mean_sentence": 12.9,
+      "baseline_output_tokens": 348,
+      "baseline_n": 8,
+      "skill_viol_per_100w": 0.33,
+      "skill_mean_sentence": 9.8,
+      "skill_output_tokens": 236,
+      "skill_n": 8,
+      "reduction_pct": 81.4
+    },
+    {
+      "model": "claude-fable-5",
+      "baseline_viol_per_100w": 2.73,
+      "baseline_mean_sentence": 15.1,
+      "baseline_output_tokens": 285,
+      "baseline_n": 8,
+      "skill_viol_per_100w": 0.51,
+      "skill_mean_sentence": 9.6,
+      "skill_output_tokens": 250,
+      "skill_n": 8,
+      "reduction_pct": 81.3
+    },
     {
       "model": "claude-opus-5",
       "baseline_viol_per_100w": 2.13,
@@ -86,10 +110,10 @@
       "reduction_pct": 74.8
     }
   ],
-  "runs": 112,
+  "runs": 144,
   "efforts": [
     "low",
     "unrecorded"
   ],
-  "max_thinking_tokens": 0
+  "max_thinking_tokens": 298
 }

@@ -1,0 +1,35 @@
+{
+  "text": "## Troubleshooting\n\n### Postgres connection timeouts\n\nIf sqlpipe hangs or fails with `connection timed out` when reaching Postgres, first verify the host and port are reachable: `pg_isready -h <host> -p 5432` or `nc -zv <host> 5432`. Common causes are a firewall or security group blocking port 5432, a wrong host in the connection string, or Postgres not listening on external interfaces (`listen_addresses` in `postgresql.conf`) or rejecting the client in `pg_hba.conf`. For slow networks, raise the timeout with `--connect-timeout` or the `connect_timeout` connection string parameter. Check server-side connection limits (`max_connections`) if timeouts appear under load.\n\n### S3 permission errors\n\n`AccessDenied` errors usually mean missing IAM permissions. sqlpipe needs `s3:GetObject`, `s3:PutObject`, and `s3:ListBucket` on the target bucket and prefix. Confirm your credentials are loaded (`aws sts get-caller-identity`), the bucket region matches your configuration, and any bucket policy or KMS key policy also grants access. Expired session tokens produce similar errors: refresh and retry.",
+  "input_tokens": 2,
+  "output_tokens": 409,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 9319,
+  "cost_usd": 0.184425,
+  "model": "claude-fable-5",
+  "condition": "baseline",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 140,
+    "sentences": 10,
+    "mean_sentence_words": 14.0,
+    "longest_sentence_words": 37,
+    "violations": {
+      "sentence_over_limit": 2,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 2
+    },
+    "violations_total": 5,
+    "violations_per_100w": 3.57
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "text": "**API errors: 502 responses (resolved)**\n\nBetween 14:02 and 14:31 UTC, 12% of API requests failed with HTTP 502 errors. All other requests completed as normal. The incident is resolved.\n\n**Cause**\n\nAt 14:02 UTC, we deployed a change to the API. This change removed the step that warms the cache (loads data into the cache before traffic arrives). As a result, the API servers started with an empty cache. Some requests timed out, and the servers returned HTTP 502 errors.\n\n**Recovery**\n\nAt 14:27 UTC, we reverted the deploy. By 14:31 UTC, the error rate returned to normal.\n\n**Next steps**\n\nWe will add a test that makes sure that the cache warmup step runs on every deploy. We apologize for the disruption.",
+  "input_tokens": 2,
+  "output_tokens": 260,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 6992,
+  "cost_usd": 0.3263545,
+  "model": "claude-fable-5-1",
+  "condition": "skill",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 120,
+    "sentences": 12,
+    "mean_sentence_words": 10.0,
+    "longest_sentence_words": 19,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

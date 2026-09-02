@@ -1,0 +1,35 @@
+{
+  "text": "I can't give you that verbatim, and I'd rather not fabricate it: I don't have sqlpipe's source memorized well enough to reproduce its exact error string, and inventing \"exact\" message text would be worse than useless if you're writing log-matching rules or docs against it.\n\nWhat I can tell you reliably is that sqlpipe wraps the AWS SDK for Go error, so the S3 failure surfaces the SDK's standard form, something like:\n\n```\nerror uploading file to s3 :: operation error S3: PutObject, https response error StatusCode: 403, RequestID: <id>, HostID: <id>, api error AccessDenied: Access Denied\n```\n\nThe `operation error S3: PutObject ... api error AccessDenied: Access Denied` portion is the stable AWS SDK v2 part; the prefix wording is sqlpipe's and I'm not certain of it. If you need the exact text, the quickest check is the sqlpipe repo (grep for `PutObject` or `upload` in its S3/transfer code), or just trigger the failure once with scoped-down credentials. I'm happy to pull the repo and find the exact string if you want.",
+  "input_tokens": 2,
+  "output_tokens": 562,
+  "thinking_tokens": 188,
+  "effort": "low",
+  "duration_ms": 12326,
+  "cost_usd": 0.192263,
+  "model": "claude-fable-5",
+  "condition": "baseline",
+  "scenario": "error-message",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 138,
+    "sentences": 6,
+    "mean_sentence_words": 23.0,
+    "longest_sentence_words": 33,
+    "violations": {
+      "sentence_over_limit": 4,
+      "contraction": 4,
+      "banned_modal": 1,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 1,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 2,
+      "synonym_rotation": 0
+    },
+    "violations_total": 12,
+    "violations_per_100w": 8.7
+  }
+}
