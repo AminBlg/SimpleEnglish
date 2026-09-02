@@ -106,6 +106,7 @@ A blind pairwise judge (claude-opus-4-8, both text orders, no labels) preferred 
 | Pi | GPT-5.6 Terra medium | 1.69 | 0.48 | 71.6% | same |
 | Pi | GPT-5.6 Luna medium | 1.28 | 0.42 | 67.2% | same |
 | OpenAI API | gpt-4.1-mini | 3.43 | 0.14 | 95.8% | [openai-2026-09-01](evals/results/openai-2026-09-01/RESULTS.md) |
+| opencode | 5 free models, pooled | 2.16 | 0.49 | 77.5% | [opencode-2026-09-01](evals/results/opencode-2026-09-01/RESULTS.md) |
 
 Every number above reproduces from committed raw files. Score any raw directory with `python3 evals/score_text_dir.py <dir>`.
 

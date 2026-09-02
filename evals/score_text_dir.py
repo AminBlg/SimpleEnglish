@@ -29,9 +29,12 @@ def clean(text):
 def main(raw_dir):
     rows = {}
     for p in sorted(pathlib.Path(raw_dir).glob("*.txt")):
+        text = clean(p.read_text())
+        if not text:
+            continue  # a timed-out or errored cell; counted in the RESULTS notes
         parts = p.stem.split("__")
         model, cond, sid = parts if len(parts) == 3 else ["(single)"] + parts
-        r = ste_lint.lint(clean(p.read_text()), SCEN[sid]["type"])
+        r = ste_lint.lint(text, SCEN[sid]["type"])
         m = rows.setdefault(model, {"baseline": [0, 0], "skill": [0, 0]})
         m[cond][0] += r["violations_total"]
         m[cond][1] += r["words"]
@@ -39,6 +42,9 @@ def main(raw_dir):
     print("|---|---:|---:|---:|")
     total = {"baseline": [0, 0], "skill": [0, 0]}
     for model, m in rows.items():
+        if not m["baseline"][1] or not m["skill"][1]:
+            print(f"| {model} | (no complete cells) | | |")
+            continue
         b = 100 * m["baseline"][0] / m["baseline"][1]
         s = 100 * m["skill"][0] / m["skill"][1]
         for c in total:
