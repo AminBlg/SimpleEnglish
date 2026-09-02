@@ -15,7 +15,7 @@
     "asd-ste100"
   ],
   "skills": "./skills/",
-  "hooks": "./hooks/hooks.json",
+  "hooks": "./.codex-plugin/hooks.json",
   "interface": {
     "displayName": "Simple English",
     "shortDescription": "Write clear technical text with ASD-STE100 rules.",
