@@ -1,0 +1,9 @@
+**Idempotent** means calling the endpoint multiple times with the same input produces the same result as calling it once — no duplicates, no extra side effects.
+
+For a POST `/v2/orders`, "idempotent" typically means the server uses a **idempotency key** (usually a UUID you send in a header like `Idempotency-Key`) to deduplicate: if it sees the same key twice, it returns the cached first response instead of creating a second order.
+
+**Is retrying safe?** Yes, *if* your deploy script sends the same idempotency key on every retry attempt. If it generates a new key (or sends none) on each retry, the server can't deduplicate and you'll get duplicate orders.
+
+Check two things:
+1. Your script sends a stable `Idempotency-Key` per logical order attempt (not regenerated on retry).
+2. The API actually honors that header — "the endpoint is idempotent" is only true if the server implements it correctly.

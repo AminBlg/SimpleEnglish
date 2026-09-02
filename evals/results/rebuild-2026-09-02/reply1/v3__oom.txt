@@ -1,0 +1,24 @@
+The pod is being killed by the Linux kernel's Out-Of-Memory (OOM) killer because the container exceeded its memory limit. Kubernetes sets a hard cgroup memory ceiling via the `resources.limits.memory` field; when the process crosses that ceiling, the kernel kills it immediately — no graceful shutdown, just SIGKILL.
+
+To diagnose, run these two commands:
+
+```bash
+kubectl describe pod <pod-name> -n <namespace>
+kubectl top pod <pod-name> -n <namespace> --containers
+```
+
+The `describe` output will show the last exit code (137 = OOM kill) and the memory limit in the `Limits` section. `kubectl top` shows live consumption.
+
+To fix it, you have two levers. First, raise the memory limit in your pod spec:
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"
+```
+
+Second, if the consumption is a real leak or unexpectedly high, profile the application first — raising the limit only masks a leak. For JVM workloads, add `-XX:MaxRAMPercentage=75` so the heap respects the cgroup limit; the JVM does not detect cgroup limits by default in older versions and will size the heap against the node's total RAM.
+
+The `requests` value controls scheduling placement; the `limits` value is the hard kill threshold. Set `requests` to your typical steady-state usage and `limits` to your acceptable peak, with enough headroom that normal traffic spikes do not trigger the OOM killer.

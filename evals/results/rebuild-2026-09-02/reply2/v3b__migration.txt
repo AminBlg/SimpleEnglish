@@ -1,0 +1,7 @@
+A backfill is the process of writing a value into every existing row for a column that was added after those rows were created.
+
+When you add a NOT NULL column to a table that already has rows, the database must store a value in that column for every existing row. On a 20 GB table, doing that in a single migration transaction locks the table for minutes or longer, which is why the migration hangs.
+
+The standard fix is a three-step migration. First, add the column as nullable with a default: `ALTER TABLE your_table ADD COLUMN new_col INTEGER DEFAULT 0`. Second, backfill in batches — loop over primary key ranges and run `UPDATE your_table SET new_col = 0 WHERE id BETWEEN x AND y AND new_col IS NULL`, using a batch size of 1,000 to 10,000 rows so each update finishes fast and does not hold long locks. Third, once every row has a value, add the NOT NULL constraint: `ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL`.
+
+Postgres 11 and later can short-circuit step two if the default is a constant: it stores the default in the catalog rather than rewriting every row, so the column appears immediately without a full table scan. If you are on Postgres 11+, drop the migration and re-run it as a single `ALTER TABLE your_table ADD COLUMN new_col INTEGER NOT NULL DEFAULT 0` instead.

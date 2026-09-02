@@ -1,0 +1,56 @@
+## Installation and Setup
+
+Download the latest binary for your platform from the releases page and place it in a directory on your `PATH`.
+
+Verify the installation:
+
+```
+sqlpipe --version
+```
+
+## Running sqlpipe
+
+sqlpipe requires connection strings for a source database and a destination database. Both must be Postgres.
+
+**Basic usage:**
+
+```
+sqlpipe \
+  --source "postgres://user:password@source-host:5432/dbname" \
+  --dest   "postgres://user:password@dest-host:5432/dbname" \
+  --table  my_table
+```
+
+**Copy multiple tables:**
+
+```
+sqlpipe \
+  --source "postgres://..." \
+  --dest   "postgres://..." \
+  --table orders \
+  --table customers \
+  --table products
+```
+
+**Copy all tables in a schema:**
+
+```
+sqlpipe \
+  --source "postgres://..." \
+  --dest   "postgres://..." \
+  --schema public
+```
+
+The destination table must already exist and its columns must match the source. sqlpipe does not create or alter tables.
+
+If a copy fails partway through, sqlpipe stops and reports the row count it transferred before the error. Re-run the command to retry; sqlpipe does not resume partial transfers.
+
+**Options:**
+
+| Flag | Description |
+|------|-------------|
+| `--source` | Connection string for the source database |
+| `--dest` | Connection string for the destination database |
+| `--table` | Table name to copy (repeatable) |
+| `--schema` | Copy all tables in this schema |
+| `--workers` | Number of parallel copy workers (default: 4) |

@@ -1,0 +1,1 @@
+Retrying a POST on timeout is safe only if the endpoint is idempotent. Idempotent means that making the same request many times has the same effect as making it once. So, retrying does not create multiple orders or change data wrongly. If the endpoint is idempotent, your script can retry safely on timeout.

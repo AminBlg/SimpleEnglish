@@ -1,0 +1,5 @@
+A token bucket works like a physical bucket that holds tokens. Each user gets their own bucket with a maximum capacity, say 100 tokens. Every minute, the system refills the bucket up to that cap. Each request costs one token. If the bucket is empty, the request is rejected or queued.
+
+This fits your requirement well because it allows short bursts up to 100 requests while the long-term rate stays at 100 per minute. A sliding window counter is simpler to implement but cuts off bursts more harshly. The token bucket is the standard choice for this pattern and is supported directly by most API gateway tools (Kong, nginx rate-limit modules, Redis with the `redis-cell` module).
+
+The one implementation detail to decide is whether you refill in discrete ticks (add 100 tokens once per minute) or continuously (add 1.67 tokens per second). Continuous refill is smoother and prevents a burst at the tick boundary, but discrete refill is easier to reason about.

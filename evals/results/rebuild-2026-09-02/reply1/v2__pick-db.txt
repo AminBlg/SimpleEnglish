@@ -1,0 +1,19 @@
+Before sharding, exhaust simpler options — sharding adds enormous operational complexity and is rarely the right first move.
+
+**Do these first, in order:**
+
+1. **Check indexes.** Run `EXPLAIN (ANALYZE, BUFFERS)` on your slow queries. Missing or unused indexes fix most read problems at zero cost.
+
+2. **Check table bloat.** Run `VACUUM ANALYZE` and check `pg_stat_user_tables` for dead tuples. Bloated tables scan slowly even with good indexes.
+
+3. **Identify the actual bottleneck.** Is it CPU, I/O, memory, or lock contention? Check `pg_stat_activity` for long-running queries and `pg_stat_statements` for the worst offenders.
+
+4. **Add a read replica.** If reads are the only problem, a streaming replica scales read throughput with one config change and no application complexity.
+
+5. **Partition the table.** If the data has a natural range (by date, region, or tenant), declarative partitioning in Postgres lets the planner skip irrelevant partitions entirely — most of the benefit of sharding with none of the cross-node complexity.
+
+6. **Tune Postgres memory.** `shared_buffers`, `work_mem`, and `effective_cache_size` are often left at defaults. Wrong values cause unnecessary disk I/O.
+
+**Sharding is the right answer only when** you have exhausted the above and your data volume or write throughput genuinely exceeds what a single node can handle. 40 million rows is not large by Postgres standards — a well-indexed table of that size reads fast on modest hardware.
+
+Start with `EXPLAIN (ANALYZE, BUFFERS)` on your slowest query and share what it shows.

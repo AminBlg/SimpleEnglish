@@ -1,0 +1,53 @@
+## Installation & Usage
+
+### Install
+
+**Homebrew (macOS/Linux):**
+```bash
+brew install sqlpipe
+```
+
+**Go:**
+```bash
+go install github.com/sqlpipe/sqlpipe@latest
+```
+
+**Binary releases:** Download the latest binary for your platform from the [releases page](https://github.com/sqlpipe/sqlpipe/releases) and place it somewhere on your `PATH`.
+
+---
+
+### Run
+
+Copy a single table from one Postgres database to another:
+
+```bash
+sqlpipe \
+  --source "postgres://user:password@source-host:5432/mydb" \
+  --target "postgres://user:password@target-host:5432/mydb" \
+  --table orders
+```
+
+Copy all tables in a schema:
+
+```bash
+sqlpipe \
+  --source "postgres://user:password@source-host:5432/mydb" \
+  --target "postgres://user:password@target-host:5432/mydb" \
+  --schema public
+```
+
+By default, sqlpipe truncates the target table before copying. To append instead:
+
+```bash
+sqlpipe ... --mode append
+```
+
+---
+
+### Requirements
+
+- Both databases must be reachable from the machine running sqlpipe.
+- The target user needs `CREATE` and `INSERT` privileges on the destination schema.
+- Postgres 12 or later on both ends.
+
+Run `sqlpipe --help` to see all available flags.

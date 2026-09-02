@@ -1,0 +1,40 @@
+**OOMKilled** means the Linux kernel's Out-Of-Memory killer terminated the container because it exceeded its memory limit.
+
+Kubernetes sets a hard memory ceiling on each container via `resources.limits.memory`. When the process inside the container crosses that ceiling, the kernel kills it immediately. Kubernetes then restarts the pod, which starts the cycle again.
+
+**Diagnose first:**
+
+```bash
+# See current and previous restart counts and last exit reason
+kubectl describe pod <pod-name>
+
+# Check memory usage live
+kubectl top pod <pod-name>
+
+# Read logs from the previous (killed) container instance
+kubectl logs <pod-name> --previous
+```
+
+Look for `Last State: Terminated` with `Reason: OOMKilled` and note the memory values in `kubectl top`.
+
+**What to change:**
+
+1. **Raise the memory limit** — the most direct fix if the workload legitimately needs more memory:
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"
+```
+
+2. **Set a request and limit together** — a missing `requests.memory` causes the scheduler to place the pod on a node that cannot actually serve it.
+
+3. **Fix a memory leak** — if usage grows unbounded over time, raising the limit only delays the next kill. Profile the application.
+
+4. **Tune the runtime** — for JVM apps, set `-Xmx` to stay below the container limit. For Node.js, set `--max-old-space-size`. The runtime heap default is often calculated from total host RAM, not the container limit.
+
+5. **Check for runaway requests** — a single large payload or a tight loop can spike memory transiently. Add request size limits or rate limits at the application layer.
+
+The minimum viable fix is to raise `limits.memory` to a value above what `kubectl top` reports at peak load, then watch `kubectl top` for several minutes to confirm usage stabilizes.

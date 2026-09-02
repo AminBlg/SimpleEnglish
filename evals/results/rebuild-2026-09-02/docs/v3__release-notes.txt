@@ -1,0 +1,9 @@
+sqlpipe v2.0
+
+Breaking change: the `name` field on the `/v2/users` endpoint is removed. It splits into two separate fields, `first_name` and `last_name`. Update any code that reads or writes `name` before upgrading.
+
+New: `--incremental` flag. Pass it to sync only rows added or updated since the last run. This cuts transfer time for large tables with low change rates.
+
+Performance: Parquet write speed is 40% faster across all export commands. Benchmarks used mixed-type tables at 10M rows; results vary with schema and hardware.
+
+Upgrade path: bump the package version, then search your codebase for `.name` on user objects and replace each with `.first_name` and `.last_name` as your data requires.

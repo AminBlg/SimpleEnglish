@@ -1,0 +1,3 @@
+sqlpipe syncs Postgres tables to S3 as Parquet files. Run it on a schedule or as a one-off export to keep your data lake current without writing custom ETL scripts.
+
+Point sqlpipe at a Postgres connection string, name the tables you want, and specify an S3 destination. It reads each table, converts the rows to Parquet, and writes the result to S3. Column types map automatically. You can filter rows by a timestamp column to export only new or updated records since the last run, which keeps incremental syncs fast even on large tables.

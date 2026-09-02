@@ -1,0 +1,10 @@
+Before sharding, check whether you actually need it. Sharding is complex, irreversible in practice, and usually the last resort.
+
+Do these first, in order:
+
+1. Run `EXPLAIN (ANALYZE, BUFFERS)` on your slow queries and look for sequential scans. Missing indexes fix most read problems at this scale.
+2. Check `pg_stat_user_tables` for `seq_scan` vs `idx_scan` counts. High sequential scans confirm the index gap.
+3. If indexes are present and used, check whether the table has dead rows bloating it with `SELECT n_dead_tup FROM pg_stat_user_tables WHERE relname = 'your_table'`. Run `VACUUM ANALYZE` if dead rows are high.
+4. If the bottleneck is read throughput across many clients, add a read replica before considering sharding.
+
+40 million rows is not large by Postgres standards. Sharding adds distributed transaction complexity, cross-shard query pain, and operational overhead that indexes and replicas almost never justify at that scale.

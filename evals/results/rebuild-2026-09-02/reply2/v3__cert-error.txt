@@ -1,0 +1,9 @@
+curl cannot verify the server's TLS certificate because the certificate authority (CA) that signed it is not in curl's default trust store. This is common with internal APIs that use a private/corporate CA rather than a public one like Let's Encrypt.
+
+The fix depends on what you have available.
+
+If you have the CA certificate file (a `.pem` or `.crt`), pass it directly: `curl --cacert /path/to/internal-ca.pem https://your-api/`. To make this permanent, add `capath=/path/to/internal-ca.pem` to `~/.curlrc`.
+
+To add the CA system-wide on Arch so all tools trust it, copy the cert to `/etc/ca-certificates/trust-source/anchors/` and run `trust extract-compat` (which requires sudo). After that, curl uses the system store automatically.
+
+If you do not have the CA cert, ask whoever runs the API for it, or extract it with `openssl s_client -connect your-api:443 -showcerts </dev/null 2>/dev/null | openssl x509 -outform PEM > internal-ca.pem` — but verify you got the right cert out-of-band before trusting it. Do not use `-k` / `--insecure` in production; it disables all certificate verification and exposes you to MITM attacks.

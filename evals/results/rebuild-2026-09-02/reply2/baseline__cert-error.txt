@@ -1,0 +1,51 @@
+## What's happening
+
+curl can't verify the server's SSL certificate because it was signed by an internal/private Certificate Authority (CA) that isn't in curl's trusted CA bundle. Your internal API uses a self-signed cert or a cert issued by a corporate CA — neither of which ships in the system's default trust store.
+
+## How to fix it
+
+**Option 1 — Trust your internal CA (recommended, permanent)**
+
+Get the root CA certificate (`.crt` or `.pem`) from whoever runs your internal PKI, then add it to the system trust store:
+
+```bash
+# Arch Linux
+sudo trust anchor --store internal-ca.crt
+# or
+sudo cp internal-ca.crt /etc/ca-certificates/trust-source/anchors/
+sudo update-ca-trust
+```
+
+After this, curl (and most other tools) will trust it system-wide.
+
+**Option 2 — Point curl at the CA cert directly (per-command)**
+
+```bash
+curl --cacert /path/to/internal-ca.crt https://your-internal-api/...
+```
+
+Or set it permanently via environment variable:
+
+```bash
+export CURL_CA_BUNDLE=/path/to/internal-ca.crt
+```
+
+**Option 3 — Skip verification (quick test only, never production)**
+
+```bash
+curl -k https://your-internal-api/...
+```
+
+This disables verification entirely — fine to confirm the endpoint is alive, but leaves you open to MITM.
+
+---
+
+**How to get the CA cert if you don't have it:**
+
+```bash
+# Grab the full cert chain the server presents
+openssl s_client -connect your-internal-api:443 -showcerts </dev/null 2>/dev/null \
+  | awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > chain.pem
+```
+
+The last certificate in the chain is typically the root CA. If you're on a corporate network, your IT/platform team should be able to hand you the `.crt` directly.

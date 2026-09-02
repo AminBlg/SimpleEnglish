@@ -1,0 +1,32 @@
+**Yes, 2 million consumer lag is bad.** Here's what it means:
+
+## What the number means
+
+Consumer lag is the count of messages sitting in Kafka partitions that your consumers have not yet processed. At 2 million, your consumers are falling behind producers — messages are arriving faster than they are being consumed.
+
+## Why it matters for users
+
+The impact depends entirely on what that consumer processes:
+
+| Consumer role | User-visible effect |
+|---|---|
+| Sends emails / notifications | Users receive them minutes or hours late |
+| Updates search indexes | Search results show stale data |
+| Processes payments / orders | Transactions appear pending longer than expected |
+| Writes to a read database | Reads return outdated records |
+| Feeds analytics / dashboards | Metrics are delayed or frozen |
+
+## Immediate questions to answer
+
+1. **Is lag growing or stable?** A stable 2M is a chronic backlog. A growing 2M is an active incident — consumers will never catch up without intervention.
+2. **What is your message rate?** 2M lag at 10k msg/s = 3 minutes behind. At 1k msg/s = 33 minutes behind.
+3. **Did producer throughput spike, or did consumers slow down?** Check both sides. A consumer crash, GC pause, or downstream DB bottleneck is common.
+
+## What to do right now
+
+- Check consumer group lag per partition: `kafka-consumer-groups.sh --describe --group <your-group>`
+- Look for dead or slow consumer instances in your consumer group
+- If lag is growing, scale out consumers (add instances up to the partition count)
+- If one partition holds all the lag, you have a hot partition — repartitioning or a key strategy fix is needed
+
+The number alone is not the whole story, but 2M warrants immediate investigation regardless of your throughput.

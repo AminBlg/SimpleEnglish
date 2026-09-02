@@ -1,0 +1,3 @@
+I don't have reliable knowledge of sqlpipe's exact error message text for that scenario, and fabricating it would be misleading if you need it for documentation, tests, or user-facing copy.
+
+To get the exact text, run sqlpipe with invalid or restricted IAM credentials against an S3 destination, or check the sqlpipe source code in its error-handling path for S3 uploads.

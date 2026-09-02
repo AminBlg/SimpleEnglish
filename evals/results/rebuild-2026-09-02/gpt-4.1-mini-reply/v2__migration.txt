@@ -1,0 +1,10 @@
+A backfill copies default or existing values into the new NOT NULL column for all rows. The database cannot mark the column NOT NULL until this data exists. For a large table, backfill takes time because it updates every row.
+
+To fix the problem, you can:
+
+- Run the backfill update in small batches to avoid long locks and reduce load.
+- Use online schema change tools if your database supports them.
+- Schedule the migration during low load times.
+- Test on a smaller copy to estimate time and risks.
+
+Ask the DBA to help plan and run the backfill safely.

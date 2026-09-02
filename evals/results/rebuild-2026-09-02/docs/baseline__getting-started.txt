@@ -1,0 +1,40 @@
+## Getting Started
+
+### Installation
+
+Install sqlpipe with a single command:
+
+```bash
+curl -sSL https://get.sqlpipe.dev | sh
+```
+
+### Configuration
+
+Create a `sqlpipe.yaml` file in your project directory to define your pipeline. At minimum, specify your source and destination connections along with the tables or queries you want to transfer:
+
+```yaml
+source:
+  type: postgres
+  url: postgres://user:password@localhost:5432/mydb
+
+destination:
+  type: snowflake
+  url: snowflake://user:password@account/mydb
+
+pipelines:
+  - name: my_pipeline
+    query: SELECT * FROM orders
+    destination_table: orders
+```
+
+Refer to the full configuration reference for available connection types, transformation options, and scheduling settings.
+
+### First Run
+
+Execute your pipeline:
+
+```bash
+sqlpipe run --config sqlpipe.yaml
+```
+
+sqlpipe will connect to your source, extract the data, and load it into the destination. Logs are printed to stdout by default.

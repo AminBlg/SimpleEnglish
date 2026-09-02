@@ -1,0 +1,7 @@
+Idempotent means that running the same operation twice produces the same result as running it once — no duplicate side effects.
+
+A POST to `/v2/orders` is safe to retry **only if the server guarantees idempotency**, typically via an idempotency key. You send a unique key (e.g., a UUID) in a header like `Idempotency-Key: <uuid>`. The server stores the key and, if it sees the same key again, returns the original response instead of creating a second order.
+
+Without that key, a timeout retry creates a duplicate order — the first request may have succeeded before the connection dropped.
+
+Check whether `/v2/orders` accepts an idempotency key, generate a stable key per order attempt in your deploy script, and pass it on every retry of that attempt.

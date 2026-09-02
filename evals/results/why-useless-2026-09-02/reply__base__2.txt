@@ -1,0 +1,36 @@
+**Yes, 2 million lag is almost certainly a problem.** Here's what it means:
+
+## What consumer lag is
+
+Consumer lag = the number of messages sitting in Kafka topics that consumers *haven't processed yet*. It's the gap between the latest message produced and the latest message your consumer has read.
+
+## Why 2M is concerning
+
+The raw number alone doesn't tell the full story — what matters is **how long those messages represent**. Two scenarios:
+
+- **High-throughput system (e.g. 1M msg/sec):** 2M lag = ~2 seconds behind. Probably fine, just normal buffering.
+- **Low-throughput system (e.g. 1K msg/sec):** 2M lag = ~33 minutes behind. That's a serious backlog.
+
+**The danger sign is *climbing* lag** — that's what you said. Even if the absolute number were small, a lag that keeps growing means consumers are falling further behind and will never catch up on their own.
+
+## What users experience
+
+Depends on what the consumers do:
+
+| Consumer role | User impact |
+|---|---|
+| Real-time notifications | Notifications arrive late or not at all |
+| Order/payment processing | Transactions delayed or stuck |
+| Search indexing | Search results stale or missing recent data |
+| Analytics pipeline | Dashboards show outdated numbers |
+| Email/webhook delivery | Deliveries backlogged or dropped if topic retention expires |
+
+## Immediate things to check
+
+1. **Consumer CPU/memory** — are consumers crashing or throttled?
+2. **Processing time per message** — did a recent deploy slow down message handling?
+3. **Partition count vs consumer count** — you can't have more active consumers than partitions
+4. **Topic retention** — if lag exceeds retention, messages start being *deleted before they're read* (data loss)
+5. **Producer spike** — did ingest volume suddenly increase?
+
+The most urgent risk: if your topic retention window is short (e.g. 24h) and the backlog is old enough to approach that window, you're at risk of **losing messages permanently**. Check that first.

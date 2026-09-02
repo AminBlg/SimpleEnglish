@@ -1,0 +1,28 @@
+A **backfill** is the process of writing a value into the new column for every row that already exists in the table. When you add a `NOT NULL` column without a default, the database must update every existing row before it can enforce the constraint — on a 20 GB table, that one `ALTER TABLE` locks the table and touches millions of rows at once, which is why it hangs.
+
+**The safe approach has three steps:**
+
+1. Add the column as nullable first, with no constraint:
+   ```sql
+   ALTER TABLE your_table ADD COLUMN new_col INTEGER;
+   ```
+   This is fast — it changes only the schema, not the rows.
+
+2. Backfill the value in batches so you do not hold a long lock:
+   ```sql
+   UPDATE your_table
+   SET new_col = 0
+   WHERE new_col IS NULL
+   LIMIT 10000;
+   ```
+   Run this in a loop (or a script) until no rows remain. Small batches keep transactions short and let other queries through.
+
+3. Once every row has a value, add the `NOT NULL` constraint:
+   ```sql
+   ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL;
+   ```
+   On Postgres 12+, if you backfilled all rows, this step is fast because the database can verify the constraint without a full table scan (it uses a short lock, not a full rewrite).
+
+**Key point:** step 2 is the backfill. The batch size (10 000 rows above) is a starting point — tune it up or down based on how long each batch takes and whether replication lag grows.
+
+What database are you on? Postgres, MySQL, and others have slightly different syntax for step 3.

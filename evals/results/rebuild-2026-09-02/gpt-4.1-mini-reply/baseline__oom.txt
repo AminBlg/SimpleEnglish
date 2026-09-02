@@ -1,0 +1,59 @@
+If a Kubernetes pod is restarting with the status **OOMKilled**, it means the pod’s container was terminated by the operating system because it exceeded its **memory limit**. The "OOM" stands for **Out Of Memory**, which is a mechanism in the Linux kernel that kills processes when the system is critically low on memory to protect the entire system.
+
+### What is going on?
+- Your container is using more memory than the limit specified in its resource configuration.
+- The kubelet (Kubernetes node agent) enforces this limit by cgroup.
+- When memory usage exceeds the limit, the kernel's OOM killer kills the container process, causing the pod to restart.
+- This cycle repeats, resulting in frequent pod restarts.
+
+### How to fix it?
+You want to adjust your pod's resource requests and limits, or fix your application’s actual memory usage.
+
+1. **Check current resource limits and requests**:
+   Look in your pod spec for:
+   ```yaml
+   resources:
+     requests:
+       memory: "128Mi"
+     limits:
+       memory: "256Mi"
+   ```
+
+2. **Identify actual memory usage**:
+   Use tools like:
+   - `kubectl top pod <pod-name>` (shows current memory usage)
+   - Logs or metrics from your application to see memory patterns.
+
+3. **Increase memory limits**:
+   If your application needs more memory, update the memory limit to a higher value:
+   ```yaml
+   resources:
+     limits:
+       memory: "512Mi"  # increased limit
+   ```
+
+4. **Ensure memory request is set properly**:
+   Requests should be set to a reasonable baseline so the scheduler places your pod on a node with enough memory:
+   ```yaml
+   resources:
+     requests:
+       memory: "256Mi"
+     limits:
+       memory: "512Mi"
+   ```
+
+5. **Fix any memory leaks in your application**:
+   If the memory spikes are unexpected, debug the application for memory leaks or inefficiencies.
+
+6. **Node capacity considerations**:
+   If your pod needs more memory than the node capacity allows, consider:
+   - Deploying to larger nodes
+   - Autoscaling your cluster
+
+### Summary
+- **OOMKilled** means your container exceeded its memory limit.
+- Increase the pod’s memory limit in the pod specification.
+- Monitor your app to confirm it’s within new limits.
+- Optimize app memory usage if necessary.
+
+If you want, I can help you write a corrected pod spec with increased memory limits.

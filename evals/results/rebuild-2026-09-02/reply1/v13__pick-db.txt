@@ -1,0 +1,17 @@
+Before sharding, exhaust simpler options — sharding adds enormous operational complexity and is rarely the right first move.
+
+**Do this first:**
+
+1. **Check slow queries.** Run `EXPLAIN (ANALYZE, BUFFERS)` on your slowest queries. Identify whether the bottleneck is sequential scans, index misses, or I/O.
+
+2. **Add or fix indexes.** 40M rows with a missing index on a filter column will be slow; a well-chosen B-tree or partial index often fixes it entirely.
+
+3. **Check `pg_stat_user_tables`** for `seq_scan` vs `idx_scan` ratio — high sequential scans on a large table is the clearest signal of missing indexes.
+
+4. **Look at connection and memory config** (`work_mem`, `shared_buffers`, `effective_cache_size`). Defaults are conservative and often wrong for large datasets.
+
+5. **Consider table partitioning** (native Postgres, no extra tooling) if your queries filter heavily on a date or ID range. Partition pruning can make a 40M-row query behave like a 2M-row one.
+
+**Only after those:** if you've exhausted indexing, tuning, partitioning, and read replicas — and the bottleneck is genuinely write throughput or dataset size beyond a single machine's disk — then evaluate sharding with something like Citus.
+
+40M rows is not large by Postgres standards. The problem is almost certainly an index or query shape issue, not scale.

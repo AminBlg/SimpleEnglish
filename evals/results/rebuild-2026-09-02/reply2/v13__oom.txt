@@ -1,0 +1,71 @@
+## OOMKilled: What It Means
+
+The container exceeded its memory limit. The Linux kernel's Out-Of-Memory killer terminated the process, and Kubernetes restarted the pod. This will loop indefinitely if the root cause is not fixed.
+
+---
+
+## Diagnose First
+
+Check the current and previous container's memory usage and limits:
+
+```bash
+# See the limit and current usage
+kubectl describe pod <pod-name> -n <namespace>
+
+# Check exit code (137 = OOMKilled) and last state
+kubectl get pod <pod-name> -o jsonpath='{.status.containerStatuses[*].lastState}'
+
+# Live memory usage
+kubectl top pod <pod-name> -n <namespace> --containers
+```
+
+Look at the `Limits.memory` and `Last State: Reason: OOMKilled` fields in `describe` output.
+
+---
+
+## What to Change
+
+### 1. Raise the memory limit (if the usage is legitimate)
+
+In your pod spec or Helm values:
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"   # raise this
+```
+
+Set the limit to ~20–30% above observed peak usage. Keep `requests` at realistic steady-state usage so the scheduler places the pod correctly.
+
+### 2. Fix a memory leak (if usage grows unbounded)
+
+If `kubectl top` shows memory climbing over time with no ceiling, the application leaks. Profile it — this is a code fix, not a Kubernetes fix. Raising the limit only delays the kill.
+
+### 3. Tune JVM or runtime heap (for Java/.NET/Node)
+
+Runtimes often do not respect container limits by default:
+
+- **Java**: add `-XX:MaxRAMPercentage=75.0` (JDK 11+) or explicit `-Xmx`
+- **Node.js**: add `--max-old-space-size=<MB>`
+- **.NET**: set `DOTNET_GCHeapHardLimit` or use `GCConserveMemory`
+
+Without this, the JVM sees the node's total RAM, not the container limit, and allocates far too much heap.
+
+### 4. Add a liveness probe with a memory guard (optional, last resort)
+
+If you cannot fix the leak immediately, a liveness probe that fails when a health endpoint signals high memory will trigger a controlled restart instead of a hard kill. This buys time but is not a fix.
+
+---
+
+## Rule of Thumb
+
+| Observation | Action |
+|---|---|
+| Memory flat, just over the limit | Raise the limit |
+| Memory grows over time | Fix the leak |
+| Java/Node process, limit ignored | Set heap flags |
+| Limit already generous | Profile heap dumps |
+
+Start with `kubectl top pod` over several minutes to distinguish a flat overage from a leak.

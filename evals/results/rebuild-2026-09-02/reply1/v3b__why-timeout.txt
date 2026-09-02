@@ -1,0 +1,5 @@
+Idempotent means safe to run twice: calling the endpoint multiple times with the same input produces the same result as calling it once.
+
+For POST /v2/orders, that guarantee depends entirely on how the server implements it. A truly idempotent POST must use a deduplication key (often a client-supplied `Idempotency-Key` header) so the server recognizes the retry as the same request and returns the cached response instead of creating a second order. Without that key, a retry on timeout is not safe because the first request may have succeeded server-side before the network dropped the response, and the retry will create a duplicate order.
+
+Check whether your POST includes an idempotency key and whether the server documents that guarantee before trusting the retry logic.

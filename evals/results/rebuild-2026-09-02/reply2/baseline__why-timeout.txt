@@ -1,0 +1,9 @@
+**Idempotent** means: calling the endpoint multiple times with the same input produces the same result as calling it once. No duplicates, no side effects from retries.
+
+For a POST /v2/orders endpoint, "idempotent" typically means the API uses a **client-supplied idempotency key** (a unique ID you include in the request, e.g. `Idempotency-Key: <uuid>`). The server stores the result of the first successful call and returns the same response for any retry with the same key — instead of creating a second order.
+
+**So: yes, retrying on timeout is safe *if and only if* your deploy script sends the same idempotency key on each retry attempt.** If it generates a new key per attempt, or the endpoint ignores keys entirely, you risk duplicate orders.
+
+Check that your script:
+1. Generates the idempotency key once before the retry loop, not inside it.
+2. Passes it as a header (or wherever the API expects it) on every attempt.

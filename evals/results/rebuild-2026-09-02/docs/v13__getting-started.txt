@@ -1,0 +1,37 @@
+## Getting Started
+
+### Install
+
+Run the following command to install sqlpipe:
+
+```
+curl -sSL https://get.sqlpipe.dev | sh
+```
+
+### Configure
+
+Create a `sqlpipe.yaml` file in your project directory. This file defines your data sources, destinations, and transfer rules. A minimal configuration looks like this:
+
+```yaml
+source:
+  type: postgres
+  url: postgres://user:password@localhost:5432/mydb
+
+destination:
+  type: snowflake
+  url: snowflake://user:password@account/mydb
+```
+
+Refer to the configuration reference for the full list of supported source and destination types and their options.
+
+### Run Your First Transfer
+
+Start a transfer with the following command:
+
+```
+sqlpipe run --config sqlpipe.yaml
+```
+
+sqlpipe reads your configuration, connects to the source, and writes data to the destination. Progress and any errors print to standard output.
+
+To verify the transfer completed, check the destination database for the expected tables and row counts.

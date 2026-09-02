@@ -1,0 +1,1 @@
+I do not have reliable knowledge of the exact error message text that sqlpipe prints in that scenario, and fabricating it would give you incorrect information to work from. Run the upload against a bucket with a policy that denies `s3:PutObject` on a test credential, then capture the output directly.

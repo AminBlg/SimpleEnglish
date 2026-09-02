@@ -1,0 +1,37 @@
+Sure! Here's a plain explanation of the **token bucket** algorithm and whether it fits your need to rate-limit an API to 100 requests per minute per user.
+
+---
+
+### What is a Token Bucket? (Plain terms)
+
+Imagine you have a bucket that can hold tokens. Each token represents permission to make one API request.
+
+- The bucket has a **maximum size** (let’s say 100 tokens).
+- Tokens are **added to the bucket at a steady rate** (in your case, 100 tokens per minute, or about 1.67 tokens per second).
+- When a user makes a request, you **remove one token** from their bucket.
+- If there are no tokens left, the user **has to wait** until new tokens are added before they can make another request.
+
+The idea:
+
+- Tokens accumulate when the user *doesn't* make requests, allowing bursts.
+- The steady refill rate means the user can’t exceed the average rate over time.
+
+---
+
+### Does it fit your goal of 100 requests per minute per user?
+
+- Yes, the token bucket is **a good fit**.
+- It enforces a long-term average rate of 100 requests/minute.
+- It allows short bursts (up to the bucket size) if tokens have accumulated.
+- The bucket size controls how much "burstiness" you allow—if you want strict limits, set the bucket size to 100 tokens.
+
+---
+
+### Summary
+
+- **Token bucket** = tokens added steadily + requests consume tokens.
+- Enforces rate limit smoothly.
+- Allows controlled bursts.
+- Fits your 100 requests/minute per user rate-limiting need nicely.
+
+If you want strictly no bursts and a hard limit per fixed time window, other algorithms like a fixed window or sliding window counter may be better. But for smooth, user-friendly rate limiting, token bucket is a great choice.

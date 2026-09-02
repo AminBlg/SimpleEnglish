@@ -1,0 +1,15 @@
+curl cannot verify the server's certificate because the certificate authority (CA) that signed it is not in curl's trust store. This happens with internal APIs that use a private CA rather than a public one like Let's Encrypt.
+
+To fix it, get the internal CA certificate (a `.pem` or `.crt` file from your infra team) and pass it to curl:
+
+```bash
+curl --cacert /path/to/internal-ca.pem https://your-internal-api/
+```
+
+To make that permanent for all curl calls, add this to `~/.curlrc`:
+
+```
+cacert=/path/to/internal-ca.pem
+```
+
+If you also want the system trust store to recognize it (so other tools like Python `requests` or Node work too), install it system-wide with `sudo trust anchor --store /path/to/internal-ca.pem` on Arch, then run `update-ca-trust`.

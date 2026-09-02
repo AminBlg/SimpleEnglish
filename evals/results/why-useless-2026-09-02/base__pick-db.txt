@@ -1,0 +1,21 @@
+Before sharding, exhaust simpler options — sharding adds massive operational complexity and is rarely the right first move.
+
+**Do these first, in order:**
+
+1. **Check your indexes.** Run `EXPLAIN (ANALYZE, BUFFERS)` on your slow queries. Missing indexes are the #1 cause of slow reads at 40M rows. 40M rows with a good index is fast; without one, it's a full sequential scan.
+
+2. **Check what you're actually selecting.** `SELECT *` on wide rows kills performance. Fetch only the columns you need.
+
+3. **Look at connection overhead.** If you're opening many short-lived connections, add a connection pooler (PgBouncer). This is often misdiagnosed as a query problem.
+
+4. **Add read replicas.** If reads are high-volume but write traffic is fine, a read replica routes SELECT load off the primary with near-zero schema changes.
+
+5. **Partition the table.** If your queries filter by a range (date, region, ID range), declarative table partitioning in Postgres can give you most of sharding's benefits with far less complexity — it's a single-database operation.
+
+6. **Consider a cache layer.** If the same rows are read repeatedly, Redis/Memcached in front of the DB eliminates the query entirely.
+
+**Only consider sharding if:** you've exhausted the above and the bottleneck is write throughput or total data volume that won't fit on one machine (typically hundreds of GB to TB range).
+
+Sharding means splitting data across multiple database servers. It forces your application to know which shard holds each row, complicates transactions, makes joins harder, and creates a long-term operational burden. Most teams that reach for it early regret it.
+
+Start with `EXPLAIN ANALYZE` on your slowest query — that single output will tell you more than anything else.

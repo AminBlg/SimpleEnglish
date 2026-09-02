@@ -1,0 +1,1 @@
+I do not have reliable knowledge of sqlpipe's exact error message text for that scenario, and fabricating it would give you wrong output to match against. Check the sqlpipe source (the S3 upload path) or run a test upload with deliberately restricted credentials to capture the real output.

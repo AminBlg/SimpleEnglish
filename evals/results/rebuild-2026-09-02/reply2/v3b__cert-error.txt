@@ -1,0 +1,15 @@
+curl cannot verify the server's TLS certificate because the certificate authority (CA) that signed it is not in curl's default trust store. This is common with internal APIs that use a private or self-hosted CA.
+
+To fix it, get the CA certificate (or chain) from your infrastructure team as a PEM file, then pass it to curl:
+
+```bash
+curl --cacert /path/to/internal-ca.pem https://your-internal-api/
+```
+
+To make that permanent for all curl calls, add this line to `~/.curlrc`:
+
+```
+capath=/path/to/internal-ca.pem
+```
+
+If you also need other tools (like Python's `requests` or `git`) to trust the same CA, add it to the system trust store with `trust anchor --store /path/to/internal-ca.pem` (on Arch) and then run `update-ca-trust`. Do not use `-k` / `--insecure` in production because it disables all certificate verification.

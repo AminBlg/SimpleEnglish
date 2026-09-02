@@ -1,0 +1,30 @@
+If users see stale prices for up to 10 minutes after you update them, and you use Redis in front of your database, the most likely cause is that Redis is caching the old prices and serving them until the cache expires (in your case, after 10 minutes).
+
+### Why this happens:
+- **Caching layer (Redis)** is configured with a TTL (time-to-live) on keys, for example, 10 minutes.
+- When you update the price in the database, the cached value in Redis **is not invalidated immediately**.
+- Users requesting prices hit Redis and get the cached stale values until the TTL runs out, forcing Redis to fetch fresh data again.
+- This is a classic cache coherence / stale cache problem.
+
+### How to fix it:
+1. **Cache Invalidation on Update:**  
+   When you update the price in the database, **also delete or update the corresponding Redis cache entry immediately.**  
+   This ensures the next read will fetch fresh data and repopulate the cache.
+
+2. **Use a Cache Aside Pattern:**  
+   - On read: Check Redis first; if miss, fetch from DB and set cache.  
+   - On write/update: Update DB, then either delete or update cache in Redis immediately.
+
+3. **Reduce or Remove TTL:**  
+   Sometimes the TTL is causing stale reads, so reduce TTL or rely on invalidation only.
+
+4. **Use Pub/Sub or Event-Based Invalidation:**  
+   If updates happen across multiple services, publish a cache invalidation event on price update to make sure all cache nodes evict stale keys.
+
+### Summary:
+- The stale prices occur because Redis cache is stale for up to 10 minutes due to TTL.
+- Fix by invalidating or updating Redis cache immediately after the price update in the database.
+
+---
+
+If you want, I can also help you with sample code or configuration for cache invalidation!

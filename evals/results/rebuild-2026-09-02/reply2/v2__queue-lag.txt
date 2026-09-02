@@ -1,0 +1,23 @@
+Yes, 2 million messages of consumer lag is a serious problem. Here is what it means.
+
+**What consumer lag is:** the number of messages produced to a topic that consumers have not yet processed. Zero lag means consumers keep up in real time.
+
+**At 2 million messages:**
+
+- Consumers are falling behind producers. The gap is growing, or at best holding steady, instead of draining.
+- How bad it is depends on your throughput rate. If you produce 100k messages/second, 2 million represents 20 seconds of backlog. If you produce 1k/second, it is 33 minutes.
+
+**What users experience** depends on what the consumers do:
+
+- **Real-time features** (notifications, live feeds, fraud checks, recommendation updates) will be delayed or stale by the duration of the backlog.
+- **Write-path consumers** (ones that update a database or trigger side effects) may cause data to appear missing or inconsistent until the lag drains.
+- **Read-path consumers** (search indexing, caches) will serve outdated results.
+
+**Immediate things to check:**
+
+1. Is lag growing, stable, or draining? Growing is the urgent case.
+2. Did a consumer pod crash or restart? Check consumer group membership.
+3. Did a producer spike drive the gap up, or did consumer throughput drop?
+4. Check consumer CPU, memory, and downstream dependency latency — a slow database call can stall an entire consumer.
+
+If lag is growing and you cannot identify a cause quickly, scaling up consumer instances is the fastest lever, provided your topic has enough partitions to parallelize across them.

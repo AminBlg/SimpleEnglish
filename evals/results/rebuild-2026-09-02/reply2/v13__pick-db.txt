@@ -1,0 +1,42 @@
+Before sharding, check if you actually need it. Sharding is complex and rarely the right first move.
+
+**Do this first: diagnose the actual bottleneck.**
+
+```sql
+-- Find slow queries
+SELECT query, mean_exec_time, calls, total_exec_time
+FROM pg_stat_statements
+ORDER BY mean_exec_time DESC
+LIMIT 20;
+
+-- Check missing indexes
+SELECT schemaname, tablename, attname, n_distinct, correlation
+FROM pg_stats
+WHERE tablename = 'your_table';
+
+-- Check index usage
+SELECT indexrelname, idx_scan, idx_tup_read, idx_tup_fetch
+FROM pg_stat_user_indexes
+WHERE relname = 'your_table';
+
+-- Table bloat / dead tuples
+SELECT n_dead_tup, n_live_tup, last_vacuum, last_autovacuum
+FROM pg_stat_user_tables
+WHERE relname = 'your_table';
+```
+
+**The likely culprits in order of probability:**
+
+1. **Missing or wrong index** — most common cause by far. `EXPLAIN (ANALYZE, BUFFERS)` on your slow query will show this immediately.
+2. **Table bloat** — high `n_dead_tup` means `VACUUM ANALYZE` or tuning `autovacuum` will help.
+3. **Sequential scans on large result sets** — partial indexes, composite indexes, or covering indexes often fix this.
+4. **Connection saturation** — add `pg_bouncer` if you're opening many short-lived connections.
+5. **Hardware** — `shared_buffers`, `work_mem`, and `effective_cache_size` defaults are almost always too low.
+
+**If those don't help, then consider:**
+
+- **Partitioning** (same server, splits the table by range/list/hash) — much simpler than sharding, often sufficient to 100M+ rows.
+- **Read replicas** — if reads are the bottleneck and writes are fine, this is a one-line config change in most managed Postgres offerings.
+- **Sharding** — only when you've exhausted the above and a single node genuinely cannot handle the write throughput or storage.
+
+Run `EXPLAIN (ANALYZE, BUFFERS)` on your slowest query and share the output — that will tell you exactly what's happening.

@@ -1,0 +1,66 @@
+## What's happening
+
+When you add a `NOT NULL` column to a large table, most databases need to rewrite every row to include the new column's value. On a 20 GB table, that's a full table scan + write under a lock — which is why it hangs (or blocks all other queries while it runs).
+
+A **backfill** means: add the column in a way that avoids that lock, then populate existing rows separately in small batches.
+
+---
+
+## The safe pattern (Postgres example, adapt for your DB)
+
+**Step 1 — Add the column as nullable first (instant, no lock)**
+```sql
+ALTER TABLE your_table ADD COLUMN new_col INTEGER;
+```
+
+**Step 2 — Backfill in batches (no table lock, rows stay accessible)**
+```sql
+UPDATE your_table
+SET new_col = <default_value>
+WHERE id BETWEEN 1 AND 10000;
+-- repeat with next range, or use a loop/script
+```
+Batching in chunks of ~5k–10k rows keeps each transaction short and avoids building up lock pressure. You can script this:
+```sql
+DO $$
+DECLARE
+  batch_start BIGINT := 1;
+  batch_size  BIGINT := 10000;
+  max_id      BIGINT;
+BEGIN
+  SELECT MAX(id) INTO max_id FROM your_table;
+  WHILE batch_start <= max_id LOOP
+    UPDATE your_table
+      SET new_col = <default_value>
+      WHERE id >= batch_start AND id < batch_start + batch_size
+        AND new_col IS NULL;
+    batch_start := batch_start + batch_size;
+    PERFORM pg_sleep(0.05); -- small pause to reduce I/O pressure
+  END LOOP;
+END $$;
+```
+
+**Step 3 — Add the NOT NULL constraint (after all rows are populated)**
+```sql
+-- Postgres 12+: validates without a full rewrite if rows are already set
+ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL;
+-- Or safer on Postgres 12+:
+ALTER TABLE your_table ADD CONSTRAINT new_col_not_null CHECK (new_col IS NOT NULL) NOT VALID;
+ALTER TABLE your_table VALIDATE CONSTRAINT new_col_not_null; -- scans, but without blocking writes
+```
+
+---
+
+## First: cancel the hanging migration
+
+Before anything else, kill the hanging `ALTER TABLE` — it's holding a lock. Find and terminate it:
+```sql
+SELECT pid, query, state, wait_event_type
+FROM pg_stat_activity
+WHERE state != 'idle';
+
+SELECT pg_cancel_backend(<pid>); -- graceful
+-- or: SELECT pg_terminate_backend(<pid>);
+```
+
+Then follow the steps above. What database are you on (Postgres, MySQL, SQL Server)? The exact syntax varies.

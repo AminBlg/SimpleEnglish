@@ -1,0 +1,5 @@
+A token bucket is a counter per user that refills at a fixed rate and drains by one on each request. Set the bucket capacity to 100 and the refill rate to 100 tokens per minute. When a request arrives, the bucket gains any tokens that accumulated since the last request, then loses one token for the request itself. If the bucket is empty, the request is rejected.
+
+This fits your requirement well. It allows short bursts up to the capacity of 100, so a user who was idle can send 100 requests at once, then must wait for the bucket to refill. That behavior is usually what you want: it tolerates bursty clients without letting any single user sustain more than 100 requests per minute on average.
+
+The main implementation choice is where you store the token count. A single Redis key per user with an atomic Lua script is the standard approach for distributed services because it avoids race conditions across multiple API servers.

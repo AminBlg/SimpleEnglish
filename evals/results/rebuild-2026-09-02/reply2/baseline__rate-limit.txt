@@ -1,0 +1,11 @@
+A token bucket works like this: each user has a bucket that holds up to 100 tokens. Tokens refill at a steady rate — in your case, 100 per minute (roughly 1.67/second). Each incoming request consumes one token. If the bucket has tokens, the request goes through. If it's empty, the request is rejected (or queued).
+
+**Why it fits your use case well:**
+
+- **Burst-friendly.** A user who was quiet for a minute arrives with a full bucket and can fire 100 requests back-to-back. This is usually the right behavior for APIs — it feels responsive to legitimate clients.
+- **Simple to implement.** Each user needs just two values: `tokens` (float) and `last_refill_time` (timestamp). On each request, compute tokens earned since last check, cap at 100, subtract 1, persist.
+- **Stateless-ish.** You can store the bucket in Redis with a single hash per user, and the refill math requires no background job — it's computed lazily on each request.
+
+**One tradeoff to know:** because bursts are allowed, a user can technically do 100 requests in the first second of every minute if they time it right (empty bucket, wait 60s, burst again). If you need a strict "no more than 100 in any 60-second window," a sliding window log or sliding window counter is more precise — but also more complex and memory-hungry.
+
+For most APIs, the token bucket's burst tolerance is a feature, not a bug. It fits your requirement cleanly.

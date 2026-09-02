@@ -27,34 +27,39 @@ def clean(text):
 
 
 def main(raw_dir):
+    """Files are named [model__]condition__scenario.txt. Any condition names work;
+    the first condition sorted is the reference for the reduction column."""
     rows = {}
     for p in sorted(pathlib.Path(raw_dir).glob("*.txt")):
-        text = clean(p.read_text())
-        if not text:
-            continue  # a timed-out or errored cell; counted in the RESULTS notes
         parts = p.stem.split("__")
         model, cond, sid = parts if len(parts) == 3 else ["(single)"] + parts
-        r = ste_lint.lint(text, SCEN[sid]["type"])
-        m = rows.setdefault(model, {"baseline": [0, 0], "skill": [0, 0]})
-        m[cond][0] += r["violations_total"]
-        m[cond][1] += r["words"]
-    print("| Model | Baseline viol/100w | Skill viol/100w | Reduction |")
-    print("|---|---:|---:|---:|")
-    total = {"baseline": [0, 0], "skill": [0, 0]}
-    for model, m in rows.items():
-        if not m["baseline"][1] or not m["skill"][1]:
-            print(f"| {model} | (no complete cells) | | |")
+        text = clean(p.read_text())
+        if not text.strip() or "session limit" in text or "Not logged in" in text:
             continue
-        b = 100 * m["baseline"][0] / m["baseline"][1]
-        s = 100 * m["skill"][0] / m["skill"][1]
-        for c in total:
-            total[c][0] += m[c][0]
-            total[c][1] += m[c][1]
-        print(f"| {model} | {b:.2f} | {s:.2f} | {(b - s) / b * 100:.1f}% |")
+        r = ste_lint.lint(text, SCEN[sid]["type"])
+        v = ste_lint.reader_check(text)["counts"]
+        m = rows.setdefault(model, {}).setdefault(cond, {"viol": 0, "words": 0, "em": 0, "bold": 0, "n": 0})
+        m["viol"] += r["violations_total"]; m["words"] += r["words"]; m["n"] += 1
+        m["em"] += v["em_dash"]; m["bold"] += v["bold_spans"]
+    conds = sorted({c for m in rows.values() for c in m}, key=lambda c: (c != "baseline", c))
+    print("| Model | Condition | n | viol/100w | Reduction vs " + conds[0] + " | em-dash | bold spans | words |")
+    print("|---|---|---:|---:|---:|---:|---:|---:|")
+    pooled = {}
+    for model, m in rows.items():
+        base = 100 * m[conds[0]]["viol"] / max(1, m[conds[0]]["words"]) if conds[0] in m else None
+        for c in conds:
+            if c not in m:
+                continue
+            d = m[c]; rate = 100 * d["viol"] / max(1, d["words"])
+            red = f"{(base - rate) / base * 100:.1f}%" if base else "-"
+            print(f"| {model} | {c} | {d['n']} | {rate:.2f} | {red} | {d['em']} | {d['bold']} | {d['words'] // max(1, d['n'])} |")
+            q = pooled.setdefault(c, {"viol": 0, "words": 0})
+            q["viol"] += d["viol"]; q["words"] += d["words"]
     if len(rows) > 1:
-        b = 100 * total["baseline"][0] / total["baseline"][1]
-        s = 100 * total["skill"][0] / total["skill"][1]
-        print(f"| pooled | {b:.2f} | {s:.2f} | {(b - s) / b * 100:.1f}% |")
+        base = 100 * pooled[conds[0]]["viol"] / max(1, pooled[conds[0]]["words"])
+        for c in conds:
+            rate = 100 * pooled[c]["viol"] / max(1, pooled[c]["words"])
+            print(f"| pooled | {c} | | {rate:.2f} | {(base - rate) / base * 100:.1f}% | | | |")
 
 
 if __name__ == "__main__":

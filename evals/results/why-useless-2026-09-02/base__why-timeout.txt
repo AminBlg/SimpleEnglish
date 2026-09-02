@@ -1,0 +1,7 @@
+**Idempotent** means: running the same operation multiple times produces the same result as running it once. For a POST to `/v2/orders`, this typically means the server uses a unique key (e.g., a client-supplied `idempotency_key` in the request) to detect duplicate requests and return the same response instead of creating a second order.
+
+**Is retrying on timeout safe?** It depends on one subtlety:
+
+A timeout means you don't know if the server received and processed the request. If the server *did* process it but the response was lost in transit, your retry will hit a duplicate — which is fine *if* the endpoint is truly idempotent (it'll return the original result). If it's not actually idempotent despite the claim, you'd create duplicate orders.
+
+**So: safe if and only if** the idempotency is enforced server-side with a stable key you're sending. Check that your requests include something like `Idempotency-Key: <uuid>` and that the key stays the same across retries for the same logical operation. If you're generating a fresh key on each retry, the protection is defeated.

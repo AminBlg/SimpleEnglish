@@ -9,10 +9,10 @@
 </p>
 
 <p align="center">
-  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/STE_violations-%E2%88%9274.6%25_measured-brightgreen?style=flat" alt="74.6% fewer violations, measured"></a>
+  <a href="evals/results/rebuild-2026-09-02/RESULTS.md"><img src="https://img.shields.io/badge/reply_defects-%E2%88%9286%25_measured-brightgreen?style=flat" alt="86% fewer visible reply defects, measured"></a>
   <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-7_Claude_models-blueviolet?style=flat" alt="7 models benchmarked"></a>
   <a href="https://agentskills.io"><img src="https://img.shields.io/badge/SKILL.md-open_standard-blue?style=flat" alt="Agent Skills"></a>
-  <a href="skills/simple-english/SKILL.md"><img src="https://img.shields.io/badge/version-2.0.0-blue?style=flat" alt="version 2.0.0"></a>
+  <a href="skills/simple-english/SKILL.md"><img src="https://img.shields.io/badge/version-2.0.1-blue?style=flat" alt="version 2.0.1"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat" alt="MIT"></a>
   <a href="https://github.com/AminBlg/SimpleEnglish/stargazers"><img src="https://img.shields.io/github/stars/AminBlg/SimpleEnglish?style=flat&logo=github&color=yellow" alt="GitHub stars"></a>
 </p>
@@ -83,50 +83,58 @@ More rewrites in [`examples/before-after.md`](examples/before-after.md): READMEs
 
 ## Benchmarks
 
-**74.6% fewer STE violations per 100 words with the skill on, averaged across 7 Claude models × 8 writing tasks (112 generations).** Measured on skill 1.3.0. The 2.0.0 pivot (Plain by default) was checked against 1.3.0 on two models, the reply set, and a blind judge: documents at parity, replies with 43% fewer violations. Details: [`evals/results/pivot-2026-09-01/RESULTS.md`](evals/results/pivot-2026-09-01/RESULTS.md). Deterministic regex linter, same rules for both conditions, reasoning effort pinned to `low`. Method, caveats, and raw files: [`evals/results/RESULTS.md`](evals/results/RESULTS.md). Reproduce with `python3 evals/run_bench.py` and a logged-in Claude Code CLI.
+**86% fewer visible defects in chat replies with the skill on**: over-cap sentences, em-dashes, bold, headers, and bullets, pooled over 16 replies on claude-sonnet-4-6 (418 → 57). A blind judge preferred 2.0.1 over 2.0.0 in 14 of 16 pairs. Measured 2026-09-02, [raw files and tables](evals/results/rebuild-2026-09-02/RESULTS.md).
 
-| Model | Baseline viol/100w | Skill viol/100w | Reduction |
-|---|---|---|---|
-| claude-opus-5 | 2.13 | 0.32 | 85% |
-| claude-opus-4-8 | 1.05 | 0.62 | 41% |
-| claude-opus-4-7 | 2.28 | 0.42 | 82% |
-| claude-opus-4-6 | 2.24 | 0.40 | 82% |
-| claude-opus-4-5 | 2.55 | 0.57 | 78% |
-| claude-sonnet-5 | 2.67 | 0.53 | 80% |
-| claude-sonnet-4-6 | 2.06 | 0.52 | 75% |
+| Reply condition (sonnet-4-6, 2 runs × 8 questions) | words | sentences | em-dashes | bold | headers | bullets |
+|---|---:|---:|---:|---:|---:|---:|
+| no skill | 218 | 16.7 | 62 | 79 | 38 | 52 |
+| 2.0.0 | 185 | 14.4 | 43 | 72 | 13 | 52 |
+| **2.0.1** | 146 | 7.9 | 5 | 2 | 0 | 4 |
 
-A blind pairwise judge (claude-opus-4-8, both text orders, no labels) preferred the skill output in 45 of 56 pairs, with 5 ties and 6 losses. Output tokens went down on all seven models.
+On gpt-4.1-mini the same 8 questions went from 23 sentences, 64 bold spans, and 101 bullets per 8 replies to 5.0 sentences and zero formatting, 8 of 8 under the cap.
 
-**Other harnesses**, same 8 tasks, same linter, one run per cell:
+**Documents**, the 8 sqlpipe writing tasks scored with the STE linter (`evals/ste_lint.py`), sonnet-4-6, one run:
 
-| Harness | Model | Baseline viol/100w | Skill viol/100w | Reduction | Raw files |
-|---|---|---:|---:|---:|---|
-| Pi | GLM-5.2 max | 2.56 | 0.40 | 84.4% | [pi-2026-07-31](evals/results/pi-2026-07-31/RESULTS.md) |
-| Pi | GPT-5.6 Sol medium | 1.33 | 0.16 | 88.0% | same |
-| Pi | GPT-5.6 Terra medium | 1.69 | 0.48 | 71.6% | same |
-| Pi | GPT-5.6 Luna medium | 1.28 | 0.42 | 67.2% | same |
-| OpenAI API | gpt-4.1-mini | 3.43 | 0.14 | 95.8% | [openai-2026-09-01](evals/results/openai-2026-09-01/RESULTS.md) |
-| opencode | 5 free models, pooled | 2.16 | 0.49 | 77.5% | [opencode-2026-09-01](evals/results/opencode-2026-09-01/RESULTS.md) |
+| Condition | viol/100w | Reduction |
+|---|---:|---:|
+| no skill | 4.09 | |
+| 1.3.0 | 2.11 | 48% |
+| 2.0.0 | 1.70 | 58% |
+| **2.0.1** | 0.91 | 78% |
 
-Every number above reproduces from committed raw files. Score any raw directory with `python3 evals/score_text_dir.py <dir>`.
+**History.** The 1.3.0 headline was 74.6% fewer linter violations across 7 Claude models (112 generations, [RESULTS.md](evals/results/RESULTS.md)), with Pi, opencode, and OpenAI runs in [`evals/results/`](evals/results/). Those numbers reproduce, but the audit in [WHY-USELESS-2026-09-02.md](evals/results/WHY-USELESS-2026-09-02.md) showed that they measured rule obedience, not what a reader sees: the baselines held zero slop words, and the old skill left em-dashes, bold, and 15-sentence replies untouched. 2.0.1 is built on the reader-visible counts above.
+
+Every number reproduces from committed raw files: `python3 evals/score_text_dir.py <dir>` for documents, `python3 evals/run_reply_bench.py --report-only --skill v3b=prompts/system-prompt.md --out <dir>` for replies.
 
 ## The rules
 
-53 numbered rules in 9 sections, paraphrased with software examples in [`SKILL.md`](skills/simple-english/SKILL.md). The ones that do the work:
+Two registers, in [`SKILL.md`](skills/simple-english/SKILL.md) (about 1,700 tokens). The 53 numbered rules of Issue 9 live in [`rule-catalog.md`](skills/simple-english/references/rule-catalog.md) for check mode and Strict mode.
+
+**The reply** (every chat answer):
+
+| Rule | What it kills |
+|---|---|
+| Prose only: no headers, bullets, bold, tables | The wall of formatting around a one-line answer |
+| Five sentences maximum, list items included | The 240-word answer to "is that bad?" |
+| First sentence answers | The preamble |
+| No em-dashes | The spliced half-thought |
+| Define a concept term in a few words | Jargon the reader has to look up |
+| No contractions, openers, or closers | "Great question!" and "Hope this helps!" |
+
+**The document** (docs, READMEs, runbooks, error messages, release notes):
 
 | Rule | What it kills |
 |---|---|
 | Max 20 words per instruction, 25 per description | The run-on sentence |
-| One word = one meaning, whole document | check/verify/confirm/validate roulette |
-| Simple tenses only | "has been updated" → "we updated" |
-| No "-ing" verb forms | ", making it easy to..." clauses |
-| Active voice | "it should be noted that" |
-| No should/would/may/might | Hedging. (`can`, `will`, `must` survive) |
 | Condition BEFORE command | Trailing "...if the flag is set" that readers execute too late |
-| One instruction per sentence | Steps nobody can follow at 2 a.m. |
+| Simple tenses, active voice | "has been updated", ", making it easy to..." |
+| No should/would/may/might | Hedging. (`can`, `will`, `must` survive) |
+| One word = one meaning, whole document | check/verify/confirm/validate roulette |
 | Keep articles, keep "that" | Telegraph style. STE is short, not terse |
+| No bold lead-ins, no heading over two sentences | Decoration that hides the fact |
+| State the fact, not its importance | "crucial", "robust", "not just X, it is Y" |
 
-Two modes. **Plain** (default) writes for a smart reader outside the field: the structural rules, common words, every technical term defined at first use, answer-first replies. **Strict** adds the STE dictionary discipline to the document when you name STE or compliance. The skill also covers error messages, runbooks, incident reports, release notes, agent prompts, and translation prep: [`use-cases.md`](skills/simple-english/references/use-cases.md). It does not touch marketing copy, on purpose.
+Two modes. **Plain** (default) is all of the above. **Strict** adds the STE dictionary discipline from [`strict-vocabulary.md`](skills/simple-english/references/strict-vocabulary.md) when you name STE, ASD-STE100, or compliance. The reply stays Plain in every mode.
 
 ## FAQ
 

@@ -1,0 +1,17 @@
+## Getting Started
+
+**Install sqlpipe** by running this command in your terminal:
+
+```
+curl -sSL https://get.sqlpipe.dev | sh
+```
+
+**Configure your pipeline** by creating a file named `sqlpipe.yaml` in your working directory. This file defines your source database, destination database, and the tables or queries you want to transfer. A minimal configuration names at least one source connection and one destination connection.
+
+**Run your first transfer** with:
+
+```
+sqlpipe run --config sqlpipe.yaml
+```
+
+sqlpipe reads the configuration file, connects to your databases, and moves data from source to destination. Check the output for row counts and any errors. If a transfer fails, correct the configuration and run the command again — sqlpipe does not modify the source database, so retries are safe.

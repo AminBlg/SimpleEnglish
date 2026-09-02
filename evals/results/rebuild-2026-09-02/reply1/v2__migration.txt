@@ -1,0 +1,41 @@
+A **backfill** is a one-time update that fills in values for existing rows after you add a new column. Without it, the database must lock the entire table to set a default for every row at once — that is why the migration hangs on a 20 GB table.
+
+## Why it hung
+
+When you add `NOT NULL` with a `DEFAULT` in a single statement, most databases (Postgres, MySQL) do one of two things:
+
+- Rewrite the entire table to add the value to every row (old Postgres behavior), or
+- Block reads/writes while it validates that no row is NULL.
+
+Either path holds a lock for minutes or hours on a large table.
+
+## The safe pattern (Postgres)
+
+Do this in three separate migrations:
+
+**Step 1 — Add the column as nullable, with a default.**
+```sql
+ALTER TABLE your_table ADD COLUMN new_col integer DEFAULT 0;
+```
+This is instant. No lock, no rewrite.
+
+**Step 2 — Backfill existing rows in batches.**
+```sql
+UPDATE your_table SET new_col = 0 WHERE new_col IS NULL AND id BETWEEN 1 AND 10000;
+-- repeat for next 10 000 rows, etc.
+```
+Batching prevents one giant transaction from locking the table. Aim for batches that finish in under 1 second each.
+
+**Step 3 — Add the NOT NULL constraint.**
+```sql
+ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL;
+```
+In Postgres 12+, if you used `DEFAULT` in Step 1, this constraint check is fast because no row can be NULL. In older Postgres, use `ADD CONSTRAINT ... NOT VALID` first, then `VALIDATE CONSTRAINT` — each takes a lighter lock.
+
+## If you are on MySQL / MariaDB
+
+Use `pt-online-schema-change` or `gh-ost`. They copy the table in the background and swap it in without a blocking lock. Do not run a bare `ALTER TABLE` on a 20 GB table.
+
+## Immediate action
+
+If the migration is still running, kill it now — the longer it holds the lock, the more queries queue behind it. Then apply the three-step pattern above.

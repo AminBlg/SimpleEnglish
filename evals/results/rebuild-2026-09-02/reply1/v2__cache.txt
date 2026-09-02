@@ -1,0 +1,19 @@
+Redis is caching the prices. When you update a price in the database, the old value stays in Redis until its TTL (time-to-live) expires — hence the 10-minute lag.
+
+**Fix options, simplest first:**
+
+1. **Invalidate on write** — when you update a price, delete (or update) the Redis key in the same transaction. The next read repopulates the cache from the database with the fresh value.
+
+2. **Reduce TTL** — lower the cache TTL to an acceptable staleness window. Blunt and wasteful, but zero code change.
+
+3. **Write-through cache** — write the new price to Redis and the database together, so the cache is always current.
+
+Option 1 is the right fix. The pattern:
+
+```python
+def update_price(product_id, new_price):
+    db.execute("UPDATE products SET price = ? WHERE id = ?", new_price, product_id)
+    redis.delete(f"price:{product_id}")
+```
+
+If you need atomic guarantees (cache and DB stay in sync on failure), wrap both in a transaction or use an outbox pattern, but for price reads the simple delete-on-write is sufficient.

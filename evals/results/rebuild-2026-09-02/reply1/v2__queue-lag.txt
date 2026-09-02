@@ -1,0 +1,31 @@
+Yes, 2 million lag is bad. Here is what it means.
+
+**What consumer lag is**
+
+Consumer lag (unread offset count) is the number of messages a consumer group has not yet processed. A lag of 2 million means consumers are 2 million messages behind producers.
+
+**Why it matters for users**
+
+The impact depends on your throughput rate. If your topic receives 10,000 messages per second and consumers process at the same rate, 2 million lag means users see roughly **3 minutes of delay** on any data that flows through that topic. If consumers are slower than producers, the gap widens and delay grows unbounded.
+
+**Immediate questions to ask**
+
+- Are consumers still running, or have they stopped entirely?
+- Is lag stable, growing, or shrinking? Growing lag is an emergency; stable high lag may just mean a batch job fell behind.
+- What is the topic's retention period? If lag exceeds retention, messages will be deleted before consumers read them — data loss.
+
+**User-visible effects by use case**
+
+| Use case | Effect at 3+ min lag |
+|---|---|
+| Real-time analytics / dashboards | Stale data shown to users |
+| Order / payment processing | Delayed confirmations |
+| Notifications | Late or missing alerts |
+| Event sourcing / CDC | Downstream state out of sync |
+
+**First actions**
+
+1. Check if consumer processes are alive and connected.
+2. Scale up consumer instances (add partitions first if at partition count limit).
+3. Check for a slow or blocked consumer thread — one stuck consumer can stall a whole partition.
+4. Set a lag alert threshold (typically 100k–500k) so you catch this earlier next time.

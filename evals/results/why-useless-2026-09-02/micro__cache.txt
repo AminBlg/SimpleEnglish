@@ -1,0 +1,3 @@
+Redis is being used as a cache, meaning price data is read from Redis instead of the database, and that cached copy has a time-to-live (TTL) of up to 10 minutes before it expires and forces a fresh database read.
+
+The fix is to invalidate the cache entry immediately when a price is updated. In the update path, after writing the new price to the database, delete or overwrite the corresponding Redis key so the next read fetches fresh data instead of waiting for the TTL to expire. This pattern is called cache invalidation on write, and it eliminates the stale window entirely.

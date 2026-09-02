@@ -1,0 +1,3 @@
+sqlpipe exports Postgres tables to S3 as Parquet files. Point it at a database and a bucket, and it reads each table you specify, converts the rows to the columnar Parquet format, and uploads the result. It handles type mapping from Postgres to Arrow, chunked reads for large tables, and multipart uploads so memory use stays flat regardless of table size.
+
+Use sqlpipe when you want a queryable snapshot of your database in object storage — for feeding a data lake, driving Athena or DuckDB queries, or producing a cheap off-site backup that any Parquet-aware tool can read without restoring a full database dump.

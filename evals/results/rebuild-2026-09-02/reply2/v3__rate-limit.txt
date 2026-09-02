@@ -1,0 +1,5 @@
+A token bucket works like a physical bucket that holds tokens, where each API request consumes one token. The bucket refills at a fixed rate — in your case, 100 tokens per minute — and has a maximum capacity, usually equal to that refill rate. If the bucket is empty when a request arrives, the request is rejected or queued.
+
+It fits your requirement well. The refill rate gives you the 100 requests per minute limit, and the capacity controls how much burst traffic one user can send before hitting the ceiling. One bucket per user ID is the standard approach, stored in Redis with a timestamp and current token count.
+
+The main alternative is a sliding window counter, which is more precise about "per minute" semantics but costs more memory. The token bucket's burst tolerance is usually a feature, not a bug — it handles legitimate spiky clients without false rejections.

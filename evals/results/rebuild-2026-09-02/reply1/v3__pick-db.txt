@@ -1,0 +1,5 @@
+Before sharding, add the right indexes and confirm you are actually hitting table scan bottlenecks. Run `EXPLAIN (ANALYZE, BUFFERS)` on your slowest queries — if you see `Seq Scan` with high `Buffers: shared hit/read`, missing indexes are the culprit, not table size.
+
+Then check `pg_stat_user_tables` for `seq_scan` vs `idx_scan` counts, and `pg_stat_user_indexes` to find unused indexes wasting write overhead. 40 million rows is not inherently large for Postgres; a well-indexed table at that size routinely handles thousands of reads per second on modest hardware.
+
+If indexes are already in place and reads are still slow, the next step is partitioning (native Postgres range or list partitioning on a natural column like `created_at` or a tenant ID) — this keeps data in one logical table while pruning scan scope per query, and it requires zero application-layer changes. Sharding across multiple databases is a last resort because it breaks joins, complicates transactions, and forces application-level routing; reach for it only when a single Postgres instance is genuinely I/O or CPU saturated after partitioning.

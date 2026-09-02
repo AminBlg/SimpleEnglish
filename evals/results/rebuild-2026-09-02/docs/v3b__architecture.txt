@@ -1,0 +1,7 @@
+sqlpipe moves data from Postgres to S3 in three pipeline stages.
+
+The reader process connects to a Postgres database and streams rows in fixed-size batches. It holds one batch in memory at a time, so memory use stays bounded regardless of table size.
+
+The converter receives each batch and transforms it into a Parquet row group. A row group is a horizontal partition of a Parquet file that stores column data together. The converter maps Postgres types to Parquet types and writes column statistics so downstream query engines can skip irrelevant row groups.
+
+The uploader receives completed row groups and writes them to S3 using the S3 multipart upload API. Each part corresponds to one row group. If a part upload fails, the uploader retries that part without restarting the entire object. When all parts are complete, the uploader finalizes the object.

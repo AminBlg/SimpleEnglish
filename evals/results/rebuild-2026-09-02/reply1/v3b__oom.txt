@@ -1,0 +1,39 @@
+OOMKilled means the Linux kernel killed the container because it exceeded the memory limit set in the pod specification. Kubernetes sets a cgroup memory ceiling, and when the process crosses it, the kernel sends SIGKILL with no warning.
+
+To diagnose, run these commands in order.
+
+Get the restart count and last exit reason:
+
+```
+kubectl get pod <pod-name> -o jsonpath='{.status.containerStatuses[*]}'
+```
+
+Check the memory limit currently set:
+
+```
+kubectl get pod <pod-name> -o jsonpath='{.spec.containers[*].resources}'
+```
+
+Check recent memory usage across the pod:
+
+```
+kubectl top pod <pod-name> --containers
+```
+
+Read the last termination message:
+
+```
+kubectl describe pod <pod-name> | grep -A5 "Last State"
+```
+
+To fix it, edit the `resources` block in your deployment manifest. You have two levers: `requests` (what Kubernetes reserves on the node for scheduling) and `limits` (the hard cgroup ceiling the kernel enforces).
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"
+```
+
+Raise `limits` to give the process room. If you do not know the right value, remove the limit temporarily, watch `kubectl top pod` under real load, then set the limit roughly 20-30% above the observed peak. If the process genuinely grows without bound (a memory leak), raising the limit only delays the kill — profile the application and fix the leak instead.

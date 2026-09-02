@@ -1,0 +1,3 @@
+sqlpipe syncs Postgres tables to S3 as Parquet files. It reads directly from your database and writes columnar Parquet output to any S3-compatible bucket, so your data is ready for Athena, Spark, DuckDB, or any other tool that reads object storage.
+
+You configure a source table, a destination bucket path, and a schedule. sqlpipe handles type mapping from Postgres to Parquet, incremental exports based on a watermark column, and partition layout. It runs as a single binary with no external dependencies.

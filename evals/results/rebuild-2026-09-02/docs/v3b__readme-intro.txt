@@ -1,0 +1,3 @@
+sqlpipe syncs Postgres tables to S3 as Parquet files. You run it from the command line, point it at a database and a bucket, and it writes one Parquet file per table. It reads directly from Postgres and writes directly to S3 — no intermediate files on disk.
+
+The tool fits teams that want to query Postgres data in a data lake without building a pipeline. You configure the connection, the target bucket, and which tables to export, then run a single command. sqlpipe supports full exports and incremental exports based on a timestamp column. It requires no server and stores no state between runs.

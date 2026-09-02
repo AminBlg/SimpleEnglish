@@ -1,0 +1,1 @@
+A consumer lag of 2 million means that your Kafka consumer has not read 2 million messages from the topic. This is bad. The consumers fall behind the data producers. Users will see delays or old data in applications using Kafka. You must find the cause and fix it to keep the system responsive.

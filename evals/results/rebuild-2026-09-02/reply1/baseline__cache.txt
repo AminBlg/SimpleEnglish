@@ -1,0 +1,20 @@
+The stale data comes from **cache TTL**: when a price is written to the database, the old value is still cached in Redis and served until it expires (up to 10 minutes).
+
+**Why it happens:** The write path updates the DB but doesn't invalidate or update the Redis key. Reads hit the cache first, so they serve the old price until the TTL expires.
+
+**Fix: cache invalidation on write**
+
+When you update a price, explicitly delete (or overwrite) the Redis key in the same operation:
+
+```python
+# After updating DB
+redis.delete(f"price:{item_id}")
+# or immediately re-populate it:
+redis.set(f"price:{item_id}", new_price, ex=600)
+```
+
+Do this in the same transaction boundary if possible, or at minimum immediately after the DB commit. If you have multiple writers, make sure all of them do this — a single writer that skips invalidation will reintroduce the bug.
+
+**If you need stronger consistency:** use the **write-through** pattern — always write to Redis and DB together, never just the DB. Then the cache is never stale by definition.
+
+**Watch out for:** a race where a concurrent read re-populates the cache with the old value between your DB write and your `redis.delete`. Under high concurrency, a short TTL (e.g. 1–5s) as a safety net is worth keeping even with explicit invalidation.

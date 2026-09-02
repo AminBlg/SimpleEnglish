@@ -1,0 +1,13 @@
+OOMKilled means the Linux kernel's Out-Of-Memory killer terminated the container because it exceeded its configured memory limit. Kubernetes sets a memory limit on the container's cgroup (a Linux kernel feature that groups processes and enforces resource quotas), and when the process inside tries to allocate more RAM than that ceiling allows, the kernel kills it rather than let it starve other workloads. The pod then restarts because its restart policy (usually Always or OnFailure) tells Kubernetes to try again, which repeats the cycle if the root cause is not addressed.
+
+To fix it, you have two levers. First, raise the memory limit in the pod spec:
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"
+```
+
+Increase the limits value until it comfortably exceeds the application's peak usage, which you can find by running `kubectl top pod <pod-name>` before the next crash. Second, investigate whether the application itself has a memory leak or is simply misconfigured; for a JVM process, for example, you may need to set `-Xmx` to a value below the container limit so the heap stays within bounds. Setting requests and limits to the same value gives predictable scheduling but leaves no headroom, so a small buffer above the measured peak is prudent.

@@ -1,0 +1,11 @@
+A token bucket works like this: each user has a bucket that holds up to 100 tokens. One token is added per 0.6 seconds (100 per minute), up to the bucket's capacity. Each request consumes one token. If the bucket is empty, the request is rejected.
+
+**Why it fits your case well:**
+
+- It naturally handles bursts — a user who was idle can fire 100 requests immediately, then gets throttled to the refill rate.
+- It's stateless per user: you only need to store two values — current token count and last refill timestamp.
+- Redis makes it trivial to implement atomically with a Lua script or the `redis-cell` module (`CL.THROTTLE`).
+
+**The one tradeoff to be aware of:** if you want strict "no more than 100 in any 60-second window," a token bucket doesn't guarantee that. A user can drain 100 tokens instantly, wait 60 seconds, and drain 100 more — so up to 200 requests can land within a 61-second span spanning two windows. A sliding window log gives the strict guarantee but costs more memory.
+
+For most APIs, the burst-tolerant behavior of a token bucket is the right call. If your use case requires strict per-minute enforcement (billing, compliance), use a sliding window instead.

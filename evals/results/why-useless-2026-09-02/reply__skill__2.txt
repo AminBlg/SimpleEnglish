@@ -1,0 +1,19 @@
+Yes, 2 million is a serious problem.
+
+**What consumer lag means:** messages sit in a Kafka topic waiting to be processed. Lag is the count of unread messages between the latest produced message and the last one your consumer read.
+
+**What 2 million means for users:** your consumers are far behind producers. Depending on your throughput, users experience:
+
+- **Delayed data** — events, notifications, or state changes arrive late or not at all
+- **Stale reads** — if downstream systems read from processed output, they see old data
+- **Cascading failures** — if lag keeps climbing, consumers may fall behind the retention window and lose messages permanently
+
+**Immediate questions to answer:**
+
+1. Is lag still growing, or has it plateaued? Growing lag means consumers cannot keep up. A plateau means they are processing but behind.
+2. What is your topic's retention period? If retention is 24 hours and lag represents more than 24 hours of data, you will lose messages.
+3. Did throughput spike, or did consumers slow down? Check producer rate and consumer CPU/memory.
+
+**Common fixes:** add consumer instances (if the topic has enough partitions), find and fix a slow processing step, or temporarily reduce message complexity upstream.
+
+The number alone is not the full picture — lag of 2 million at 10 messages/second is catastrophic (55 hours behind); at 100,000 messages/second it is 20 seconds behind and recoverable.

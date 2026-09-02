@@ -1,0 +1,3 @@
+A token bucket gives each user a bucket that holds up to 100 tokens. Every minute, the bucket refills to 100 tokens. Each request costs one token. If the bucket is empty, the request is rejected.
+
+It fits your requirement well. It allows short bursts (up to 100 requests at once if the bucket is full) while enforcing the 100-per-minute average. If you want to prevent bursts and enforce a steady rate instead, use a fixed window counter or a sliding window log.

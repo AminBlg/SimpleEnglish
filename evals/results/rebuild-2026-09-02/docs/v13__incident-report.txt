@@ -1,0 +1,10 @@
+**Incident Report — 2026-09-02**
+
+**Duration:** 14:02 – 14:31 UTC (29 minutes)
+**Impact:** 12% of API requests failed with HTTP 502
+
+At 14:02 UTC, a deploy removed the cache warmup step from the startup sequence. Without warmup, the cache started cold, and upstream services received requests before they were ready to serve traffic. This caused 12% of API requests to fail with HTTP 502.
+
+The team identified the cause at 14:25 UTC. At 14:27 UTC, the deploy was reverted. Traffic returned to normal by 14:31 UTC.
+
+We will restore the cache warmup step and add a post-deploy check to confirm cache state before traffic is accepted.

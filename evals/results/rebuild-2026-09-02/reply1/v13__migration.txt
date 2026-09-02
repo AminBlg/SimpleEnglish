@@ -1,0 +1,49 @@
+## What a backfill is
+
+When you add a `NOT NULL` column to an existing table, every existing row needs a value for that column — but those rows were written before the column existed, so they have none. A **backfill** is the operation that writes values into that column for all pre-existing rows.
+
+The migration hangs because most databases (PostgreSQL in particular) try to do this in a single transaction with a full table lock. On 20 GB, that lock can hold for minutes or hours, blocking all reads and writes.
+
+---
+
+## What to do
+
+Do it in three separate migrations instead of one:
+
+**Step 1 — Add the column as nullable.**
+```sql
+ALTER TABLE your_table ADD COLUMN new_col TEXT;
+```
+This is near-instant. No lock needed.
+
+**Step 2 — Backfill in batches.**
+Run this in a loop (script or migration tool), updating a few thousand rows at a time:
+```sql
+UPDATE your_table
+SET new_col = 'default_value'
+WHERE id BETWEEN :start AND :end
+  AND new_col IS NULL;
+```
+Small batches avoid long lock windows and give the database time to breathe. Pause briefly between batches if you are on a production system under load.
+
+**Step 3 — Add the NOT NULL constraint.**
+Once every row has a value:
+```sql
+ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL;
+```
+In PostgreSQL 12+, if you set a column default and the database already validated nullability internally, this step can also be near-instant. Otherwise add a `CHECK (new_col IS NOT NULL)` constraint as `NOT VALID` first, validate it separately, then convert — this avoids the full scan lock.
+
+---
+
+## If the migration is still hanging right now
+
+Kill it. A hung `ALTER TABLE` holds an `AccessExclusiveLock`. Find and terminate it:
+```sql
+SELECT pid, query, state, wait_event
+FROM pg_stat_activity
+WHERE state != 'idle';
+
+SELECT pg_terminate_backend(<pid>);
+```
+
+Then follow the three-step approach above.

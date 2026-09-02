@@ -11,7 +11,7 @@ Search the draft for each pattern. Every hit outside code blocks and quoted text
 | `'ll`, `'re`, `'ve`, `n't`, `it's` | Contraction (Rule 4.2) | Expand it. |
 | `has been`, `have been`, `had been` | Present/past perfect (Rule 3.4) | Simple past or simple present. |
 | `has` / `have` + past participle | Present perfect (Rule 3.4) | Simple past. |
-| `should`, `would`, `may`, `might`, `could`, `shall` | Unapproved modal (Rule 3.2) | See the modal ladder in SKILL.md. |
+| `should`, `would`, `may`, `might`, `could`, `shall` | Unapproved modal (Rule 3.2) | See the modal ladder in rule-catalog.md. |
 | `is being`, `are being`, `was being` | Progressive passive (Rules 3.4, 3.5) | Active, simple tense. |
 | `, making`, `, allowing`, `, enabling`, `, ensuring` | "-ing" clause as verb (Rule 3.5) | New sentence with a real subject. |
 | `;` | Semicolon (Rule 8.1) | Two sentences. |

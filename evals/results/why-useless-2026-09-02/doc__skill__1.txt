@@ -1,0 +1,51 @@
+## Installation and Usage
+
+**Requirements:** Go 1.21 or later, and network access to both Postgres databases.
+
+**Install**
+
+```bash
+go install github.com/your-org/sqlpipe@latest
+```
+
+Or download a prebuilt binary from the [releases page](https://github.com/your-org/sqlpipe/releases) and place it on your `PATH`.
+
+**Verify the installation**
+
+```bash
+sqlpipe --version
+```
+
+**Copy a table**
+
+```bash
+sqlpipe \
+  --src "postgres://user:pass@source-host:5432/sourcedb" \
+  --dst "postgres://user:pass@dest-host:5432/destdb" \
+  --table orders
+```
+
+`sqlpipe` reads every row from the source table and writes it to a table of the same name in the destination database. If the destination table does not exist, `sqlpipe` creates it. If it does exist, `sqlpipe` appends rows to it.
+
+**Copy multiple tables**
+
+Pass `--table` once for each table:
+
+```bash
+sqlpipe \
+  --src "postgres://..." \
+  --dst "postgres://..." \
+  --table orders \
+  --table customers \
+  --table products
+```
+
+**Connection strings**
+
+Store connection strings in environment variables to keep credentials out of your shell history:
+
+```bash
+export SRC="postgres://user:pass@source-host:5432/sourcedb"
+export DST="postgres://user:pass@dest-host:5432/destdb"
+sqlpipe --src "$SRC" --dst "$DST" --table orders
+```

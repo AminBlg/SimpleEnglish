@@ -1,0 +1,9 @@
+sqlpipe v2.0
+
+Breaking change: the `name` field on the `/v2/users` endpoint is removed. It splits into two separate fields, `first_name` and `last_name`. Update any code that reads `name` before you upgrade.
+
+New feature: the `--incremental` flag tells sqlpipe to transfer only rows added or changed since the last run. This cuts transfer time for large tables that receive frequent appends.
+
+Performance: Parquet write speed is 40% faster than v1. Large exports that previously bottlenecked on file output will complete in noticeably less time.
+
+Upgrade steps: update your client code to use `first_name` and `last_name`, then install v2.0. No other configuration changes are required.

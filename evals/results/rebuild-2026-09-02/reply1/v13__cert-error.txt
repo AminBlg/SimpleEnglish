@@ -1,0 +1,44 @@
+## What is happening
+
+curl is verifying the server's TLS certificate by tracing the chain up to a trusted root. Your internal API presents a certificate signed by a private/internal Certificate Authority (CA). That CA's root certificate is not in curl's trust store (usually `/etc/ssl/certs/ca-certificates.crt` on Linux), so verification fails.
+
+## How to fix it
+
+### Option 1 — Trust the internal CA system-wide (recommended)
+
+1. Get the internal CA root certificate (PEM format, `.crt` extension) from your infrastructure team.
+2. Copy it into the system trust directory:
+   ```bash
+   sudo cp internal-ca.crt /usr/local/share/ca-certificates/
+   sudo update-ca-certificates
+   ```
+3. Verify curl now works — no flags needed.
+
+This fixes curl, wget, Python `requests`, Node `https`, and anything else that uses the system store.
+
+### Option 2 — Pass the CA cert per request
+
+```bash
+curl --cacert /path/to/internal-ca.crt https://internal-api.example.com/
+```
+
+Useful for scripts when you cannot or do not want to modify the system store.
+
+### Option 3 — Set `CURL_CA_BUNDLE` (per session or script)
+
+```bash
+export CURL_CA_BUNDLE=/path/to/internal-ca.crt
+curl https://internal-api.example.com/
+```
+
+### Do NOT do this
+
+```bash
+curl -k https://...   # --insecure
+```
+
+`-k` disables all certificate verification. It silences the error but removes the protection TLS provides — any MITM can intercept the connection without detection.
+
+---
+
+**If you do not have the CA cert**, ask whoever manages your internal PKI. On many corporate networks it is also retrievable from an LDAP or internal URL your sysadmin can point you to.

@@ -1,0 +1,21 @@
+## Getting Started
+
+Install sqlpipe by running this command in your terminal:
+
+```
+curl -sSL https://get.sqlpipe.dev | sh
+```
+
+After installation, create a configuration file named `sqlpipe.yaml`. This file defines your data sources, destinations, and pipeline behavior. Place it in the directory where you will run sqlpipe.
+
+A minimal configuration file names at least one source and one destination. Refer to the sqlpipe documentation for the full list of configuration options.
+
+To run your first pipeline, execute:
+
+```
+sqlpipe run --config sqlpipe.yaml
+```
+
+sqlpipe reads the configuration file, connects to your sources and destinations, and transfers data according to the rules you defined. If the command fails, read the error output to identify which configuration field to correct.
+
+Run `sqlpipe --help` to see all available commands and flags.

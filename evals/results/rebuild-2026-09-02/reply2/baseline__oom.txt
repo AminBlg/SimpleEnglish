@@ -1,0 +1,48 @@
+**OOMKilled** means the Linux kernel's Out-Of-Memory killer terminated the container because it exceeded its memory limit.
+
+## What's happening
+
+Kubernetes lets you set a `resources.limits.memory` on a container. This maps directly to a Linux cgroup memory limit. When the process inside the container tries to allocate more memory than that limit, the kernel OOM killer steps in and kills the process — no graceful shutdown, just SIGKILL. Kubernetes then restarts the pod, and if it keeps happening, you'll see a `CrashLoopBackOff` with reason `OOMKilled`.
+
+## How to diagnose
+
+```bash
+# See restart count and last termination reason
+kubectl describe pod <pod-name> -n <namespace>
+# Look for: Last State: Terminated, Reason: OOMKilled
+
+# Check current memory usage of running pods
+kubectl top pods -n <namespace>
+
+# Check historical resource usage (if metrics-server is installed)
+kubectl top pod <pod-name> --containers -n <namespace>
+```
+
+## What to change
+
+**1. Raise the memory limit** (quickest fix if the app legitimately needs more):
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"   # raise this
+```
+
+**2. Set a request without an artificially low limit** — if you have no limit set, the node itself becomes the ceiling (riskier but valid in dev).
+
+**3. Fix the actual memory leak** — if usage grows unboundedly over time, raising the limit just delays the kill. Profile the app:
+- JVM: check heap settings (`-Xmx`), heap dumps
+- Node.js: `--inspect` + Chrome DevTools heap snapshot
+- Go/Rust: unlikely a leak, more likely a bursty workload
+
+**4. Tune the app's own memory settings** — many runtimes don't auto-detect cgroup limits:
+- JVM: add `-XX:+UseContainerSupport` (default in JDK 10+) and `-XX:MaxRAMPercentage=75.0`
+- Node.js: `--max-old-space-size=<MB>` should be set below the container limit
+
+**5. Use a `LimitRange` or `VPA`** — if this is a fleet-wide issue, a Vertical Pod Autoscaler can recommend or auto-apply right-sized limits based on observed usage.
+
+## Rule of thumb
+
+Set `requests` to typical steady-state usage and `limits` to ~1.5–2× that. If the gap between observed peak and your limit is small, either the limit is too tight or there's a genuine leak.

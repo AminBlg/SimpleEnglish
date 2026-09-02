@@ -78,7 +78,7 @@ test('uses the fallback ruleset when there is no prompt text', () => {
 test('the shipped prompt fits under the Claude Code stdout cap', () => {
   const out = buildContext(fs.readFileSync(REPO_PROMPT, 'utf8'));
   assert.ok(out.length <= MAX_CHARS, `${out.length} > ${MAX_CHARS}`);
-  assert.ok(out.includes('CLASSIFY FIRST'));
+  assert.ok(out.includes('THE REPLY'));
   assert.ok(out.startsWith('SIMPLE ENGLISH SKILL ACTIVE AUTOMATICALLY'));
 });
 

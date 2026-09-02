@@ -1,0 +1,60 @@
+## What's happening
+
+When you add a `NOT NULL` column to an existing table, the database needs every existing row to have a value for that column. If you don't provide a default, the DB has to lock the table while it figures out what to put there — on a 20 GB table, that can take minutes or hours, blocking all reads and writes. That's your hang.
+
+A **backfill** means: populate the new column's value for all existing rows, usually in small batches, so you don't hold one giant lock.
+
+---
+
+## The safe 3-step pattern
+
+**Step 1 — Add the column as nullable first**
+
+```sql
+ALTER TABLE your_table ADD COLUMN new_col INTEGER;
+```
+
+This is near-instant because the DB doesn't need to touch existing rows.
+
+**Step 2 — Backfill in batches**
+
+```sql
+UPDATE your_table
+SET new_col = <default_value>
+WHERE new_col IS NULL
+  AND id BETWEEN 1 AND 10000;
+-- repeat with next batch: 10001–20000, etc.
+```
+
+Small batches (5k–50k rows) keep lock time per transaction low and let other queries breathe between them. Add a `pg_sleep(0.1)` or equivalent between batches if the table is under heavy load.
+
+**Step 3 — Add the NOT NULL constraint once all rows are filled**
+
+```sql
+ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL;
+```
+
+In PostgreSQL 12+, this is a metadata-only check (no full scan) if the DB can verify no NULLs exist. In older versions or other DBs, it may still scan — but it's much faster than the original approach.
+
+---
+
+## If you're using PostgreSQL specifically
+
+Postgres 11+ lets you do this in one shot with a constant default:
+
+```sql
+ALTER TABLE your_table ADD COLUMN new_col INTEGER NOT NULL DEFAULT 42;
+```
+
+For constant defaults, Postgres 11+ stores the default in metadata and doesn't rewrite the table — so it's instant. This only works if your default is a literal value, not a function like `NOW()` or a value derived from another column.
+
+---
+
+## What to do right now
+
+1. Kill the hanging migration if it's still running (it's holding locks).
+2. Add the column as nullable.
+3. Run a batched backfill script.
+4. Then apply the `NOT NULL` constraint.
+
+What database are you on (Postgres, MySQL, etc.) and do you have an ORM managing migrations? I can give you more specific commands.

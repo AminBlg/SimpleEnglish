@@ -1,0 +1,7 @@
+Idempotent means you can run the same operation twice and get the same result — no duplicate side effects. A POST to create an order is normally **not** idempotent: two requests create two orders.
+
+The exception is if the server implements an idempotency key — a unique token you send with every request. The server stores the result of the first call and returns that same result for any retry with the same key, without processing the order again.
+
+So: retrying is safe **only if** your POST includes an idempotency key and the server honors it. Without that, a timeout retry risks creating a duplicate order, because the original request may have succeeded before the connection dropped.
+
+Check whether your deploy script sets an `Idempotency-Key` header (or equivalent) on each request.

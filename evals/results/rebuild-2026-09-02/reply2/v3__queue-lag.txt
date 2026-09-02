@@ -1,0 +1,9 @@
+Consumer lag of 2 million means your consumers are 2 million messages behind the producers. Whether that is bad depends entirely on your message rate and your expected processing time.
+
+If your topic produces 1 million messages per second, a 2-million lag means you are about 2 seconds behind — likely fine. If it produces 1,000 messages per second, you are 33 minutes behind — almost certainly a problem. The lag number alone is meaningless without the production rate alongside it.
+
+For users, the practical effect is delayed data. If your pipeline feeds a search index, a recommendation engine, or a notifications system, users see stale results or late alerts proportional to how far behind you are. If the pipeline feeds real-time analytics or fraud detection, a multi-minute lag can mean missed signals.
+
+The more urgent question is whether the lag is growing, stable, or shrinking. A stable lag at 2 million means your consumers are keeping pace but never catching up — you need more consumer capacity. A growing lag means consumers cannot keep up at all and will eventually cause memory or disk pressure on the brokers if retention limits are hit.
+
+Check consumer CPU and network saturation, then look at whether adding partitions and consumer instances closes the gap.

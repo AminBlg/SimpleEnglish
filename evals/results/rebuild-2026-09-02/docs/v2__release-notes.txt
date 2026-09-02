@@ -1,0 +1,15 @@
+## sqlpipe v2.0 Release Notes
+
+**Breaking change:** The `name` field on the `/v2/users` endpoint is removed. It splits into two separate fields: `first_name` and `last_name`. Update any code that reads or writes `name` before upgrading.
+
+**New: `--incremental` flag**
+Pass `--incremental` to sync only rows added or modified since the last run. This reduces transfer volume for large tables that receive frequent small updates.
+
+**Faster Parquet writes**
+Parquet output is now 40% faster. No configuration change is required to get the improvement.
+
+**Upgrade steps:**
+
+1. Replace all references to `name` with `first_name` and `last_name` in your queries and application code.
+2. Re-test any pipeline that writes to the `/v2/users` endpoint.
+3. Deploy the new binary.

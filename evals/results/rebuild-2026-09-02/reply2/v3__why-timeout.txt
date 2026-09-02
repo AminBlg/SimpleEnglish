@@ -1,0 +1,3 @@
+Idempotent means safe to run twice: the second identical request produces the same result as the first, with no extra side effect. A POST to create an order is typically not idempotent by default, but if the server implements it with an idempotency key (a unique ID you send in the request that the server uses to deduplicate), then retrying on timeout is safe. Without that key, a timeout means you do not know whether the server processed the request, so a retry can create a duplicate order.
+
+Check whether your POST includes an idempotency key header and whether the server documents that it deduplicates on that key. If it does, your retry logic is safe. If not, you are at risk of double-orders on every timeout.

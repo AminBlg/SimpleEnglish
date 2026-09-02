@@ -1,0 +1,38 @@
+## What's happening
+
+When you add a `NOT NULL` column to an existing table, the database needs every existing row to have a value for it. If you don't supply a default, the DB has nothing to put there — so it either rejects the migration outright or (on older Postgres/MySQL) tries to rewrite every row in-place, which locks the table and takes forever on a 20 GB table.
+
+A **backfill** is the process of populating that column for all pre-existing rows after the fact.
+
+## The safe pattern (zero-downtime)
+
+Do this in three separate migrations/deploys:
+
+**Step 1 — Add the column as nullable**
+```sql
+ALTER TABLE your_table ADD COLUMN new_col TEXT;
+```
+This is instant — no row rewrite, no lock.
+
+**Step 2 — Backfill existing rows in batches**
+```sql
+UPDATE your_table
+SET new_col = 'default_value'
+WHERE new_col IS NULL AND id BETWEEN 1 AND 100000;
+-- repeat with next batch
+```
+Batching (10k–100k rows at a time) keeps transactions short, avoids lock buildup, and gives you breathing room to monitor replication lag. Use a loop in a script or your migration tool's batching support.
+
+**Step 3 — Add the NOT NULL constraint**
+```sql
+ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL;
+```
+On Postgres 12+, if all rows are already populated, this is a metadata-only change (no scan) — nearly instant. On older versions or MySQL it still scans, but at least it doesn't rewrite.
+
+## What to do right now
+
+1. **Kill the hanging migration** if it's still running — it's holding locks.
+2. Check if you can add a `DEFAULT` value to the column (if the value is static, Postgres 11+ handles `ADD COLUMN ... NOT NULL DEFAULT 'x'` with a metadata-only change — no rewrite).
+3. If you need a computed or app-supplied value, use the three-step approach above.
+
+What database engine are you on (Postgres version, MySQL, etc.)? That affects which shortcuts apply.

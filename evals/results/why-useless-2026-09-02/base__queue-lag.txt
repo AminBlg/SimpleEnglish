@@ -1,0 +1,33 @@
+**Yes, 2 million consumer lag is almost certainly bad** — though the severity depends on context.
+
+## What it means
+
+Consumer lag = the gap between the latest message produced to a topic and the latest message your consumer has processed. A lag of 2 million means your consumers are 2 million messages *behind* producers right now.
+
+## Why it matters for users
+
+The practical impact depends on **how fast messages are produced** (the lag-to-drain time):
+
+| Production rate | Time to drain 2M lag | User impact |
+|---|---|---|
+| 100k msg/sec | ~20 seconds | Probably fine, temporary spike |
+| 10k msg/sec | ~3 minutes | Noticeable delays |
+| 1k msg/sec | ~33 minutes | Serious degradation |
+| Growing lag | Never drains | System is falling behind — escalating problem |
+
+**If the lag is growing** (not stable or shrinking), that's the real alarm: consumers can't keep up with producers and will never self-recover without intervention.
+
+Common user-visible symptoms:
+- **Delayed events** — notifications, order updates, feed changes arrive late
+- **Stale reads** — dashboards or views showing outdated state
+- **Queue buildup** — downstream services starved of data
+
+## What to check first
+
+1. **Is lag growing, stable, or shrinking?** — Stable at 2M is very different from climbing.
+2. **Consumer CPU/memory** — Are consumers saturated?
+3. **Rebalancing** — Frequent rebalances stall processing.
+4. **Partition count vs. consumer count** — Consumers can't exceed partition count; you may need to scale out.
+5. **Slow deserialization or DB writes** — Per-message processing time may have regressed.
+
+The number alone isn't the whole story — **trend over time** is what determines urgency. If it's been flat at 2M for hours with no user complaints, it may be a batch workload operating normally. If it crossed 2M in the last 30 minutes and is still climbing, treat it as an incident now.

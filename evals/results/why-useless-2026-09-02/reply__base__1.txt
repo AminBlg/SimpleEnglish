@@ -1,0 +1,39 @@
+**Yes, 2 million consumer lag is bad** — but how bad depends on your throughput rate.
+
+## What it means
+
+Consumer lag = the number of messages in a Kafka topic that have been *produced* but not yet *consumed*. Your consumers are falling behind producers by 2 million messages.
+
+## Is 2M actually critical?
+
+It depends on your **consumption rate**:
+
+| Consumption rate | Time to clear 2M lag |
+|---|---|
+| 100k msg/sec | ~20 seconds — probably fine |
+| 10k msg/sec | ~3 minutes — watch it |
+| 1k msg/sec | ~33 minutes — likely a problem |
+| 100 msg/sec | ~5.5 hours — serious incident |
+
+If lag is *growing*, that's the real alarm — producers are outpacing consumers and the gap will keep widening.
+
+## What users likely experience
+
+- **Delayed data**: anything downstream of this consumer (dashboards, notifications, recommendations, search indexes) shows stale or missing data
+- **Delayed events**: order confirmations, email triggers, fraud checks — anything event-driven is backed up
+- **Eventually: data loss risk** — if lag grows past your topic's retention window (e.g., 7 days of data), oldest messages get deleted before they're consumed
+
+## Immediate things to check
+
+1. **Is lag growing or stable?** Stable high lag is a backlog; growing lag is an active incident.
+2. **Are consumers healthy?** Check for crashed consumer instances, GC pauses, or slow downstream DB writes.
+3. **Did a deploy just happen?** Consumer restarts cause temporary lag spikes.
+4. **Is the consumer group running?** A stopped consumer group will show 100% of topic messages as lag.
+
+## Quick remediation options
+
+- **Scale out consumers** (add more instances up to the partition count)
+- **Increase batch size / `max.poll.records`** if consumers are CPU-bound
+- **Identify and fix the slow operation** (usually a slow DB write or external API call in the consumer loop)
+
+The number alone isn't the verdict — the trend and your message rate are what determine severity.

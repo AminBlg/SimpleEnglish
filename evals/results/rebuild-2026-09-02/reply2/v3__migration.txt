@@ -1,0 +1,7 @@
+A backfill is the process of writing values into existing rows after a schema change — in this case, filling in the new column for all rows that existed before the migration ran.
+
+The hang happens because most databases (Postgres especially) lock the table while adding a NOT NULL column, then scan every row to verify none are null. On 20 GB that lock can hold for minutes, blocking all reads and writes.
+
+The safe approach is three separate migrations. First, add the column as nullable with a default: `ALTER TABLE t ADD COLUMN new_col INT DEFAULT 0;` — this is fast because no row scan is needed. Second, backfill in batches so you never hold a single massive lock: `UPDATE t SET new_col = 0 WHERE id BETWEEN 1 AND 10000 AND new_col IS NULL;` — loop this with a short sleep between batches. Third, once every row has a value, apply the NOT NULL constraint: `ALTER TABLE t ALTER COLUMN new_col SET NOT NULL;` — Postgres 12+ can do this with a fast constraint check if you add a `CHECK (new_col IS NOT NULL) NOT VALID` first, then validate separately.
+
+If your migration is currently hanging, kill it and roll back the column addition before doing this in steps.

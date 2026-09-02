@@ -1,0 +1,26 @@
+A backfill is a batch update that fills in values for existing rows after a schema change. When you add a NOT NULL column to a large table, the database must write a value to every existing row — on a 20 GB table, doing that in a single transaction holds a lock that blocks all reads and writes until it finishes, which is why the migration hangs.
+
+**The safe pattern: decouple the schema change from the data fill.**
+
+1. **Add the column as nullable first.** This is near-instant — no rows are rewritten.
+   ```sql
+   ALTER TABLE your_table ADD COLUMN new_col INTEGER;
+   ```
+
+2. **Backfill in batches.** Update rows in chunks so you never hold a long lock.
+   ```sql
+   UPDATE your_table
+   SET new_col = <default_value>
+   WHERE id BETWEEN 1 AND 10000
+     AND new_col IS NULL;
+   -- Repeat, advancing the range, with a short sleep between batches.
+   ```
+   For PostgreSQL, tools like `pg_backfill` or a simple loop script work. For Rails, `strong_migrations` provides a helper. Batch size of 1 000–10 000 rows with a 10–50 ms sleep between batches is a common starting point.
+
+3. **Add the NOT NULL constraint after all rows are filled.**
+   ```sql
+   ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL;
+   ```
+   On PostgreSQL 12+, you can add a `CHECK (new_col IS NOT NULL)` constraint with `NOT VALID` first, then `VALIDATE CONSTRAINT` separately — this acquires only a weaker lock during validation.
+
+**Right now:** kill or roll back the hanging migration, then execute the three steps above in separate deploys or maintenance windows. The column being nullable temporarily is safe as long as your application code handles that or always writes a value.

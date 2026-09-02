@@ -1,0 +1,22 @@
+Yes, that is bad. Here is what it means.
+
+**What consumer lag is:** the number of messages your consumer has not yet processed. A lag of 2 million means your consumers are 2 million messages behind the producers.
+
+**What users experience depends on your system**, but common effects are:
+
+- **Delayed data** — if your pipeline feeds a UI or API, users see stale information proportional to how long it takes to clear that backlog.
+- **Missed time windows** — if consumers drive time-sensitive logic (alerts, fraud checks, order confirmations), those fire late or not at all.
+- **Memory/disk pressure** — Kafka retains unprocessed messages on disk; if lag keeps growing, you risk hitting retention limits and losing messages permanently before they are processed.
+
+**The key question is: is lag growing or stable?**
+
+- Stable lag means consumers keep up with current traffic but never caught up from a past spike. You have time to investigate.
+- Growing lag means consumers are slower than producers right now. This is urgent — the backlog will not resolve on its own.
+
+**Immediate checks:**
+
+1. Look at consumer CPU and memory — a slow consumer is often resource-starved.
+2. Check if a consumer instance crashed or restarted — fewer consumers means more lag per remaining instance.
+3. Check producer throughput for a sudden spike that outpaced your consumer capacity.
+
+If lag is growing, scale up consumer instances or reduce processing time per message first, then investigate the root cause.

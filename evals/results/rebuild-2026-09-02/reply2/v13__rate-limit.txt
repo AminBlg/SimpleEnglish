@@ -1,0 +1,14 @@
+A token bucket works like this: each user has a bucket that holds up to 100 tokens. One token is added per second (refill rate = 100/min). Each request consumes one token. If the bucket is empty, the request is rejected. The bucket never exceeds its capacity, so a user who waits 30 seconds can burst up to 30 requests instantly, but never more than 100 at once.
+
+**Does it fit your case?**
+
+Yes, well. Token bucket is the standard answer for "N requests per minute with burst tolerance." The two parameters map cleanly:
+
+- **Capacity** = 100 (max burst)
+- **Refill rate** = 100 tokens/minute ≈ 1.67/second
+
+One practical note: you need to store `(token_count, last_refill_timestamp)` per user. Redis is the typical backing store — a Lua script or `WATCH`/`MULTI` transaction makes the check-and-decrement atomic, which matters under concurrent requests.
+
+**Alternative worth knowing:** a *fixed window counter* (just count requests in the current 60-second window) is simpler to implement but has a boundary exploit — a user can fire 100 requests at second 59 and 100 more at second 61 for 200 in two seconds. Token bucket avoids this because burst is bounded by capacity regardless of window alignment.
+
+Token bucket is the right call here.

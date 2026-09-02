@@ -1,0 +1,5 @@
+**Incident Report — 2026-09-02**
+
+**14:02–14:31 UTC | Elevated API Error Rate (502)**
+
+Between 14:02 and 14:31 UTC, approximately 12% of API requests failed with HTTP 502 errors. The cause was a deploy that removed the cache warmup step, leaving the cache cold and unable to serve requests before traffic arrived. Engineers identified the root cause at 14:22 UTC and reverted the deploy at 14:27 UTC. Error rates returned to normal by 14:31 UTC. Total incident duration was 29 minutes. We are adding a pre-deploy cache warmup check to prevent recurrence.

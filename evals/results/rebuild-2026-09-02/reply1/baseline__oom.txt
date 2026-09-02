@@ -1,0 +1,72 @@
+## OOMKilled in Kubernetes
+
+**What's happening:** The container exceeded its memory limit. The Linux kernel's Out-Of-Memory (OOM) killer terminated the process, and Kubernetes restarted the pod. This cycle repeats if nothing changes.
+
+Kubernetes enforces memory limits via cgroups. When a container crosses its `resources.limits.memory` threshold, the kernel kills it immediately — no graceful shutdown, no warning.
+
+---
+
+## How to diagnose
+
+```bash
+# See restart count and last termination reason
+kubectl describe pod <pod-name> -n <namespace>
+# Look for: "Last State: Terminated  Reason: OOMKilled"
+
+# Check actual memory usage trend
+kubectl top pod <pod-name> -n <namespace>
+
+# For historical data (if metrics-server or Prometheus is available)
+kubectl top pod <pod-name> --containers -n <namespace>
+```
+
+In `kubectl describe`, look for:
+```
+Last State:     Terminated
+  Reason:       OOMKilled
+  Exit Code:    137        # 128 + SIGKILL(9)
+```
+
+---
+
+## What to change
+
+**1. Raise the memory limit** (quickest fix if the app legitimately needs more):
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"   # increase this
+```
+
+**2. Set a request without a tight limit** (gives the scheduler accurate info while allowing bursting):
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  # omit limits.memory to allow unbounded usage (use carefully)
+```
+
+**3. Fix a memory leak** — if usage grows unbounded over time, the leak is in the app. Add heap profiling (`pprof`, `py-spy`, heap dumps depending on runtime) and identify what's accumulating.
+
+**4. Tune JVM/runtime heap** — if it's a JVM app, the JVM often ignores cgroup limits without explicit flags:
+
+```
+-XX:MaxRAMPercentage=75.0   # use 75% of cgroup limit as heap ceiling
+```
+
+Similar issues exist for Node.js (`--max-old-space-size`), Go GC tuning, etc.
+
+**5. Check for request/limit mismatch** — if `requests` is much lower than actual usage, the pod gets scheduled on a node that can't sustain it. Keep `requests` close to typical usage and `limits` at the burst ceiling.
+
+---
+
+## Rule of thumb
+
+- `requests`: what the app uses at idle/typical load — used for scheduling
+- `limits`: hard ceiling — crossing it = OOMKill
+
+Profile first with `kubectl top`, then set limits at ~20–30% above observed peak to give headroom without over-provisioning.

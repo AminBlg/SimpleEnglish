@@ -1,0 +1,25 @@
+Yes, 2 million consumer lag is bad — here's what it means concretely:
+
+**What it is:** Consumer lag is the gap between the latest message produced to a topic and the last message your consumer has processed. 2M lag means your consumer is 2 million messages behind real-time.
+
+**What it means for users:** Depends entirely on your throughput rate:
+- At 10k msg/s: you're ~200 seconds (3+ minutes) behind real-time
+- At 100k msg/s: you're ~20 seconds behind
+- At 1M msg/s: you're ~2 seconds behind — probably fine
+
+So the lag number alone isn't the verdict — **lag ÷ throughput = how stale your data is**, and that's what hits users.
+
+**Likely symptoms users would notice:**
+- Delayed notifications, feed updates, or real-time features
+- Analytics/dashboards showing stale numbers
+- Event-driven side effects (emails, webhooks, cache invalidation) firing late
+- If lag keeps growing: eventual OOM or the consumer falling so far behind that Kafka's retention window expires and offsets become invalid — at that point the consumer can't recover without resetting
+
+**Common causes to rule out:**
+1. Consumer is slow (processing bottleneck, slow DB writes, blocking I/O)
+2. Sudden producer spike that outpaced consumer capacity
+3. Consumer group rebalancing loop (check for frequent rebalances)
+4. Consumer crashed/stopped and lag is accumulating unprocessed
+5. Partition count too low — consumers can't parallelize enough
+
+Check `kafka-consumer-groups.sh --describe` to see if lag is growing, shrinking, or stable — a stable 2M is a performance problem; a growing 2M is an active incident.

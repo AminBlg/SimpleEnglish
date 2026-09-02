@@ -1,0 +1,17 @@
+## sqlpipe v2.0 Release Notes
+
+### Breaking Changes
+
+**`/v2/users` name field split** — The `name` field has been removed and replaced with `first_name` and `last_name`. Update any code reading or writing this field before migrating.
+
+### New Features
+
+**`--incremental` flag** — Sync only rows added or modified since the last run. Reduces transfer volume significantly for large, append-heavy tables.
+
+### Performance
+
+**40% faster Parquet writes** — Rewritten column encoding reduces CPU overhead and wall-clock time for Parquet output, with the largest gains on wide schemas and high-cardinality string columns.
+
+### Upgrading
+
+Review the `/v2/users` schema change in the migration guide before upgrading. All other v1 endpoints remain compatible.

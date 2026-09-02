@@ -1,0 +1,46 @@
+**OOMKilled** means the Linux kernel's Out-of-Memory killer terminated the container because it exceeded its memory limit.
+
+Kubernetes enforces memory limits at the cgroup level. When a container's memory use crosses the `resources.limits.memory` value, the kernel kills the process immediately — no warning, no graceful shutdown. Kubernetes then restarts the pod, which is why you see the restart loop.
+
+**Diagnose first**
+
+```bash
+# See current limits and restart count
+kubectl describe pod <pod-name>
+
+# Check memory use at the moment of kill
+kubectl get pod <pod-name> -o jsonpath='{.status.containerStatuses[*].lastState.terminated}'
+
+# Recent memory usage (requires metrics-server)
+kubectl top pod <pod-name>
+```
+
+**What to change**
+
+1. **Raise the memory limit** — the simplest fix if the app legitimately needs more memory:
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"
+```
+
+2. **Set a request without a hard limit** — lets the pod use spare node memory without a hard kill. Use this only if memory spikes are rare and short-lived:
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  # no limits.memory
+```
+
+3. **Tune the application** — if the limit is already generous, the app has a memory leak or is not respecting heap limits. Common fixes:
+   - JVM: add `-Xmx` to cap heap below the container limit
+   - Node.js: add `--max-old-space-size`
+   - Python: profile with `tracemalloc` or `memory_profiler`
+
+4. **Check for memory leaks** — use `kubectl logs <pod-name> --previous` to read logs from the killed container and look for runaway allocation.
+
+**Rule of thumb**: set `requests` to the app's steady-state memory use and `limits` to 1.5–2x that. A missing `requests` value also causes problems — the scheduler places the pod on a node that cannot support it.

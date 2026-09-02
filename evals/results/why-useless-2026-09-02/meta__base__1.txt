@@ -1,0 +1,11 @@
+From the **Tone and style** section:
+
+> "Your responses should be short and concise."
+
+> "Match responses to the task: a simple question gets a direct answer, not headers and sections."
+
+From the **Text output** section:
+
+> "End-of-turn summary: one or two sentences. What changed and what's next. Nothing else."
+
+No instructions about em-dashes appear in the system prompt.

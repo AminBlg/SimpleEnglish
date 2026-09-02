@@ -1,0 +1,52 @@
+## What happened
+
+When you add a `NOT NULL` column without a default, the database must write a value to every existing row before it can enforce the constraint. On a 20 GB table, that's a full table rewrite — it locks the table and hangs until it finishes (or times out).
+
+## What a backfill is
+
+A backfill is a strategy to populate the new column in batches, outside of the migration, so you avoid one giant lock. The pattern has three steps:
+
+1. Add the column as **nullable** (fast, no rewrite).
+2. Write the value to existing rows in small batches (the backfill).
+3. Add the `NOT NULL` constraint once all rows have a value.
+
+## What to do
+
+**Step 1 — Roll back or kill the hung migration.**
+Find and kill the blocking query first, then roll back the migration to the state before the `NOT NULL` column was added.
+
+**Step 2 — Add the column nullable.**
+```sql
+ALTER TABLE your_table ADD COLUMN new_col integer;
+```
+This is near-instant.
+
+**Step 3 — Backfill in batches.**
+Run this in a loop, adjusting batch size to keep each update under ~1 second:
+```sql
+UPDATE your_table
+SET new_col = <your_value>
+WHERE id BETWEEN <start> AND <end>
+  AND new_col IS NULL;
+```
+Use `pg_sleep(0.1)` (Postgres) or equivalent between batches to give the table breathing room under live traffic.
+
+**Step 4 — Add the constraint.**
+Once `new_col IS NULL` returns zero rows:
+```sql
+ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL;
+```
+On Postgres 12+, if you first add a `CHECK (new_col IS NOT NULL)` constraint as `NOT VALID` and then validate it, Postgres uses a weaker lock and the table stays available during validation.
+
+```sql
+-- Weaker-lock approach (Postgres 12+)
+ALTER TABLE your_table ADD CONSTRAINT new_col_not_null CHECK (new_col IS NOT NULL) NOT VALID;
+ALTER TABLE your_table VALIDATE CONSTRAINT new_col_not_null;
+-- Then, once validated:
+ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL;
+ALTER TABLE your_table DROP CONSTRAINT new_col_not_null;
+```
+
+---
+
+What database are you on (Postgres, MySQL, etc.) and do you have a migration framework in play (Rails, Flyway, Alembic)? The exact commands vary, and some frameworks have built-in safe-migration helpers.

@@ -1,0 +1,3 @@
+A token bucket gives each user a bucket that holds up to 100 tokens. The bucket refills at a fixed rate — in your case, 100 tokens per minute. Each API request costs one token. If the bucket is empty, the request is rejected or queued.
+
+It fits your requirement well. A user can burst up to 100 requests instantly if the bucket is full, then the rate drops to 100 per minute sustained. If you want to prevent bursting entirely and enforce a strict 100 requests per minute with no spikes, use a sliding window counter instead.

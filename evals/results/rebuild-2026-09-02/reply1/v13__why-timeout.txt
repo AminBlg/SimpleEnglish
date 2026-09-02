@@ -1,0 +1,15 @@
+Idempotent means calling the endpoint N times produces the same result as calling it once. For reads (GET), that's trivially true. For writes, it requires the server to detect and deduplicate repeated requests.
+
+**POST is not idempotent by default.** A plain POST to `/v2/orders` will typically create a new order on every call. Retrying on timeout is unsafe because the first request may have succeeded — the timeout just means you didn't get the *response*, not that the order wasn't created.
+
+**"The endpoint is idempotent" changes everything — if true.** It means the server uses a deduplication mechanism, typically one of:
+
+- **Idempotency key**: you send a unique `Idempotency-Key` header; the server returns the cached response for any retry with the same key.
+- **Natural key**: the order payload contains a unique client-generated ID; the server treats duplicate IDs as the same order.
+
+**What you need to verify:**
+
+1. Does your deploy script actually send an idempotency key (or equivalent) on each retry of the *same* request? If you generate a fresh key per attempt, deduplication won't work.
+2. Does the server document this guarantee, or is it just assumed? Check the API docs.
+
+If both are true, retrying on timeout is safe. If either is missing, you risk duplicate orders.

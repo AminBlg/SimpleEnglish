@@ -1,0 +1,7 @@
+sqlpipe is a three-stage pipeline for efficiently moving Postgres data to S3 as Parquet.
+
+**Reader** — A streaming process connects to Postgres and fetches rows in configurable batches using a server-side cursor, avoiding full result-set materialization. It emits typed row batches downstream as soon as each is complete.
+
+**Converter** — Each batch is transformed into a Parquet row group: Postgres types are mapped to their Arrow/Parquet equivalents (numerics, timestamps with timezone, text, nullable primitives), and the group is encoded and compressed (Snappy or Zstd) in memory before passing to the uploader.
+
+**Uploader** — Row groups are written to S3 via multipart upload: each group becomes a part, uploaded with exponential-backoff retries on transient failures. Once all parts land, the multipart upload is completed atomically, producing a single coherent Parquet object per pipeline run.

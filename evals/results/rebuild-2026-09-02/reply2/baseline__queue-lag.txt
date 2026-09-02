@@ -1,0 +1,32 @@
+Yes, 2 million consumer lag is bad — but how bad depends on your throughput rate.
+
+## What it means
+
+Consumer lag is the number of messages sitting in Kafka that your consumers haven't processed yet. At 2M lag, your consumers are behind producers by 2 million messages.
+
+**The critical metric is time-to-drain, not the raw number:**
+- If you produce 100k msg/s and consume 110k msg/s → ~18s to drain, probably fine
+- If you produce 100k msg/s and consume 100k msg/s → lag is stable but never drains, growing problem
+- If lag is *climbing*, consumers are slower than producers — that's the urgent case
+
+## Impact on users
+
+Depends entirely on what those consumers do:
+
+| Consumer purpose | User impact at 2M lag |
+|---|---|
+| Real-time notifications / events | Delayed by minutes to hours |
+| Order processing / payments | Transactions stuck in queue |
+| Analytics / dashboards | Stale data shown to users |
+| Email/SMS delivery | Delayed communications |
+| Search index updates | Stale search results |
+| Audit/logging (async) | Probably none immediately |
+
+## Immediate questions to answer
+
+1. **Is lag growing or stable?** Growing = active incident. Stable = capacity problem.
+2. **What's the consumer group?** Some groups matter more than others.
+3. **Why are consumers slow?** Check: consumer CPU/memory, downstream DB latency, GC pauses, or consumers crashed entirely (lag grows because there's nobody consuming).
+4. **Is retention at risk?** If messages age out before consumers reach them, data is permanently lost.
+
+If lag is actively climbing and the consumer handles user-facing workflows, treat it as an incident now. The fix is usually either scaling consumer instances or fixing the downstream bottleneck causing slow processing.

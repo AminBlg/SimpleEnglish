@@ -1,0 +1,25 @@
+The OOMKilled status means the Linux kernel's out-of-memory killer terminated the container because it exceeded its memory limit. Kubernetes sets a cgroup memory limit on each container, and when the process inside crosses that limit, the kernel kills it rather than let it consume memory from other workloads on the node.
+
+Two things to check and change:
+
+**Find the actual memory usage first.** Run this before changing limits blindly:
+
+```
+kubectl top pod <pod-name> --containers
+```
+
+Also check recent peak usage in your metrics system (Prometheus, Datadog, etc.) to see if the spike is a leak or normal load.
+
+**Then adjust the pod spec.** The relevant fields are `resources.requests` and `resources.limits` under the container:
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"
+```
+
+`requests` is what Kubernetes uses for scheduling (the node must have this free). `limits` is the hard ceiling the kernel enforces. If `limits` is set too low relative to actual usage, you get OOMKilled. If it is unset, the container can consume all node memory and destabilize other pods.
+
+Three possible root causes and fixes: (1) the limit is just too low for normal operation, so raise it; (2) the app has a memory leak, so profile and fix the leak rather than raising the limit indefinitely; (3) a sudden traffic spike caused a one-time spike, so raise the limit with headroom and optionally add a HorizontalPodAutoscaler to spread load.

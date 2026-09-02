@@ -1,0 +1,23 @@
+The stale data is caused by **cache-aside with a fixed TTL**: when a price is updated in the database, the old value sits in Redis until its TTL expires (up to 10 minutes). Reads during that window hit the cache and never see the new value.
+
+**Fix: invalidate or update the cache on write.**
+
+Two standard approaches:
+
+**1. Delete the cache key on write (cache invalidation)**
+```python
+def update_price(product_id, new_price):
+    db.execute("UPDATE prices SET price = ? WHERE id = ?", new_price, product_id)
+    redis.delete(f"price:{product_id}")
+```
+Next read misses the cache, fetches from DB, repopulates. Simple and correct. Brief latency spike on the first post-update read (cache miss penalty), but that's usually fine.
+
+**2. Write-through (update cache on write)**
+```python
+def update_price(product_id, new_price):
+    db.execute("UPDATE prices SET price = ? WHERE id = ?", new_price, product_id)
+    redis.set(f"price:{product_id}", new_price, ex=600)
+```
+No miss penalty, but introduces a race: if the DB write succeeds and the Redis write fails (or the process crashes between them), they diverge. Requires careful error handling or a transaction-like wrapper.
+
+**Recommendation:** Use **invalidation (option 1)**. It's simpler, the failure mode is a cache miss (not stale data), and the extra DB read on the first post-update request is almost always acceptable for a price update. If you need zero-miss-penalty, add a short TTL (e.g. 30s) *in addition* to invalidation as a safety net against bugs that skip the invalidation path.

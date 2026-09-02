@@ -1,0 +1,55 @@
+## What's happening
+
+curl is trying to verify the server's SSL certificate by tracing it up to a trusted root CA. Your internal API uses a certificate signed by a **private/internal CA** (your company's own certificate authority) — and curl can't find that CA in its trust store, so it rejects the connection.
+
+## How to fix it
+
+### Option 1: Point curl at your internal CA cert (recommended)
+
+```bash
+curl --cacert /path/to/internal-ca.crt https://your-internal-api/
+```
+
+Or set it permanently via an environment variable:
+
+```bash
+export CURL_CA_BUNDLE=/path/to/internal-ca.crt
+```
+
+To also apply to tools that use libcurl (Python `requests`, etc.):
+
+```bash
+export SSL_CERT_FILE=/path/to/internal-ca.crt
+```
+
+### Option 2: Add your internal CA to the system trust store
+
+**Linux (Debian/Ubuntu):**
+```bash
+sudo cp internal-ca.crt /usr/local/share/ca-certificates/
+sudo update-ca-certificates
+```
+
+**Linux (RHEL/Arch):**
+```bash
+sudo cp internal-ca.crt /etc/pki/ca-trust/source/anchors/   # RHEL
+sudo cp internal-ca.crt /etc/ca-certificates/trust-source/anchors/  # Arch
+sudo update-ca-trust
+```
+
+**Mac:**
+```bash
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain internal-ca.crt
+```
+
+### Option 3: Skip verification (not recommended for production)
+
+```bash
+curl -k https://your-internal-api/
+```
+
+This disables verification entirely — fine for quick debugging, but leaves you open to MITM attacks.
+
+---
+
+**Getting the CA cert:** If you don't have it, ask your IT/infra team for the internal root CA certificate, or extract it from your browser's certificate store after visiting the API URL in a browser (padlock icon → Certificate → export root/intermediate).

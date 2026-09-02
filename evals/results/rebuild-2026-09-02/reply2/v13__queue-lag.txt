@@ -1,0 +1,35 @@
+**Yes, 2 million lag is serious — but context determines severity.**
+
+## What it means
+
+Consumer lag is the gap between the latest message produced and the latest message your consumer has processed. At 2 million, your consumers are 2 million messages behind the producers.
+
+## Whether it's bad depends on three things
+
+**1. Throughput rate.** At 100k msg/s, 2M lag = 20 seconds behind. At 1k msg/s, it's 33 minutes. The lag number alone tells you nothing without the rate.
+
+**2. Trend.** Lag that is stable (consumers keeping pace but offset is high) is a different problem from lag that is climbing. Climbing lag means consumers cannot keep up — that is the dangerous case.
+
+**3. What the topic drives.** A lag on an analytics pipeline is tolerable. A lag on a payment processing or notification topic means users are waiting or missing events.
+
+## User impact (likely scenarios)
+
+- **Notifications/emails delayed** — users act on stale state or miss time-sensitive alerts.
+- **Order/payment processing backed up** — transactions appear to hang.
+- **Search indexes or caches stale** — users see outdated data.
+- **Event-driven workflows frozen** — anything downstream of the consumer stops progressing.
+
+## Immediate checks
+
+1. `kafka-consumer-groups.sh --describe` — confirm the lag is growing, not steady.
+2. Check consumer CPU and GC — a slow consumer is often the cause.
+3. Check producer rate — a traffic spike may have outpaced a healthy consumer.
+4. Check for consumer rebalancing — frequent rebalances stall processing.
+
+## Fast mitigations
+
+- **Scale out consumers** (add partitions first if you are at partition count already).
+- **Increase `fetch.min.bytes` / `max.poll.records`** to batch more per poll.
+- **Check for a stuck partition** — sometimes one partition holds nearly all the lag.
+
+The climbing trend is the part to fix urgently. Stable high lag can sometimes be caught up overnight; climbing lag compounds.

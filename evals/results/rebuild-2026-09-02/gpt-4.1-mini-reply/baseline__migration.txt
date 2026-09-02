@@ -1,0 +1,72 @@
+When you add a **NOT NULL** column to an existing large table (like your 20 GB table), the database needs to populate that column for every existing row because **NOT NULL** means no row can have a NULL in that column. This process of populating the new column for all existing rows is called a **backfill**.
+
+### What is Backfill?
+
+- **Backfill** is the operation where the database updates all existing rows with a default or specified value for the new NOT NULL column.
+- Because the table is large, this can take a long time and appear like the migration is hanging.
+- During the backfill, the database usually holds locks or consumes resources, which might block other operations or cause performance issues.
+
+### Why does backfill happen?
+
+- When you add a NOT NULL column **with no default value**, the database usually requires you to specify a default, or it rejects the operation because existing rows would violate the NOT NULL constraint.
+- When you add a **NOT NULL column with a default value**, the database needs to update all rows to have that default value in the new column.
+- This update of all rows is the backfill process.
+
+---
+
+### What should you do?
+
+**1. Check how you added the column:**
+
+If you added the column like this:
+
+```sql
+ALTER TABLE your_table ADD COLUMN new_column <type> NOT NULL DEFAULT <default_value>;
+```
+
+the database updates the existing rows with `<default_value>`, causing the backfill.
+
+---
+
+**2. Strategies to avoid long backfill operations:**
+
+- **Add the column as NULLABLE first, without a default:**
+
+  ```sql
+  ALTER TABLE your_table ADD COLUMN new_column <type>;
+  ```
+
+- **Populate the column in smaller batches:**
+
+  Write update scripts that fill in the new column value in smaller chunks, e.g., using `LIMIT` and looped updates, to mitigate locking and resource problems.
+
+- **Then, set the column to NOT NULL:**
+
+  After all rows have values (and no NULLs remain), you can enforce NOT NULL:
+
+  ```sql
+  ALTER TABLE your_table ALTER COLUMN new_column SET NOT NULL;
+  ```
+
+- **Add the default value only at the schema level, without rewriting existing rows:**
+
+  In some databases (like PostgreSQL 11 and later), adding a column with a constant default does not rewrite the table but changes internal metadata, avoiding backfill.
+
+---
+
+### Steps you can follow now:
+
+1. **Cancel the current migration** if it is hanging and impacting your system.
+
+2. **Add the column as nullable without a default:**
+
+   ```sql
+   ALTER TABLE your_table ADD COLUMN new_column <type>;
+   ```
+
+3. **Backfill in batches:**
+
+   Run update statements to fill in the new column, for example:
+
+   ```sql
+   UPDATE your_table SET new_column = <default_value> WHERE new_column IS NULL LIMIT

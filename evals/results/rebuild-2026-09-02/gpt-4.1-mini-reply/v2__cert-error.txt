@@ -1,0 +1,9 @@
+The error means that curl cannot verify your API server’s SSL certificate. Curl needs the full certificate chain, including the trusted root or intermediate certificate, to confirm the server’s identity.
+
+To fix it:
+
+1. Make sure the server sends the full certificate chain. Ask the server admin to add missing intermediate certificates.
+2. If you have the correct CA (certificate authority) certificate, use curl with `--cacert /path/to/ca.pem` to trust it.
+3. You can disable verification with `-k` or `--insecure`, but do not use this in production. It skips SSL checks and is unsafe.
+
+Troubleshoot by checking the server’s certificate chain with `openssl s_client -connect host:port -showcerts`.

@@ -1,0 +1,20 @@
+Before sharding, exhaust simpler options — sharding is expensive and hard to undo.
+
+**Do this first:**
+
+1. **Check your indexes.** Run `EXPLAIN (ANALYZE, BUFFERS)` on your slow queries. Missing or bloated indexes cause most "slow reads on big tables" problems.
+
+2. **Check table bloat.** `SELECT * FROM pgstats` or `pg_stat_user_tables` — high `n_dead_tup` means you need `VACUUM ANALYZE`. Dead rows from updates/deletes slow sequential scans significantly.
+
+3. **Check query patterns.** Are you doing full-table scans? Filtering on unindexed columns? Returning too many columns (`SELECT *`)?
+
+4. **Partitioning (not sharding).** If queries filter by a range (date, region, ID range), Postgres native partitioning lets you prune entire partitions from scans — no application changes, no distributed system complexity.
+
+**Only then consider sharding if:**
+- You're CPU/IO bound on a fully-tuned single node
+- Write throughput is the bottleneck, not reads
+- You've outgrown vertical scaling options
+
+40M rows is not inherently large for Postgres — a well-indexed table at that size should be fast. The problem is almost certainly query or index related, not scale.
+
+What does `EXPLAIN ANALYZE` show on a slow query? That'll tell you exactly where to look.

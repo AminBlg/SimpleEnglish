@@ -1,0 +1,14 @@
+Before sharding, add indexes and check your query plans. Sharding is complex and often unnecessary.
+
+**Do this first:**
+
+1. Run `EXPLAIN (ANALYZE, BUFFERS)` on your slow queries to find the actual bottleneck.
+2. Add indexes on columns you filter or join on — a missing index on a 40M-row table is almost always the real cause.
+3. Make sure `autovacuum` is running and the table is not bloated (`pg_stat_user_tables`).
+4. If reads are analytical (aggregates, scans), add a read replica and route those queries there.
+
+**Consider partitioning before sharding.** Postgres native partitioning (by date or ID range) splits one table into smaller physical pieces with no application changes and no distributed-system complexity.
+
+**Sharding** (splitting data across multiple Postgres instances) is a last resort. It breaks transactions, complicates joins, and requires application changes. It is the right answer only when a single machine cannot hold the data or handle the write throughput — 40M rows is unlikely to hit that limit.
+
+The bottleneck is almost certainly a missing index or a bad query plan, not data volume.

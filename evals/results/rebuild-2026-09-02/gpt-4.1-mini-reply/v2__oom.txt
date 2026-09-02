@@ -1,0 +1,1 @@
+The pod restarts because it uses more memory than its limit. The system kills it to free memory. You must increase the pod memory limit or reduce its memory use. Check pod logs to find memory use spikes. You can also add resource limits if missing.

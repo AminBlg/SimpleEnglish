@@ -148,6 +148,41 @@ Remove the panel:
 """
 
 
+BOLD = re.compile(r"\*\*[^*\n]+\*\*")
+HEADER = re.compile(r"^#{1,6}\s", re.M)
+BULLET = re.compile(r"^\s*([-*+]|\d+[.)])\s", re.M)
+REPLY_CAP = 5
+
+
+def reader_check(text):
+    """What a reader sees in a chat reply. Every sentence counts, list items included."""
+    prose = re.sub(r"```.*?```", " ", text, flags=re.S)
+    prose = re.sub(r"`[^`\n]+`", " CODESPAN ", prose)
+    prose_no_md = re.sub(r"^\s*(#{1,6}\s|[-*+]\s|\d+[.)]\s)", "", prose, flags=re.M)
+    sents = [p for p in re.split(r"(?<=[.!?])\s+|\n+", prose_no_md) if len(p.strip().split()) >= 2]
+    counts = {
+        "sentences": len(sents),
+        "over_cap": max(0, len(sents) - REPLY_CAP),
+        "em_dash": len(DASH.findall(prose)),
+        "bold_spans": len(BOLD.findall(text)),
+        "headers": len(HEADER.findall(text)),
+        "bullets": len(BULLET.findall(text)),
+        "contraction": len(CONTRACTION.findall(prose)),
+    }
+    words = max(1, len(prose_no_md.split()))
+    visible = counts["over_cap"] + counts["em_dash"] + counts["bold_spans"] + counts["headers"] + counts["bullets"]
+    return {"type": "reply", "words": words, "counts": counts, "visible_total": visible, "under_cap": counts["over_cap"] == 0}
+
+
+REPLY_FIXTURE = """**Yes** — it is bad.
+
+## Why
+- Lag grows.
+- Users wait.
+
+Check it now. Then scale."""
+
+
 def self_test():
     slop = lint(SLOP_FIXTURE, "procedural")
     clean = lint(CLEAN_FIXTURE, "procedural")
@@ -165,10 +200,13 @@ def self_test():
     assert clean["violations_total"] == 0, clean
     assert lint("We delve into the landscape.", "descriptive")["violations"]["slop_word"] == 2
     assert dashes["violations"]["em_dash"] == 3, dashes
+    r = reader_check(REPLY_FIXTURE)["counts"]
+    assert (r["sentences"], r["em_dash"], r["bold_spans"], r["headers"], r["bullets"]) == (5, 1, 1, 1, 2), r
+    assert reader_check("Yes. It is bad because lag grows. Scale now.")["visible_total"] == 0
     print("self-test OK:", slop["violations_total"], "violations in slop fixture, 0 in clean")
 
 
-USAGE = "usage: ste_lint.py [--type procedural|descriptive] [--gate] (FILE|-) | --self-test"
+USAGE = "usage: ste_lint.py [--type procedural|descriptive|reply] [--gate] (FILE|-) | --self-test"
 
 
 def main():
@@ -186,7 +224,7 @@ def main():
             sys.exit("missing value after --type\n" + USAGE)
         text_type = args[i + 1]
         del args[i:i + 2]
-    if text_type not in LIMITS:
+    if text_type != "reply" and text_type not in LIMITS:
         sys.exit("unknown --type %r (expected procedural or descriptive)\n%s" % (text_type, USAGE))
     if len(args) != 1:
         sys.exit(USAGE)
@@ -199,7 +237,7 @@ def main():
                 text = fh.read()
         except OSError as err:
             sys.exit(str(err))
-    report = lint(text, text_type)
+    report = reader_check(text) if text_type == "reply" else lint(text, text_type)
     print(json.dumps(report, indent=2))
     return 1 if gate and report["violations_total"] else 0
 

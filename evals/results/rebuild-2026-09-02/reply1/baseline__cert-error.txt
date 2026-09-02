@@ -1,0 +1,56 @@
+## What's happening
+
+curl is trying to verify the server's SSL certificate by tracing its chain up to a trusted root CA. Your internal API is using a certificate signed by a **private/internal CA** (common in corporate environments), and that CA's root certificate is not in curl's trust store (`/etc/ssl/certs/ca-certificates.crt` on Linux).
+
+The chain breaks at the top because curl has never been told to trust your internal CA.
+
+---
+
+## How to fix it
+
+### Option 1 — Trust the internal CA system-wide (recommended)
+
+Get the internal CA root certificate (`.crt` or `.pem` file) from your infra/security team, then:
+
+```bash
+sudo cp internal-ca.crt /usr/local/share/ca-certificates/
+sudo update-ca-certificates
+```
+
+After this, curl and most other tools (browsers via NSS, Git, etc.) will trust certs signed by that CA.
+
+### Option 2 — Pass the CA cert directly to curl (one-off)
+
+```bash
+curl --cacert /path/to/internal-ca.crt https://your-internal-api/
+```
+
+Good for a quick test or scripts where you don't want to touch the system store.
+
+### Option 3 — Add it to curl's config permanently (user-level, no sudo)
+
+```bash
+echo 'capath=/path/to/internal-ca.crt' >> ~/.curlrc
+```
+
+---
+
+## Diagnosing the chain
+
+To see exactly what certificate the server is presenting and where the chain breaks:
+
+```bash
+curl -vvv https://your-internal-api/ 2>&1 | grep -E 'subject|issuer|SSL|certificate'
+```
+
+Or with openssl for the full chain:
+
+```bash
+openssl s_client -connect your-internal-api:443 -showcerts
+```
+
+Look for `Verify return code:` at the bottom — code `20` means "unable to get local issuer certificate", confirming the CA is missing from your trust store.
+
+---
+
+**Do not use `-k` / `--insecure`** outside of quick local debugging — it disables all certificate verification and defeats the purpose of TLS.

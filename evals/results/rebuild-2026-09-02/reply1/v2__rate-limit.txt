@@ -1,0 +1,5 @@
+A token bucket works like this: each user has a bucket that holds up to 100 tokens. The bucket refills at a fixed rate — in your case, 100 tokens per minute. Each request consumes one token. If the bucket is empty, the request is rejected or queued.
+
+This fits your requirement well. It allows short bursts up to 100 requests, then enforces the 100 req/min average naturally without requiring a hard per-second calculation. It also handles idle users gracefully — their bucket fills up, ready for the next burst.
+
+The main alternative is a sliding window counter, which is stricter but more complex to implement in distributed systems. For a simple 100 req/min limit, the token bucket is a good choice.

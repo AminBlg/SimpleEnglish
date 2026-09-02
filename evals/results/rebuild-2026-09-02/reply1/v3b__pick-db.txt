@@ -1,0 +1,3 @@
+Before sharding, profile the actual bottleneck. Sharding is expensive and often unnecessary.
+
+Run `EXPLAIN (ANALYZE, BUFFERS)` on your slowest queries. The output tells you whether the problem is missing indexes, sequential scans, lock contention, or something else entirely. Fix the cheap things first: add indexes, tune `work_mem` and `shared_buffers`, and check if `autovacuum` is keeping up. Partitioning by a natural range key (date, region) is a far simpler step than sharding and often recovers most of the performance. Only reach for sharding if you have exhausted those options and the bottleneck is write throughput or the table genuinely cannot fit on one machine.

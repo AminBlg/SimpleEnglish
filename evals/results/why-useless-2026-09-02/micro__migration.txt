@@ -1,0 +1,20 @@
+A backfill is the process of filling in values for the new column in rows that already exist in the table, since those rows were written before the column existed and have no value for it.
+
+When you add a NOT NULL column to a large table in most databases (PostgreSQL, MySQL), the database tries to rewrite every row immediately to set a default value, which locks the table and can take very long or appear to hang. The fix is to split the migration into three steps: first add the column as nullable with no constraint so the table rewrite is cheap or skipped, then run an UPDATE in batches to fill in the value for existing rows (the backfill), and finally add the NOT NULL constraint once every row has a value.
+
+A batched backfill looks roughly like this in SQL, run repeatedly until zero rows are updated:
+
+```sql
+UPDATE your_table
+SET new_column = <default_value>
+WHERE new_column IS NULL
+LIMIT 10000;
+```
+
+Then once the column is fully populated:
+
+```sql
+ALTER TABLE your_table ALTER COLUMN new_column SET NOT NULL;
+```
+
+In PostgreSQL 12 and later you can make that final constraint step nearly instant by first creating it as NOT VALID, validating it separately, which avoids a full table scan under a heavy lock.

@@ -1,0 +1,5 @@
+Consumer lag is the number of messages sitting in a Kafka topic that a consumer has not yet processed. A lag of 2 million means your consumers are 2 million messages behind producers, and whether that is bad depends entirely on your throughput rate and how quickly the gap is growing. If your consumers process 1 million messages per second and the lag is stable, you have roughly a 2-second delay, which may be acceptable. If the lag is climbing, consumers cannot keep up with production rate, and the gap will widen until you intervene or the system buckles.
+
+For users, the practical impact maps directly to what those messages represent. If this is a real-time notification pipeline, users may receive alerts minutes or hours late. If it is an order-processing or payment stream, transactions may appear pending or delayed. If it is a read-model update pipeline (keeping a database in sync), users will see stale data.
+
+The most important question to answer right now is whether the lag is stable, growing, or shrinking, because that tells you if you have a chronic capacity problem or an acute incident in progress.

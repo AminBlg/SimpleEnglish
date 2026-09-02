@@ -1,0 +1,19 @@
+Before sharding, check if you actually need it. Sharding is complex and often unnecessary.
+
+**Do these first, in order:**
+
+1. **Check your indexes.** Run `EXPLAIN (ANALYZE, BUFFERS)` on the slow queries. A missing index on a 40M-row table explains most slowdowns.
+
+2. **Check autovacuum.** Run `SELECT relname, n_dead_tup, last_autovacuum FROM pg_stat_user_tables WHERE relname = 'your_table'`. Dead tuples bloat sequential scans.
+
+3. **Check your query patterns.** Are you doing full-table scans, joining without indexes, or fetching too many rows? Fix the query before scaling the infrastructure.
+
+4. **Add table partitioning (if reads filter by a range).** Postgres native partitioning by date or ID is far simpler than sharding and often enough for hundreds of millions of rows.
+
+5. **Add read replicas.** If the problem is read throughput (many clients), a replica costs almost nothing compared to sharding.
+
+**Sharding only makes sense when:**
+- A single node cannot hold the data or handle the write rate.
+- You have already done the above and measured that they are not enough.
+
+40M rows is not large for Postgres. The problem is almost certainly a missing index or a bad query plan.

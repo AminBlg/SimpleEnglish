@@ -1,0 +1,7 @@
+A backfill is the process of writing a value into the new column for every existing row, because the database cannot accept NULL there but all old rows have nothing yet.
+
+The migration hangs because most databases (Postgres in particular) take a full table lock while they rewrite every row inline during an `ALTER TABLE ... SET DEFAULT ... NOT NULL` statement on a 20 GB table, blocking all reads and writes until it finishes.
+
+The standard fix is three separate migrations: first add the column as nullable with no constraint, then run an UPDATE in batches (for example, 10 000 rows at a time with a small sleep between batches) to fill in the value for existing rows, and finally add the NOT NULL constraint once every row has a value. In Postgres 11 and later you can also use `ALTER TABLE ... ADD COLUMN ... NOT NULL DEFAULT <literal>` with a constant default, which stores the default in the catalog and avoids a full rewrite entirely — but only when the default is a literal, not a function call like `now()`.
+
+Stop the hanging migration first, then choose the batched-update path if you need a dynamic default, or the single-statement path if a constant value works.

@@ -1,0 +1,19 @@
+## sqlpipe v2.0 Release Notes
+
+**Breaking change:** The `name` field on `/v2/users` responses is removed. It is replaced by two separate fields: `first_name` and `last_name`. Update any client code that reads or maps the `name` field before upgrading.
+
+**New: `--incremental` flag**
+
+Pass `--incremental` to export only rows added or modified since the last run. This reduces transfer volume for large tables and shortens pipeline runtimes.
+
+**Faster Parquet writes**
+
+Parquet write throughput is 40% faster in this release. No configuration changes are required to get this improvement.
+
+---
+
+**Upgrade steps:**
+
+1. Update client code to use `first_name` and `last_name` in place of `name`.
+2. Replace the sqlpipe binary with the v2.0 build.
+3. Run your pipeline to confirm output.

@@ -1,0 +1,47 @@
+**OOMKilled** means the pod's container used more memory than its limit. The Linux kernel killed the process to protect the node.
+
+## What causes it
+
+The container hit the `resources.limits.memory` value set in its spec. Kubernetes does not warn before the kill — it happens instantly when usage crosses the limit.
+
+## What to change
+
+**1. Raise the memory limit** (quickest fix):
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"
+```
+
+Set `requests` to the typical usage and `limits` to the peak you can tolerate.
+
+**2. Find the actual usage first** — do not guess the new value:
+
+```bash
+kubectl top pod <pod-name> -n <namespace>
+```
+
+If the pod restarts too fast, check the previous container's metrics:
+
+```bash
+kubectl describe pod <pod-name> -n <namespace>
+```
+
+Look for `Last State` and `OOM Killed: true` in the output.
+
+**3. Fix the application if the leak is real**
+
+If memory grows over time and never stabilizes, you have a memory leak. Raising the limit only delays the next kill. Profile the application to find what holds memory.
+
+## Decision rule
+
+| Situation | Action |
+|---|---|
+| Limit was too low for normal workload | Raise the limit |
+| Memory grows without bound | Fix the leak, then set the limit |
+| Batch job with high peak usage | Raise the limit or add a `--max-old-space-size` flag (Node.js) or heap flag (JVM) |
+
+For JVM workloads, also set `-XX:MaxRAMPercentage=75` so the heap stays below the container limit.

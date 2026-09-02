@@ -1,0 +1,3 @@
+Redis is caching the old price and serving it until the cache entry expires (TTL of roughly 10 minutes). The database has the new price immediately, but every read hits Redis first, so users never see the update until the key expires naturally.
+
+The fix is to invalidate the cache key whenever a price is written. In the write path, after you update the database, delete (or overwrite) the Redis key for that price. That way the next read misses the cache, fetches the fresh value from the database, and repopulates Redis with the correct price.

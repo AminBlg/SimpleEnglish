@@ -1,0 +1,20 @@
+Redis is caching the prices with a time-to-live (TTL) of 10 minutes. When the database updates a price, Redis still serves the old value until that TTL expires.
+
+**Fix: invalidate the cache on write.**
+
+When you update a price in the database, delete (or update) the corresponding Redis key in the same operation:
+
+```python
+def update_price(product_id, new_price):
+    db.execute("UPDATE prices SET price = ? WHERE id = ?", new_price, product_id)
+    redis.delete(f"price:{product_id}")
+```
+
+This is cache invalidation. The next read after the delete fetches the fresh value from the database and repopulates Redis.
+
+Two alternatives if you cannot invalidate on write:
+
+- **Write-through cache** — write the new price to Redis and the database at the same time, so the cache is never stale.
+- **Shorter TTL** — reduces the stale window but does not eliminate it.
+
+Cache invalidation on write is the standard fix because it makes the cache consistent immediately at zero extra read cost.

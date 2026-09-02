@@ -1,0 +1,5 @@
+Yes, 2 million is bad, but how bad depends on your throughput rate. Consumer lag is the count of messages produced but not yet consumed — the gap between the latest offset and the consumer's current offset. At 10,000 messages per second, 2 million means your consumers are 200 seconds (over 3 minutes) behind real time. At 1,000 messages per second, that gap is 33 minutes.
+
+For users, the impact maps directly to what those messages drive. If the topic feeds real-time features (search indexing, order status, notifications, fraud checks), users see stale data or delayed actions proportional to that lag. If it feeds async batch jobs (reporting, analytics), users likely notice nothing yet.
+
+The immediate questions to answer: is lag growing, stable, or shrinking? Growing lag means consumers cannot keep up and the situation will worsen. Check consumer CPU and GC pause times first, then partition count (too few partitions caps parallelism), then whether a single slow partition or dead consumer instance is the bottleneck.

@@ -1,0 +1,7 @@
+Yes, 2 million messages of consumer lag is serious. Lag is the count of messages produced but not yet consumed — it means your consumers are falling behind producers by that many messages.
+
+The user impact depends on what the consumer does. If it drives real-time features (notifications, live feeds, fraud checks, order processing), users experience delays proportional to your throughput rate. At 10,000 messages per second, 2 million messages means a 200-second backlog — over three minutes of stale data or delayed actions.
+
+The root cause is almost always one of three things: a consumer that is too slow (CPU-bound processing, slow downstream calls), too few consumer instances relative to partition count, or a sudden traffic spike the current fleet cannot absorb. Check consumer CPU, downstream latency, and whether partition count matches or exceeds your consumer instance count.
+
+To stop the bleed, scale consumer instances up to match partition count first, then profile the processing path for bottlenecks. If lag is still climbing after scaling, the problem is per-message processing time, not parallelism.

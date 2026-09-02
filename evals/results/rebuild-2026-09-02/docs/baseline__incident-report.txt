@@ -1,0 +1,11 @@
+**Incident Report — 2026-09-02**
+
+**Status:** Resolved
+
+**Duration:** 14:02 – 14:31 UTC (29 minutes)
+
+**Impact:** 12% of API requests returned HTTP 502 errors.
+
+**Summary:** A deployment at 14:02 UTC inadvertently removed the cache warmup step from the startup sequence. Without pre-warmed cache, the API tier was unable to serve a portion of requests, resulting in 502 errors for affected clients. Our engineering team identified the root cause at 14:23 UTC and reverted the deployment at 14:27 UTC. Services fully recovered by 14:31 UTC.
+
+**Next steps:** We are adding automated checks to prevent cache warmup configuration from being silently removed in future deployments.

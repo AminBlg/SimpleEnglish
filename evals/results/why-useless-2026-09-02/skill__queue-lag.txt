@@ -1,0 +1,25 @@
+Yes, 2 million is bad. Here is what it means.
+
+**Consumer lag** is the number of messages that producers wrote to Kafka but consumers have not yet read. A lag of 2 million means your consumers are 2 million messages behind the current position in the topic.
+
+**What users experience depends on what that topic drives.** Common effects:
+
+- **Delayed data** — if the topic feeds a database, search index, or dashboard, users see stale results.
+- **Delayed actions** — if the topic triggers emails, notifications, or payments, those are queued and late.
+- **Timeouts or failures** — if a downstream service waits for a Kafka-driven response, it may time out before the message is processed.
+
+**Why lag climbs:**
+
+- Consumers are too slow (CPU-bound, slow database writes, external API calls blocking the processing loop).
+- Producers spiked and sent far more messages than usual.
+- A consumer instance crashed and left fewer instances to share the load.
+- A consumer is stuck on a poison-pill message it cannot process.
+
+**First steps to diagnose:**
+
+1. Run `kafka-consumer-groups.sh --describe` to see which partitions and consumer instances are behind.
+2. Check if lag is growing or holding steady — steady lag is serious, but growing lag is urgent.
+3. Look at consumer error logs for repeated failures or slow processing times.
+4. Check producer throughput to rule out a traffic spike.
+
+If lag is still climbing, add consumer instances or reduce processing time per message before users feel a broader outage.

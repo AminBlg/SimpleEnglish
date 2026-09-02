@@ -1,0 +1,1 @@
+First, analyze the queries to find slow points. Next, check if the table has proper indexes for those queries. Then, consider table partitioning if applicable. Sharding is complex and suits very high scale. Improve indexing and optimize queries before sharding.

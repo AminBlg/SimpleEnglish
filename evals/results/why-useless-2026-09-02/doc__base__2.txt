@@ -1,0 +1,55 @@
+## Installation & Usage
+
+### Install
+
+**macOS / Linux (Homebrew)**
+```bash
+brew install sqlpipe
+```
+
+**Go install**
+```bash
+go install github.com/your-org/sqlpipe@latest
+```
+
+**Binary download**
+
+Download the latest release for your platform from the [releases page](https://github.com/your-org/sqlpipe/releases), then make it executable:
+```bash
+chmod +x sqlpipe && mv sqlpipe /usr/local/bin/
+```
+
+---
+
+### Run
+
+Copy a single table from one Postgres database to another:
+
+```bash
+sqlpipe \
+  --src "postgres://user:pass@source-host:5432/sourcedb" \
+  --dst "postgres://user:pass@dest-host:5432/destdb" \
+  --table orders
+```
+
+Copy multiple tables:
+
+```bash
+sqlpipe \
+  --src "postgres://user:pass@source-host:5432/sourcedb" \
+  --dst "postgres://user:pass@dest-host:5432/destdb" \
+  --table orders,customers,products
+```
+
+Copy all tables in a schema:
+
+```bash
+sqlpipe \
+  --src "postgres://user:pass@source-host:5432/sourcedb" \
+  --dst "postgres://user:pass@dest-host:5432/destdb" \
+  --schema public
+```
+
+By default, sqlpipe **truncates** the destination table before inserting. Pass `--mode append` to insert without truncating, or `--mode upsert --key id` to upsert on a primary key.
+
+Run `sqlpipe --help` for the full list of flags.

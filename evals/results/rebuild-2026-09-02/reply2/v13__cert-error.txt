@@ -1,0 +1,47 @@
+Your curl client cannot verify the server's certificate because it doesn't trust the Certificate Authority (CA) that signed it. Internal APIs typically use a private/corporate CA that isn't in the system's default CA bundle.
+
+**What is happening**
+
+curl builds a chain from the server's certificate up to a trusted root CA. Your internal API's certificate was signed by a private CA whose root certificate is not in curl's trusted CA bundle (usually `/etc/ssl/certs/ca-certificates.crt` on Linux).
+
+**How to fix it**
+
+**Option 1 — Add your internal CA to the system trust store (recommended, permanent)**
+
+1. Get the internal CA certificate (`.crt` or `.pem`) from your IT/platform team.
+2. Copy it into the system CA directory:
+   ```bash
+   sudo cp internal-ca.crt /usr/local/share/ca-certificates/
+   sudo update-ca-certificates
+   ```
+3. curl picks up the updated bundle automatically.
+
+**Option 2 — Pass the CA cert directly to curl (per-command)**
+
+```bash
+curl --cacert /path/to/internal-ca.crt https://your-internal-api/
+```
+
+Useful for one-off testing or scripts before the CA is deployed system-wide.
+
+**Option 3 — Set `CURL_CA_BUNDLE` (per-session)**
+
+```bash
+export CURL_CA_BUNDLE=/path/to/internal-ca.crt
+curl https://your-internal-api/
+```
+
+This applies to all curl invocations in that shell session and also affects many tools that use libcurl (Python `requests`, etc.).
+
+**Do not do this** — `curl -k` / `--insecure` disables verification entirely. It silences the error but leaves you open to man-in-the-middle attacks.
+
+---
+
+**How to get the CA cert if you don't have it**
+
+```bash
+openssl s_client -connect your-internal-api:443 -showcerts 2>/dev/null </dev/null \
+  | openssl x509 -outform PEM > server-cert.pem
+```
+
+This extracts the server cert. If the chain is multi-level, run with `-showcerts` and grab the last (root) PEM block — that is the CA you need to trust.

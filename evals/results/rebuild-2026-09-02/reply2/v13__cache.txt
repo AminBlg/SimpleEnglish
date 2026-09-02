@@ -1,0 +1,13 @@
+The stale data is caused by cached values in Redis not being invalidated when prices are updated in the database. Redis holds a snapshot of the price at write time, and reads are served from cache until the TTL expires — hence the up-to-10-minute lag.
+
+**Why:** The cache TTL is set to ~10 minutes. Every read hits Redis first; the database is only queried on a cache miss. When a price is written to the database, the corresponding Redis key is not deleted or updated, so readers continue to get the old value until the key naturally expires.
+
+**Fix options, in order of preference:**
+
+1. **Cache invalidation on write (best).** When a price is updated in the database, immediately delete (or overwrite) the Redis key for that price. Reads after that will miss the cache, fetch from the database, and repopulate Redis with the fresh value. This gives you near-instant consistency with no TTL change needed.
+
+2. **Write-through caching.** Write the new price to Redis and the database atomically on every update. Reads always hit Redis, but the cached value is always current. More complex to implement correctly under concurrent writes.
+
+3. **Reduce TTL (workaround, not a fix).** Lowering the TTL to, say, 30 seconds reduces the stale window but does not eliminate it, and adds database load. Only useful as a temporary band-aid.
+
+The correct fix is option 1: after every `UPDATE prices SET ...`, issue a `DEL <price_key>` (or `SET <price_key> <new_value>`) to Redis in the same transaction boundary. If you use an ORM, a post-save hook or event listener is the right place to put this.

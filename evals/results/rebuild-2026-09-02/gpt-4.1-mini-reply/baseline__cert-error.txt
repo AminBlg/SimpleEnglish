@@ -1,0 +1,65 @@
+The error `SSL certificate problem: unable to get local issuer certificate` from `curl` means that `curl` is unable to verify the SSL certificate chain presented by your internal API server because it can't find the intermediate or root certificates (the local issuer certificates) in its trusted store.
+
+### What is happening?
+
+1. **Incomplete certificate chain on server:**  
+   Your internal API server is likely serving a certificate that is signed by an intermediate CA, but it is **not including the intermediate certificate(s)** needed for clients to verify the full chain up to a trusted root.
+
+2. **Missing or untrusted CA certificate on client:**  
+   The CA that issued the certificate (or its intermediate authorities) may not be in the CA bundle `curl` uses to verify the server cert.
+
+3. **Custom or internal CA:**  
+   For internal APIs, it's common to use private/internal CA certificates that public clients (and `curl` by default) don't trust by default.
+
+### How to fix it
+
+#### 1. Ensure the server sends the full certificate chain
+
+Check what your server is sending using:
+
+```bash
+openssl s_client -connect yourapi.internal:443 -showcerts
+```
+
+You should see the server certificate *and* the intermediate certificates. If intermediates are missing, update your server SSL config to include the full chain.
+
+For example, for Apache or NGINX:
+
+- Apache: `SSLCertificateFile` for your cert, and `SSLCertificateChainFile` (or include intermediate certs in the cert file)
+- NGINX: Put full chain in `ssl_certificate` file (server cert + intermediate certs concatenated)
+
+---
+
+#### 2. Add your internal CA or intermediate CA cert(s) to your client trust store
+
+If the CA is internal/private:
+
+- Get the CA certificate PEM file (root and/or intermediate)
+- For the `curl` command, use `--cacert` option:
+
+```bash
+curl --cacert /path/to/your-ca.pem https://yourapi.internal
+```
+
+- Alternatively, add your CA cert to your system's trusted certificates store, e.g.,
+
+  - On Debian/Ubuntu, place the PEM file under `/usr/local/share/ca-certificates/` and run `sudo update-ca-certificates`
+  - On RedHat/CentOS, place in `/etc/pki/ca-trust/source/anchors/` and run `sudo update-ca-trust`
+  - On Windows / Mac, import the cert into the system keychain/trusted root CA
+
+---
+
+#### 3. Disable SSL verification (not recommended except for quick testing)
+
+```bash
+curl -k https://yourapi.internal
+```
+
+**This bypasses all certificate checks and is insecure; don't use for production.**
+
+---
+
+### Summary
+
+- The error happens because the client `curl` can't verify the certificate chain.
+- Fix it by making sure your server sends the full certificate

@@ -1,0 +1,19 @@
+Before sharding, check whether you actually need it. Sharding is a last resort — it adds enormous operational complexity.
+
+**Do these first, in order:**
+
+1. **Explain the slow queries.** Run `EXPLAIN (ANALYZE, BUFFERS)` on your slowest queries. Most "slow reads on big tables" are missing indexes, not a scale problem.
+
+2. **Check your indexes.** Are you filtering/joining on unindexed columns? 40M rows with a proper B-tree index returns in milliseconds.
+
+3. **Check `pg_stat_user_tables` and `pg_stat_user_indexes`.** Look for sequential scans where you expect index scans. Check `n_dead_tup` — if it's high, run `VACUUM ANALYZE`.
+
+4. **Check your hardware bottleneck.** Is it CPU, I/O, or memory? If your working set doesn't fit in `shared_buffers` (and OS page cache), you'll see heavy I/O. Throwing more RAM at it often solves "big table" problems cheaply.
+
+5. **Partitioning (not sharding).** If queries consistently filter on a column like `created_at` or `tenant_id`, Postgres native partitioning (`PARTITION BY RANGE/LIST`) prunes irrelevant partitions automatically. This is a single-node solution with much lower complexity than sharding.
+
+6. **Read replicas.** If reads are the bottleneck and writes are fine, a streaming replica handles read scale with near-zero application changes.
+
+**Only consider sharding if:** you've exhausted indexes, partitioning, and replicas, AND you're hitting single-node write throughput or storage limits. Tools like Citus or application-level sharding are real options then — but the operational cost is significant.
+
+What do the slow queries look like? That's the fastest way to narrow this down.

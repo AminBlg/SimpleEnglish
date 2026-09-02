@@ -1,0 +1,5 @@
+I don't have reliable knowledge of sqlpipe's exact error message text for that scenario, and fabricating it would risk giving you something incorrect. To get the precise output:
+
+1. Check sqlpipe's source on GitHub (search for `AccessDenied` or `PutObject` in the error-handling code).
+2. Reproduce it locally with a restricted IAM role.
+3. Check their docs or issue tracker for a known error reference.

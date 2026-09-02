@@ -1,0 +1,40 @@
+curl cannot verify the server's certificate because it does not trust the certificate authority (CA) that signed it. For an internal API, the CA is almost always a private/corporate CA whose root certificate is not in curl's default trust store.
+
+**What is happening**
+
+TLS verification works by tracing the server's certificate back to a trusted root CA. curl uses a compiled-in CA bundle (usually `/etc/ssl/certs/ca-certificates.crt` on Linux). Your internal API presents a certificate signed by a private CA that is not in that bundle, so verification fails.
+
+**How to fix it**
+
+*Option 1 — Pass the CA certificate directly (safest, no system changes)*
+
+```bash
+curl --cacert /path/to/internal-ca.crt https://your-internal-api/
+```
+
+Get the CA certificate from your infrastructure or security team. It is a `.crt` or `.pem` file containing the root (and any intermediate) CA certificate.
+
+*Option 2 — Add the CA to the system trust store (permanent, affects all tools)*
+
+```bash
+# Arch / Manjaro
+sudo trust anchor --store /path/to/internal-ca.crt
+sudo update-ca-trust
+
+# Debian / Ubuntu
+sudo cp /path/to/internal-ca.crt /usr/local/share/ca-certificates/internal-ca.crt
+sudo update-ca-certificates
+```
+
+After this, curl and other tools that use the system store will trust the CA automatically.
+
+*Option 3 — Inspect the chain first (to confirm the diagnosis)*
+
+```bash
+curl -v https://your-internal-api/ 2>&1 | grep -A5 'SSL certificate'
+openssl s_client -connect your-internal-api:443 -showcerts </dev/null
+```
+
+The `openssl` output shows the full chain and identifies which CA signed the leaf certificate.
+
+**Do not use `-k` / `--insecure`** in anything beyond a one-off test. It disables verification entirely and exposes you to man-in-the-middle attacks on the internal network.

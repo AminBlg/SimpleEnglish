@@ -1,0 +1,68 @@
+## OOMKilled — What's Happening
+
+The Linux kernel's Out-of-Memory killer terminated your container's process because it exceeded the memory **limit** set in the pod spec. Kubernetes then restarts it, and if the root cause isn't fixed, the cycle repeats — which is what you see in `kubectl get pods` as increasing `RESTARTS`.
+
+The limit is enforced via cgroups. When the container's memory usage hits the ceiling, the kernel kills the heaviest process in that cgroup rather than letting it take memory from other workloads.
+
+---
+
+## Diagnose First
+
+```bash
+# Confirm OOMKill and see current/previous container state
+kubectl describe pod <pod-name>
+
+# Check how much memory the app actually uses at peak
+kubectl top pod <pod-name> --containers
+
+# See the last exit code (137 = killed by signal 9 = OOM)
+kubectl get pod <pod-name> -o jsonpath='{.status.containerStatuses[0].lastState.terminated}'
+```
+
+---
+
+## What to Change
+
+### 1. Raise the memory limit (if the usage is legitimate)
+
+```yaml
+resources:
+  requests:
+    memory: "512Mi"   # scheduler uses this for placement
+  limits:
+    memory: "1Gi"     # kernel enforces this — raise it
+```
+
+Set `limits` to ~20–30% above your observed peak usage to give headroom for spikes.
+
+### 2. Set a request if you haven't (prevents bad scheduling)
+
+If `requests` is unset, Kubernetes places the pod on a node that may already be under pressure. `requests` should reflect your steady-state usage; `limits` covers burst.
+
+### 3. Fix the actual leak (if usage grows unbounded)
+
+If `kubectl top` shows memory climbing over time rather than sitting at a stable high value, the problem is a memory leak, not a tight limit. Raising the limit only delays the kill. Profile the app:
+
+- JVM: heap dump, tune `-Xmx`
+- Node.js: `--inspect` + heap snapshot
+- Go/Rust: unlikely to leak but check goroutine/buffer accumulation
+- General: look for unbounded caches, retained connections, or growing queues
+
+### 4. Enable a Vertical Pod Autoscaler (VPA) in recommendation mode
+
+```bash
+kubectl apply -f https://github.com/kubernetes/autoscaler/raw/master/vertical-pod-autoscaler/deploy/vpa-v1-crd-gen.yaml
+```
+
+VPA observes real usage and recommends (or automatically applies) better `requests`/`limits` values.
+
+---
+
+## Quick Mental Model
+
+| Field | Who uses it | What happens if too low |
+|---|---|---|
+| `requests.memory` | Kubernetes scheduler | Pod lands on an already-pressured node |
+| `limits.memory` | Linux kernel (cgroups) | Process is OOMKilled |
+
+Start with `kubectl describe pod` — the `Last State` and `Events` sections will confirm OOMKill and show the exact usage at the time of death.

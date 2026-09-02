@@ -1,0 +1,34 @@
+curl cannot verify the server's SSL certificate because the certificate chain includes a CA (Certificate Authority) that is not in curl's trust store. This is common with internal APIs that use a private/corporate CA.
+
+**What is happening**
+
+The server presents a certificate signed by an internal CA. curl checks its trust store (usually `/etc/ssl/certs/ca-certificates.crt` on Linux) and does not find that CA, so it refuses the connection.
+
+**How to fix it**
+
+**Option 1 — Trust your internal CA system-wide (recommended)**
+
+1. Get the internal CA certificate (`.crt` or `.pem` file) from your infrastructure team.
+2. Copy it to the system trust directory:
+   ```bash
+   sudo cp internal-ca.crt /usr/local/share/ca-certificates/
+   sudo update-ca-certificates
+   ```
+3. Run curl again — no flags needed.
+
+**Option 2 — Pass the CA to curl directly (per-command)**
+
+```bash
+curl --cacert /path/to/internal-ca.pem https://your-internal-api/
+```
+
+**Option 3 — Inspect the certificate chain first**
+
+```bash
+curl -v https://your-internal-api/ 2>&1 | grep -A5 "SSL certificate"
+openssl s_client -connect your-internal-api:443 -showcerts
+```
+
+The `openssl` command prints the full chain. The last certificate in the chain is the root CA you need to trust.
+
+**Do not use `-k` / `--insecure`** in any environment beyond a quick local test. It disables all certificate verification and exposes you to man-in-the-middle attacks.

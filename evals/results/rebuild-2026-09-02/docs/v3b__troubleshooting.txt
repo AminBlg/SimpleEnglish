@@ -1,0 +1,9 @@
+## Troubleshooting
+
+**Connection timeouts to Postgres**
+
+If sqlpipe times out when it connects to Postgres, make sure that the host and port in your connection string are reachable from the machine that runs sqlpipe. Run `psql` with the same credentials to confirm the connection works. If the connection works in `psql` but not in sqlpipe, increase the `--connect-timeout` value in your command. If a firewall sits between sqlpipe and the database, make sure that the firewall allows outbound TCP on port 5432.
+
+**S3 permission errors**
+
+If sqlpipe returns an access-denied error for S3, make sure that the IAM role or user has `s3:PutObject` permission on the target bucket. If you use a bucket policy, make sure that the policy does not deny the principal that sqlpipe uses. Set the `AWS_REGION` environment variable to the region of the target bucket before you run sqlpipe.

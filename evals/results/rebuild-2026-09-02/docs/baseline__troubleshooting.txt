@@ -1,0 +1,9 @@
+## Troubleshooting
+
+### Connection Timeouts to PostgreSQL
+
+If sqlpipe times out connecting to PostgreSQL, verify the host and port are reachable: `pg_isready -h <host> -p <port>`. Check that your connection string includes a valid `connect_timeout` parameter (e.g., `connect_timeout=10`). Firewall rules or VPC security groups commonly block port 5432 — confirm inbound access from the sqlpipe host. For SSL-related hangs, try appending `sslmode=disable` to isolate the issue. Long-running transfers may hit idle timeout limits; increase `tcp_keepalives_idle` on the server or pass keepalive options in the DSN.
+
+### S3 Permission Errors
+
+`AccessDenied` errors typically indicate missing IAM permissions. The executing role needs at minimum `s3:PutObject` and `s3:GetObject` on the target bucket. If using a bucket policy with a condition on `aws:SourceVpc`, ensure the sqlpipe host routes through the correct VPC endpoint. For KMS-encrypted buckets, add `kms:GenerateDataKey` and `kms:Decrypt` to the role. Run `aws s3 ls s3://<bucket>` to confirm credential resolution before invoking sqlpipe.

@@ -1,0 +1,56 @@
+## OOMKilled in Kubernetes
+
+**What's happening:** The container in your pod is exceeding its memory limit. When a container uses more memory than its configured `resources.limits.memory`, the Linux kernel's Out-Of-Memory (OOM) killer terminates the process. Kubernetes then restarts the pod, and if it keeps happening, you'll see a `CrashLoopBackOff` with restart counts climbing.
+
+You can confirm this with:
+```bash
+kubectl describe pod <pod-name>
+# Look for: Last State: Terminated, Reason: OOMKilled
+
+kubectl top pod <pod-name>  # live memory usage (requires metrics-server)
+```
+
+---
+
+## What to change
+
+### 1. Raise the memory limit (quickest fix)
+
+In your pod/deployment spec:
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"  # increase this
+```
+
+Pick a limit based on observed usage — `kubectl top pod` or your monitoring tool shows actual consumption. A common rule: set `limits` to ~1.5–2× the normal peak.
+
+### 2. Set a request if you haven't (prevents scheduling on too-small nodes)
+
+`requests` is what Kubernetes uses for scheduling; `limits` is the enforcement ceiling. If `requests` is missing or too low, the pod may land on a node that can't actually sustain it.
+
+### 3. Fix the actual memory leak or over-allocation
+
+Raising the limit is a band-aid if the app is genuinely leaking. Investigate:
+- **JVM apps** (Java, Scala, Kotlin): the JVM often ignores container limits unless you set `-XX:MaxRAMPercentage=75` or `-Xmx` explicitly.
+- **Node.js**: increase with `--max-old-space-size=<MB>`.
+- **Python**: check for unbounded caches, large dataframes kept in memory, or circular references.
+- Profile the app with heap dumps or memory profilers to find the root cause.
+
+### 4. Enable a Vertical Pod Autoscaler (VPA) in recommendation mode
+
+VPA observes real usage and suggests right-sized `requests`/`limits` without you guessing:
+```bash
+kubectl apply -f https://github.com/kubernetes/autoscaler/raw/master/vertical-pod-autoscaler/deploy/vpa-v1-crd-gen.yaml
+```
+Then create a `VerticalPodAutoscaler` object with `updateMode: "Off"` to get recommendations without automatic changes.
+
+---
+
+**Summary of priority:**
+1. Raise `limits.memory` to stop the immediate restarts.
+2. Instrument the app to understand real usage.
+3. Fix leaks or tune runtime memory flags.
+4. Use VPA to automate right-sizing over time.

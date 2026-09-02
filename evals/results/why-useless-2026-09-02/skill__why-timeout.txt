@@ -1,0 +1,10 @@
+Idempotent means safe to run twice: sending the same request a second time produces the same result as sending it once. No duplicate orders, no extra charges.
+
+A POST to `/v2/orders` is not idempotent by default — POST typically creates a new resource on each call. If the endpoint is *designed* to be idempotent (for example, it requires a unique `idempotency-key` header and deduplicates by that key), then retrying on timeout is safe.
+
+Check two things before you rely on this:
+
+- The API docs confirm idempotency support for that endpoint.
+- Your retry sends the exact same `idempotency-key` value, not a freshly generated one.
+
+If both are true, your retry is safe. If either is false, a timeout retry can create duplicate orders.
