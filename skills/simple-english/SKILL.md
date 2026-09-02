@@ -17,7 +17,7 @@ description: |
 license: MIT
 compatibility: claude-code cursor codex gemini-cli opencode
 metadata:
-  version: "2.0.0"
+  version: "2.0.1"
   standard: ASD-STE100 Issue 9 (2025-01-15)
 ---
 
@@ -120,10 +120,7 @@ Break long noun chains with prepositions (of, on, in, for):
 | 3.7 | Describe an action with a verb, not a noun ("compress the file", not "perform compression of the file"). |
 
 **Approved modals: can, will, must. Banned: should, would, may, might, could.**
-The standard rejects "could" even for possibility: write "an explosion can occur", never "could occur". For "should": a requirement becomes "must". A suggestion is stated as fact or deleted. This matters double for agent instructions, because models read "should" as optional.
-
-**Before:** The migration has completed and the table is being rebuilt.
-**After:** The migration completed. The database rebuilds the table.
+The modal ladder below routes each banned modal. This matters double for agent instructions, because models read "should" as optional.
 
 ### Section 4 — Sentences (Rules 4.1-4.5)
 
@@ -164,8 +161,6 @@ Rule 4.2 is the anti-terseness rule. Plain English is short sentences with compl
 | 6.5 | One topic per paragraph. |
 | 6.6 | Maximum six sentences per paragraph. |
 
-No imperative in descriptive text. Descriptions explain. Procedures instruct.
-
 ### Section 7 — Safety instructions (Rules 7.1-7.3)
 
 | Rule | Instruction |
@@ -192,9 +187,6 @@ Never bury the instruction after the explanation. The same pattern fits destruct
 Rule 8.6 matters for software text: `sqlpipe run --config sqlpipe.yaml` in backticks counts as one word.
 
 **Dashes** (this skill, not the standard). An em-dash (`—`) splices two statements and hides the logic between them. Name the relation ("because", "but", "for example") or write two sentences. A spaced or double hyphen between statements is the same dash. A range (`5–10`), a list marker, and a flag (`--force`) are not.
-
-**Before:** The deploy failed — the disk was full.
-**After:** The deploy failed because the disk was full.
 
 ### Section 9 — Writing practices (Rules 9.1-9.4, GR-1 to GR-8)
 
@@ -232,7 +224,7 @@ AI text drifts in known directions (Wikipedia "Signs of AI writing"). The rules 
 - Collaborative leftovers: no "I hope this helps", no "Let me know".
 - Formatting habits: no bold as decoration, no bold lead-ins, no emoji as structure, no heading for two sentences.
 
-For the specific overused words, `references/word-swaps.md` maps each one to a plain replacement. Read it when you rewrite existing text. If a word carries no fact, delete it instead.
+For the specific overused words, `references/word-swaps.md` maps each one to a plain replacement. If a word carries no fact, delete it instead.
 
 ## Word Choice
 
@@ -240,7 +232,6 @@ One word, one meaning, one part of speech, for the whole document (Rules 1.11, 9
 
 - The settings file is `configuration`, never config, settings, or options in the same document.
 - The verify concept is `make sure that`, never check, verify, confirm, validate, or ensure as verbs. Strict mode routes the rest with `references/strict-vocabulary.md`.
-- When a plain word does the job, take it over the technical one, and define the technical one when you must keep it.
 - Common swaps: however → but, therefore → as a result, since (= because) → because, perform → do, avoid → prevent, repeat → do again, acceptable → permitted, now → delete it.
 
 ## Untouchables
@@ -262,7 +253,7 @@ The reply is Plain mode, in every mode: 25 words per sentence, simple tenses, ac
 
 ## Self-Check Before You Deliver
 
-This step is not optional. Run these six checks (checks 1-5 on your draft, check 6 on your reply):
+This step is not optional. Run these six checks (the sixth covers your reply):
 
 1. Count words in your three longest sentences. Over the 20/25 limit → split them.
 2. Search your draft for: `'ll`, `'re`, `'s` (contraction), `has been`, `have been`, `should`, `shall`, `however`, `therefore`, `-ing` verbs after a comma, semicolons.

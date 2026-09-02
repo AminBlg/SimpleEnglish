@@ -2,7 +2,7 @@
   "name": "simple-english",
   "displayName": "Simple English",
   "description": "Write plain, layman-readable English with the discipline of ASD-STE100 Simplified Technical English: short sentences, one word one meaning, active voice, condition before command, terms defined at first use.",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": {
     "name": "AminBlg"
   },
