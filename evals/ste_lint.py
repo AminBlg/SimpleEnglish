@@ -69,11 +69,13 @@ def strip_code(text):
     text = re.sub(r"`[^`\n]+`", " CODESPAN ", text)  # one word per Rule 8.6
     text = re.sub(r"^#+\s.*$", " ", text, flags=re.M)  # headings exempt (titles, 8.6)
     text = re.sub(r"https?://\S+", " URL ", text)
+    text = re.sub(r"^\s*\|.*\|\s*$", " ", text, flags=re.M)  # table rows (cells are not sentences)
     return text
 
 
 def sentences(text):
-    text = re.sub(r"^\s*([-*]|\d+\.)\s+", "", text, flags=re.M)  # list markers
+    # Append ". " to each item so items become their own sentence units instead of merging.
+    text = re.sub(r"^\s*([-*]|\d+\.)\s+(.*?)$", r"\2. ", text, flags=re.M)
     parts = re.split(r"(?<=[.!?:])\s+", text)
     return [p.strip() for p in parts if len(p.strip().split()) >= 2]
 
@@ -134,6 +136,31 @@ CLEAN_FIXTURE = """The system retries a failed upload automatically. This proces
 
 If failures continue, make sure that your credentials are correct. If the problem continues, contact support."""
 
+TABLE_FIXTURE = """\
+| Column A | Column B | Column C |
+|----------|----------|----------|
+| Cell one that is very long and has many words | Cell two that is also quite long | Cell three |
+| More data here in this cell | And more data here too | And even more here |
+"""
+
+LIST_FIXTURE = """\
+The following items are available:
+
+- First item without a period at the end of the line
+- Second item without a period at the end of the line
+- Third item without a period at the end of the line
+
+Following prose sentence.
+"""
+
+LABEL_LIST_FIXTURE = """\
+**Helix owns:**
+
+- Learner authentication and session management
+- Identity verification and multi-factor authentication
+- Privacy controls and consent management
+"""
+
 # Only the first three dashes must be flagged as logic junctions.
 DASH_FIXTURE = """The deploy failed — the disk was full.
 The upload failed -- the token expired.
@@ -165,6 +192,17 @@ def self_test():
     assert clean["violations_total"] == 0, clean
     assert lint("We delve into the landscape.", "descriptive")["violations"]["slop_word"] == 2
     assert dashes["violations"]["em_dash"] == 3, dashes
+    # Table rows and list items must not produce false sentence_over_limit hits.
+    assert lint(TABLE_FIXTURE, "descriptive")["violations"]["sentence_over_limit"] == 0, \
+        "table rows produced false sentence_over_limit"
+    assert lint(LIST_FIXTURE, "descriptive")["violations"]["sentence_over_limit"] == 0, \
+        "bullet list produced false sentence_over_limit"
+    assert lint(LABEL_LIST_FIXTURE, "descriptive")["violations"]["sentence_over_limit"] == 0, \
+        "bold label + list produced false sentence_over_limit"
+    # A genuine long prose sentence must still flag.
+    long_prose = "a " * 30  # 30 repetitions of the same word, one space each
+    assert lint(long_prose, "descriptive")["violations"]["sentence_over_limit"] >= 1, \
+        "genuine long sentence was not flagged"
     print("self-test OK:", slop["violations_total"], "violations in slop fixture, 0 in clean")
 
 
