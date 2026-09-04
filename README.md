@@ -83,7 +83,7 @@ More rewrites in [`examples/before-after.md`](examples/before-after.md): READMEs
 
 ## Benchmarks
 
-**86% fewer visible defects in chat replies with the skill on**: over-cap sentences, em-dashes, bold, headers, and bullets, pooled over 16 replies on claude-sonnet-4-6 (406 → 58). A blind judge preferred 2.0.1 over 2.0.0 in 14 of 16 pairs. Measured 2026-09-02, [raw files and tables](evals/results/rebuild-2026-09-02/RESULTS.md).
+**86% fewer visible defects in chat replies with the skill on**: over-cap sentences, em-dashes, bold, headers, and bullets, pooled over 16 replies on claude-sonnet-4-6 (406 → 58). A blind judge preferred the shipped 2.0.1 over 2.0.0 in 14 of 16 pairs, no ties. Measured 2026-09-02, [raw files and tables](evals/results/rebuild-2026-09-02/RESULTS.md).
 
 | Reply condition (sonnet-4-6, 2 runs × 8 questions) | words | sentences | em-dashes | bold | headers | bullets |
 |---|---:|---:|---:|---:|---:|---:|

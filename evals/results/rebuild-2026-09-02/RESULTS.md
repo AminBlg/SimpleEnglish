@@ -26,10 +26,14 @@ Run 2 (`reply2/`):
 
 Visible defects pooled over both runs (over-cap sentences + em-dashes + bold + headers + bullets): baseline 406, 2.0.0 321, 2.0.1 (v3b) 58. That is 85.7% fewer than baseline and 81.9% fewer than 2.0.0. The five-sentence cap is met in 5 of 16 replies. Sonnet at low effort still explains at length when the question says "explain".
 
-| Run | 2.0.1 wins | ties | losses | mean 2.0.0 | mean 2.0.1 |
-|---|---:|---:|---:|---:|---:|
-| reply1 | 7 | 1 | 0 | 6.38 | 8.19 |
-| reply2 | 7 | 0 | 1 | 6.50 | 8.12 |
+Blind pairwise judge (claude-sonnet-4-6, both orders, no labels), rubric: answers first, every term understood by an outsider, no filler, no longer than needed. The shipped 2.0.1 (`v3b`) against 2.0.0 (`judge/judge-v2-v3b-r*.json`), and the first draft (`v3`) against 2.0.0 (`judge/judge-v2-v3-r*.json`):
+
+| Pair | Run | 2.0.1 wins | ties | losses | mean 2.0.0 | mean 2.0.1 |
+|---|---|---:|---:|---:|---:|---:|
+| v3b vs 2.0.0 | reply1 | 7 | 0 | 1 | 5.94 | 8.12 |
+| v3b vs 2.0.0 | reply2 | 7 | 0 | 1 | 5.81 | 7.88 |
+| v3 vs 2.0.0 | reply1 | 7 | 1 | 0 | 6.38 | 8.19 |
+| v3 vs 2.0.0 | reply2 | 7 | 0 | 1 | 6.50 | 8.12 |
 
 ## Replies on gpt-4.1-mini (`gpt-4.1-mini-reply/`)
 
