@@ -1,9 +1,10 @@
 {
   "model": "claude-opus-4-8",
   "scenario": "release-notes",
+  "judge_effort": "low",
   "order1_base_first": {
-    "a_score": 6,
-    "b_score": 9
+    "a_score": 8,
+    "b_score": 10
   },
   "order2_skill_first": {
     "a_score": 9,

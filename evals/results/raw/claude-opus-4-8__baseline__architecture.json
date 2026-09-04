@@ -1,32 +1,35 @@
 {
-  "text": "sqlpipe moves Postgres tables into S3 as Parquet through three stages joined by bounded channels.\n\n**Reader** holds a single Postgres connection, runs a cursor over target table, pulls rows in fixed-size batches. Batch size caps memory: reader blocks when downstream channel full, so slow S3 backpressures straight to database instead of buffering unbounded.\n\n**Converter** takes each batch, maps Postgres types to Parquet schema once at start, writes rows into a row group, closes group at batch boundary. Output is byte buffer per row group. CPU-bound stage, so it scales horizontally \u2014 several converters read same channel, order irrelevant because row groups are self-contained.\n\n**Uploader** accumulates row-group buffers until it hits S3 multipart minimum (5 MiB), then uploads part. Failed part retries with exponential backoff; part numbers stay stable across retries, so retry never corrupts object. On final batch, uploader completes multipart upload; on unrecoverable error, aborts it so S3 drops orphaned parts.\n\nFailure in any stage cancels shared context, draining the other two.",
+  "text": "sqlpipe moves data from Postgres to S3 as Parquet through a three-stage pipeline connected by bounded channels. A **reader** process opens a Postgres cursor and streams rows in fixed-size batches, applying backpressure so it never outruns downstream consumers. Each batch is handed to a **converter**, which maps Postgres types to their Parquet equivalents and encodes the rows into columnar row groups, buffering until a target row-group size is reached. Completed row groups flow to an **uploader**, which assembles them into multipart S3 objects, issuing part uploads concurrently and retrying transient failures with exponential backoff before finalizing each object. Decoupling the stages lets slow network I/O overlap with CPU-bound encoding and database reads, so throughput is bounded by the slowest stage rather than their sum. Failures propagate through the channels, cancelling the pipeline cleanly.",
   "input_tokens": 2,
-  "output_tokens": 371,
-  "duration_ms": 7947,
-  "cost_usd": 0.21743350000000003,
+  "output_tokens": 300,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 6624,
+  "cost_usd": 0.057015,
   "model": "claude-opus-4-8",
   "condition": "baseline",
   "scenario": "architecture",
   "type": "descriptive",
   "lint": {
     "type": "descriptive",
-    "words": 163,
-    "sentences": 11,
-    "mean_sentence_words": 14.8,
-    "longest_sentence_words": 24,
+    "words": 133,
+    "sentences": 6,
+    "mean_sentence_words": 22.2,
+    "longest_sentence_words": 31,
     "violations": {
-      "sentence_over_limit": 0,
+      "sentence_over_limit": 3,
       "contraction": 0,
       "banned_modal": 0,
       "perfect_tense": 0,
       "ing_clause": 0,
-      "semicolon": 2,
+      "semicolon": 0,
+      "em_dash": 0,
       "latin_abbrev": 0,
       "slop_word": 0,
-      "trailing_condition": 1,
+      "trailing_condition": 0,
       "synonym_rotation": 0
     },
     "violations_total": 3,
-    "violations_per_100w": 1.84
+    "violations_per_100w": 2.26
   }
 }

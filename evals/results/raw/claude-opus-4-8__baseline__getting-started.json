@@ -1,32 +1,35 @@
 {
-  "text": "## Getting started\n\nInstall sqlpipe with one command:\n\n```sh\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nThe script drops the `sqlpipe` binary in your `PATH`. Verify with `sqlpipe --version`.\n\n### Configure\n\nsqlpipe reads a YAML file. Create `sqlpipe.yaml` in your project root:\n\n```yaml\nsource:\n  driver: postgresql\n  dsn: postgres://user:pass@localhost:5432/app\n\ntarget:\n  driver: mysql\n  dsn: mysql://user:pass@localhost:3306/warehouse\n\ntables:\n  - users\n  - orders\n```\n\n`source` and `target` define the two ends of the pipe. `tables` lists what moves. Keep credentials out of the file by using environment variables \u2014 sqlpipe expands `${VAR}` in any DSN.\n\n### First run\n\n```sh\nsqlpipe run --config sqlpipe.yaml\n```\n\nsqlpipe connects to both databases, checks that the target schema matches, then copies each table in order. Progress prints per table with row counts and elapsed time. A non-zero exit code means the transfer stopped; the error names the table and the failing statement.\n\nAdd `--dry-run` to validate your config and connections without writing anything.",
+  "text": "## Getting Started\n\nsqlpipe gets you from install to your first pipeline run in three steps.\n\n### 1. Install\n\nDownload and install the CLI with a single command:\n\n```sh\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nThis places the `sqlpipe` binary on your `PATH`. Verify it with `sqlpipe --version`.\n\n### 2. Configure\n\nsqlpipe is driven by a `sqlpipe.yaml` file that defines your source, destination, and the data to move. Create one in your project directory:\n\n```yaml\nsource:\n  driver: postgres\n  dsn: postgres://user:pass@localhost:5432/app\n\ndestination:\n  driver: snowflake\n  dsn: snowflake://user:pass@account/warehouse\n\npipelines:\n  - name: users\n    query: SELECT * FROM users\n```\n\nAdjust the drivers, connection strings, and pipeline queries to match your environment.\n\n### 3. Run\n\nExecute the pipeline using your configuration:\n\n```sh\nsqlpipe run --config sqlpipe.yaml\n```\n\nsqlpipe connects to both endpoints, runs each defined pipeline, and reports progress as rows are transferred. You're now moving data.",
   "input_tokens": 2,
-  "output_tokens": 419,
-  "duration_ms": 7805,
-  "cost_usd": 0.2189835,
+  "output_tokens": 401,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 6785,
+  "cost_usd": 0.068727,
   "model": "claude-opus-4-8",
   "condition": "baseline",
   "scenario": "getting-started",
   "type": "procedural",
   "lint": {
     "type": "procedural",
-    "words": 116,
-    "sentences": 12,
+    "words": 97,
+    "sentences": 10,
     "mean_sentence_words": 9.7,
     "longest_sentence_words": 17,
     "violations": {
       "sentence_over_limit": 0,
-      "contraction": 0,
+      "contraction": 1,
       "banned_modal": 0,
       "perfect_tense": 0,
       "ing_clause": 0,
-      "semicolon": 1,
+      "semicolon": 0,
+      "em_dash": 0,
       "latin_abbrev": 0,
       "slop_word": 0,
       "trailing_condition": 0,
-      "synonym_rotation": 2
+      "synonym_rotation": 0
     },
-    "violations_total": 3,
-    "violations_per_100w": 2.59
+    "violations_total": 1,
+    "violations_per_100w": 1.03
   }
 }

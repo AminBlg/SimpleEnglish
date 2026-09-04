@@ -1,13 +1,13 @@
 # Benchmark results
 
-**76.1% fewer STE violations per 100 words with the skill, averaged across 9 models x 8 tasks (144 generations, measured).**
+**81.3% fewer STE violations per 100 words with the skill, averaged across 9 models x 8 tasks (144 generations, measured).**
 
 | Model | Baseline viol/100w | Skill viol/100w | Reduction | Baseline sent. len | Skill sent. len | Output tok (base->skill) |
 |---|---|---|---|---|---|---|
 | claude-fable-5-1 | 1.77 | 0.33 | 81.4% | 12.9 | 9.8 | 348 -> 236 |
 | claude-fable-5 | 2.73 | 0.51 | 81.3% | 15.1 | 9.6 | 285 -> 250 |
 | claude-opus-5 | 2.13 | 0.32 | 85.0% | 14.1 | 10.8 | 272 -> 241 |
-| claude-opus-4-8 | 1.05 | 0.62 | 41.0% | 10.7 | 10.0 | 260 -> 235 |
+| claude-opus-4-8 | 3.64 | 0.45 | 87.6% | 16.9 | 11.4 | 278 -> 200 |
 | claude-opus-4-7 | 2.28 | 0.42 | 81.6% | 13.0 | 10.8 | 243 -> 226 |
 | claude-opus-4-6 | 2.24 | 0.4 | 82.1% | 10.9 | 9.0 | 185 -> 176 |
 | claude-opus-4-5-20251101 | 2.55 | 0.57 | 77.6% | 11.1 | 8.5 | 196 -> 159 |
@@ -20,15 +20,15 @@ For each model x scenario pair, claude-opus-4-8 scored the baseline text and
 the skill text on a 0-10 rubric, twice with the texts in both orders. The
 two scores were averaged to cancel position bias. The judge saw no labels.
 
-Result: the skill output scored higher in 61 of 72 pairs, tied in
-5, and lost in 6. Mean rubric score: 8.29 with the skill, 6.15 without.
+Result: the skill output scored higher in 62 of 72 pairs, tied in
+6, and lost in 4. Mean rubric score: 8.31 with the skill, 6.20 without.
 
 | Model | Skill wins | Ties | Losses |
 |---|---|---|---|
 | claude-fable-5-1 | 8 | 0 | 0 |
 | claude-fable-5 | 8 | 0 | 0 |
 | claude-opus-5 | 7 | 1 | 0 |
-| claude-opus-4-8 | 5 | 1 | 2 |
+| claude-opus-4-8 | 6 | 2 | 0 |
 | claude-opus-4-7 | 7 | 1 | 0 |
 | claude-opus-4-6 | 8 | 0 | 0 |
 | claude-opus-4-5-20251101 | 6 | 0 | 2 |
@@ -38,7 +38,7 @@ Result: the skill output scored higher in 61 of 72 pairs, tied in
 Caveats: one judge model, judged once per order. The judge is a Claude
 model and the texts are Claude output, so family bias is possible. Pairs
 judged before effort pinning inherited the ambient setting, so the judge
-pass is not uniform: 24 of 72 judge files record a
+pass is not uniform: 32 of 72 judge files record a
 `judge_effort` and the rest pre-date the pin. Raw judge files:
 results/raw/*__judge__*.json. Reproduce with
 `python3 evals/run_bench.py --judge`.

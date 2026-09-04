@@ -1,0 +1,32 @@
+{
+  "text": "## Getting started\n\nInstall sqlpipe with one command:\n\n```sh\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nThe script drops the `sqlpipe` binary in your `PATH`. Verify with `sqlpipe --version`.\n\n### Configure\n\nsqlpipe reads a YAML file. Create `sqlpipe.yaml` in your project root:\n\n```yaml\nsource:\n  driver: postgresql\n  dsn: postgres://user:pass@localhost:5432/app\n\ntarget:\n  driver: mysql\n  dsn: mysql://user:pass@localhost:3306/warehouse\n\ntables:\n  - users\n  - orders\n```\n\n`source` and `target` define the two ends of the pipe. `tables` lists what moves. Keep credentials out of the file by using environment variables \u2014 sqlpipe expands `${VAR}` in any DSN.\n\n### First run\n\n```sh\nsqlpipe run --config sqlpipe.yaml\n```\n\nsqlpipe connects to both databases, checks that the target schema matches, then copies each table in order. Progress prints per table with row counts and elapsed time. A non-zero exit code means the transfer stopped; the error names the table and the failing statement.\n\nAdd `--dry-run` to validate your config and connections without writing anything.",
+  "input_tokens": 2,
+  "output_tokens": 419,
+  "duration_ms": 7805,
+  "cost_usd": 0.2189835,
+  "model": "claude-opus-4-8",
+  "condition": "baseline",
+  "scenario": "getting-started",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 116,
+    "sentences": 12,
+    "mean_sentence_words": 9.7,
+    "longest_sentence_words": 17,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 1,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 2
+    },
+    "violations_total": 3,
+    "violations_per_100w": 2.59
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "generated": "2026-09-02",
+  "generated": "2026-09-04",
   "models": [
     {
       "model": "claude-fable-5-1",
@@ -39,15 +39,15 @@
     },
     {
       "model": "claude-opus-4-8",
-      "baseline_viol_per_100w": 1.05,
-      "baseline_mean_sentence": 10.7,
-      "baseline_output_tokens": 260,
+      "baseline_viol_per_100w": 3.64,
+      "baseline_mean_sentence": 16.9,
+      "baseline_output_tokens": 278,
       "baseline_n": 8,
-      "skill_viol_per_100w": 0.62,
-      "skill_mean_sentence": 10.0,
-      "skill_output_tokens": 235,
+      "skill_viol_per_100w": 0.45,
+      "skill_mean_sentence": 11.4,
+      "skill_output_tokens": 200,
       "skill_n": 8,
-      "reduction_pct": 41.0
+      "reduction_pct": 87.6
     },
     {
       "model": "claude-opus-4-7",

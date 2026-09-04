@@ -1,32 +1,35 @@
 {
-  "text": "Between 14:02 and 14:31 UTC, 12% of API requests failed with HTTP 502.\n\nA deploy at 14:02 removed the cache warmup step. Without this step, the cache was empty at startup. The origin servers received all requests directly. The origin servers reached their connection limit and returned HTTP 502.\n\nWe reverted the deploy at 14:27. The cache filled again. Error rates returned to normal at 14:31.\n\nNo data was lost. Failed requests returned an error and did not change any records.\n\nWe will add the cache warmup step to the deploy checks. A deploy that removes this step will fail the checks.",
+  "text": "Between 14:02 and 14:31 UTC, about 12% of API requests failed with HTTP 502 errors. The cause was a deploy that removed the cache warmup step, the process that fills the cache before traffic arrives. Without warmup, backend servers could not answer some requests in time and returned 502. We reverted the deploy at 14:27 UTC. Error rates returned to normal within a few minutes. All systems now operate as expected. We are sorry for the disruption. We will add a check to prevent this change from shipping again.",
   "input_tokens": 2,
-  "output_tokens": 201,
-  "duration_ms": 5203,
-  "cost_usd": 0.2827935,
+  "output_tokens": 172,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 4328,
+  "cost_usd": 0.074927,
   "model": "claude-opus-4-8",
   "condition": "skill",
   "scenario": "incident-report",
   "type": "descriptive",
   "lint": {
     "type": "descriptive",
-    "words": 102,
-    "sentences": 12,
-    "mean_sentence_words": 8.5,
-    "longest_sentence_words": 13,
+    "words": 89,
+    "sentences": 8,
+    "mean_sentence_words": 11.1,
+    "longest_sentence_words": 20,
     "violations": {
       "sentence_over_limit": 0,
       "contraction": 0,
-      "banned_modal": 0,
+      "banned_modal": 1,
       "perfect_tense": 0,
       "ing_clause": 0,
       "semicolon": 0,
+      "em_dash": 0,
       "latin_abbrev": 0,
       "slop_word": 0,
       "trailing_condition": 0,
       "synonym_rotation": 0
     },
-    "violations_total": 0,
-    "violations_per_100w": 0.0
+    "violations_total": 1,
+    "violations_per_100w": 1.12
   }
 }

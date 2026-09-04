@@ -102,7 +102,7 @@ On gpt-4.1-mini the same 8 questions went from 23 sentences, 64 bold spans, and 
 | 2.0.0 | 1.70 | 58% |
 | **2.0.1** | 0.91 | 78% |
 
-**History.** The old headline was 76.1% fewer linter violations across 9 Claude models (144 generations, skill versions 1.0.0 to 2.0.0 by row, [RESULTS.md](evals/results/RESULTS.md)), with Pi, opencode, and OpenAI runs in [`evals/results/`](evals/results/). Those numbers reproduce, but the audit in [WHY-USELESS-2026-09-02.md](evals/results/WHY-USELESS-2026-09-02.md) showed that they measured rule obedience, not what a reader sees: the baselines held zero slop words, and the old skill left em-dashes, bold, and 15-sentence replies untouched. 2.0.1 is built on the reader-visible counts above.
+**History.** The old headline is 81.3% fewer linter violations across 9 Claude models (144 generations, skill versions 1.0.0 to 2.0.1 by row, the claude-opus-4-8 row re-run on 2026-09-04 for #24, [RESULTS.md](evals/results/RESULTS.md)), with Pi, opencode, and OpenAI runs in [`evals/results/`](evals/results/). Those numbers reproduce, but the audit in [WHY-USELESS-2026-09-02.md](evals/results/WHY-USELESS-2026-09-02.md) showed that they measured rule obedience, not what a reader sees: the baselines held zero slop words, and the old skill left em-dashes, bold, and 15-sentence replies untouched. 2.0.1 is built on the reader-visible counts above.
 
 Every number reproduces from committed raw files: `python3 evals/score_text_dir.py <dir>` for documents, `python3 evals/run_reply_bench.py --report-only --skill v3b=prompts/system-prompt.md --out <dir>` for replies.
 

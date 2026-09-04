@@ -1,32 +1,35 @@
 {
-  "text": "# sqlpipe v2.0\n\n**Breaking: `/v2/users` name split**\n\n`name` gone. Replaced by `first_name` and `last_name`. Clients reading `name` break on upgrade. Update parsers before deploying. No compatibility shim \u2014 v1 endpoints stay available if you need time to migrate.\n\n**New: `--incremental`**\n\nSync only rows changed since last run instead of full table copy. Cuts transfer volume on large tables with low churn.\n\n**Faster Parquet writes**\n\nParquet output now 40% faster. No config change needed \u2014 applies to all existing pipelines.\n\n**Upgrade**\n\nFix `name` field consumers first, then upgrade. Rest of v2.0 is drop-in.",
+  "text": "# SQLPipe v2.0\n\n**Breaking changes**\n\n- The `/v2/users` endpoint now returns and expects `first_name` and `last_name` instead of a single `name` field. Update any client code that reads or writes `name` before upgrading \u2014 requests using the old field will be rejected.\n\n**New features**\n\n- Added an `--incremental` flag to sync only rows changed since the last run, avoiding full-table reprocessing on large datasets.\n\n**Performance**\n\n- Parquet writes are now roughly 40% faster, cutting export times and lowering memory pressure on wide tables.\n\n**Upgrading**\n\nMigrate `name` handling to the new split fields, then adopt `--incremental` where full reloads aren't required. See the migration guide for details. This is a major release; review the breaking change carefully before deploying to production.",
   "input_tokens": 2,
-  "output_tokens": 239,
-  "duration_ms": 6292,
-  "cost_usd": 0.2634935,
+  "output_tokens": 275,
+  "thinking_tokens": 10,
+  "effort": "low",
+  "duration_ms": 5892,
+  "cost_usd": 0.049485,
   "model": "claude-opus-4-8",
   "condition": "baseline",
   "scenario": "release-notes",
   "type": "descriptive",
   "lint": {
     "type": "descriptive",
-    "words": 91,
-    "sentences": 11,
-    "mean_sentence_words": 8.1,
-    "longest_sentence_words": 14,
+    "words": 117,
+    "sentences": 7,
+    "mean_sentence_words": 16.3,
+    "longest_sentence_words": 21,
     "violations": {
       "sentence_over_limit": 0,
-      "contraction": 0,
+      "contraction": 1,
       "banned_modal": 0,
       "perfect_tense": 0,
       "ing_clause": 0,
-      "semicolon": 0,
+      "semicolon": 1,
+      "em_dash": 1,
       "latin_abbrev": 0,
       "slop_word": 0,
-      "trailing_condition": 1,
+      "trailing_condition": 0,
       "synonym_rotation": 0
     },
-    "violations_total": 1,
-    "violations_per_100w": 1.1
+    "violations_total": 3,
+    "violations_per_100w": 2.56
   }
 }

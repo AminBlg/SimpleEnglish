@@ -1,32 +1,35 @@
 {
-  "text": "Cannot write. Never seen sqlpipe source. Inventing exact error string = fabrication.\n\nWhat settles it: point me at repo/path, or name the version, and I read actual `s3` upload error path.",
+  "text": "I can't give you that as an \"exact\" quote \u2014 I'd be inventing it. I don't have sqlpipe's source or output memorized, and fabricating a verbatim error message (which someone might then grep for, paste into a bug report, or match against logs) would be worse than useless.\n\nTo get the real string, check the source directly \u2014 it's Go, so the message is a literal near the S3 upload call:\n\n```bash\ngit clone https://github.com/sqlpipe/sqlpipe   # or your local checkout\ngrep -rniE 'putobject|access ?denied|s3.*upload|upload.*fail' --include='*.go'\n```\n\nOr just trigger it and capture stderr with a credential that lacks `s3:PutObject`. If you paste the relevant snippet here (or point me at a checkout), I'll tell you exactly what it prints and under what condition.",
   "input_tokens": 2,
-  "output_tokens": 67,
-  "duration_ms": 3470,
-  "cost_usd": 0.2591235,
+  "output_tokens": 363,
+  "thinking_tokens": 91,
+  "effort": "low",
+  "duration_ms": 7693,
+  "cost_usd": 0.058468,
   "model": "claude-opus-4-8",
   "condition": "baseline",
   "scenario": "error-message",
   "type": "procedural",
   "lint": {
     "type": "procedural",
-    "words": 31,
+    "words": 109,
     "sentences": 5,
-    "mean_sentence_words": 6.2,
-    "longest_sentence_words": 16,
+    "mean_sentence_words": 21.8,
+    "longest_sentence_words": 34,
     "violations": {
-      "sentence_over_limit": 0,
-      "contraction": 0,
-      "banned_modal": 0,
+      "sentence_over_limit": 3,
+      "contraction": 5,
+      "banned_modal": 2,
       "perfect_tense": 0,
       "ing_clause": 0,
       "semicolon": 0,
+      "em_dash": 2,
       "latin_abbrev": 0,
       "slop_word": 0,
       "trailing_condition": 0,
       "synonym_rotation": 0
     },
-    "violations_total": 0,
-    "violations_per_100w": 0.0
+    "violations_total": 12,
+    "violations_per_100w": 11.01
   }
 }

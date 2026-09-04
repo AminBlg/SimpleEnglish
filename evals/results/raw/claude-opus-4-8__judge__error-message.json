@@ -1,9 +1,10 @@
 {
   "model": "claude-opus-4-8",
   "scenario": "error-message",
+  "judge_effort": "low",
   "order1_base_first": {
-    "a_score": 3,
-    "b_score": 9
+    "a_score": 9,
+    "b_score": 3
   },
   "order2_skill_first": {
     "a_score": 9,

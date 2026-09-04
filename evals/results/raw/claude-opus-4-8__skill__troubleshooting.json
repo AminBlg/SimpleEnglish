@@ -1,32 +1,35 @@
 {
-  "text": "## Troubleshooting\n\n### Connection timeouts to Postgres\n\nsqlpipe stops with `dial tcp: i/o timeout` when it cannot reach the Postgres port (5432 by default).\n\n1. Make sure that the host that runs sqlpipe can reach the Postgres port. A firewall or a security group usually blocks this port.\n2. If the database is managed (RDS, Cloud SQL), make sure that the instance accepts connections from the IP address of sqlpipe.\n3. If the network is slow, increase `source.connect_timeout_seconds` in the configuration.\n\n### S3 permission errors\n\nsqlpipe stops with `AccessDenied` when the credentials do not have the necessary permissions for the bucket.\n\n1. Make sure that the identity has the `s3:PutObject` and `s3:GetObject` permissions for the target bucket.\n2. If the bucket policy contains a `Deny` statement, make sure that the identity of sqlpipe is not in that statement. A `Deny` statement has priority over an `Allow` statement.\n3. If the bucket uses a KMS key, make sure that the identity has the `kms:GenerateDataKey` and `kms:Decrypt` permissions for this key.\n4. Make sure that the value of `destination.region` is the same as the region of the bucket. A different region returns `PermanentRedirect`.",
+  "text": "## Troubleshooting\n\n### Connection timeouts to Postgres\n\nsqlpipe stops with `dial tcp: i/o timeout` when it cannot connect to the Postgres port (5432 by default).\n\n1. Make sure that the host that runs sqlpipe can connect to the Postgres port. A firewall or security group usually blocks it.\n2. If the database is managed (RDS, Cloud SQL), make sure that the instance accepts connections from the IP of sqlpipe.\n3. If the connection still fails, raise the timeout value for the connection with the `--connect-timeout` flag.\n\n### S3 permission errors\n\nsqlpipe stops with `AccessDenied` when the credentials cannot read or write the bucket.\n\n1. Make sure that the IAM policy grants `s3:GetObject` and `s3:PutObject` on the target bucket.\n2. Make sure that the bucket policy does not deny the account of sqlpipe.\n3. If you use a role, make sure that the session token is current. An expired token returns the same error.",
   "input_tokens": 2,
-  "output_tokens": 446,
-  "duration_ms": 6608,
-  "cost_usd": 0.2887385,
+  "output_tokens": 360,
+  "thinking_tokens": 23,
+  "effort": "low",
+  "duration_ms": 5510,
+  "cost_usd": 0.095199,
   "model": "claude-opus-4-8",
   "condition": "skill",
   "scenario": "troubleshooting",
   "type": "procedural",
   "lint": {
     "type": "procedural",
-    "words": 178,
-    "sentences": 12,
-    "mean_sentence_words": 14.2,
-    "longest_sentence_words": 21,
+    "words": 139,
+    "sentences": 10,
+    "mean_sentence_words": 13.3,
+    "longest_sentence_words": 20,
     "violations": {
-      "sentence_over_limit": 2,
+      "sentence_over_limit": 0,
       "contraction": 0,
       "banned_modal": 0,
       "perfect_tense": 0,
       "ing_clause": 0,
       "semicolon": 0,
+      "em_dash": 0,
       "latin_abbrev": 0,
       "slop_word": 0,
       "trailing_condition": 2,
       "synonym_rotation": 0
     },
-    "violations_total": 4,
-    "violations_per_100w": 2.25
+    "violations_total": 2,
+    "violations_per_100w": 1.44
   }
 }

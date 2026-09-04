@@ -1,12 +1,13 @@
 {
   "model": "claude-opus-4-8",
   "scenario": "getting-started",
+  "judge_effort": "low",
   "order1_base_first": {
-    "a_score": 8,
-    "b_score": 6
+    "a_score": 9,
+    "b_score": 8
   },
   "order2_skill_first": {
-    "a_score": 7,
-    "b_score": 8
+    "a_score": 9,
+    "b_score": 6
   }
 }

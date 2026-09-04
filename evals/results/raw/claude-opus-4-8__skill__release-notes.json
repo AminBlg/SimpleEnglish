@@ -1,19 +1,21 @@
 {
-  "text": "**sqlpipe v2.0**\n\n**Breaking change: user names**\n\nCAUTION: Update your client before you install v2.0. The `/v2/users` endpoint no longer returns the `name` field.\n\n1. Replace every read of `name` with `first_name` and `last_name`.\n2. In requests that create or update a user, send `first_name` and `last_name`. The endpoint rejects `name` with HTTP 400.\n\n**New flag**\n\nUse the `--incremental` flag to copy only the rows that changed after the last run. sqlpipe copies all rows when you do not use this flag.\n\n**Performance**\n\nParquet writes are 40% faster than v1.9. This measurement comes from the standard test set.",
+  "text": "## sqlpipe v2.0\n\nThis release changes the users API and improves performance.\n\n### Breaking change: user names\n\nThe `name` field of `/v2/users` is now two fields: `first_name` and `last_name`. Update your code before you upgrade. A request that sends `name` will fail.\n\n### New: incremental loads\n\nThe new `--incremental` flag copies only the rows that changed since the last run. Use it to make large jobs faster.\n\n### Faster Parquet writes\n\nParquet writes are now 40% faster. You do not have to change anything to get this speed.\n\n### How to upgrade\n\n1. Change every `/v2/users` call to send `first_name` and `last_name`.\n2. Test your integration against the new field names.\n3. Add `--incremental` to the jobs that need it.",
   "input_tokens": 2,
-  "output_tokens": 228,
-  "duration_ms": 5537,
-  "cost_usd": 0.2834385,
+  "output_tokens": 248,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 5942,
+  "cost_usd": 0.092749,
   "model": "claude-opus-4-8",
   "condition": "skill",
   "scenario": "release-notes",
   "type": "descriptive",
   "lint": {
     "type": "descriptive",
-    "words": 99,
-    "sentences": 11,
-    "mean_sentence_words": 8.8,
-    "longest_sentence_words": 17,
+    "words": 102,
+    "sentences": 12,
+    "mean_sentence_words": 8.2,
+    "longest_sentence_words": 14,
     "violations": {
       "sentence_over_limit": 0,
       "contraction": 0,
@@ -21,12 +23,13 @@
       "perfect_tense": 0,
       "ing_clause": 0,
       "semicolon": 0,
+      "em_dash": 0,
       "latin_abbrev": 0,
       "slop_word": 0,
-      "trailing_condition": 1,
+      "trailing_condition": 0,
       "synonym_rotation": 0
     },
-    "violations_total": 1,
-    "violations_per_100w": 1.01
+    "violations_total": 0,
+    "violations_per_100w": 0.0
   }
 }

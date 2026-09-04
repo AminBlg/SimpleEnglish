@@ -1,32 +1,35 @@
 {
-  "text": "sqlpipe moves Postgres tables into S3 as Parquet. Point it at a connection string and a bucket, name the tables you want, and it handles the rest: reading rows, writing columnar files, and uploading them. Full snapshots or incremental syncs based on a watermark column, so repeat runs only move what changed.\n\nOutput lands in a partitioned layout that Athena, DuckDB, Spark, and anything else speaking Parquet can query directly. No daemon, no scheduler, no coordination service \u2014 a single binary you run from cron, a CI job, or your own orchestrator. Configuration lives in one YAML file or command-line flags, whichever fits your setup. State is tracked in the bucket itself, so nothing extra to host and an interrupted run resumes rather than restarting.",
+  "text": "sqlpipe is a command-line tool that moves data out of Postgres and into S3 without the glue code. Point it at a table, give it a bucket, and it streams rows straight to columnar Parquet files\u2014handling type mapping, compression, and partitioning along the way. Whether you're feeding a data lake, archiving cold tables, or building an analytics layer on Athena, Trino, or Spark, sqlpipe keeps your object storage in step with your database.\n\nBuilt for repeatable pipelines, sqlpipe supports both full-table snapshots and incremental syncs driven by a watermark column, so only new or changed rows are written on each run. It's a single static binary with no runtime dependencies, making it easy to drop into a cron job, container, or CI workflow.",
   "input_tokens": 2,
-  "output_tokens": 257,
-  "duration_ms": 6009,
-  "cost_usd": 0.355215,
+  "output_tokens": 247,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 5692,
+  "cost_usd": 0.064506,
   "model": "claude-opus-4-8",
   "condition": "baseline",
   "scenario": "readme-intro",
   "type": "descriptive",
   "lint": {
     "type": "descriptive",
-    "words": 125,
-    "sentences": 8,
-    "mean_sentence_words": 15.6,
-    "longest_sentence_words": 22,
+    "words": 123,
+    "sentences": 5,
+    "mean_sentence_words": 24.6,
+    "longest_sentence_words": 29,
     "violations": {
-      "sentence_over_limit": 0,
-      "contraction": 0,
+      "sentence_over_limit": 3,
+      "contraction": 2,
       "banned_modal": 0,
       "perfect_tense": 0,
-      "ing_clause": 0,
+      "ing_clause": 1,
       "semicolon": 0,
+      "em_dash": 1,
       "latin_abbrev": 0,
       "slop_word": 0,
       "trailing_condition": 0,
       "synonym_rotation": 0
     },
-    "violations_total": 0,
-    "violations_per_100w": 0.0
+    "violations_total": 7,
+    "violations_per_100w": 5.69
   }
 }

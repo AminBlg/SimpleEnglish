@@ -1,0 +1,32 @@
+{
+  "text": "**sqlpipe v2.0**\n\n**Breaking change: user names**\n\nCAUTION: Update your client before you install v2.0. The `/v2/users` endpoint no longer returns the `name` field.\n\n1. Replace every read of `name` with `first_name` and `last_name`.\n2. In requests that create or update a user, send `first_name` and `last_name`. The endpoint rejects `name` with HTTP 400.\n\n**New flag**\n\nUse the `--incremental` flag to copy only the rows that changed after the last run. sqlpipe copies all rows when you do not use this flag.\n\n**Performance**\n\nParquet writes are 40% faster than v1.9. This measurement comes from the standard test set.",
+  "input_tokens": 2,
+  "output_tokens": 228,
+  "duration_ms": 5537,
+  "cost_usd": 0.2834385,
+  "model": "claude-opus-4-8",
+  "condition": "skill",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 99,
+    "sentences": 11,
+    "mean_sentence_words": 8.8,
+    "longest_sentence_words": 17,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 1.01
+  }
+}

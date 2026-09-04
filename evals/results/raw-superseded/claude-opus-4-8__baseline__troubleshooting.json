@@ -1,0 +1,32 @@
+{
+  "text": "## Troubleshooting\n\n### Connection timeouts to Postgres\n\n`sqlpipe` fails with `dial tcp ...: i/o timeout` when it cannot reach the database host. Check these in order:\n\n1. **Host and port** \u2014 confirm the values in your connection string. Postgres listens on 5432 by default.\n2. **Network path** \u2014 from the machine running `sqlpipe`, test with `psql` or `nc -zv <host> 5432`. If that hangs too, the problem is outside `sqlpipe`.\n3. **Firewall and security groups** \u2014 the host running `sqlpipe` needs an inbound rule on the database side.\n4. **`pg_hba.conf`** \u2014 the server must accept connections from your source address.\n5. **SSL mode** \u2014 a mismatch between client and server SSL settings can stall the handshake.\n\nRaise the timeout with `--timeout` for slow links or large transfers.\n\n### S3 permission errors\n\nAn `AccessDenied` or `403 Forbidden` response means the credentials reached S3 but were rejected. Verify:\n\n- Credentials are present (environment variables, shared config file, or instance role) and not expired.\n- The IAM policy grants `s3:GetObject` for reads and `s3:PutObject` for writes on the exact bucket and key prefix.\n- The bucket region matches the region `sqlpipe` is configured to use. A wrong region can surface as a permission error.\n- Bucket policies or SCPs do not override your IAM grant.\n\nRun with `--verbose` to see the full request that failed.",
+  "input_tokens": 2,
+  "output_tokens": 502,
+  "duration_ms": 9253,
+  "cost_usd": 0.2204785,
+  "model": "claude-opus-4-8",
+  "condition": "baseline",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 208,
+    "sentences": 17,
+    "mean_sentence_words": 11.6,
+    "longest_sentence_words": 18,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 1,
+      "synonym_rotation": 3
+    },
+    "violations_total": 4,
+    "violations_per_100w": 1.92
+  }
+}
