@@ -4,12 +4,18 @@
 PostToolUse (Write|Edit on a .md file): lint the file with evals/ste_lint.py
 and, when it has violations, print a short summary to stderr and exit 2 so
 the model sees it. Exit 2 on PostToolUse is advisory: the tool already ran.
+Agent-internal Markdown, such as memory files under the Claude configuration
+directory, is skipped. The writing rules do not govern it, and a summary of
+its violations only spends tokens. Set SIMPLE_ENGLISH_LINT_EXCLUDE to skip
+more paths.
 
 Stop: read `last_assistant_message`, check the reply register (answer first,
 5 sentences or fewer, no slop words), and return a systemMessage only when
 the reply breaks it. Always exit 0, so the session never loops.
 """
+import fnmatch
 import json
+import os
 import pathlib
 import re
 import sys
@@ -19,6 +25,7 @@ ROOT = HERE.parent.parent
 sys.path.insert(0, str(ROOT / "evals"))
 
 MAX_REPLY_SENTENCES = 5
+CLAUDE_DIR = ".claude"
 OPENERS = re.compile(r"^\s*(certainly|great question|you're absolutely right|sure[,!]|absolutely[,!])", re.I)
 CLOSERS = re.compile(r"(i hope this helps|let me know if|feel free to)", re.I)
 
@@ -36,15 +43,46 @@ def strip_code(text):
     return re.sub(r"`[^`]*`", " ", text)
 
 
+def absolute(path, cwd=None):
+    """Make the path absolute. The harness can send it relative to the session directory."""
+    return pathlib.Path(cwd or ".", pathlib.Path(path).expanduser()).absolute()
+
+
+def variants(path):
+    """The path as written and the path with symlinks resolved. An exclusion matches either form.
+
+    A symlink hides a directory name in both directions. `notes.md` can point into `.claude`,
+    and `.claude` itself can point at a dotfiles repository. Both forms must miss for the
+    file to reach the linter.
+    """
+    return {pathlib.Path(os.path.normpath(path)), path.resolve()}
+
+
+def excluded(target):
+    """True for agent-internal Markdown and for the paths the user excludes."""
+    config_dirs = variants(absolute(os.environ.get("CLAUDE_CONFIG_DIR") or f"~/{CLAUDE_DIR}"))
+    raw = os.environ.get("SIMPLE_ENGLISH_LINT_EXCLUDE", "").split(os.pathsep)
+    patterns = [os.path.expanduser(p) for p in raw if p]
+    for form in variants(target):
+        if CLAUDE_DIR in form.parts or any(form.is_relative_to(d) for d in config_dirs):
+            return True
+        if any(fnmatch.fnmatch(str(form), p) for p in patterns):
+            return True
+    return False
+
+
 def post_tool_use(event):
     path = (event.get("tool_input") or {}).get("file_path", "")
     if not path.endswith(".md"):
+        return 0
+    target = absolute(path, event.get("cwd"))
+    if excluded(target):
         return 0
     lint = load_linter()
     if lint is None:
         return 0
     try:
-        text = pathlib.Path(path).read_text(encoding="utf-8")
+        text = target.read_text(encoding="utf-8")
     except OSError:
         return 0
     report = lint.lint(text, "descriptive")
@@ -53,7 +91,7 @@ def post_tool_use(event):
         return 0
     summary = ", ".join(f"{k} {v}" for k, v in hits.items())
     sys.stderr.write(
-        f"simple-english: {pathlib.Path(path).name} has {report['violations_total']} STE violations "
+        f"simple-english: {target.name} has {report['violations_total']} STE violations "
         f"({summary}). Run the self-check in SKILL.md before you deliver.\n"
     )
     return 2
