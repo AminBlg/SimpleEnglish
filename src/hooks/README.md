@@ -51,3 +51,21 @@ Two more hooks run under Claude Code, both advisory. Neither one blocks.
 - `Stop`: the same script reads the last reply and adds a system message when the reply breaks the register: more than five sentences with list items counted, an em-dash, bold, a header, a list item, a filler opener or closer, or a slop word.
 
 Codex runs only the `SessionStart` hook. Test the checks with `python3 src/hooks/test_lint_hook.py`.
+
+## What the file check skips
+
+The writing rules cover the documents that you write for a reader. They do not cover the files that the agent keeps for itself, such as memory files. A summary of the violations in such a file only spends tokens. The `PostToolUse` check therefore skips three groups of paths:
+
+- Every path under the Claude configuration directory. The check reads `CLAUDE_CONFIG_DIR` and falls back to `~/.claude`.
+- Every path with a `.claude` directory component, for example `my-project/.claude/agent-memory/reviewer/MEMORY.md`. A skill or a command that you write under `.claude/` is also skipped.
+- Every path that matches a glob in `SIMPLE_ENGLISH_LINT_EXCLUDE`.
+
+A symlink does not defeat a skip. The check tests the absolute path in two forms, as written and with the symlinks resolved. A match on either form is enough.
+
+`SIMPLE_ENGLISH_LINT_EXCLUDE` holds glob patterns, separated by the path separator of the platform (`:` on Linux and macOS, `;` on Windows). In a pattern, `*` also matches `/`. The check expands a leading `~` to your home directory.
+
+```bash
+export SIMPLE_ENGLISH_LINT_EXCLUDE="$HOME/notes/*:*/CHANGELOG.md"
+```
+
+To turn the file check off, set the variable to `*`. The `Stop` reply check stays on.
