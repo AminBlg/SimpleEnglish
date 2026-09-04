@@ -1,0 +1,35 @@
+{
+  "text": "## Getting started\n\n**1. Install**\n\nRun the installer script, which downloads the latest sqlpipe binary and places it on your `PATH`:\n\n```sh\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nVerify the installation with `sqlpipe --version`.\n\n**2. Configure**\n\nsqlpipe reads its settings from a `sqlpipe.yaml` file. Create one in your project directory and define at least a source, a destination, and the tables or queries to move between them. A minimal example:\n\n```yaml\nsource:\n  driver: postgres\n  dsn: postgres://user:pass@localhost:5432/app\ndestination:\n  driver: mysql\n  dsn: mysql://user:pass@localhost:3306/warehouse\npipelines:\n  - name: users\n    query: SELECT * FROM users\n    target_table: users\n```\n\nKeep credentials out of version control; environment variable references are supported.\n\n**3. First run**\n\nExecute the pipelines defined in your config:\n\n```sh\nsqlpipe run --config sqlpipe.yaml\n```\n\nsqlpipe connects to both databases, runs each pipeline in order, and prints a summary of rows transferred. Fix any connection errors reported, then re-run.",
+  "input_tokens": 2,
+  "output_tokens": 402,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 9255,
+  "cost_usd": 0.025868,
+  "model": "claude-fable-5-1",
+  "condition": "baseline",
+  "scenario": "getting-started",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 106,
+    "sentences": 9,
+    "mean_sentence_words": 11.4,
+    "longest_sentence_words": 23,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 1,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 1
+    },
+    "violations_total": 3,
+    "violations_per_100w": 2.83
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "text": "**Resolved: Elevated API error rates**\n\nBetween 14:02 and 14:31 UTC, approximately 12% of API requests failed with HTTP 502 errors. Customers may have seen intermittent failures or timeouts when calling the API during this window.\n\nThe issue was caused by a deploy that unintentionally removed the cache warmup step. New instances began serving traffic before their caches were populated, which overloaded backend services and resulted in 502 responses.\n\nWe identified the cause and reverted the deploy at 14:27 UTC. Error rates returned to normal by 14:31 UTC.\n\nTo prevent recurrence, we are adding a deploy check that requires cache warmup before instances receive traffic. We apologize for the disruption.",
+  "input_tokens": 2,
+  "output_tokens": 239,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 7308,
+  "cost_usd": 0.16872749999999997,
+  "model": "claude-fable-5-1",
+  "condition": "baseline",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 109,
+    "sentences": 8,
+    "mean_sentence_words": 13.5,
+    "longest_sentence_words": 19,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 1,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 1,
+      "trailing_condition": 1,
+      "synonym_rotation": 0
+    },
+    "violations_total": 3,
+    "violations_per_100w": 2.75
+  }
+}

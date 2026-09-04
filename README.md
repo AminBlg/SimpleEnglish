@@ -10,7 +10,7 @@
 
 <p align="center">
   <a href="evals/results/rebuild-2026-09-02/RESULTS.md"><img src="https://img.shields.io/badge/reply_defects-%E2%88%9286%25_measured-brightgreen?style=flat" alt="86% fewer visible reply defects, measured"></a>
-  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-7_Claude_models-blueviolet?style=flat" alt="7 models benchmarked"></a>
+  <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-9_Claude_models-blueviolet?style=flat" alt="9 models benchmarked"></a>
   <a href="https://agentskills.io"><img src="https://img.shields.io/badge/SKILL.md-open_standard-blue?style=flat" alt="Agent Skills"></a>
   <a href="skills/simple-english/SKILL.md"><img src="https://img.shields.io/badge/version-2.0.1-blue?style=flat" alt="version 2.0.1"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat" alt="MIT"></a>
@@ -102,7 +102,7 @@ On gpt-4.1-mini the same 8 questions went from 23 sentences, 64 bold spans, and 
 | 2.0.0 | 1.70 | 58% |
 | **2.0.1** | 0.91 | 78% |
 
-**History.** The 1.3.0 headline was 74.6% fewer linter violations across 7 Claude models (112 generations, [RESULTS.md](evals/results/RESULTS.md)), with Pi, opencode, and OpenAI runs in [`evals/results/`](evals/results/). Those numbers reproduce, but the audit in [WHY-USELESS-2026-09-02.md](evals/results/WHY-USELESS-2026-09-02.md) showed that they measured rule obedience, not what a reader sees: the baselines held zero slop words, and the old skill left em-dashes, bold, and 15-sentence replies untouched. 2.0.1 is built on the reader-visible counts above.
+**History.** The 1.3.0 headline was 76.1% fewer linter violations across 9 Claude models (144 generations, skill versions 1.0.0 to 2.0.0 by row, [RESULTS.md](evals/results/RESULTS.md)), with Pi, opencode, and OpenAI runs in [`evals/results/`](evals/results/). Those numbers reproduce, but the audit in [WHY-USELESS-2026-09-02.md](evals/results/WHY-USELESS-2026-09-02.md) showed that they measured rule obedience, not what a reader sees: the baselines held zero slop words, and the old skill left em-dashes, bold, and 15-sentence replies untouched. 2.0.1 is built on the reader-visible counts above.
 
 Every number reproduces from committed raw files: `python3 evals/score_text_dir.py <dir>` for documents, `python3 evals/run_reply_bench.py --report-only --skill v3b=prompts/system-prompt.md --out <dir>` for replies.
 

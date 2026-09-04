@@ -1,0 +1,35 @@
+{
+  "text": "sqlpipe v2.0\n\nThis release includes one breaking API change, a new sync mode, and a significant performance improvement for Parquet output.\n\nBreaking change: the `name` field on `/v2/users` has been split into `first_name` and `last_name`. Clients that read or write `name` must be updated before upgrading. Requests that still send `name` will be rejected with a 400 error.\n\nNew: the `--incremental` flag syncs only rows changed since the previous run instead of reloading the full table. This cuts transfer time and load on the source database for large, frequently updated tables.\n\nPerformance: Parquet writes are now about 40% faster thanks to a reworked buffering and compression pipeline. No configuration changes are needed to benefit.\n\nSee the migration guide for upgrade steps.",
+  "input_tokens": 2,
+  "output_tokens": 251,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 7832,
+  "cost_usd": 0.1692745,
+  "model": "claude-fable-5-1",
+  "condition": "baseline",
+  "scenario": "release-notes",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 122,
+    "sentences": 10,
+    "mean_sentence_words": 12.0,
+    "longest_sentence_words": 21,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 1,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 1,
+    "violations_per_100w": 0.82
+  }
+}

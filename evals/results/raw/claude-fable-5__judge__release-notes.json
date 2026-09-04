@@ -1,0 +1,13 @@
+{
+  "model": "claude-fable-5",
+  "scenario": "release-notes",
+  "judge_effort": "low",
+  "order1_base_first": {
+    "a_score": 8,
+    "b_score": 9
+  },
+  "order2_skill_first": {
+    "a_score": 9,
+    "b_score": 6
+  }
+}

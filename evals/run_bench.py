@@ -32,6 +32,8 @@ SKILL = HERE.parent / "skills" / "simple-english" / "SKILL.md"
 RESULTS = HERE / "results"
 RAW = RESULTS / "raw"
 MODELS = [
+    "claude-fable-5-1",
+    "claude-fable-5",
     "claude-opus-5",
     "claude-opus-4-8",
     "claude-opus-4-7",
@@ -231,8 +233,10 @@ def report(table, meta, effort):
         f"  the table assumes they are also `{DEFAULT_EFFORT}`, which matches their measured",
         "  output-token profile, but treat that as inferred. Effort moves the numbers a lot:",
         "  claude-opus-5 measured 85.0% at `low` and 90.2% at `xhigh` on the same scenarios.",
-        "- Output tokens include reasoning tokens. Highest `thinking_tokens` recorded in",
-        f"  raw/ is {meta['max_thinking_tokens']}, so that column is final text.",
+        "- Output tokens include reasoning tokens. The highest `thinking_tokens` in",
+        f"  raw/ is {meta['max_thinking_tokens']}. "
+        + ("The column is final text." if not meta["max_thinking_tokens"]
+           else "On the models that reason, the column is more than final text."),
         "- One generation per cell. Re-run the matrix for variance; the runner is",
         "  resumable, delete results/raw to start fresh.",
         "- No tool can guarantee ASD-STE100 compliance, including this one.",

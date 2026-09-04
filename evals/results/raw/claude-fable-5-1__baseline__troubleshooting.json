@@ -1,0 +1,35 @@
+{
+  "text": "## Troubleshooting\n\n### Postgres connection timeouts\n\nIf `sqlpipe` hangs or fails with `connection timed out`, first confirm the host is reachable:\n\n```\npg_isready -h <host> -p 5432\n```\n\nCommon causes:\n\n- **Firewall or security group** blocks port 5432 from the machine running `sqlpipe`. Check inbound rules for your source IP.\n- **Wrong host or port** in the connection string. Verify with `--source` echoed via `sqlpipe config show`.\n- **SSL mismatch**: the server requires TLS but `sslmode=disable` is set. Try `sslmode=require`.\n- **Slow queries**: increase `--connect-timeout` (default 10s) or `--statement-timeout` for large exports.\n\n### S3 permission errors\n\nAn `AccessDenied` or `403 Forbidden` error means the credentials lack rights on the bucket.\n\n- Confirm which identity is active: `aws sts get-caller-identity`.\n- The IAM policy must allow `s3:PutObject`, `s3:GetObject`, and `s3:ListBucket` on the target bucket and prefix.\n- Check for a bucket policy or SCP that overrides the IAM grant.\n- If using `--kms-key`, the role also needs `kms:GenerateDataKey` and `kms:Decrypt`.\n- Verify the `--region` flag matches the bucket's region.",
+  "input_tokens": 2,
+  "output_tokens": 468,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 11200,
+  "cost_usd": 0.029134,
+  "model": "claude-fable-5-1",
+  "condition": "baseline",
+  "scenario": "troubleshooting",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 153,
+    "sentences": 18,
+    "mean_sentence_words": 8.0,
+    "longest_sentence_words": 17,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 2
+    },
+    "violations_total": 2,
+    "violations_per_100w": 1.31
+  }
+}

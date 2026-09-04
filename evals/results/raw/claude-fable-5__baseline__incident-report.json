@@ -1,0 +1,35 @@
+{
+  "text": "**API Incident Report \u2013 Elevated 502 Errors**\n\nBetween 14:02 and 14:31 UTC, approximately 12% of API requests failed with HTTP 502 errors. We apologize for the disruption.\n\nThe incident was triggered by a deploy at 14:02 that inadvertently removed the cache warmup step, causing backend instances to come online unprepared for production traffic and return errors under load.\n\nWe identified the cause and reverted the deploy at 14:27. Error rates returned to normal by 14:31, and the incident was resolved.\n\nTo prevent recurrence, we are adding automated checks to ensure cache warmup runs on every deploy.",
+  "input_tokens": 2,
+  "output_tokens": 212,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 7183,
+  "cost_usd": 0.175143,
+  "model": "claude-fable-5",
+  "condition": "baseline",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 96,
+    "sentences": 6,
+    "mean_sentence_words": 16.0,
+    "longest_sentence_words": 31,
+    "violations": {
+      "sentence_over_limit": 1,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 1,
+      "semicolon": 0,
+      "em_dash": 1,
+      "latin_abbrev": 0,
+      "slop_word": 1,
+      "trailing_condition": 0,
+      "synonym_rotation": 1
+    },
+    "violations_total": 5,
+    "violations_per_100w": 5.21
+  }
+}

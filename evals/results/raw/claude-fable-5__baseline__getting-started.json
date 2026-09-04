@@ -1,0 +1,35 @@
+{
+  "text": "## Getting started\n\nInstall sqlpipe with a single command:\n\n```sh\ncurl -sSL https://get.sqlpipe.dev | sh\n```\n\nThis downloads the latest release and places the `sqlpipe` binary on your `PATH`. Verify the installation with `sqlpipe --version`.\n\nNext, create a `sqlpipe.yaml` file in your project directory. This is where you define your source and target connections and the pipelines between them. A minimal example:\n\n```yaml\nsource:\n  type: postgres\n  dsn: postgres://user:pass@localhost:5432/mydb\ntarget:\n  type: mysql\n  dsn: user:pass@tcp(localhost:3306)/mydb\n```\n\nAdjust the connection details to match your databases. Keep credentials out of version control: reference environment variables where possible.\n\nFinally, start your first run:\n\n```sh\nsqlpipe run --config sqlpipe.yaml\n```\n\nsqlpipe connects to both databases, validates the configuration, and begins transferring data. Progress and any errors are logged to stdout.",
+  "input_tokens": 2,
+  "output_tokens": 343,
+  "thinking_tokens": 0,
+  "effort": "low",
+  "duration_ms": 7312,
+  "cost_usd": 0.182102,
+  "model": "claude-fable-5",
+  "condition": "baseline",
+  "scenario": "getting-started",
+  "type": "procedural",
+  "lint": {
+    "type": "procedural",
+    "words": 97,
+    "sentences": 12,
+    "mean_sentence_words": 8.1,
+    "longest_sentence_words": 15,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 1
+    },
+    "violations_total": 1,
+    "violations_per_100w": 1.03
+  }
+}

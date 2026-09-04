@@ -1,0 +1,35 @@
+{
+  "text": "sqlpipe moves data from Postgres to S3 with three processes: a reader, a converter, and an uploader.\n\nThe reader streams rows from Postgres in batches. A batch is a fixed number of rows held in memory. Streaming keeps memory use low because the reader never loads the full table.\n\nThe converter turns each batch into a Parquet row group. Parquet is a columnar file format (data stored by column, not by row). A row group is one self-contained block of rows inside a Parquet file.\n\nThe uploader writes the Parquet data to S3 as multipart objects. A multipart upload sends a large object in separate parts. If a part fails, the uploader sends that part again. This retry logic makes the pipeline safe on unstable networks.",
+  "input_tokens": 2,
+  "output_tokens": 317,
+  "thinking_tokens": 82,
+  "effort": "low",
+  "duration_ms": 9215,
+  "cost_usd": 0.33685699999999996,
+  "model": "claude-fable-5",
+  "condition": "skill",
+  "scenario": "architecture",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 126,
+    "sentences": 12,
+    "mean_sentence_words": 10.5,
+    "longest_sentence_words": 13,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 0,
+      "trailing_condition": 0,
+      "synonym_rotation": 0
+    },
+    "violations_total": 0,
+    "violations_per_100w": 0.0
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "text": "**Elevated API errors on September 2**\n\nBetween 14:02 and 14:31 UTC, 12% of API requests failed with HTTP 502 errors. All other requests completed normally.\n\nA deploy at 14:02 removed the cache warmup step. The cache warmup step fills the cache before the service accepts traffic. Without it, the service sent requests to servers that were not ready. These requests failed.\n\nWe reverted the deploy at 14:27. Error rates returned to normal at 14:31. The incident is resolved.\n\nWe will add an automated test that blocks a deploy when the cache warmup step is missing. We apologize for the disruption.",
+  "input_tokens": 2,
+  "output_tokens": 259,
+  "thinking_tokens": 53,
+  "effort": "low",
+  "duration_ms": 7151,
+  "cost_usd": 0.33408499999999997,
+  "model": "claude-fable-5",
+  "condition": "skill",
+  "scenario": "incident-report",
+  "type": "descriptive",
+  "lint": {
+    "type": "descriptive",
+    "words": 100,
+    "sentences": 11,
+    "mean_sentence_words": 9.1,
+    "longest_sentence_words": 20,
+    "violations": {
+      "sentence_over_limit": 0,
+      "contraction": 0,
+      "banned_modal": 0,
+      "perfect_tense": 0,
+      "ing_clause": 0,
+      "semicolon": 0,
+      "em_dash": 0,
+      "latin_abbrev": 0,
+      "slop_word": 1,
+      "trailing_condition": 1,
+      "synonym_rotation": 0
+    },
+    "violations_total": 2,
+    "violations_per_100w": 2.0
+  }
+}
