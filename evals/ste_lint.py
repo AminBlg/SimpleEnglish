@@ -69,13 +69,14 @@ def strip_code(text):
     text = re.sub(r"`[^`\n]+`", " CODESPAN ", text)  # one word per Rule 8.6
     text = re.sub(r"^#+\s.*$", " ", text, flags=re.M)  # headings exempt (titles, 8.6)
     text = re.sub(r"https?://\S+", " URL ", text)
-    text = re.sub(r"^\s*\|.*\|\s*$", " ", text, flags=re.M)  # table rows (cells are not sentences)
+    text = re.sub(r"^\s*\|[\s:|-]+\|\s*$", " ", text, flags=re.M)  # table separator rows
+    text = re.sub(r"^\s*\|(.*)\|\s*$", lambda m: ". ".join(c.strip() for c in m.group(1).split("|") if c.strip()) + ". ", text, flags=re.M)  # each cell is its own unit, still linted
     return text
 
 
 def sentences(text):
     # Append ". " to each item so items become their own sentence units instead of merging.
-    text = re.sub(r"^\s*([-*]|\d+\.)\s+(.*?)$", r"\2. ", text, flags=re.M)
+    text = re.sub(r"^\s*([-*]|\d+\.)\s+(.*?)([.!?:])?\s*$", lambda m: m.group(2) + (m.group(3) or ".") + " ", text, flags=re.M)
     parts = re.split(r"(?<=[.!?:])\s+", text)
     return [p.strip() for p in parts if len(p.strip().split()) >= 2]
 
@@ -182,18 +183,20 @@ REPLY_CAP = 5
 
 
 def reader_check(text):
-    """What a reader sees in a chat reply. Every sentence counts, list items included."""
+    """What a reader sees in a chat reply. Every sentence counts, list items and table rows included."""
+    text = text.replace("\r\n", "\n")
     prose = re.sub(r"```.*?```", " ", text, flags=re.S)
     prose = re.sub(r"`[^`\n]+`", " CODESPAN ", prose)
-    prose_no_md = re.sub(r"^\s*(#{1,6}\s|[-*+]\s|\d+[.)]\s)", "", prose, flags=re.M)
-    sents = [p for p in re.split(r"(?<=[.!?])\s+|\n+", prose_no_md) if len(p.strip().split()) >= 2]
+    prose_no_md = re.sub(r"^\s*(#{1,6}\s|[-*+]\s|\d+[.)]\s|\|)", "", prose, flags=re.M)
+    prose_no_md = re.sub(r"^\s*[\s:|-]+$", "", prose_no_md, flags=re.M)  # table separator rows
+    sents = [p for p in re.split(r"(?<=[.!?])[\"')\]]*\s+|\n+", prose_no_md) if len(p.strip().split()) >= 2]
     counts = {
         "sentences": len(sents),
         "over_cap": max(0, len(sents) - REPLY_CAP),
         "em_dash": len(DASH.findall(prose)),
-        "bold_spans": len(BOLD.findall(text)),
-        "headers": len(HEADER.findall(text)),
-        "bullets": len(BULLET.findall(text)),
+        "bold_spans": len(BOLD.findall(prose)),
+        "headers": len(HEADER.findall(prose)),
+        "bullets": len(BULLET.findall(prose)),
         "contraction": len(CONTRACTION.findall(prose)),
     }
     words = max(1, len(prose_no_md.split()))
@@ -230,6 +233,12 @@ def self_test():
     r = reader_check(REPLY_FIXTURE)["counts"]
     assert (r["sentences"], r["em_dash"], r["bold_spans"], r["headers"], r["bullets"]) == (5, 1, 1, 1, 2), r
     assert reader_check("Yes. It is bad because lag grows. Scale now.")["visible_total"] == 0
+    tricky = "He said \"stop now.\" Then (it broke.) All done.\n\n```\n# not a header\n**not bold**\n- not a bullet\n```\n"
+    t = reader_check(tricky)["counts"]
+    assert (t["sentences"], t["headers"], t["bold_spans"], t["bullets"]) == (3, 0, 0, 0), t
+    cell = lint("| Column | Value |\n|---|---|\n| You should restart it | ok |\n", "descriptive")["violations"]
+    assert cell["banned_modal"] == 1 and cell["sentence_over_limit"] == 0, cell
+    assert sentences("- Loosen the bolts.\n- Then go on") == ["Loosen the bolts.", "Then go on."]
     # Table rows and list items must not produce false sentence_over_limit hits.
     assert lint(TABLE_FIXTURE, "descriptive")["violations"]["sentence_over_limit"] == 0, \
         "table rows produced false sentence_over_limit"

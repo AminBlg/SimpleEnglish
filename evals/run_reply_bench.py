@@ -81,7 +81,11 @@ def main():
             if not f.exists() or not f.read_text().strip():
                 if a.report_only:
                     continue
-                f.write_text(generate(s["prompt"], system, a.model, a.effort))
+                reply = generate(s["prompt"], system, a.model, a.effort)
+                if "session limit" in reply or "Not logged in" in reply:
+                    print(f"SKIP {f.name}: harness message, not cached", file=sys.stderr)
+                    continue
+                f.write_text(reply)
             text = f.read_text()
             if "session limit" in text or "Not logged in" in text:
                 print(f"SKIP {f.name}: harness message, not a reply", file=sys.stderr)

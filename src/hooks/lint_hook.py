@@ -72,7 +72,7 @@ def excluded(target):
 
 
 def post_tool_use(event):
-    path = (event.get("tool_input") or {}).get("file_path", "")
+    path = (event.get("tool_input") or {}).get("file_path") or ""
     if not path.endswith(".md"):
         return 0
     target = absolute(path, event.get("cwd"))
@@ -125,11 +125,14 @@ def main():
         event = json.load(sys.stdin)
     except Exception:  # noqa: BLE001
         return 0
-    name = event.get("hook_event_name", "")
-    if name == "PostToolUse":
-        return post_tool_use(event)
-    if name == "Stop":
-        return stop(event)
+    try:
+        name = event.get("hook_event_name", "")
+        if name == "PostToolUse":
+            return post_tool_use(event)
+        if name == "Stop":
+            return stop(event)
+    except Exception:  # noqa: BLE001  advisory hook: a crash must never block or loop the session
+        return 0
     return 0
 
 

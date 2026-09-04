@@ -24,7 +24,7 @@ Codex asks you to review and trust the hook before its first run. Open `/hooks` 
 
 ## What the hook sends
 
-The hook writes `prompts/system-prompt.md` to standard output. That file is the condensed rule set, about 3,500 characters. The full skill, `skills/simple-english/SKILL.md`, is about 20,000 characters, and Claude Code caps hook output at 10,000 characters. Output over the cap goes to a file and the model gets only a preview. The condensed rules fit, and the hook names the full skill path so the model can read it for a compliance check or strict mode.
+The hook writes the fenced rule block of `prompts/system-prompt.md` to standard output, about 3,500 characters. The page title, the paste instructions, and the word-budget variant stay out. The full skill, `skills/simple-english/SKILL.md`, is about 7,500 characters, and Claude Code caps hook output at 10,000 characters. Output over the cap goes to a file and the model gets only a preview. The condensed rules fit, and the hook names the full skill path so the model can read it for a compliance check or strict mode.
 
 Codex applies its own cap to hook context. The `additionalContextLimit: 0` setting in `.codex-plugin/hooks.json` turns off the spill-to-disk threshold. It does not remove the cap. The condensed rules fit under it.
 

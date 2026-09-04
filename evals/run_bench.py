@@ -231,8 +231,8 @@ def report(table, meta, effort):
         "  present in raw/: " + ", ".join(f"`{e}`" for e in meta["efforts"]) + ".",
         "  Rows marked unrecorded pre-date the pin and inherited the ambient effortLevel;",
         f"  the table assumes they are also `{DEFAULT_EFFORT}`, which matches their measured",
-        "  output-token profile, but treat that as inferred. Effort moves the numbers a lot:",
-        "  claude-opus-5 measured 85.0% at `low` and 90.2% at `xhigh` on the same scenarios.",
+        "  output-token profile, but treat that as inferred. Effort moves the numbers,",
+        "  so compare rows only at the same effort.",
         "- Output tokens include reasoning tokens. The highest `thinking_tokens` in",
         f"  raw/ is {meta['max_thinking_tokens']}. "
         + ("The column is final text." if not meta["max_thinking_tokens"]

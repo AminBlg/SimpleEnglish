@@ -69,7 +69,7 @@ Blind pairwise judge on the replies, 2.0.0 against 1.3.0 (claude-sonnet-4-6, bot
 | earlier text (`5886ea4`) | 6 | 0 | 2 | 6.94 | 7.56 |
 | earlier text (`1065aa6`) | 5 | 1 | 2 | 7.56 | 7.88 |
 
-Across the three runs the pivot leads 14 to 9 with 2 ties. The linter and the judge disagree on the final run; the linter measures the mechanical rules, the judge reads for a smart outsider. Both are reported.
+Across the three runs the pivot leads 14 to 9 with 1 tie. The linter and the judge disagree on the final run; the linter measures the mechanical rules, the judge reads for a smart outsider. Both are reported.
 
 The five-sentence cap in the reply register is not met by any condition at
 low effort; the pivot moves the mean from 8.2 to 7.9. The term-definition

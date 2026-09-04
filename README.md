@@ -83,15 +83,15 @@ More rewrites in [`examples/before-after.md`](examples/before-after.md): READMEs
 
 ## Benchmarks
 
-**86% fewer visible defects in chat replies with the skill on**: over-cap sentences, em-dashes, bold, headers, and bullets, pooled over 16 replies on claude-sonnet-4-6 (418 → 57). A blind judge preferred 2.0.1 over 2.0.0 in 14 of 16 pairs. Measured 2026-09-02, [raw files and tables](evals/results/rebuild-2026-09-02/RESULTS.md).
+**86% fewer visible defects in chat replies with the skill on**: over-cap sentences, em-dashes, bold, headers, and bullets, pooled over 16 replies on claude-sonnet-4-6 (406 → 58). A blind judge preferred 2.0.1 over 2.0.0 in 14 of 16 pairs. Measured 2026-09-02, [raw files and tables](evals/results/rebuild-2026-09-02/RESULTS.md).
 
 | Reply condition (sonnet-4-6, 2 runs × 8 questions) | words | sentences | em-dashes | bold | headers | bullets |
 |---|---:|---:|---:|---:|---:|---:|
-| no skill | 218 | 16.7 | 62 | 79 | 38 | 52 |
-| 2.0.0 | 185 | 14.4 | 43 | 72 | 13 | 52 |
+| no skill | 216 | 16.8 | 62 | 79 | 25 | 52 |
+| 2.0.0 | 184 | 14.4 | 43 | 72 | 4 | 52 |
 | **2.0.1** | 146 | 7.9 | 5 | 2 | 0 | 4 |
 
-On gpt-4.1-mini the same 8 questions went from 23 sentences, 64 bold spans, and 101 bullets per 8 replies to 5.0 sentences and zero formatting, 8 of 8 under the cap.
+On gpt-4.1-mini the same 8 questions went from 23 sentences, 64 bold spans, and 101 bullets per 8 replies to 5.2 sentences and zero formatting, 6 of 8 under the cap.
 
 **Documents**, the 8 sqlpipe writing tasks scored with the STE linter (`evals/ste_lint.py`), sonnet-4-6, one run:
 
@@ -102,7 +102,7 @@ On gpt-4.1-mini the same 8 questions went from 23 sentences, 64 bold spans, and 
 | 2.0.0 | 1.70 | 58% |
 | **2.0.1** | 0.91 | 78% |
 
-**History.** The old headline is 81.3% fewer linter violations across 9 Claude models (144 generations, skill versions 1.0.0 to 2.0.1 by row, the claude-opus-4-8 row re-run on 2026-09-04 for #24, [RESULTS.md](evals/results/RESULTS.md)), with Pi, opencode, and OpenAI runs in [`evals/results/`](evals/results/). Those numbers reproduce, but the audit in [WHY-USELESS-2026-09-02.md](evals/results/WHY-USELESS-2026-09-02.md) showed that they measured rule obedience, not what a reader sees: the baselines held zero slop words, and the old skill left em-dashes, bold, and 15-sentence replies untouched. 2.0.1 is built on the reader-visible counts above.
+**History.** The old headline is 81.3% fewer linter violations across 9 Claude models (144 generations, measured across skill versions from 1.0.0 to 2.0.1, the claude-opus-4-8 row re-run on 2026-09-04 for #24, [RESULTS.md](evals/results/RESULTS.md)), with Pi, opencode, and OpenAI runs in [`evals/results/`](evals/results/). Those numbers reproduce, but the audit in [WHY-USELESS-2026-09-02.md](evals/results/WHY-USELESS-2026-09-02.md) showed that they measured rule obedience, not what a reader sees: the baselines held zero slop words, and the old skill left em-dashes, bold, and 15-sentence replies untouched. 2.0.1 is built on the reader-visible counts above.
 
 Every number reproduces from committed raw files: `python3 evals/score_text_dir.py <dir>` for documents, `python3 evals/run_reply_bench.py --report-only --skill v3b=prompts/system-prompt.md --out <dir>` for replies.
 

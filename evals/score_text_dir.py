@@ -42,6 +42,9 @@ def main(raw_dir):
         m["viol"] += r["violations_total"]; m["words"] += r["words"]; m["n"] += 1
         m["em"] += v["em_dash"]; m["bold"] += v["bold_spans"]
     conds = sorted({c for m in rows.values() for c in m}, key=lambda c: (c != "baseline", c))
+    if not conds:
+        print("no scorable files in", raw_dir)
+        return
     print("| Model | Condition | n | viol/100w | Reduction vs " + conds[0] + " | em-dash | bold spans | words |")
     print("|---|---|---:|---:|---:|---:|---:|---:|")
     pooled = {}

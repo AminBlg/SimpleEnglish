@@ -46,11 +46,25 @@ function stripFrontmatter(content) {
   return content.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n?/, '');
 }
 
+// prompts/system-prompt.md is a page for people: a title, a paragraph that says
+// where to paste the block, the rule block between two "---" lines, then a
+// word-budget variant. The model gets the fenced block only.
+function ruleBlock(content) {
+  const fence = /^---[ \t]*\r?$/m;
+  const first = content.search(fence);
+  if (first === -1) {
+    return content;
+  }
+  const rest = content.slice(first).replace(fence, '');
+  const second = rest.search(fence);
+  return second === -1 ? rest : rest.slice(0, second);
+}
+
 function buildContext(promptText) {
   if (!promptText) {
     return FALLBACK_CONTEXT;
   }
-  const out = HEADER + stripFrontmatter(promptText).trim();
+  const out = HEADER + ruleBlock(stripFrontmatter(promptText)).trim();
   if (out.length > MAX_CHARS) {
     process.stderr.write(`simple-english hook: payload is ${out.length} characters, over the ${MAX_CHARS} cap; sending the fallback ruleset\n`);
     return FALLBACK_CONTEXT;
@@ -73,5 +87,6 @@ module.exports = {
   buildContext,
   promptCandidates,
   readFirstFile,
+  ruleBlock,
   stripFrontmatter,
 };

@@ -1,0 +1,52 @@
+{
+ "summary": {
+  "n": 8,
+  "plain_wins": 7,
+  "ties": 0,
+  "plain_losses": 1,
+  "mean_old": 5.81,
+  "mean_plain": 7.88
+ },
+ "pairs": [
+  {
+   "file": "skill__cache.txt",
+   "old": 5.5,
+   "plain": 8.0
+  },
+  {
+   "file": "skill__cert-error.txt",
+   "old": 5.5,
+   "plain": 9.0
+  },
+  {
+   "file": "skill__migration.txt",
+   "old": 5.0,
+   "plain": 8.0
+  },
+  {
+   "file": "skill__oom.txt",
+   "old": 5.5,
+   "plain": 7.0
+  },
+  {
+   "file": "skill__pick-db.txt",
+   "old": 5.5,
+   "plain": 8.0
+  },
+  {
+   "file": "skill__queue-lag.txt",
+   "old": 5.0,
+   "plain": 8.5
+  },
+  {
+   "file": "skill__rate-limit.txt",
+   "old": 8.5,
+   "plain": 6.5
+  },
+  {
+   "file": "skill__why-timeout.txt",
+   "old": 6.0,
+   "plain": 8.0
+  }
+ ]
+}

@@ -79,6 +79,9 @@ test('the shipped prompt fits under the Claude Code stdout cap', () => {
   const out = buildContext(fs.readFileSync(REPO_PROMPT, 'utf8'));
   assert.ok(out.length <= MAX_CHARS, `${out.length} > ${MAX_CHARS}`);
   assert.ok(out.includes('THE REPLY'));
+  assert.ok(!out.includes('Standalone system prompt'), 'the page title leaked');
+  assert.ok(!out.includes('Word-budget'), 'the word-budget section leaked');
+  assert.ok(!out.includes('paste this block'), 'the packaging paragraph leaked');
   assert.ok(out.startsWith('SIMPLE ENGLISH SKILL ACTIVE AUTOMATICALLY'));
 });
 

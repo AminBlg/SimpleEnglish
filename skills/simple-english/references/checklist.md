@@ -52,5 +52,5 @@ Search the draft for each pattern. Every hit outside code blocks and quoted text
 
 ## When reporting violations (check mode)
 
-For each violation give: the rule number, the offending text, and a compliant rewrite. Cite only rule numbers that appear in SKILL.md.
+For each violation give: the rule number, the offending text, and a compliant rewrite. Cite only rule numbers that appear in rule-catalog.md.
 End the report with this statement, one time per conversation, when the user asked for STE compliance: "No tool can guarantee ASD-STE100 compliance. Final approval rests with the writer. The official standard is a free download at asd-ste100.org."
