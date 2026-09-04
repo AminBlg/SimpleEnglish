@@ -49,7 +49,7 @@ DEFAULT_EFFORT = "low"
 
 
 def call_claude(prompt, model, timeout=300, effort=DEFAULT_EFFORT):
-    cmd = ["claude", "-p", prompt, "--model", model, "--output-format", "json",
+    cmd = ["claude", "-p", prompt, "--model", model, "--output-format", "json", "--setting-sources", "",
            "--disallowedTools", "Bash,Read,Write,Edit,Glob,Grep,WebFetch,WebSearch"]
     if effort:
         cmd += ["--effort", effort]
