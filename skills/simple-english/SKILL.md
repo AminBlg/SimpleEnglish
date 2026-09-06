@@ -30,19 +30,19 @@ Write plain English that a smart reader outside your field understands on one re
 When asked to write or rewrite documentation, apply these rules to the prose:
 
 1. **Classify each passage.** Procedural text tells the reader what to do: imperative mood, 20 words per sentence, one instruction per sentence. Descriptive text explains: simple tenses, 25 words per sentence, one topic per paragraph, six sentences per paragraph at most.
-2. **Condition before command, with a comma.** "If the build fails, read the log."
-3. **Simple tenses, active voice.** No present perfect ("has completed" → "completed"). No "-ing" verb after a comma (", making it easy" → new sentence). Name the actor: "You run the migration."
-4. **Modals: can, will, must.** Never should, would, may, might, could. A required "should" becomes "must". An optional one is deleted.
-5. **Complete grammar.** No contractions, keep articles, keep "that". Short sentences, not telegraph style.
-6. **No semicolons and no em-dashes.** Write two sentences, or name the relation.
-7. **One word, one meaning, for the whole document.** Use `make sure that` for check, verify, confirm, validate, ensure. Use `configuration` for config, settings, options. Break noun chains over three words with a preposition ("the timeout value for the connection pool").
-8. **Define a concept term at its first use**, under ten words, one per sentence. Do not define product names, standard names (Postgres, S3, HTTP), or the tool the document is about.
-9. **State the fact, not its importance.** Delete words that carry no fact: simply, seamlessly, robust, powerful, comprehensive, leverage, crucial, "in order to", "it is worth noting". No "not just X, it is Y". No decorative triplets. No "in conclusion".
-10. **Format for the eye, not for decoration.** No bold lead-ins, no bold as emphasis, no emoji, no heading over two sentences. A vertical list is for three or more parallel items or steps: colon on the lead-in, uppercase start, one instruction per item.
-11. **Warnings: command or condition first, then the risk.** "Do not run this against production. The command deletes rows."
-12. **Never touch** code, identifiers, commands, flags, file paths, quoted errors, product names, or facts. When the source gives no number or cause, keep the general statement.
+2. **Never touch** code, identifiers, commands, flags, file paths, quoted errors, product names, or facts. When the source gives no number or cause, keep the general statement.
+3. **Condition before command, with a comma.** "If the build fails, read the log."
+4. **Simple tenses, active voice.** No present perfect ("has completed" → "completed"). No "-ing" verb after a comma (", making it easy" → new sentence). Name the actor: "You run the migration."
+5. **Modals: can, will, must.** Never should, would, may, might, could. A required "should" becomes "must". An optional one is deleted.
+6. **Complete grammar.** No contractions, keep articles, keep "that". Short sentences, not telegraph style.
+7. **No semicolons and no em-dashes.** Write two sentences, or name the relation.
+8. **One word, one meaning, for the whole document.** Use `make sure that` for check, verify, confirm, validate, ensure. Use `configuration` for config, settings, options. Break noun chains over three words with a preposition ("the timeout value for the connection pool").
+9. **Define a concept term at its first use**, under ten words, one per sentence. Do not define product names, standard names (Postgres, S3, HTTP), or the tool the document is about.
+10. **State the fact, not its importance.** Delete words that carry no fact: simply, seamlessly, robust, powerful, comprehensive, leverage, crucial, "in order to", "it is worth noting". No "not just X, it is Y". No decorative triplets. No "in conclusion".
+11. **Format for the eye, not for decoration.** No bold lead-ins, no bold as emphasis, no emoji, no heading over two sentences. A vertical list is for three or more parallel items or steps: colon on the lead-in, uppercase start, one instruction per item.
+12. **Warnings: command or condition first, then the risk.** "Do not run this against production. The command deletes rows."
 
-Use American spelling. `references/word-swaps.md` maps the overused words to plain ones.
+Use American spelling. `references/word-swaps.md` maps the overused words to plain ones. For an error message, a runbook, an incident report, release notes, a commit message, or UI copy, read `references/use-cases.md` first: it names the mode and the pattern for each.
 
 **Before (real AI output):**
 
@@ -75,13 +75,13 @@ Every chat reply, in every mode, follows these rules. Read them last, apply them
 ## Self-Check Before You Deliver
 
 1. Reply: count the sentences. Over five, cut. Search for `—`, `**`, `#`, and a line that starts with `-`. Remove each one.
-2. Document: count the words in your three longest sentences. Over 20 or 25, split. Search for `'`, `has been`, `should`, `may`, `;`, `—`, `, making`, `check`, `verify`, `config`. Fix each hit.
+2. Document: count the words in your three longest sentences. Over 20 or 25, split. Search for `'`, `has been`, `should`, `may`, `;`, `—`, `, making`, `**`, `check`, `verify`, `config`, and any heading that covers fewer than three sentences. Fix each hit.
 
 ## Modes
 
 **Plain** is the default and is all of the above. **Strict** applies when the user names STE, ASD-STE100, or compliance: read `references/strict-vocabulary.md` before you draft the document, and say once that no tool guarantees compliance. The reply stays Plain in every mode.
 
-When asked to CHECK text instead of writing it, read `references/rule-catalog.md` and report each violation as: rule number, the offending text, a compliant rewrite. Cite only rule numbers from that file, never from memory.
+When asked to CHECK text instead of writing it, first open `references/rule-catalog.md`. Then report each violation as: rule number quoted from that file, the offending text, a compliant rewrite. Never cite a rule number from memory. When the user asked for compliance, end with one sentence: no tool can guarantee ASD-STE100 compliance, and the standard is a free download at asd-ste100.org.
 
 ## Limits
 
@@ -90,7 +90,6 @@ These rules are for facts and instructions, not marketing copy or brand writing:
 ## References
 
 - `references/rule-catalog.md` — the 53 rules of Issue 9 with software examples, for CHECK mode
-- `references/checklist.md` — full verification pass with searchable patterns
 - `references/strict-vocabulary.md` — the dictionary discipline for Strict mode
 - `references/word-swaps.md` — slop-to-plain word map
-- `references/use-cases.md` — patterns for error messages, runbooks, incident reports, release notes, commits, agent prompts, UI copy, i18n
+- `references/use-cases.md` — mode and pattern for error messages, runbooks, incident reports, release notes, commits, agent prompts, UI copy, translation prep
