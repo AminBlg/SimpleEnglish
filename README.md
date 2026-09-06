@@ -91,7 +91,7 @@ Replies, 8 chat questions with a jargon term each, two runs, [raw files and tabl
 | 2.0.0 | 184 | 14.4 | 43 | 72 | 4 | 52 |
 | 2.0.1 | 146 | 7.9 | 5 | 2 | 0 | 4 |
 
-The five-sentence cap holds in 5 of 16 sonnet replies. On gpt-4.1-mini the same 8 questions went from 23 sentences, 64 bold spans, and 101 bullets per 8 replies to 5.2 sentences and zero formatting, 6 of 8 under the cap.
+The five-sentence cap holds in 5 of 16 sonnet replies. On gpt-4.1-mini the same 8 questions went from 23 sentences, 64 bold spans, and 101 bullets per 8 replies. With 2.0.1 they went to 5.2 sentences and zero formatting, 6 of 8 under the cap.
 
 Documents, the 8 sqlpipe writing tasks scored with the STE linter, one run per cell. One run moves by about 0.5 on this model, so read the rows as parity or better, not as a ranking.
 
@@ -152,7 +152,7 @@ How was it built? Against the primary Issue 9 text, not summaries. A community a
 
 ## Word-choice linter
 
-`evals/ste_lint.py` measures the mechanical rules and cannot see word choice. [`tools/ste-dictionary/`](tools/ste-dictionary/README.md) holds an extractor that builds the word lists from your own copy of the free Issue 9 PDF, and a linter that reads them. The repository ships the tool and no dictionary content, because the standard forbids reproduction without written authority from ASD.
+`evals/ste_lint.py` measures the mechanical rules and cannot see word choice. [`tools/ste-dictionary/`](tools/ste-dictionary/README.md) holds an extractor that builds the word lists from your own copy of the free Issue 9 PDF. A linter reads them. The repository ships the tool and no dictionary content, because the standard forbids reproduction without written authority from ASD.
 
 ## Contributing
 
