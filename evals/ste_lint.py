@@ -239,6 +239,7 @@ def self_test():
     cell = lint("| Column | Value |\n|---|---|\n| You should restart it | ok |\n", "descriptive")["violations"]
     assert cell["banned_modal"] == 1 and cell["sentence_over_limit"] == 0, cell
     assert sentences("- Loosen the bolts.\n- Then go on") == ["Loosen the bolts.", "Then go on."]
+    assert "visible_total" in reader_check("Yes.") and "violations_total" in lint("Yes.", "descriptive")
     # Table rows and list items must not produce false sentence_over_limit hits.
     assert lint(TABLE_FIXTURE, "descriptive")["violations"]["sentence_over_limit"] == 0, \
         "table rows produced false sentence_over_limit"
@@ -286,7 +287,8 @@ def main():
             sys.exit(str(err))
     report = reader_check(text) if text_type == "reply" else lint(text, text_type)
     print(json.dumps(report, indent=2))
-    return 1 if gate and report["violations_total"] else 0
+    total = report["visible_total"] if text_type == "reply" else report["violations_total"]
+    return 1 if gate and total else 0
 
 
 if __name__ == "__main__":
