@@ -152,6 +152,10 @@ Two modes. **Plain** (default) is all of the above. **Strict** adds the STE dict
 
 [![Star History Chart](https://api.star-history.com/chart?repos=AminBlg/SimpleEnglish&type=date&legend=top-left)](https://www.star-history.com/?repos=AminBlg%2FSimpleEnglish&type=date&legend=top-left)
 
+## Word-choice linter
+
+`evals/ste_lint.py` measures the mechanical rules and cannot see word choice. [`tools/ste-dictionary/`](tools/ste-dictionary/README.md) holds an extractor that builds the approved and not-approved word lists from your own copy of the free Issue 9 PDF, and a linter that reads them. The repository ships the tool and no dictionary content, because the standard forbids reproduction without written authority from ASD.
+
 ## Contributing
 
 Open an issue for questions and bug reports. Pull requests are welcome. Every number in this README reproduces from committed raw files, so a change that moves a number ships the raw files with it. Run `python3 evals/ste_lint.py --self-test` before you push.

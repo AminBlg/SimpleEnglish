@@ -1,2 +1,9 @@
 __pycache__/
 *.pyc
+
+# tools/ste-dictionary: generated from your own copy of the PDF
+tools/ste-dictionary/ste9.txt
+tools/ste-dictionary/dict.json
+tools/ste-dictionary/approved.txt
+tools/ste-dictionary/not-approved.tsv
+*.pdf
