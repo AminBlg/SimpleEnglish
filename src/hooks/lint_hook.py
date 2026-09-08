@@ -92,7 +92,7 @@ def post_tool_use(event):
     summary = ", ".join(f"{k} {v}" for k, v in hits.items())
     sys.stderr.write(
         f"simple-english: {target.name} has {report['violations_total']} STE violations "
-        f"({summary}). Run the self-check in SKILL.md before you deliver.\n"
+        f"({summary}). Fix these hits in the file you just wrote, then continue.\n"
     )
     return 2
 
