@@ -23,6 +23,15 @@ def test_post_tool_use_flags_a_slop_markdown_file():
         code, out, err = run(post(write_slop(d)))
     assert code == 2 and "STE violations" in err, (code, err)
 
+def test_post_tool_use_prints_the_offending_text_and_line_number():
+    with tempfile.TemporaryDirectory() as d:
+        path = pathlib.Path(d, "notes.md")
+        path.write_text("# Title\n\nYou should check this. It has been done.\n", encoding="utf-8")
+        code, out, err = run(post(str(path)))
+    assert code == 2, (code, err)
+    assert "line 3, banned_modal: should" in err, err
+    assert "line 3, perfect_tense: has been" in err, err
+
 def test_post_tool_use_ignores_clean_file_and_non_markdown():
     with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False) as f:
         f.write("Run the migration. Then restart the service.\n"); path = f.name

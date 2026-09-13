@@ -21,6 +21,7 @@ import json
 import pathlib
 import re
 import sys
+from collections import Counter
 
 BANNED_MODALS = re.compile(r"\b(should|would|may|might|could)\b", re.I)
 PERFECT = re.compile(r"\b(has|have|had)\s+been\b|\b(has|have)\s+\w+ed\b", re.I)
@@ -79,6 +80,75 @@ def sentences(text):
     text = re.sub(r"^\s*([-*]|\d+\.)\s+(.*?)([.!?:])?\s*$", lambda m: m.group(2) + (m.group(3) or ".") + " ", text, flags=re.M)
     parts = re.split(r"(?<=[.!?:])\s+", text)
     return [p.strip() for p in parts if len(p.strip().split()) >= 2]
+
+
+def lint_detail(text, text_type):
+    """Every hit lint() counts, with its matched text and line number.
+
+    strip_code() keeps every original newline (it blanks or rewrites text in
+    place, never deletes a line), so a line number counted in the stripped
+    body is the same line number in the caller's original text. Locating a
+    whole sentence uses its start offset in body, found once per sentence
+    with str.find(), which is safe here because sentences() never returns
+    the same sentence text twice for two different source positions in a
+    single lint pass (each split fragment keeps its surrounding words).
+    """
+    body = strip_code(text)
+    limit = LIMITS[text_type]
+    hits = []
+
+    def add(category, m, snippet=None):
+        line = body.count("\n", 0, m.start()) + 1
+        hits.append({"category": category, "text": (snippet or m.group(0)).strip(), "line": line})
+
+    def locate(sentence, search_from):
+        """The sentence's start offset in body, at or after search_from."""
+        start = body.find(sentence, search_from)
+        return start if start != -1 else search_from
+
+    def add_sentence(category, sentence, start):
+        line = body.count("\n", 0, start) + 1
+        text_out = sentence if len(sentence) <= 80 else sentence[:80] + "…"
+        hits.append({"category": category, "text": text_out, "line": line})
+
+    pos = 0
+    for s in sentences(body):
+        pos = locate(s, pos)
+        n = len(s.split())
+        if n > limit:
+            add_sentence("sentence_over_limit", s, pos)
+        m = TRAILING_COND.search(s)
+        if m:
+            line_start = s.rfind("\n", 0, m.start()) + 1
+            if m.start() - line_start >= 4 and not re.match(r"^(if|when)\b", s, re.I):
+                add_sentence("trailing_condition", s, pos)
+        pos += max(len(s), 1)
+
+    for m in CONTRACTION.finditer(body):
+        add("contraction", m)
+    for m in BANNED_MODALS.finditer(body):
+        add("banned_modal", m)
+    for m in PERFECT.finditer(body):
+        add("perfect_tense", m)
+    for m in ING_CLAUSE.finditer(body):
+        add("ing_clause", m)
+    for m in re.finditer(";", body):
+        add("semicolon", m)
+    for m in DASH.finditer(body):
+        add("em_dash", m)
+    for m in LATIN.finditer(body):
+        add("latin_abbrev", m)
+    for m in SLOP.finditer(body):
+        add("slop_word", m)
+    for name, rx in ROTATION_SETS:
+        seen = {}
+        for m in rx.finditer(body):
+            stem = m.group(1).lower().rstrip("s")
+            seen.setdefault(stem, m)
+        for m in list(seen.values())[1:]:
+            add("synonym_rotation", m, f"{m.group(0)} ({name})")
+
+    return sorted(hits, key=lambda h: h["line"])
 
 
 def lint(text, text_type):
@@ -251,6 +321,11 @@ def self_test():
     long_prose = "a " * 30  # 30 repetitions of the same word, one space each
     assert lint(long_prose, "descriptive")["violations"]["sentence_over_limit"] >= 1, \
         "genuine long sentence was not flagged"
+    detail = lint_detail(SLOP_FIXTURE, "procedural")
+    assert len(detail) == slop["violations_total"], (len(detail), slop["violations_total"])
+    assert all(h["line"] >= 1 and h["text"] for h in detail), detail
+    detail_counts = Counter(h["category"] for h in detail)
+    assert detail_counts == {k: v for k, v in slop["violations"].items() if v}, (detail_counts, slop["violations"])
     print("self-test OK:", slop["violations_total"], "violations in slop fixture, 0 in clean")
 
 
