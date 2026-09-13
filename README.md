@@ -31,6 +31,8 @@ Any agent, with the [skills CLI](https://github.com/vercel-labs/skills):
 npx skills add AminBlg/SimpleEnglish
 ```
 
+This installs the skill only. It does not install the session hook or the output style below, so setting `outputStyle` to `simple-english:simple-english` without the plugin does nothing. Use the Claude Code plugin for those.
+
 Claude Code plugin, with the session hook and the output style:
 
 ```bash
