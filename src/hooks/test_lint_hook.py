@@ -86,12 +86,18 @@ def test_post_tool_use_matches_a_glob_through_a_symlinked_directory():
         assert run(post(path))[0] == 2
         assert run(post(path), env={"SIMPLE_ENGLISH_LINT_EXCLUDE": f"{d}/notes/*"})[0] == 0
 
-def test_stop_flags_long_slop_reply_and_never_blocks():
+def test_stop_flags_slop_reply_and_never_blocks():
     long = "Great question! " + "This is a robust sentence. " * 7 + "I hope this helps!"
     code, out, err = run({"hook_event_name": "Stop", "last_assistant_message": long})
     assert code == 0 and "systemMessage" in out, (code, out)
     msg = json.loads(out)["systemMessage"]
-    assert "sentences" in msg and "opener" in msg and "closer" in msg and "slop" in msg, msg
+    assert "opener" in msg and "closer" in msg and "slop" in msg, msg
+
+def test_stop_does_not_count_sentences():
+    """The reply register has no sentence cap since 2.1.0. Length alone is not a defect."""
+    reply = " ".join(f"The step {i} runs." for i in range(20))
+    code, out, err = run({"hook_event_name": "Stop", "last_assistant_message": reply})
+    assert code == 0 and out.strip() == "", (code, out)
 
 def test_stop_is_silent_on_a_good_reply():
     code, out, err = run({"hook_event_name": "Stop", "last_assistant_message": "The build failed because the disk was full. Free 2 GB and run it again."})

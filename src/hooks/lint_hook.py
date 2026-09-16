@@ -10,9 +10,9 @@ skipped. The writing rules do not govern it, and a summary of its
 violations only spends tokens. Set SIMPLE_ENGLISH_LINT_EXCLUDE to skip more
 paths.
 
-Stop: read `last_assistant_message`, check the reply register (five sentences or
-fewer with list items counted, no headers, bullets, bold, or em-dashes), and return a systemMessage only when
-the reply breaks it. Always exit 0, so the session never loops.
+Stop: read `last_assistant_message`, check the reply register (no headers,
+bullets, bold, or em-dashes), and return a systemMessage only when the reply
+breaks it. Always exit 0, so the session never loops.
 """
 import fnmatch
 import json
@@ -25,7 +25,6 @@ HERE = pathlib.Path(__file__).resolve().parent
 ROOT = HERE.parent.parent
 sys.path.insert(0, str(ROOT / "evals"))
 
-MAX_REPLY_SENTENCES = 5
 MAX_HOOK_HITS = 12
 CLAUDE_DIR = ".claude"
 OPENERS = re.compile(r"^\s*(certainly|great question|you're absolutely right|sure[,!]|absolutely[,!])", re.I)
@@ -107,8 +106,6 @@ def stop(event):
     lint = load_linter()
     if lint is not None:
         c = lint.reader_check(reply)["counts"]
-        if c["over_cap"]:
-            problems.append(f"{c['sentences']} sentences, list items included (limit {MAX_REPLY_SENTENCES})")
         for key, label in (("em_dash", "em-dash"), ("bold_spans", "bold span"), ("headers", "header"), ("bullets", "list item")):
             if c[key]:
                 problems.append(f"{c[key]} {label}(s)")
@@ -120,7 +117,7 @@ def stop(event):
     if CLOSERS.search(reply):
         problems.append("a filler closer")
     if problems:
-        print(json.dumps({"systemMessage": "simple-english reply check: " + "; ".join(problems) + ". Answer in prose, five sentences or fewer."}))
+        print(json.dumps({"systemMessage": "simple-english reply check: " + "; ".join(problems) + ". Answer in prose."}))
     return 0
 
 

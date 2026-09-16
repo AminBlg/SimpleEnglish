@@ -24,7 +24,7 @@ Run 2 (`reply2/`):
 | v3 | 8 | 138 | 7.0 | 2/8 | 14 | 0 | 0 | 0 | 0 | 2.83 |
 | v3b | 8 | 158 | 8.5 | 1/8 | 3 | 2 | 0 | 4 | 0 | 1.70 |
 
-Visible defects pooled over both runs (over-cap sentences + em-dashes + bold + headers + bullets): baseline 406, 2.0.0 321, 2.0.1 (v3b) 58. That is 85.7% fewer than baseline and 81.9% fewer than 2.0.0. The five-sentence cap is met in 5 of 16 replies. Sonnet at low effort still explains at length when the question says "explain".
+Visible defects pooled over both runs (em-dashes + bold + headers + bullets): baseline 218, 2.0.0 171, 2.0.1 (v3b) 11. That is 95.0% fewer than baseline and 93.6% fewer than 2.0.0. Release 2.1.0 removed the five-sentence cap, so over-cap sentences are no longer counted as a defect. The 2026-09-02 tables below keep the `under cap` column that the run recorded. Sonnet at low effort still explains at length when the question says "explain".
 
 Blind pairwise judge (claude-sonnet-4-6, both orders, no labels), rubric: answers first, every term understood by an outsider, no filler, no longer than needed. The shipped 2.0.1 (`v3b`) against 2.0.0 (`judge/judge-v2-v3b-r*.json`), and the first draft (`v3`) against 2.0.0 (`judge/judge-v2-v3-r*.json`):
 

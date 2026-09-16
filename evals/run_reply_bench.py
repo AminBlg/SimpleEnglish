@@ -29,7 +29,7 @@ def score(text):
     r = ste_lint.reader_check(text)
     lint = ste_lint.lint(text, "descriptive")
     out = dict(r["counts"])
-    out.update(words=r["words"], visible_total=r["visible_total"], under_cap=r["under_cap"],
+    out.update(words=r["words"], visible_total=r["visible_total"],
                opener=bool(OPENER.search(text)), closer=bool(CLOSER.search(text)),
                slop_word=lint["violations"]["slop_word"], viol_per_100w=lint["violations_per_100w"])
     return out
@@ -94,14 +94,14 @@ def main():
             print(f"{cond:9} {s['id']:12} sent={sc['sentences']:2} em={sc['em_dash']} bold={sc['bold_spans']} hdr={sc['headers']} bul={sc['bullets']} words={sc['words']}", flush=True)
     (out / "scores.json").write_text(json.dumps(rows, indent=1))
     print()
-    print("| condition | n | words | sentences | under cap | em-dash | bold | headers | bullets | openers | linter viol/100w |")
+    print("| condition | n | words | sentences | em-dash | bold | headers | bullets | openers | linter viol/100w |")
     print("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
     for cond in conds:
         rs = [r for r in rows if r["cond"] == cond]
         n = len(rs)
         if not n:
             continue
-        print(f"| {cond} | {n} | {sum(r['words'] for r in rs)/n:.0f} | {sum(r['sentences'] for r in rs)/n:.1f} | {sum(r['under_cap'] for r in rs)}/{n} | "
+        print(f"| {cond} | {n} | {sum(r['words'] for r in rs)/n:.0f} | {sum(r['sentences'] for r in rs)/n:.1f} | "
               f"{sum(r['em_dash'] for r in rs)} | {sum(r['bold_spans'] for r in rs)} | {sum(r['headers'] for r in rs)} | {sum(r['bullets'] for r in rs)} | "
               f"{sum(r['opener'] for r in rs)} | {sum(r['viol_per_100w'] for r in rs)/n:.2f} |")
 

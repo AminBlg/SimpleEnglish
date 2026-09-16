@@ -48,7 +48,6 @@ def reply_stats(files):
         "words": round(sum(r["words"] for r in rows) / n),
         "sentences": round(sum(r["counts"]["sentences"] for r in rows) / n, 1),
         "em": c("em_dash"), "bold": c("bold_spans"), "headers": c("headers"), "bullets": c("bullets"),
-        "under_cap": sum(r["under_cap"] for r in rows),
         "visible": sum(r["visible_total"] for r in rows),
     }
 
@@ -106,7 +105,7 @@ def sync():
     if prompt != style:
         problems.append("rule block differs between prompts/system-prompt.md and output-styles/simple-english.md")
     skill = (ROOT / "skills" / "simple-english" / "SKILL.md").read_text(encoding="utf-8")
-    for phrase in ("Five sentences maximum", "No em-dashes", "No contractions", "first sentence gives the answer",
+    for phrase in ("Answer in prose", "No em-dashes", "No contractions", "first sentence gives the answer",
                    "Condition before command", "make sure that", "Never touch"):
         for name, text in (("SKILL.md", skill), ("prompts/system-prompt.md", prompt)):
             if phrase.lower() not in text.lower():
@@ -147,8 +146,8 @@ def main():
                f"{s['words']} | {s['sentences']} | {s['em']} | {s['bold']} | {s['headers']} | {s['bullets']}")
     expect("README gpt baseline", README, r"went from ([\d.]+ sentences, \d+ bold spans, and \d+ bullets)",
            f"{g['baseline']['sentences']:g} sentences, {g['baseline']['bold']} bold spans, and {g['baseline']['bullets']} bullets")
-    expect("README gpt v3b", README, r"to ([\d.]+ sentences and zero formatting, \d of 8 under the cap)",
-           f"{g['v3b']['sentences']} sentences and zero formatting, {g['v3b']['under_cap']} of 8 under the cap")
+    expect("README gpt v3b", README, r"to ([\d.]+ sentences and zero formatting)",
+           f"{g['v3b']['sentences']} sentences and zero formatting")
     for cond, label in (("baseline", "no skill"), ("v13", "1.3.0"), ("v2", "2.0.0"), ("v3b", "2.0.1")):
         red = "" if cond == "baseline" else f" {round(100 * (d['baseline'] - d[cond]) / d['baseline'])}%"
         expect(f"README docs row {cond}", docs_section, rf"\| {label} \| ([\d.]+ \|[^|\n]*?) ?\|", f"{d[cond]:.2f} |{red}")

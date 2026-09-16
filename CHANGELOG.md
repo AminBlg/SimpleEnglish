@@ -2,6 +2,23 @@
 
 Each entry names the version, the date, and the measured effect where one exists.
 
+## 2.1.0, 2026-09-16
+
+- Removed: the five-sentence cap on the reply. The rule is gone from SKILL.md,
+  the output style, the system prompt, the self-check, the Stop hook, and the
+  linter. Users reported that replies on multi-part questions came out as one
+  paragraph. A rescore of the committed 2026-09-02 replies shows the cap was
+  met in only 5 of 16 replies, and that the same replies had 18.9% of sentences
+  over 25 words against 5.7% for release 2.0.0, which had no formatting rule.
+  The cap did not hold and it did not shorten sentences. (#35)
+- Changed: `reader_check()` no longer counts over-cap sentences in
+  `visible_total`, because the skill no longer asks for five sentences. The
+  published reply figure moves from 86% fewer visible defects (406 to 58) to
+  95% fewer (218 to 11), recomputed from the same raw files by
+  `python3 evals/check_numbers.py`. The counted classes are now em-dashes,
+  bold, headers, and bullets. `sentences` is still reported, as a count and
+  not a limit.
+
 ## 2.0.2, 2026-09-08
 
 - Fixed: the PostToolUse hook message said "Run the self-check in SKILL.md

@@ -249,11 +249,14 @@ Remove the panel:
 BOLD = re.compile(r"\*\*[^*\n]+\*\*")
 HEADER = re.compile(r"^#{1,6}\s", re.M)
 BULLET = re.compile(r"^\s*([-*+]|\d+[.)])\s", re.M)
-REPLY_CAP = 5
 
 
 def reader_check(text):
-    """What a reader sees in a chat reply. Every sentence counts, list items and table rows included."""
+    """What a reader sees in a chat reply.
+
+    `sentences` counts list items and table rows as sentences, but it is a report, not a
+    limit: the reply register sets no sentence cap, so it is not part of `visible_total`.
+    """
     text = text.replace("\r\n", "\n")
     prose = re.sub(r"```.*?```", " ", text, flags=re.S)
     prose = re.sub(r"`[^`\n]+`", " CODESPAN ", prose)
@@ -262,7 +265,6 @@ def reader_check(text):
     sents = [p for p in re.split(r"(?<=[.!?])[\"')\]]*\s+|\n+", prose_no_md) if len(p.strip().split()) >= 2]
     counts = {
         "sentences": len(sents),
-        "over_cap": max(0, len(sents) - REPLY_CAP),
         "em_dash": len(DASH.findall(prose)),
         "bold_spans": len(BOLD.findall(prose)),
         "headers": len(HEADER.findall(prose)),
@@ -270,8 +272,8 @@ def reader_check(text):
         "contraction": len(CONTRACTION.findall(prose)),
     }
     words = max(1, len(prose_no_md.split()))
-    visible = counts["over_cap"] + counts["em_dash"] + counts["bold_spans"] + counts["headers"] + counts["bullets"]
-    return {"type": "reply", "words": words, "counts": counts, "visible_total": visible, "under_cap": counts["over_cap"] == 0}
+    visible = counts["em_dash"] + counts["bold_spans"] + counts["headers"] + counts["bullets"]
+    return {"type": "reply", "words": words, "counts": counts, "visible_total": visible}
 
 
 REPLY_FIXTURE = """**Yes** — it is bad.
