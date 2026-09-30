@@ -2,6 +2,25 @@
 
 Each entry names the version, the date, and the measured effect where one exists.
 
+## 2.1.1, 2026-09-30
+
+- Changed: removed wording in the skill that broke the skill's own rules. The
+  12 document rules in SKILL.md lost their bold lead-ins. Rule 11 lost its
+  "not X, but Y" title. The References list, the rule-catalog headings, and
+  four cells in word-swaps.md lost their em-dashes. The rule content did not
+  change.
+- Removed: filler and claims with no source. SKILL.md lost "a tired
+  mechanic", "Nothing else in this file is optional", and "Read them last,
+  apply them first". use-cases.md lost "a stressed reader at 2 a.m." and "STE
+  cuts the error rate and the cost". rule-catalog.md lost "The ones agents
+  break are 1.7, 1.11, and 1.13". The SKILL.md example is now labeled "AI
+  output" and not "real AI output", because no committed eval file holds it.
+- Changed: the sentence "The same rule covers a fact, not just a word" in
+  SKILL.md, `prompts/system-prompt.md`, and `output-styles/simple-english.md`
+  now starts "Also name the host". The two mirrors stay byte-identical.
+- No benchmark ran on this release. The published figures still describe
+  2.0.1.
+
 ## 2.1.0, 2026-09-16
 
 - Removed: the five-sentence cap on the reply. The rule is gone from SKILL.md,

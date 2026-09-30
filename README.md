@@ -12,7 +12,7 @@
   <a href="evals/results/rebuild-2026-09-02/RESULTS.md"><img src="https://img.shields.io/badge/reply_defects-%E2%88%9295%25_measured-brightgreen?style=flat" alt="95% fewer visible reply defects, measured"></a>
   <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-9_Claude_models-blueviolet?style=flat" alt="9 models benchmarked"></a>
   <a href="https://agentskills.io"><img src="https://img.shields.io/badge/SKILL.md-open_standard-blue?style=flat" alt="Agent Skills"></a>
-  <a href="skills/simple-english/SKILL.md"><img src="https://img.shields.io/badge/version-2.1.0-blue?style=flat" alt="version 2.1.0"></a>
+  <a href="skills/simple-english/SKILL.md"><img src="https://img.shields.io/badge/version-2.1.1-blue?style=flat" alt="version 2.1.1"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat" alt="MIT"></a>
   <a href="https://github.com/AminBlg/SimpleEnglish/stargazers"><img src="https://img.shields.io/github/stars/AminBlg/SimpleEnglish?style=flat&logo=github&color=yellow" alt="GitHub stars"></a>
 </p>
@@ -85,7 +85,7 @@ More rewrites in [`examples/before-after.md`](examples/before-after.md): READMEs
 
 Every number below is recomputed from the committed raw files by `python3 evals/check_numbers.py`, which CI runs on every push. All Claude runs: `claude-sonnet-4-6`, low effort, no settings loaded. Judges are Claude models on Claude text, so family bias is possible.
 
-Replies, 8 chat questions with a jargon term each, two runs, [raw files and tables](evals/results/rebuild-2026-09-02/RESULTS.md). Counts are totals over the 16 replies. **95% fewer visible defects** (em-dashes, bold, headers, bullets) with 2.0.1 than with no skill (218 → 11). These counts come from the 2026-09-02 runs of 2.0.1, which still had the five-sentence reply cap that 2.1.0 removed. No run exists yet for 2.1.0. A blind judge preferred 2.0.1 over 2.0.0 in 14 of 16 pairs.
+Replies, 8 chat questions with a jargon term each, two runs, [raw files and tables](evals/results/rebuild-2026-09-02/RESULTS.md). Counts are totals over the 16 replies. **95% fewer visible defects** (em-dashes, bold, headers, bullets) with 2.0.1 than with no skill (218 → 11). These counts come from the 2026-09-02 runs of 2.0.1, which still had the five-sentence reply cap that 2.1.0 removed. No run exists yet for 2.1.0 or later. A blind judge preferred 2.0.1 over 2.0.0 in 14 of 16 pairs.
 
 | Condition | words | sentences | em-dashes | bold | headers | bullets |
 |---|---:|---:|---:|---:|---:|---:|

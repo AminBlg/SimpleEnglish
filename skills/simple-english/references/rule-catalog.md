@@ -4,7 +4,7 @@ Read this file for CHECK mode, for Strict mode, or when a rule number is in ques
 
 53 rules in 9 sections, paraphrased from ASD-STE100 Issue 9 with software examples. Rules marked (S) are Strict mode only (see `references/strict-vocabulary.md`). The official wording is in the free standard at asd-ste100.org.
 
-### Section 1 — Words (Rules 1.1-1.14)
+### Section 1: Words (Rules 1.1-1.14)
 
 | Rule | Instruction |
 |---|---|
@@ -19,12 +19,12 @@ Read this file for CHECK mode, for Strict mode, or when a rule number is in ques
 | 1.13 | Do not use technical verbs as nouns. |
 | 1.14 | Use American English spelling. |
 
-In Plain mode, rules 1.5, 1.8, and 1.12 make your domain vocabulary legal. The ones agents break are 1.7, 1.11, and 1.13.
+In Plain mode, rules 1.5, 1.8, and 1.12 make your domain vocabulary legal.
 
-**Before:** You can webhook the event, then do a deploy.
-**After:** Send the event to the webhook. Then deploy the service.
+Before: You can webhook the event, then do a deploy.
+After: Send the event to the webhook. Then deploy the service.
 
-### Section 2 — Multi-word nouns (Rules 2.1-2.2)
+### Section 2: Multi-word nouns (Rules 2.1-2.2)
 
 | Rule | Instruction |
 |---|---|
@@ -33,10 +33,10 @@ In Plain mode, rules 1.5, 1.8, and 1.12 make your domain vocabulary legal. The o
 
 Break long noun chains with prepositions (of, on, in, for):
 
-**Before:** the connection pool timeout configuration value
-**After:** the timeout value for the connection pool
+Before: the connection pool timeout configuration value
+After: the timeout value for the connection pool
 
-### Section 3 — Verbs (Rules 3.1-3.7)
+### Section 3: Verbs (Rules 3.1-3.7)
 
 | Rule | Instruction |
 |---|---|
@@ -48,10 +48,9 @@ Break long noun chains with prepositions (of, on, in, for):
 | 3.6 | Active voice. In descriptive text, passive is legal only when the agent is unknown. To repair an agentless passive, use "you" (the reader) or "we" (your company): "Indexes are not used on this table" → "We do not use indexes on this table." |
 | 3.7 | Describe an action with a verb, not a noun ("compress the file", not "perform compression of the file"). |
 
-**Approved modals: can, will, must. Banned: should, would, may, might, could.**
-The modal ladder below routes each banned modal. This matters double for agent instructions, because models read "should" as optional.
+Approved modals: can, will, must. Banned: should, would, may, might, could. The modal ladder at the end of this file gives the replacement for each banned modal.
 
-### Section 4 — Sentences (Rules 4.1-4.5)
+### Section 4: Sentences (Rules 4.1-4.5)
 
 | Rule | Instruction |
 |---|---|
@@ -63,10 +62,10 @@ The modal ladder below routes each banned modal. This matters double for agent i
 
 Rule 4.2 is the anti-terseness rule. Plain English is short sentences with complete grammar, not telegraph style:
 
-**Wrong shortening:** Ensure file exists before running.
-**Plain:** Make sure that the file exists before you run the command.
+Wrong shortening: Ensure file exists before running.
+Plain: Make sure that the file exists before you run the command.
 
-### Section 5 — Procedural writing (Rules 5.1-5.5)
+### Section 5: Procedural writing (Rules 5.1-5.5)
 
 | Rule | Instruction |
 |---|---|
@@ -76,10 +75,10 @@ Rule 4.2 is the anti-terseness rule. Plain English is short sentences with compl
 | 5.4 | Put a required condition before the command, divided by a comma: "If the build fails, read the log." |
 | 5.5 | Notes give information, never instructions or limits. A limit belongs with its action. Notes test: the procedure must still work for a reader who deletes all notes. |
 
-**Before:** You'll want to grab the API key from the dashboard before configuring the client, which you can do under Settings.
-**After:** Get the API key from the dashboard, under Settings. Then configure the client with this key.
+Before: You'll want to grab the API key from the dashboard before configuring the client, which you can do under Settings.
+After: Get the API key from the dashboard, under Settings. Then configure the client with this key.
 
-### Section 6 — Descriptive writing (Rules 6.1-6.6)
+### Section 6: Descriptive writing (Rules 6.1-6.6)
 
 | Rule | Instruction |
 |---|---|
@@ -90,7 +89,7 @@ Rule 4.2 is the anti-terseness rule. Plain English is short sentences with compl
 | 6.5 | One topic per paragraph. |
 | 6.6 | Maximum six sentences per paragraph. |
 
-### Section 7 — Safety instructions (Rules 7.1-7.3)
+### Section 7: Safety instructions (Rules 7.1-7.3)
 
 | Rule | Instruction |
 |---|---|
@@ -98,12 +97,12 @@ Rule 4.2 is the anti-terseness rule. Plain English is short sentences with compl
 | 7.2 | Start with a clear command or condition. |
 | 7.3 | Then give the risk or the possible result. |
 
-Never bury the instruction after the explanation. The same pattern fits destructive CLI flags and irreversible migrations.
+Put the instruction before the explanation. Use the same pattern for destructive CLI flags and migrations that you cannot undo.
 
-**Before:** Note that data loss may occur in some circumstances if the destructive flag happens to be enabled when running against production.
-**After:** CAUTION: Do not use the `--force` flag against production. The flag deletes rows that do not match the source.
+Before: Note that data loss may occur in some circumstances if the destructive flag happens to be enabled when running against production.
+After: CAUTION: Do not use the `--force` flag against production. The flag deletes rows that do not match the source.
 
-### Section 8 — Punctuation and word count (Rules 8.1-8.7)
+### Section 8: Punctuation and word count (Rules 8.1-8.7)
 
 | Rule | Instruction |
 |---|---|
@@ -115,9 +114,9 @@ Never bury the instruction after the explanation. The same pattern fits destruct
 
 Rule 8.6 matters for software text: `sqlpipe run --config sqlpipe.yaml` in backticks counts as one word.
 
-**Dashes** (this skill, not the standard). An em-dash (`—`) splices two statements and hides the logic between them. Name the relation ("because", "but", "for example") or write two sentences. A spaced or double hyphen between statements is the same dash. A range (`5–10`), a list marker, and a flag (`--force`) are not.
+Dashes (a rule of this skill, not of the standard): an em-dash (`—`) splices two statements and hides the logic between them. Name the relation ("because", "but", "for example") or write two sentences. A spaced or double hyphen between statements is the same dash. A range (`5–10`), a list marker, and a flag (`--force`) are not.
 
-### Section 9 — Writing practices (Rules 9.1-9.4, GR-1 to GR-8)
+### Section 9: Writing practices (Rules 9.1-9.4, GR-1 to GR-8)
 
 | Rule | Instruction |
 |---|---|

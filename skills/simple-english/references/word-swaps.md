@@ -9,12 +9,12 @@ This table is ours, not the ASD dictionary. It maps the words AI-generated docs 
 | prior to | before |
 | ensure | make sure that |
 | it is worth noting that | (delete) |
-| it's important to | (delete — state the fact) |
+| it's important to | (delete, then state the fact) |
 | simply, just, easily, seamless, seamlessly, effortlessly | (delete) |
 | robust, powerful, comprehensive, performant | (delete, or give the measurable property) |
 | functionality | function, feature |
 | enables you to, allows you to | you can |
-| is designed to, aims to | (delete — say what it does) |
+| is designed to, aims to | (delete, then say what it does) |
 | facilitate | help, make possible |
 | dive into, delve into | read, examine |
 | when it comes to | for |
@@ -37,7 +37,7 @@ This table is ours, not the ASD dictionary. It maps the words AI-generated docs 
 | vibrant, nuanced, multifaceted | (delete, or name the parts) |
 | realm, landscape (metaphorical) | area |
 | groundbreaking, cutting-edge, state-of-the-art, innovative, unprecedented | new (or delete) |
-| transformative, game-changer | (delete — say what changes) |
+| transformative, game-changer | (delete, then say what changes) |
 | revolutionize | change |
 | showcase, underscore, emphasize | show |
 | foster, empower, bolster | help, support, let |
@@ -52,7 +52,7 @@ This table is ours, not the ASD dictionary. It maps the words AI-generated docs 
 | paradigm | model |
 | navigate (metaphorical) | go to |
 | boasts | has |
-| nestled, in the heart of | (delete — give the location or the fact) |
+| nestled, in the heart of | (delete, then give the location or the fact) |
 | bustling | busy |
 | that being said, notwithstanding | but |
 | I hope this helps, let's dive in | (delete) |

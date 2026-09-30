@@ -4,7 +4,7 @@ STE was built for aircraft maintenance manuals. The same properties transfer to 
 
 ## Error messages and CLI output
 
-Mode: procedural. An error message is an instruction to a stressed reader at 2 a.m., so it is the highest-value target.
+Mode: procedural. An error message is an instruction to a reader who is in the middle of a failure.
 
 Pattern: state what happened (simple past), state the cause if known, give the command or condition that fixes it.
 
@@ -13,11 +13,11 @@ Pattern: state what happened (simple past), state the cause if known, give the c
 
 ## Runbooks and standard operating procedures
 
-Mode: procedural, with the 20-word limit enforced hard. An on-call runbook is a maintenance manual, which is what STE was made for.
+Mode: procedural. An on-call runbook is a maintenance manual, which is the text type that STE was written for.
 
 - Every step is imperative, one instruction per step, condition first.
 - A warning comes before its step: command first, risk second.
-- An operator under pager stress reads each sentence once, so the 20-word limit is not negotiable.
+- No sentence has more than 20 words.
 
 ## Incident reports and postmortems
 
@@ -26,7 +26,7 @@ Mode: descriptive, simple past only. A timeline in present perfect ("we have ide
 > Before: We have identified an issue that may have impacted some users' ability to access the service.
 > After: Between 14:02 and 14:31 UTC, 12% of requests failed. A deploy at 14:00 removed the cache warmup step.
 
-STE bans hedges such as "may have impacted". The report states what is known and says "unknown" for the rest. It reads more honest because it is.
+STE bans hedges such as "may have impacted". The report states what is known and says "unknown" for the rest.
 
 ## Commit messages and PR descriptions
 
@@ -38,7 +38,7 @@ Mode: descriptive. One entry, one change, one sentence where possible. A "Breaki
 
 ## Instructions for AI agents (prompts, AGENTS.md, skills)
 
-Mode: procedural. A system prompt is a procedure for a reader that cannot ask questions, which is the exact reader STE was designed for.
+Mode: procedural. A system prompt is a procedure for a reader that cannot ask questions.
 
 - One instruction per sentence keeps each rule quotable and hard to half-follow.
 - One word, one meaning stops the model from treating "check", "verify", and "validate" as three operations.
@@ -47,11 +47,14 @@ Mode: procedural. A system prompt is a procedure for a reader that cannot ask qu
 
 ## Support macros and status-page updates
 
-Mode: descriptive, 25-word limit. Non-native readers are the majority of many user bases. Not "we sincerely apologize for any inconvenience this may have caused" but "The API was down for 18 minutes. Uploads made during this time were saved and will process today."
+Mode: descriptive, 25-word limit. Many readers of these messages are non-native speakers.
+
+> Before: We sincerely apologize for any inconvenience this may have caused.
+> After: The API was down for 18 minutes. Uploads made during this time were saved and will process today.
 
 ## Translation and localization prep
 
-Mode: strict. The original purpose of STE was English that non-native maintenance crews can read, and it doubles as pre-editing for machine translation. One meaning per word plus complete grammar (articles, "that") removes most translation ambiguity. If your docs get localized, STE cuts the error rate and the cost.
+Mode: strict. STE was written so that non-native maintenance crews can read English manuals. The same rules prepare text for machine translation. One meaning per word and complete grammar (articles, "that") remove many ambiguities that a translator must otherwise guess at.
 
 ## UI copy and empty states
 
@@ -59,4 +62,4 @@ Mode: procedural, hard length limits. Buttons and labels are technical names and
 
 ## Where STE does not fit
 
-Marketing pages, launch posts, blog voice, brand writing. STE deletes persuasion on purpose. Write those in your own voice. Then use STE for the docs that the landing page links to.
+Do not use STE for marketing pages, launch posts, blog posts, or brand writing. STE removes persuasion. Write those texts in your own voice, and use STE for the docs that they link to.
