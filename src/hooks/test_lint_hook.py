@@ -3,6 +3,7 @@ HERE = pathlib.Path(__file__).resolve().parent
 HOOK = HERE / "lint_hook.py"
 CLEAN = {"CLAUDE_CONFIG_DIR": "/nonexistent/claude-config", "SIMPLE_ENGLISH_LINT_EXCLUDE": ""}
 SLOP = "You should simply leverage the robust tool, making it seamless.\n"
+CJK = "系统在 3 秒后重试 1 次失败的上传。重试 3 次后仍然失败时，系统写 1 条日志。" * 4 + "\n"
 
 def run(event, env=None):
     r = subprocess.run([sys.executable, str(HOOK)], input=json.dumps(event), capture_output=True, text=True,
@@ -37,6 +38,13 @@ def test_post_tool_use_ignores_clean_file_and_non_markdown():
         f.write("Run the migration. Then restart the service.\n"); path = f.name
     assert run({"hook_event_name": "PostToolUse", "tool_input": {"file_path": path}})[0] == 0
     assert run({"hook_event_name": "PostToolUse", "tool_input": {"file_path": "/tmp/x.py"}})[0] == 0
+
+def test_post_tool_use_ends_a_sentence_at_a_cjk_full_stop():
+    with tempfile.TemporaryDirectory() as d:
+        path = pathlib.Path(d, "notes.md")
+        path.write_text(CJK, encoding="utf-8")
+        code, out, err = run(post(str(path)))
+    assert code == 0, (code, err)
 
 def test_post_tool_use_skips_the_claude_config_dir():
     with tempfile.TemporaryDirectory() as d:

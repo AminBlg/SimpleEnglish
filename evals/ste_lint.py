@@ -63,6 +63,7 @@ ROTATION_SETS = [
     ("config-settings", re.compile(r"\b(config|configuration|settings)\b", re.I)),
 ]
 LIMITS = {"procedural": 20, "descriptive": 25}
+CJK_END = "。！？"  # these end a sentence with no space after them
 
 
 def strip_code(text):
@@ -77,8 +78,8 @@ def strip_code(text):
 
 def sentences(text):
     # Append ". " to each item so items become their own sentence units instead of merging.
-    text = re.sub(r"^\s*([-*]|\d+\.)\s+(.*?)([.!?:])?\s*$", lambda m: m.group(2) + (m.group(3) or ".") + " ", text, flags=re.M)
-    parts = re.split(r"(?<=[.!?:])\s+", text)
+    text = re.sub(r"^\s*([-*]|\d+\.)\s+(.*?)([.!?:" + CJK_END + r"])?\s*$", lambda m: m.group(2) + (m.group(3) or ".") + " ", text, flags=re.M)
+    parts = re.split(r"(?<=[.!?:])\s+|(?<=[" + CJK_END + r"])\s*", text)
     return [p.strip() for p in parts if len(p.strip().split()) >= 2]
 
 
@@ -232,6 +233,15 @@ LABEL_LIST_FIXTURE = """\
 - Privacy controls and consent management
 """
 
+# Chinese prose ends a sentence with "。", "！" or "？" and puts no space after it.
+CJK_FIXTURE = """\
+系统在 3 秒后重试 1 次失败的上传。重试 3 次后仍然失败时，系统写 1 条日志。日志里有上传的 ID 和失败的原因。
+第 4 次重试在 60 秒后开始。请先读这条日志！支持团队需要这个 ID 才能查到第 2 次重试的记录吗？需要。
+
+- 第 1 步：打开 设置 页。
+- 第 2 步：把 超时 改成 30 秒
+"""
+
 # Only the first three dashes must be flagged as logic junctions.
 DASH_FIXTURE = """The deploy failed — the disk was full.
 The upload failed -- the token expired.
@@ -323,6 +333,13 @@ def self_test():
     long_prose = "a " * 30  # 30 repetitions of the same word, one space each
     assert lint(long_prose, "descriptive")["violations"]["sentence_over_limit"] >= 1, \
         "genuine long sentence was not flagged"
+    # A CJK full stop ends a sentence, and no space follows it.
+    assert sentences("甲 乙。丙 丁！戊 己？庚 辛") == ["甲 乙。", "丙 丁！", "戊 己？", "庚 辛"]
+    assert sentences("- 拧松 螺栓。\n- 然后 继续") == ["拧松 螺栓。", "然后 继续."]
+    assert lint(CJK_FIXTURE, "descriptive")["violations"]["sentence_over_limit"] == 0, \
+        "CJK sentences merged into one over-limit sentence"
+    assert lint("词 " * 30 + "。", "descriptive")["violations"]["sentence_over_limit"] == 1, \
+        "genuine long CJK sentence was not flagged"
     detail = lint_detail(SLOP_FIXTURE, "procedural")
     assert len(detail) == slop["violations_total"], (len(detail), slop["violations_total"])
     assert all(h["line"] >= 1 and h["text"] for h in detail), detail
