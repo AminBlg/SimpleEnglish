@@ -95,7 +95,7 @@ def main():
     (out / "scores.json").write_text(json.dumps(rows, indent=1))
     print()
     print("| condition | n | words | sentences | em-dash | bold | headers | bullets | openers | linter viol/100w |")
-    print("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
+    print("|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|")
     for cond in conds:
         rs = [r for r in rows if r["cond"] == cond]
         n = len(rs)
