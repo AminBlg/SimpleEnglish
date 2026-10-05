@@ -1,0 +1,5 @@
+Redis caches the price at read time and serves that cached value until the TTL expires, so any database update is invisible to readers until the cache entry ages out. Because your TTL is set to at least 10 minutes, readers get the old price for that entire window.
+
+The fix is cache invalidation on write: when a price update lands in the database, immediately delete or overwrite the corresponding Redis key. That way the next read fetches the fresh value from the database and re-populates the cache.
+
+If you cannot invalidate on write (for example, the writer and the cache client are in separate services), lower the TTL to an acceptable staleness bound, or switch to a write-through pattern where the writer updates Redis and the database together in the same operation.

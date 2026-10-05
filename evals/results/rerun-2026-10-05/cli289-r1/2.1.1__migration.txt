@@ -1,0 +1,39 @@
+A backfill is the process of writing a value into every existing row for a column that was added after those rows were inserted.
+
+When you add a NOT NULL column without a default value, the database must verify that every row has a value before it commits the schema change. On a 20 GB table, that verification holds an exclusive lock on the table for the entire duration, which is why the migration hangs. Other queries queue behind that lock and the system appears frozen.
+
+The safe pattern is three separate migrations.
+
+First, add the column as nullable with no constraint.
+
+```sql
+ALTER TABLE your_table ADD COLUMN new_col integer;
+```
+
+Second, backfill the existing rows in batches. Batching keeps each transaction small so the lock is held only for milliseconds at a time and normal traffic continues.
+
+```sql
+UPDATE your_table
+SET new_col = 0
+WHERE new_col IS NULL
+  AND id BETWEEN 1 AND 10000;
+-- repeat for the next range, or use a loop in a script
+```
+
+Third, after every row has a value, add the NOT NULL constraint. Most databases can validate the constraint without a full table rewrite if you add it as `NOT VALID` first and then validate separately.
+
+```sql
+ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL;
+```
+
+On PostgreSQL specifically, you can split the third step to avoid a long lock.
+
+```sql
+ALTER TABLE your_table ADD CONSTRAINT new_col_not_null CHECK (new_col IS NOT NULL) NOT VALID;
+-- later, during a low-traffic window:
+ALTER TABLE your_table VALIDATE CONSTRAINT new_col_not_null;
+```
+
+`VALIDATE CONSTRAINT` takes a `SHARE UPDATE EXCLUSIVE` lock instead of an `ACCESS EXCLUSIVE` lock, so reads and writes continue during validation.
+
+If the original migration is still running, kill it first with `pg_cancel_backend(pid)` (soft cancel) or `pg_terminate_backend(pid)` (hard stop), then follow the three-step sequence above. Let me know which database you are on if you need the exact syntax.

@@ -1,0 +1,12 @@
+**Idempotent** means: calling it multiple times with the same input produces the same result as calling it once — no duplicate side effects.
+
+**Is retrying safe?** Only if the endpoint truly is idempotent.
+
+A POST to `/v2/orders` is **not idempotent by default** — POST typically creates a new resource each retry, so you'd get duplicate orders. The word "idempotent" has to be *enforced* by the server, usually via an **idempotency key**: a unique ID you send in the request (e.g. `Idempotency-Key: <uuid>`), and the server deduplicates based on it.
+
+**What to check:**
+1. Does `/v2/orders` actually accept and honor an idempotency key header?
+2. Is your deploy script sending that key — and is it **stable across retries** (same key for the same logical request, not a fresh UUID each attempt)?
+
+If both are true → retrying on timeout is safe.  
+If either is false → you risk creating duplicate orders on every timeout.

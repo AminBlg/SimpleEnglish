@@ -1,0 +1,29 @@
+Before sharding, exhaust these cheaper options in order:
+
+**1. Check indexes first (most likely culprit)**
+```sql
+-- Find slow queries
+SELECT query, mean_exec_time, calls FROM pg_stat_statements ORDER BY mean_exec_time DESC LIMIT 20;
+
+-- Find missing indexes (sequential scans on large tables)
+SELECT schemaname, tablename, seq_scan, idx_scan FROM pg_stat_user_tables WHERE seq_scan > idx_scan ORDER BY seq_scan DESC;
+```
+
+**2. Verify you're not fetching too much**
+- Are queries using `SELECT *`? Are result sets huge?
+- Add `EXPLAIN (ANALYZE, BUFFERS)` to your slowest query — look for `Seq Scan` on the big table.
+
+**3. Partitioning (before sharding)**
+If queries filter by a date or ID range, partition the table by that column. This is built into Postgres, transparent to the app, and often gives 10x+ improvement by pruning irrelevant partitions. Much cheaper than sharding.
+
+**4. Read replicas**
+If you have read-heavy workload, a replica costs almost nothing to set up and immediately halves (or more) read load on the primary.
+
+**5. Connection pooling**
+If you're not using PgBouncer or similar, connection overhead alone can make everything slow at scale.
+
+---
+
+**Sharding is last** because it requires splitting data across multiple Postgres instances, which forces application-level routing logic, breaks joins across shards, complicates transactions, and is very hard to undo.
+
+The most common finding: 40M rows is not that big for Postgres — a missing index on a frequently-filtered column is usually the culprit. Start with `EXPLAIN ANALYZE` on your slowest query and share what it shows.

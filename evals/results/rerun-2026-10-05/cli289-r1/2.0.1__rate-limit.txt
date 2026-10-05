@@ -1,0 +1,3 @@
+A token bucket gives each user a bucket that holds up to 100 tokens. The bucket refills at a fixed rate, here 100 tokens per minute. Each request costs one token. If the bucket is empty, the request is rejected or queued.
+
+It fits your requirement well because it allows short bursts (a user can spend all 100 tokens in a few seconds if the bucket is full) while enforcing the 100-per-minute ceiling over time. If you want to prevent bursting and force a steady rate, a leaky bucket is the better choice.

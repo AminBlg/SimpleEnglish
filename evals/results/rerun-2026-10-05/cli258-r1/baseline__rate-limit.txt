@@ -1,0 +1,31 @@
+## Token Bucket, Plain Terms
+
+Imagine each user has a bucket that holds up to 100 tokens. Tokens refill at a steady rate — in your case, 100 per minute (roughly 1.67/second). Each API request costs 1 token. If the bucket is empty, the request is rejected (or queued).
+
+**Key behaviors:**
+- A user who's been idle can burst up to 100 requests instantly, then must wait for refill.
+- A steady user sending ~1.67 req/s is never throttled.
+- The bucket never exceeds 100 tokens, so burst is capped.
+
+## Does It Fit?
+
+**Yes, it's a good fit.** Token bucket is the standard choice for "N requests per time window" rate limiting because:
+
+- It allows short bursts (useful for clients that batch requests), while still enforcing the long-run average.
+- It's cheap to implement: just store `(token_count, last_refill_timestamp)` per user in Redis.
+- Refilling is lazy — you only compute elapsed time on each request, no background jobs needed.
+
+**One tradeoff to be aware of:** a user could make 100 requests in the first second of each minute (burst), which might spike your backend more than a strict sliding-window approach. If you want to prevent that, a **sliding window counter** is stricter. But for most APIs, the burst flexibility of a token bucket is a feature, not a bug.
+
+**Simple Redis implementation sketch:**
+
+```
+tokens = min(capacity, stored_tokens + (elapsed_seconds * refill_rate))
+if tokens >= 1:
+    store tokens - 1
+    allow request
+else:
+    reject with 429
+```
+
+Token bucket fits your requirement well.

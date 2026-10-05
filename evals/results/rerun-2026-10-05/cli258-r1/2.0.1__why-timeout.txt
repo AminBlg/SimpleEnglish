@@ -1,0 +1,7 @@
+Idempotent means you can call the operation more than once and get the same result as calling it once. For example, creating an order with the same idempotency key twice produces one order, not two.
+
+A POST is not idempotent by default, but if `/v2/orders` uses an idempotency key (a unique ID you send in the request header or body), retrying on timeout is safe. The server recognizes the duplicate key and returns the original result instead of creating a second order.
+
+The risk is if the first request succeeded but the response timed out before you received it. Without an idempotency key, your retry creates a duplicate order. With a valid key, the server deduplicates it for you.
+
+Make sure that your deploy script sends the same idempotency key on every retry attempt for the same logical request.

@@ -1,0 +1,33 @@
+OOMKilled means the Linux kernel killed the container process because it exceeded the memory limit set on the pod. Kubernetes sets a cgroup memory ceiling from the `resources.limits.memory` field. When the process crosses that ceiling, the kernel's Out-Of-Memory killer terminates it immediately, and Kubernetes restarts the pod, producing the crash loop you see.
+
+Run this to confirm the cause and see the last exit code (137 means OOM kill):
+
+```
+kubectl describe pod <pod-name> -n <namespace>
+```
+
+Look for `Last State: OOMKilled` and `Exit Code: 137` in the output.
+
+**Find out how much memory the container actually needs.** Run this against a healthy instance or during a load test:
+
+```
+kubectl top pod <pod-name> -n <namespace>
+```
+
+Then make one of these changes in your pod specification, depending on what the numbers show.
+
+If the limit is too low for the workload, raise it:
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"
+```
+
+Set `requests` to the typical working-set size and `limits` to the peak you can tolerate. Kubernetes uses `requests` for scheduling and `limits` for enforcement.
+
+If the limit is reasonable but the application consumes unbounded memory, the fix is inside the application. Common causes are memory leaks, unbounded caches, or loading an entire dataset into memory at once. Profile the process with a tool appropriate to its runtime (pprof for Go, async-profiler for Java, memory_profiler for Python) to find the allocation site.
+
+For JVM workloads, also make sure that `-Xmx` is set to a value below the container limit. The JVM can allocate off-heap memory on top of the heap, so `limits.memory` must be larger than `-Xmx`, not equal to it. A common rule is to set `-Xmx` to roughly 75 percent of the container limit and leave the rest for off-heap use.

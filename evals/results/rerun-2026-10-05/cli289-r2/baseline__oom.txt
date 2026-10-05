@@ -1,0 +1,74 @@
+## OOMKilled — What's Happening
+
+The container exceeded its memory **limit** set in the pod spec. The Linux kernel's OOM (Out of Memory) killer terminated the process, and Kubernetes restarted the pod. This repeats in a loop if the root cause isn't fixed.
+
+---
+
+## Diagnose First
+
+```bash
+# See current/past resource usage
+kubectl top pod <pod-name> -n <namespace>
+
+# Check restart count and last exit reason
+kubectl describe pod <pod-name> -n <namespace>
+# Look for: "OOMKilled", "Exit Code: 137", and "Last State"
+
+# Check what limits are currently set
+kubectl get pod <pod-name> -n <namespace> -o jsonpath='{.spec.containers[*].resources}'
+```
+
+---
+
+## What to Change
+
+You have three levers, in order of preference:
+
+### 1. Fix the memory leak / inefficiency (best option)
+If the app is genuinely leaking memory or doing unbounded work, fix the code. `kubectl top pod` over time will show steady growth vs. a spike.
+
+### 2. Raise the memory limit
+Edit your Deployment/StatefulSet:
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"   # what the scheduler reserves
+  limits:
+    memory: "512Mi"   # hard ceiling — raise this
+```
+
+Rule of thumb: set `limits` to ~2× your observed peak usage from `kubectl top`. Keep `requests` at ~your steady-state baseline.
+
+### 3. Remove the limit entirely (last resort)
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits: {}   # no ceiling — pod can use whatever the node has free
+```
+This risks taking down the node if the app misbehaves. Only do this if you're profiling and need a temporary ceiling-free run.
+
+---
+
+## Key Distinction: `requests` vs `limits`
+
+| Field | Effect |
+|---|---|
+| `requests` | Used by the scheduler to place the pod on a node with enough free memory |
+| `limits` | Hard ceiling enforced by cgroups — exceeding it triggers OOMKill |
+
+OOMKill only fires when `limits` is exceeded. If you have no `limits` set, the node itself runs OOM and that's worse.
+
+---
+
+## Quick Fix (one-liner patch)
+
+```bash
+kubectl set resources deployment/<name> \
+  -c <container-name> \
+  --limits=memory=512Mi \
+  --requests=memory=256Mi
+```
+
+Adjust the values based on what `kubectl top` shows. If usage keeps climbing, the problem is a leak, not just a low limit.

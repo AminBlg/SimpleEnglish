@@ -1,0 +1,58 @@
+## What's happening
+
+When you add `NOT NULL` to an existing column, the database must verify (or set) a value for every existing row. On a 20 GB table, that's a full table rewrite — it locks the table and can run for hours, which is why it "hangs."
+
+A **backfill** means: populate the new column's values for all existing rows *before* enforcing the constraint, using small batches so the table stays available.
+
+---
+
+## The safe pattern (zero-downtime)
+
+### Step 1 — Kill the hung migration
+Stop it. The lock is blocking all reads/writes.
+
+### Step 2 — Add the column as nullable first
+```sql
+ALTER TABLE your_table ADD COLUMN new_col INTEGER;
+```
+This is near-instant — no row rewriting, no lock.
+
+### Step 3 — Backfill in batches
+```sql
+UPDATE your_table
+SET new_col = <default_value>
+WHERE id BETWEEN 1 AND 10000;
+-- repeat for next 10k, next 10k...
+```
+Or use a script/tool that loops with a small sleep between batches to avoid I/O spikes. Keep batches small (5k–50k rows depending on row size).
+
+### Step 4 — Add the NOT NULL constraint *without* a scan
+In **PostgreSQL 12+** you can do this in two steps to avoid the full table scan:
+```sql
+ALTER TABLE your_table
+  ADD CONSTRAINT new_col_not_null CHECK (new_col IS NOT NULL) NOT VALID;
+
+-- Later, after backfill is confirmed complete:
+ALTER TABLE your_table VALIDATE CONSTRAINT new_col_not_null;
+```
+`NOT VALID` skips scanning existing rows (instant). `VALIDATE CONSTRAINT` scans but takes only a `SHARE UPDATE EXCLUSIVE` lock — it doesn't block reads/writes.
+
+Once validated, you can swap to a true `NOT NULL`:
+```sql
+ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL;
+-- PostgreSQL is smart enough to skip the scan if a validated CHECK constraint already covers it
+```
+
+### Step 5 — Set the column default (if needed)
+```sql
+ALTER TABLE your_table ALTER COLUMN new_col SET DEFAULT <value>;
+```
+
+---
+
+## Key things to watch
+
+- **Batch size**: too large → replication lag and I/O spikes; too small → takes forever. 10k–50k rows with a 50–100ms sleep is typical.
+- **Index on your batch key**: make sure `WHERE id BETWEEN x AND y` uses an index or you'll do full scans per batch.
+- **Monitor replication lag** during the backfill if you have replicas.
+- **Which DB?** The exact syntax varies — PostgreSQL, MySQL, and SQL Server each have nuances. The pattern above is PostgreSQL-focused; let me know your DB if you need specifics.

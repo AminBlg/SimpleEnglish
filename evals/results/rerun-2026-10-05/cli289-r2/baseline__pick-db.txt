@@ -1,0 +1,21 @@
+Before sharding, exhaust simpler options — sharding is complex and often unnecessary.
+
+**Do this first:**
+
+1. **Check your indexes.** Run `EXPLAIN (ANALYZE, BUFFERS)` on your slow queries. Missing indexes fix most "40M row" slowness instantly.
+
+2. **Check for sequential scans on hot queries.** If you're full-scanning 40M rows because of a missing index, adding one takes minutes vs. weeks for sharding.
+
+3. **Vacuum/analyze.** Stale statistics cause the planner to make bad choices. Run `ANALYZE your_table` and check `pg_stat_user_tables` for bloat.
+
+4. **Partitioning (not sharding).** If queries filter on a time or category column, declarative table partitioning (built into Postgres) gives you most of sharding's read benefits with almost none of the operational cost. Partition pruning means Postgres only scans relevant partitions.
+
+5. **Read replicas.** If reads are the bottleneck and writes are fine, a streaming replica with read routing costs very little to set up and scales reads horizontally.
+
+**Only then consider sharding** — which means either:
+- Application-level sharding (you route queries, manage cross-shard joins yourself), or
+- Citus extension (turns Postgres into a distributed DB, adds real operational complexity)
+
+The tradeoff: sharding eliminates single-node limits but makes transactions, joins, and migrations dramatically harder. Most Postgres tables don't need it until they're in the billions of rows *and* indexing/partitioning has already been optimized.
+
+What do your slow queries look like? That would narrow this down fast.

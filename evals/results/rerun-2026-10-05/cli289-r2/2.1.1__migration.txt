@@ -1,0 +1,40 @@
+A backfill is the process of writing a value into every existing row for the new column, because those rows were inserted before the column existed and have no value for it.
+
+When you add a `NOT NULL` column without a default, Postgres must update every row in the table at once to satisfy the constraint. On a 20 GB table that holds an exclusive lock for the entire duration, which is why the migration hangs and blocks all reads and writes.
+
+The safe approach is three separate migrations.
+
+**Step 1: Add the column as nullable.**
+
+```sql
+ALTER TABLE your_table ADD COLUMN new_col integer;
+```
+
+This is instant. No lock, no row rewrites.
+
+**Step 2: Backfill in batches.**
+
+```sql
+UPDATE your_table
+SET new_col = <expression or value>
+WHERE id BETWEEN 1 AND 10000
+  AND new_col IS NULL;
+```
+
+Run this in a loop over all ID ranges, committing after each batch. Small batches (5 000 to 10 000 rows) keep each transaction short so they do not block traffic or fill up WAL. You can also use `pg_sleep(0.05)` between batches to give the database breathing room.
+
+**Step 3: Add the NOT NULL constraint after the backfill completes.**
+
+```sql
+ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL;
+```
+
+On Postgres 12 and later, this step is also fast when every row already has a value, because Postgres checks the constraint via a table scan without rewriting rows.
+
+Before you run step 3, make sure that no row still has a NULL in that column.
+
+```sql
+SELECT COUNT(*) FROM your_table WHERE new_col IS NULL;
+```
+
+That count must be zero. If your application writes new rows during the backfill, also add a `NOT NULL` check or default to your application code so new rows never insert a NULL into that column while the migration is in progress.

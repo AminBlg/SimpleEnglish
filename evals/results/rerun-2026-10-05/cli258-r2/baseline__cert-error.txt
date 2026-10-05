@@ -1,0 +1,71 @@
+## SSL: unable to get local issuer certificate
+
+This means curl can't verify the server's certificate because it doesn't have the **CA (Certificate Authority) that signed it** in its trust store. Common causes for an internal API:
+
+1. **Self-signed cert** — the server uses a cert it signed itself, not a trusted CA.
+2. **Private/internal CA** — your org has its own CA that signed the cert, but it's not installed on your machine.
+3. **Missing intermediate cert** — the server isn't serving the full chain, and curl can't build the path to a trusted root.
+
+---
+
+### Diagnose first
+
+```bash
+# See the full cert chain the server is presenting
+openssl s_client -connect your-api.internal:443 -showcerts 2>/dev/null | openssl x509 -noout -text | grep -E 'Issuer|Subject'
+
+# Or dump the whole chain
+openssl s_client -connect your-api.internal:443 -showcerts 2>/dev/null
+```
+
+Look at the `Issuer` — if it's your company name or "localhost" or matches `Subject`, it's a private/self-signed cert.
+
+---
+
+### Fix options (in order of correctness)
+
+**1. Install your org's CA cert (correct long-term fix)**
+
+Get the root CA `.crt` or `.pem` from your infra team, then:
+
+```bash
+# Arch Linux (your system)
+sudo trust anchor --store /path/to/internal-ca.crt
+sudo update-ca-trust
+
+# Verify it's trusted now
+curl https://your-api.internal
+```
+
+**2. Point curl at the CA directly (per-request, no system changes)**
+
+```bash
+curl --cacert /path/to/internal-ca.crt https://your-api.internal
+```
+
+Or set it permanently in `~/.curlrc`:
+```
+cacert=/path/to/internal-ca.crt
+```
+
+**3. Skip verification entirely (`-k`) — quick test only, never in scripts**
+
+```bash
+curl -k https://your-api.internal
+```
+
+This confirms the cert is the problem but leaves you open to MITM. Don't leave it in place.
+
+---
+
+### Getting the CA cert if you don't have it
+
+```bash
+# Pull it directly from the server (chain position 1 = intermediate/root)
+openssl s_client -connect your-api.internal:443 -showcerts 2>/dev/null \
+  | awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' \
+  | tail -n +$(grep -n 'BEGIN CERTIFICATE' <(openssl s_client -connect your-api.internal:443 -showcerts 2>/dev/null) | tail -1 | cut -d: -f1) \
+  > internal-ca.pem
+```
+
+Or just ask whoever runs the internal API — they should be able to hand you the CA bundle.

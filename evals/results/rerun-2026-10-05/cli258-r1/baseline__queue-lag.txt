@@ -1,0 +1,36 @@
+**Yes, 2 million lag is serious — here's what it means:**
+
+## What consumer lag actually is
+
+Lag = messages produced but not yet consumed. At 2M lag, your consumer is behind the producer by 2 million messages.
+
+Whether that's critical depends on two things:
+
+1. **Throughput** — if your consumer processes 1M msg/s, 2M lag = 2 seconds behind. If it processes 10K msg/s, that's 200 seconds and growing.
+2. **Trend** — is it stable, growing, or shrinking? A stable lag at 2M is a different problem than one that climbed from 500K in the last hour.
+
+## What users feel
+
+| Lag behavior | User impact |
+|---|---|
+| Stable high lag | Consistent delay (e.g., notifications always arrive 30s late) |
+| Growing lag | Increasing latency — eventually events stop arriving at all |
+| Lag spike + recovery | Temporary delay users notice, then resolves |
+
+If your pipeline is real-time (payments, alerts, live feeds), 2M growing lag likely means **users are seeing stale data or missing events entirely**. If it's async/batch (analytics, audit logs), impact is lower but you're heading toward retention cutoff risk — Kafka will delete old messages before they're consumed.
+
+## Immediate questions to ask
+
+- **Is lag growing or stable?** (`kafka-consumer-groups.sh --describe` or your dashboard trend)
+- **Is the consumer healthy?** — check for rebalancing, GC pauses, or thread starvation
+- **Is the producer bursting?** — sudden traffic spike vs. consumer falling over are different fixes
+- **What's your retention window?** — if messages expire before consumption, they're gone permanently
+
+## Common causes
+
+- Consumer crashed or scaled down
+- Processing bottleneck (slow DB writes, downstream service timeout)
+- Partition imbalance (one consumer thread doing all the work)
+- A recent deploy slowed consumer throughput
+
+The most urgent thing is determining the **rate of change** — if lag is growing at even 10K/min, you have maybe 3 hours before hitting typical 24h retention limits. What does your trend line look like?

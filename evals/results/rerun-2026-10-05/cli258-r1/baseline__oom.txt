@@ -1,0 +1,66 @@
+## OOMKilled in Kubernetes
+
+**What's happening:** The container exceeded its memory **limit**. The Linux kernel's OOM (Out of Memory) killer terminated the process, and Kubernetes restarted the pod. This repeats every restart cycle.
+
+---
+
+### Diagnose first
+
+```bash
+# Check restart count and last exit reason
+kubectl describe pod <pod-name> -n <namespace>
+# Look for: "Last State: Terminated  Reason: OOMKilled"
+
+# See current memory usage
+kubectl top pod <pod-name> -n <namespace>
+
+# Check recent memory trend (if metrics-server is installed)
+kubectl top pod --containers -n <namespace>
+```
+
+---
+
+### Root causes and fixes
+
+**1. Limit is too low — most common**
+
+The container's memory limit is simply smaller than what the app needs.
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"  # Raise this
+```
+
+How much to raise it: run the pod without a limit temporarily, observe peak usage with `kubectl top`, then set the limit to ~20–30% above that peak.
+
+**2. Memory leak in the application**
+
+Usage grows unboundedly over time. Signs: the pod runs fine for hours/days, then OOMKills. Fix is in the application code, not the limit. Add profiling (pprof, heap dumps, etc.) to confirm before raising limits indefinitely.
+
+**3. requests/limits gap too large**
+
+If `requests` is much lower than `limits`, the scheduler places the pod on a node that can't actually sustain the limit under load. Keep them close (or equal for memory-sensitive workloads).
+
+**4. JVM / runtime not container-aware**
+
+Java (pre-JDK 10), Node.js, and some runtimes read the host's total RAM, not the cgroup limit, and allocate heap accordingly. Fix:
+
+- **Java:** add `-XX:+UseContainerSupport` (JDK 8u191+ / JDK 10+) and optionally `-XX:MaxRAMPercentage=75.0`
+- **Node.js:** pass `--max-old-space-size=<MB>` explicitly
+
+**5. Init containers or sidecars**
+
+The limit applies per container. If a sidecar is leaking, it won't show up in the main container's stats. Check `kubectl top pod --containers`.
+
+---
+
+### Recommended approach
+
+1. Check current limits: `kubectl get pod <name> -o jsonpath='{.spec.containers[*].resources}'`
+2. Watch live memory: `kubectl top pod --containers`
+3. If usage is near the limit and stable → raise the limit
+4. If usage grows over time → investigate for a memory leak
+5. Set a `LimitRange` in the namespace to catch pods deployed without explicit resource specs

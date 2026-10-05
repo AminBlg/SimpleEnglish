@@ -1,0 +1,32 @@
+curl cannot verify the server's certificate because the certificate authority (CA) that signed it is not in your system's trusted CA bundle — common with internal APIs that use a private/corporate CA.
+
+**Diagnose first:**
+
+```bash
+curl -v https://your-internal-api/ 2>&1 | grep -E 'issuer|subject|SSL|verify'
+```
+
+**Fix options, in order of preference:**
+
+1. **Trust the corporate CA properly** (permanent, correct fix): get the internal CA certificate (`.pem` or `.crt`) from your infra team, then:
+
+```bash
+# Arch Linux
+sudo trust anchor --store internal-ca.crt
+```
+
+2. **Point curl at the CA bundle for this call only:**
+
+```bash
+curl --cacert /path/to/internal-ca.crt https://your-internal-api/
+```
+
+3. **Set it permanently via an environment variable** in your shell profile:
+
+```bash
+export CURL_CA_BUNDLE=/path/to/internal-ca.crt
+```
+
+**Do not use `-k` / `--insecure`** in any real workflow — it disables verification entirely and exposes you to MITM attacks on your internal network.
+
+The root cause is almost always that your org runs its own CA and only distributes trust to managed machines; if you are on a personal or new machine, you simply need to import that CA certificate.

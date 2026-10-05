@@ -1,0 +1,5 @@
+The stale window comes from your cache TTL. When a price updates in the database, the old value sits in Redis until its TTL expires, so users see the stale price for up to that TTL duration (10 minutes in your case).
+
+The fix is cache invalidation on write: when you write a new price to the database, immediately delete or overwrite the corresponding Redis key in the same operation. Then the next read fetches the fresh value from the database and repopulates the cache.
+
+If the write and the cache invalidation must be atomic, wrap both in a transaction or use a write-through pattern where every price write goes to Redis first, then the database. A simpler fallback is to lower the TTL, but that trades staleness for higher database load.

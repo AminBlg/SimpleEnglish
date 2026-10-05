@@ -1,0 +1,17 @@
+## Token Bucket, Plain Terms
+
+Imagine each user has a bucket that holds up to 100 tokens. Tokens refill at a steady rate — in your case, 100 tokens per minute (roughly 1.67/second). Each API request consumes one token. If the bucket is empty, the request is rejected (or queued).
+
+Key properties:
+- **Burst-friendly**: a user who's been idle can spend all 100 tokens at once. That's intentional — it absorbs short spikes without penalizing normal usage.
+- **Sustained rate is capped**: over any long window, a user can't average more than 100 req/min regardless of bursting.
+- **Simple state**: per user you store two values — current token count and last refill timestamp. No sliding window of timestamps needed.
+
+## Does it fit your case?
+
+**Yes, with one caveat.** Token bucket is a natural fit for "100 requests per minute per user":
+
+- If you mean *exactly* 100 evenly spread, it still works — just refill at 1.67/sec and keep a max bucket size of 1 (fixed window behavior). But that's rarely what you actually want.
+- If you mean *at most 100 in any 60-second window*, a **sliding window counter** is more precise — token bucket can technically allow ~200 requests across a minute boundary (100 saved up, refill fires, 100 more). Whether that matters depends on your threat model.
+
+For most APIs, token bucket is the right call: it's simple, efficient, and friendly to legitimate bursty clients. Use sliding window only if you need hard guarantees against boundary exploitation.

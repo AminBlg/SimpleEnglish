@@ -1,0 +1,55 @@
+## What's happening
+
+Your internal API uses a TLS certificate signed by a **private/internal CA** (Certificate Authority). curl's default trust store (usually `/etc/ssl/certs/`) doesn't include that CA, so it can't verify the certificate chain and refuses the connection.
+
+## Diagnosis
+
+```bash
+# See the full cert chain your API is presenting
+openssl s_client -connect your-api-host:443 -showcerts 2>/dev/null </dev/null
+
+# Check what curl is using as its CA bundle
+curl --version | grep -i ssl
+curl-config --ca   # or: curl --verbose https://your-api-host 2>&1 | grep CAfile
+```
+
+## Fixes (in order of preference)
+
+### 1. Add the internal CA to your system trust store (best long-term fix)
+
+```bash
+# Get the CA cert from your team/IT (usually a .crt or .pem file), then:
+
+# Arch/Manjaro
+sudo trust anchor --store internal-ca.crt
+# or
+sudo cp internal-ca.crt /etc/ca-certificates/trust-source/anchors/
+sudo update-ca-trust
+
+# Debian/Ubuntu
+sudo cp internal-ca.crt /usr/local/share/ca-certificates/
+sudo update-ca-certificates
+```
+
+After this, curl and other tools that use the system store will trust it automatically.
+
+### 2. Point curl at the CA cert for this session/script
+
+```bash
+curl --cacert /path/to/internal-ca.crt https://your-api-host/...
+
+# Or via env var (affects all curl calls in the shell)
+export CURL_CA_BUNDLE=/path/to/internal-ca.crt
+```
+
+### 3. Skip verification entirely (temporary debugging only — never in production)
+
+```bash
+curl -k https://your-api-host/...
+```
+
+This disables all certificate validation and leaves you open to MITM attacks. Use only to confirm the cert is the actual problem.
+
+---
+
+**How to get the CA cert** if you don't have it: ask your IT/infra team, or extract it from the chain openssl prints above — the last certificate in the chain is the root CA. Copy the `-----BEGIN CERTIFICATE-----` block to a `.crt` file.

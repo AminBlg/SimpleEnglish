@@ -1,0 +1,7 @@
+Yes, 2 million messages of consumer lag is serious. It means your consumer group is falling behind the producers — messages are arriving faster than your consumers process them, and that backlog is 2 million messages deep.
+
+What users experience depends on what those topics drive. If the consumers feed real-time features (notifications, search indexing, order processing, live dashboards), users see delays proportional to how long it takes to drain that backlog. At typical consumer throughput, 2M messages can mean minutes to hours of latency on user-facing events.
+
+The immediate risk is that if lag keeps climbing, you eventually hit your Kafka retention limit and unprocessed messages are deleted before consumers read them — data loss with no retry. Check your topic retention settings now and compare against how fast lag is growing.
+
+Common causes: a consumer instance crashed or was removed (check consumer group membership), a downstream dependency the consumer calls is slow or down, or a traffic spike outpaced your partition count and consumer parallelism. Run `kafka-consumer-groups.sh --describe` on the affected group to see which partitions are lagging and whether any have no active consumer assigned.

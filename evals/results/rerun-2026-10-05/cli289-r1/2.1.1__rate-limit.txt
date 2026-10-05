@@ -1,0 +1,11 @@
+A token bucket is a rate-limiting mechanism where each user holds a bucket that fills with tokens at a fixed rate and loses one token per request.
+
+The bucket has a capacity of 100 tokens. A background process adds tokens at a rate of 100 per minute (roughly 1.67 per second). When a request arrives, the system checks that the bucket has at least one token, removes it, and lets the request through. If the bucket is empty, the system rejects the request immediately or holds it until a token arrives.
+
+The key property is that a user who makes no requests for a while can accumulate tokens up to the bucket's capacity, then spend them all at once. That burst is intentional: it handles a user who is idle for 30 seconds and then sends 50 requests rapidly, without counting them against the limit unfairly.
+
+For your case, 100 requests per minute per user, the token bucket fits well. Set capacity to 100 and refill rate to 100 tokens per minute. You can tune burst behavior independently of the steady-state rate by adjusting capacity, which a simpler fixed-window counter cannot do.
+
+The main implementation cost is storage: you must persist the current token count and the last-refill timestamp for each user. Redis is the common choice because you can update both fields atomically with a Lua script, which prevents a race condition where two simultaneous requests both read a count of 1 and both proceed.
+
+One alternative worth knowing is the sliding-window log, which is more precise but stores every request timestamp. For 100 requests per minute at any meaningful scale, the token bucket is the right trade-off between precision, storage, and implementation complexity.

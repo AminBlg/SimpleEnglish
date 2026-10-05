@@ -1,0 +1,9 @@
+Before sharding, rule out cheaper fixes — sharding is expensive and hard to reverse.
+
+First, run `EXPLAIN (ANALYZE, BUFFERS)` on your slow queries to find whether the bottleneck is missing indexes, sequential scans, or actual I/O saturation. Most "40M rows is slow" problems are missing indexes or queries that fetch too many columns.
+
+If indexes are fine, check `pg_stat_user_tables` and `pg_statio_user_tables` to see heap and index hit rates — a cache hit rate below 95% points to a RAM problem, which you fix by adding memory or tuning `shared_buffers`, not by sharding.
+
+If the data has a natural time dimension, partitioning (native Postgres `PARTITION BY RANGE`) gives you most of the sharding benefit with far less operational cost — queries against recent partitions skip old ones entirely, and you can detach and archive cold partitions.
+
+Sharding (splitting rows across multiple Postgres instances via Citus or application-level routing) is the right answer only when a single node is genuinely I/O or write-throughput bound after those steps. At 40M rows, that is rarely the case unless rows are very wide or write volume is extreme.

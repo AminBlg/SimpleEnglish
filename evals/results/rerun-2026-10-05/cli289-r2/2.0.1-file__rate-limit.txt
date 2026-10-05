@@ -1,0 +1,5 @@
+A token bucket works like this: each user has a bucket that holds up to 100 tokens, and the bucket refills at a rate of 100 tokens per minute. Each request consumes one token. If the bucket is empty, the request is rejected or queued.
+
+It fits your requirement well. The bucket cap of 100 and a refill rate of 100 per minute gives you exactly 100 requests per minute per user, while also allowing short bursts up to 100 requests if the bucket was full — which is usually the right behavior for APIs.
+
+The main alternative is a fixed window counter, which is simpler but allows up to 200 requests at a window boundary (100 at the end of one minute, 100 at the start of the next). The token bucket avoids that spike. Use the token bucket.

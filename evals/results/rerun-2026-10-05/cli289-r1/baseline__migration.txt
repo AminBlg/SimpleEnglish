@@ -1,0 +1,78 @@
+## What's happening
+
+When you add a `NOT NULL` column to a large table, most databases (Postgres especially) need to rewrite every row to include the new column's value. On a 20 GB table, that's a full table rewrite — it acquires an `ACCESS EXCLUSIVE` lock, blocks all reads and writes, and takes a long time. That's why it hangs.
+
+A **backfill** is the process of populating the new column's values in existing rows *after* the structural change, instead of all at once during `ALTER TABLE`.
+
+---
+
+## The safe pattern (Postgres)
+
+**Step 1 — Add the column as nullable first**
+
+```sql
+ALTER TABLE your_table ADD COLUMN new_col TEXT;
+```
+
+This is nearly instant. No row rewrite, no lock.
+
+**Step 2 — Backfill in batches**
+
+Updating 20 GB in one `UPDATE` is just as bad. Do it in small batches:
+
+```sql
+DO $$
+DECLARE
+  batch_size INT := 10000;
+  rows_updated INT;
+BEGIN
+  LOOP
+    UPDATE your_table
+    SET new_col = 'default_value'
+    WHERE new_col IS NULL
+      AND id IN (
+        SELECT id FROM your_table WHERE new_col IS NULL LIMIT batch_size
+      );
+
+    GET DIAGNOSTICS rows_updated = ROW_COUNT;
+    EXIT WHEN rows_updated = 0;
+    PERFORM pg_sleep(0.05); -- brief pause to avoid I/O saturation
+  END LOOP;
+END $$;
+```
+
+This keeps transactions short, releases locks between batches, and lets normal traffic through.
+
+**Step 3 — Add the NOT NULL constraint separately**
+
+Once all rows are populated:
+
+```sql
+ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL;
+```
+
+On Postgres 12+, if the column has a `CHECK (new_col IS NOT NULL)` constraint already validated, this step is also instant. Otherwise it still does a scan (but no rewrite).
+
+---
+
+## First: kill the hanging migration
+
+If the original `ALTER TABLE` is still running, kill it first:
+
+```sql
+-- Find it
+SELECT pid, query, state, wait_event_type, wait_event
+FROM pg_stat_activity
+WHERE state != 'idle';
+
+-- Kill it
+SELECT pg_cancel_backend(<pid>);
+-- or harder:
+SELECT pg_terminate_backend(<pid>);
+```
+
+---
+
+## Key principle
+
+**Structural change (schema) → backfill (data) → constraint enforcement** — always three separate steps on large tables, never one.

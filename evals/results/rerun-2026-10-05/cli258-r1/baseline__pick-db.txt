@@ -1,0 +1,17 @@
+Before sharding, exhaust simpler options — sharding adds enormous operational complexity and is rarely the right first move.
+
+**Do these first, in order:**
+
+1. **Check your indexes.** Run `EXPLAIN (ANALYZE, BUFFERS)` on your slow queries. Missing or bloated indexes cause most "40M row" slowness. `pg_stat_user_indexes` shows unused indexes; `pg_stat_user_tables` shows sequential scans.
+
+2. **Vacuum/analyze.** Stale table statistics cause bad query plans. Run `ANALYZE <table>` and check for table bloat with `pgstattuple` or `pg_bloat_check`.
+
+3. **Partition the table.** Native Postgres partitioning (range or list, usually by date or tenant ID) gives you most of sharding's read benefits — partition pruning means queries only scan relevant partitions — with zero application changes and no distributed system complexity. This is almost always the right answer at 40M rows.
+
+4. **Read replicas.** If it's read *volume* (not query latency), add a replica and route reads there. Zero schema changes.
+
+5. **Connection pooling.** If you're not using PgBouncer or pgpool, connection overhead may be the actual bottleneck.
+
+**When to actually shard:** when your *write* throughput exceeds what one primary can handle, or your dataset is genuinely too large for one machine's storage. At 40M rows you are almost certainly nowhere near that — that's ~4–40 GB depending on row width, comfortably within a single Postgres instance's wheelhouse.
+
+Start with `EXPLAIN (ANALYZE, BUFFERS)` on the slowest query and share what you see — that'll tell you exactly where to focus.

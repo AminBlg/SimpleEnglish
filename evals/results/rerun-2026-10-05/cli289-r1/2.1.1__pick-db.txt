@@ -1,0 +1,17 @@
+Before sharding, exhaust the single-node options. Sharding is irreversible complexity that you almost certainly do not need yet.
+
+Do these steps in order.
+
+**1. Find the slow queries.** Run `EXPLAIN (ANALYZE, BUFFERS)` on the queries that are slow. Look at seq scans on large tables and high actual row counts. You need facts before you change anything.
+
+**2. Add the right indexes.** 40 million rows with a good B-tree index on the filter column returns results in milliseconds. A missing index is the most common cause of slow reads at this scale. Check `pg_stat_user_indexes` to find unused indexes and `pg_stat_user_tables` to find tables with high `seq_scan` counts.
+
+**3. Check `work_mem` and `shared_buffers`.** Low `shared_buffers` means Postgres reads from disk on every query. A common starting point is 25% of RAM for `shared_buffers` and 4–16 MB for `work_mem` per connection.
+
+**4. Use read replicas.** If reads are the bottleneck and writes are fine, a streaming replica handles read traffic with zero application complexity. This scales reads horizontally before you touch the data model.
+
+**5. Partition the table.** Declarative range or list partitioning (built into Postgres since version 10) gives you partition pruning, which cuts the scan to a fraction of the table. This is much simpler than sharding and still lives on one server.
+
+Sharding (splitting data across separate Postgres instances with something like Citus or application-level routing) only makes sense when a single node cannot handle the write throughput or the total data volume exceeds what one machine can store. At 40 million rows you are almost certainly not there. Most Postgres tables perform well into the hundreds of millions of rows with proper indexing and configuration.
+
+Start with `EXPLAIN (ANALYZE, BUFFERS)` on your slowest query and share what you find.

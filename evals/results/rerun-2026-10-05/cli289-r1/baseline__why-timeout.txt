@@ -1,0 +1,9 @@
+**Idempotent** means: calling the endpoint N times with the same input produces the same result as calling it once. No duplicate side effects.
+
+**Is retrying a POST safe if it's idempotent?** Yes — *if* the server actually enforces idempotency correctly (usually via a deduplication key like `Idempotency-Key` header or a unique `order_id` in the body).
+
+The risk is that "idempotent" is a contract the server must uphold. A POST is not idempotent by default — the server has to explicitly make it so. If yours does (e.g., it returns the existing order on duplicate `order_id` rather than creating a second one), retrying on timeout is safe.
+
+**The timeout edge case to watch:** a timeout means you don't know if the server received and processed the request. If you retry and the first request *did* succeed, the server must recognize the duplicate and not create a second order. That's the whole point of the idempotency guarantee.
+
+**Bottom line:** safe to retry *only if* you trust the server's deduplication logic. Verify there's a stable key (order ID, idempotency header) being sent on retries — not a freshly generated one each attempt.

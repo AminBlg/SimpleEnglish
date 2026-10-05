@@ -1,0 +1,36 @@
+curl cannot verify the server's TLS certificate because the certificate authority (CA) that signed it is not in curl's trusted CA bundle. This is common for internal APIs that use a private or self-signed CA instead of a public one like Let's Encrypt.
+
+There are three ways to fix it, ordered from most to least secure.
+
+**Tell curl where your internal CA certificate is.** This is the right fix. Get the CA certificate file (a `.pem` or `.crt` file from your PKI team or internal certificate store), then pass it:
+
+```bash
+curl --cacert /path/to/internal-ca.pem https://your-internal-api/
+```
+
+To make that permanent for all curl calls, add this line to `~/.curlrc`:
+
+```
+cacert=/path/to/internal-ca.pem
+```
+
+**Add the CA to your system trust store.** If other tools (not just curl) also hit this API, trust it system-wide. On Arch Linux:
+
+```bash
+SUDO_ASKPASS=$(which ksshaskpass) sudo -A trust anchor --store /path/to/internal-ca.pem
+SUDO_ASKPASS=$(which ksshaskpass) sudo -A update-ca-trust
+```
+
+After that, curl picks it up automatically because it reads `/etc/ssl/certs/ca-bundle.crt`.
+
+**Disable verification entirely with `-k`.** This removes all certificate validation and exposes you to man-in-the-middle attacks. Use it only as a one-off diagnostic to confirm that the certificate itself is the problem, never in scripts or automation.
+
+```bash
+curl -k https://your-internal-api/
+```
+
+To find out what CA signed the server certificate, run this and read the `Issuer` field:
+
+```bash
+curl -v https://your-internal-api/ 2>&1 | grep -E 'subject|issuer|SSL'
+```

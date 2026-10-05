@@ -1,0 +1,5 @@
+The stale reads come from cache-aside with a long TTL: on a price update, the code writes to the database but does not invalidate or update the Redis key, so readers continue to get the cached value until it expires naturally.
+
+There are two standard fixes. The simpler one is write-through: whenever a price is written to the database, also write it to Redis in the same operation. The stronger one is cache invalidation: delete the Redis key on every price write, so the next read is a cache miss and fetches the fresh value. Write-through keeps Redis warm; invalidation is safer when the write path is complex or shared across multiple services.
+
+For prices, write-through is usually the right call because reads are frequent and the value is cheap to recompute. In the write path, after the database commit, do `SET price:<id> <new_value> EX <ttl>` before returning. If you cannot guarantee the two writes are atomic, use a Redis transaction (`MULTI`/`EXEC`) or accept a brief inconsistency window on crash, which is typically acceptable for prices.

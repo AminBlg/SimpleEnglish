@@ -1,0 +1,31 @@
+The pod's container exceeded its memory limit and the kernel killed it. Kubernetes sets a hard ceiling via the pod's `resources.limits.memory` field; when the process crosses that ceiling, the Linux OOM killer terminates it and Kubernetes restarts the pod — producing the OOMKilled loop you see.
+
+**Diagnose first.**
+
+Check the last exit:
+
+```bash
+kubectl describe pod <pod-name> -n <namespace>
+```
+
+Look at `Last State: Terminated` — it shows `Reason: OOMKilled` and the memory usage at death. Then check actual usage over time:
+
+```bash
+kubectl top pod <pod-name> -n <namespace>
+```
+
+**What to change.**
+
+In your pod spec, raise or add the memory limit and, separately, the request:
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"   # scheduler uses this to place the pod
+  limits:
+    memory: "512Mi"   # kernel enforces this; raise until crashes stop
+```
+
+Set the limit to roughly 20–30% above the observed peak usage, not an arbitrary large number — a too-generous limit on a shared node can starve other pods.
+
+If usage keeps growing unbounded after the raise, the container has a memory leak and you must fix the application, not just raise the ceiling.

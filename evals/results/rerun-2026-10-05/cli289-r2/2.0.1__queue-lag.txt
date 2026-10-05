@@ -1,0 +1,5 @@
+Yes, 2 million unprocessed messages is a serious problem. Consumer lag is the gap between the last message a producer wrote and the last message a consumer processed — a lag of 2 million means your consumer is far behind the producer and falling further behind if the trend is climbing.
+
+For users, the effect depends on what that consumer does: if it drives notifications, search indexing, or order processing, those operations are delayed by however long it takes to drain that backlog. If the consumer cannot catch up at all, the backlog grows until Kafka drops old messages past the retention window and you lose data permanently.
+
+The first thing to check is whether throughput (messages per second) is still positive but slower than the producer rate, or whether the consumer has stalled entirely — those two cases have different fixes (scale out partitions and consumer instances versus restart a hung consumer process).

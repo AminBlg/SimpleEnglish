@@ -1,0 +1,27 @@
+**Why it happens:**
+
+Redis is caching price data with a TTL (time-to-live), and when prices are updated in the database, the stale Redis entries aren't invalidated. Reads hit the cache and return old values until the TTL expires — hence up to 10 minutes of staleness (your TTL is probably set to 600s).
+
+**The fix — cache invalidation on write:**
+
+When you update a price in the database, immediately delete (or update) the corresponding Redis key:
+
+```python
+# On price update
+db.update_price(item_id, new_price)
+redis.delete(f"price:{item_id}")   # or redis.set(..., new_price, ex=600)
+```
+
+If you update prices in bulk:
+```python
+pipeline = redis.pipeline()
+for item_id in updated_ids:
+    pipeline.delete(f"price:{item_id}")
+pipeline.execute()
+```
+
+**Write-through vs. invalidation:**
+- **Invalidate** (`DEL`): simpler, next read repopulates from DB. Fine if reads aren't extremely hot.
+- **Write-through** (`SET` new value on update): avoids a DB read on the next cache miss, better under high read load.
+
+**If prices change outside your app** (direct DB writes, migrations, other services), also consider a lower TTL or a Pub/Sub invalidation signal so the cache can't drift for longer than you're willing to tolerate.

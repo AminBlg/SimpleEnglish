@@ -1,0 +1,15 @@
+curl cannot verify the server's certificate because the certificate authority (CA) that signed it is not in curl's trust store. This is common with internal APIs that use a private or self-signed CA.
+
+To fix it, get the internal CA certificate (a `.pem` or `.crt` file) from your infrastructure team, then pass it to curl:
+
+```bash
+curl --cacert /path/to/internal-ca.crt https://your-internal-api/
+```
+
+To make that permanent for all curl calls, add this line to `~/.curlrc`:
+
+```
+cacert=/path/to/internal-ca.crt
+```
+
+If you also need the system trust store to recognize the CA (for tools other than curl), copy the certificate to `/etc/ca-certificates/trust-source/anchors/` and run `trust extract-compat`. Do not use `--insecure` in production; it disables all certificate verification and exposes you to man-in-the-middle attacks.

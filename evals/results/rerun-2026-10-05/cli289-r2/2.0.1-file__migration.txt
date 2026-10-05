@@ -1,0 +1,17 @@
+A backfill is the process of writing a value into every existing row for the new column, because those rows were created before the column existed and have no data for it.
+
+When Postgres adds a NOT NULL column without a default, it must verify every row has a value — on a 20 GB table that means a full table scan under an exclusive lock, which is why the migration hangs.
+
+The safe path is a three-step migration:
+
+1. Add the column as nullable with no constraint: `ALTER TABLE t ADD COLUMN new_col integer;`
+2. Backfill in batches to avoid one giant transaction and long lock hold:
+   ```sql
+   UPDATE t SET new_col = 0 WHERE id BETWEEN 1 AND 10000;
+   -- repeat with the next range, or use a script
+   ```
+3. Once every row is filled, add the constraint: `ALTER TABLE t ALTER COLUMN new_col SET NOT NULL;`
+
+Step 3 on Postgres 12+ is nearly instant because Postgres can verify the NOT NULL constraint was satisfied by the backfill without rescanning all rows, as long as you first run `ALTER TABLE t ADD CONSTRAINT chk_new_col_not_null CHECK (new_col IS NOT NULL) NOT VALID;` and then `VALIDATE CONSTRAINT` — which takes a weaker lock. If you are on Postgres 12+, use the `NOT VALID` + `VALIDATE CONSTRAINT` pattern instead of a direct `SET NOT NULL` to keep table availability high.
+
+Roll back the hung migration first with a `ROLLBACK` or by killing the connection, then execute the three steps above.

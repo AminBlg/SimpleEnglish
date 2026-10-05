@@ -1,0 +1,5 @@
+Idempotent means safe to run twice: repeating the same request produces the same result and no extra side effects.
+
+A POST is not idempotent by default, but if the server treats /v2/orders as idempotent (typically by deduplicating on a client-supplied order ID), then retrying on timeout is safe. The risk is that a timeout does not mean the request failed — the server can process the request and then fail to return the response. Without deduplication, a retry creates a duplicate order.
+
+Make sure that your deploy script sends a stable idempotency key (such as a UUID you generate before the first attempt) and that the server rejects duplicate keys. If the server does that, retrying on timeout is safe.

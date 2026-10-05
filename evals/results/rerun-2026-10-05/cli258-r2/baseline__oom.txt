@@ -1,0 +1,72 @@
+## OOMKilled: What's happening
+
+The container in your pod is being killed by the Linux kernel's **Out-Of-Memory (OOM) killer** because it exceeded its memory limit. Kubernetes sets a hard memory ceiling via cgroups; when the process crosses it, the kernel kills it immediately — no graceful shutdown.
+
+You can confirm with:
+```bash
+kubectl describe pod <pod-name> -n <namespace>
+```
+Look for:
+```
+Last State: Terminated
+  Reason: OOMKilled
+  Exit Code: 137
+```
+Exit code 137 = 128 + 9 (SIGKILL).
+
+---
+
+## Root causes
+
+1. **Memory limit set too low** — the app legitimately needs more than you've allocated.
+2. **Memory leak** — the app grows unboundedly over time.
+3. **Sudden spike** — a burst of traffic or a large job that wasn't accounted for.
+4. **JVM / runtime overhead** — Java, Node, Go runtimes consume more than the app heap alone (especially JVM with `-Xmx` set close to the container limit).
+
+---
+
+## What to change
+
+### 1. Raise the memory limit (quick fix)
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"
+```
+- **`requests`** — what Kubernetes reserves on the node for scheduling.
+- **`limits`** — the hard ceiling; crossing this triggers OOMKill.
+
+Start by doubling the limit and observe. A good steady state is `limits` at ~1.5–2× `requests`.
+
+### 2. Profile actual usage first
+```bash
+kubectl top pod <pod-name> -n <namespace>
+```
+Set `limits` based on observed peak + a safety margin (~20–30%), not guesswork.
+
+### 3. Fix the root cause if it's a leak
+- Add memory profiling (pprof for Go, heap dumps for JVM, `--inspect` for Node).
+- Watch usage over time — if it grows monotonically without leveling off, it's a leak.
+
+### 4. JVM-specific: bound heap relative to container limit
+```bash
+# Let JVM auto-size to container cgroup limits (Java 8u191+, Java 11+)
+JAVA_OPTS="-XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+```
+Without this, the JVM reads the host's total RAM and allocates far too much.
+
+### 5. Add a VPA or HPA as a longer-term guard
+- **VPA (Vertical Pod Autoscaler)** — automatically tunes `requests`/`limits` based on historical usage.
+- **HPA** — scales out horizontally under load, reducing per-pod memory pressure.
+
+---
+
+## Rule of thumb
+
+| Symptom | Action |
+|---|---|
+| OOMKill on startup | Limit too low from the start — raise it |
+| OOMKill after hours/days of running | Likely a memory leak — profile the app |
+| OOMKill under traffic spikes only | Raise limit or add HPA to spread load |

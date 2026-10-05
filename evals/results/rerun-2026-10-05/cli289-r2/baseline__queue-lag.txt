@@ -1,0 +1,42 @@
+**Yes, 2 million lag is serious — but context determines severity.**
+
+## What it means
+
+Consumer lag is the gap between the latest message produced and the latest message your consumer has processed. At 2M, your consumers are 2 million messages *behind* producers.
+
+**What users experience depends on what that topic drives:**
+
+- **Real-time features** (notifications, live feeds, fraud detection): users see stale or delayed data. At high throughput, 2M messages could mean minutes to hours of delay.
+- **Event-driven side effects** (emails, webhooks, DB writes): those actions are queued up and haven't fired yet — users may think the system is broken.
+- **Analytics/logging pipelines**: usually no user-visible impact, just delayed dashboards.
+
+## Why it happens
+
+1. **Consumer too slow** — processing each message takes too long (DB bottleneck, external API calls, heavy computation)
+2. **Producer spike** — sudden burst of traffic overwhelmed consumer throughput
+3. **Consumer crash/rebalance** — group is unhealthy, partitions unassigned or being reassigned
+4. **Under-provisioned consumers** — not enough consumer instances for the partition count
+
+## Immediate triage
+
+```bash
+# Check consumer group health
+kafka-consumer-groups.sh --bootstrap-server <broker> --describe --group <group>
+```
+
+Look at:
+- **LAG per partition** — is it uniform (throughput problem) or concentrated (stuck partition/consumer)?
+- **CONSUMER-ID** column — any partitions showing `-` means no consumer assigned (dead consumer)
+- **Is lag growing or stable?** — growing means consumers can't keep up; stable means they're processing but fell behind during a spike
+
+## What to do
+
+| Situation | Action |
+|---|---|
+| Lag growing + consumers healthy | Scale out consumers (add instances, up to partition count) |
+| Lag stable, consumers catching up | Monitor — may self-resolve |
+| Partitions unassigned | Restart/redeploy consumer group |
+| Single slow partition | Check that consumer instance's logs for errors |
+| Producer spike (one-time) | Wait it out, or temporarily increase consumer instances |
+
+The key question: **is the lag number growing or shrinking right now?** If shrinking, you have a transient burst. If growing, you have a capacity problem that won't self-heal.

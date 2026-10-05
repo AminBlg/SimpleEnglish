@@ -1,0 +1,41 @@
+OOMKilled means the Linux kernel killed the container because it exceeded the memory limit set in the pod specification. Kubernetes itself does not kill the process; it reads the exit reason from the container runtime after the kernel acts.
+
+**What happens step by step**
+
+The pod's container specification declares a `resources.limits.memory` value. The kernel enforces that value as a hard cgroup ceiling. When the process inside the container tries to allocate memory beyond that ceiling and no memory can be reclaimed, the kernel's out-of-memory killer selects and kills a process in that cgroup. The container exits with code 137 (SIGKILL). Kubernetes sees a non-zero exit code and restarts the container according to the pod's `restartPolicy`, so the cycle repeats.
+
+**How to confirm the cause**
+
+Run this command against the affected pod to read the last termination reason and the memory usage at the time of death:
+
+```
+kubectl describe pod <pod-name> -n <namespace>
+```
+
+Look for the `Last State` block under the container. It will show `Reason: OOMKilled` and the exit code 137. Also check:
+
+```
+kubectl top pod <pod-name> -n <namespace>
+```
+
+This shows current memory consumption so you can compare it against the configured limit.
+
+**What to change**
+
+You have two levers: raise the limit, or reduce consumption. Start by checking both the `requests` and `limits` values in the pod spec:
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"
+```
+
+If the application genuinely needs more memory, raise `limits.memory` to a value above the observed peak. If the `requests` value is much lower than `limits`, the scheduler can place the pod on a node that cannot actually serve the peak load, so align them more closely.
+
+If you want to reduce consumption instead, profile the application to find the leak or the large allocation. For a JVM process, check heap settings (`-Xmx`); many JVM defaults exceed the container limit because they calculate heap from the host's total RAM, not the cgroup ceiling. Use `-XX:+UseContainerSupport` (on JDK 8u191 and later, JDK 10 and later) to make the JVM read cgroup limits correctly.
+
+For a Node.js process, pass `--max-old-space-size` to cap the V8 heap below the container limit.
+
+After you raise the limit or fix the application, watch the pod with `kubectl top pod` over a traffic window to make sure memory stays below the new ceiling before you treat the problem as resolved.

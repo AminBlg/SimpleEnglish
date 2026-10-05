@@ -1,0 +1,7 @@
+Before sharding, add indexes on your query predicates — that alone often drops read latency by orders of magnitude on a 40M-row table.
+
+Run `EXPLAIN (ANALYZE, BUFFERS)` on your slowest queries to see whether you have sequential scans or index misses. Partial indexes, composite indexes in the right column order, or a covering index (one that includes all projected columns) can eliminate the problem without any architecture change.
+
+If indexed reads are still slow, the next step is partitioning (range or list on a natural key like `created_at` or `tenant_id`), which Postgres supports natively and is far cheaper operationally than sharding. Sharding — splitting data across multiple Postgres instances — introduces distributed transaction complexity, cross-shard query fan-out, and operational overhead that is rarely justified under a few hundred million rows.
+
+Only reach for sharding if you have exhausted indexes, partitioning, connection pooling (PgBouncer), and read replicas.

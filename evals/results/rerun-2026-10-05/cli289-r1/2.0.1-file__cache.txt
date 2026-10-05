@@ -1,0 +1,9 @@
+The stale-data window comes from Redis cache TTL. When the database updates a price, Redis still holds the old value until it expires — so every read within that TTL window returns stale data.
+
+Two standard fixes:
+
+**Cache invalidation on write** — when the database updates a price, immediately delete (or update) the Redis key. The next read misses the cache and fetches fresh data. This cuts staleness to near-zero.
+
+**Write-through caching** — write to Redis and the database together in the same update path, so the cache is always current. More complex but avoids the miss-on-invalidation spike under heavy read load.
+
+Cache invalidation is simpler and the right default here. The only risk is a brief thundering-herd spike if many requests hit the cache miss simultaneously — a short re-population TTL (e.g. one second) or a mutex/lock on cache repopulation handles that.

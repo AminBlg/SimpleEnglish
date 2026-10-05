@@ -1,0 +1,43 @@
+Before sharding (which is complex and often overkill), work through this checklist in order:
+
+## 1. Diagnose first
+
+```sql
+-- Find slow queries
+SELECT query, mean_exec_time, calls, total_exec_time
+FROM pg_stat_statements
+ORDER BY mean_exec_time DESC LIMIT 20;
+
+-- Check table bloat and index usage
+SELECT schemaname, tablename, n_live_tup, n_dead_tup, last_vacuum, last_analyze
+FROM pg_stat_user_tables
+WHERE tablename = 'your_table';
+
+-- Check which indexes exist and are actually used
+SELECT indexrelname, idx_scan, idx_tup_read
+FROM pg_stat_user_indexes
+WHERE relname = 'your_table';
+```
+
+## 2. Low-effort wins (do these first)
+
+- **VACUUM ANALYZE** — dead tuples cause bloat and slow scans
+- **Missing indexes** — most "slow reads" on large tables are just sequential scans that a composite index would fix
+- **`EXPLAIN (ANALYZE, BUFFERS)`** on your slow queries — confirm whether it's a seq scan, a bad join, or an index that exists but isn't being used
+- **`work_mem`** — bumping it (e.g. `SET work_mem = '256MB'`) for sort/hash-heavy queries can be dramatic
+
+## 3. Medium-effort wins
+
+- **Read replicas** — if you're read-heavy, a streaming replica handles reads with zero schema changes
+- **Partial indexes** — if queries always filter by status, created_at range, etc., a partial index is tiny and fast
+- **Table partitioning** (Postgres native) — partition by date or another natural dimension; this is often 80% of what people actually need from "sharding" with far less complexity
+
+## 4. Sharding — only if
+
+- You've exhausted the above and reads are still slow
+- You're write-bottlenecked (sharding helps writes; read replicas are usually better for reads)
+- Your dataset genuinely can't fit on one machine even with SSD
+
+**Sharding with Postgres is operationally painful.** Citus (now part of Azure) or Vitess are the practical paths if you get there. Most 40M-row tables don't need it — that's not big by Postgres standards.
+
+**Start with `EXPLAIN (ANALYZE, BUFFERS)` on your slowest query.** That output will tell you exactly what's wrong.

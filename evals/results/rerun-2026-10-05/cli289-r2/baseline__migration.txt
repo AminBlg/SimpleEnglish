@@ -1,0 +1,51 @@
+## What happened
+
+When you add a `NOT NULL` column to a large table, the database needs to write a value for every existing row. On a 20 GB table, that's potentially millions of rows — the DB locks the table and rewrites it, which is why it hangs.
+
+## What a backfill is
+
+A **backfill** is the process of populating data for existing rows *after* a schema change, done in batches instead of one giant transaction. The strategy:
+
+1. Add the column as **nullable** first (fast, no lock)
+2. Write the value into existing rows in small batches (doesn't block reads/writes)
+3. Add the `NOT NULL` constraint once all rows are populated
+
+## What to do right now
+
+**Kill the hung migration first** — it's holding a lock and blocking the table.
+
+Then redo it in three steps:
+
+**Step 1 — Add the column nullable:**
+```sql
+ALTER TABLE your_table ADD COLUMN new_col INTEGER DEFAULT NULL;
+```
+This is near-instant on Postgres 11+ and MySQL 8+ (metadata-only change).
+
+**Step 2 — Backfill in batches:**
+```sql
+-- Run this repeatedly until 0 rows updated
+UPDATE your_table
+SET new_col = <your_value>
+WHERE new_col IS NULL
+  AND id BETWEEN <start> AND <end>;  -- or use a cursor/LIMIT
+```
+
+A safe batch size is 1,000–10,000 rows. Sleep 50–100ms between batches to avoid hammering I/O. On 20 GB you're likely looking at hours; run it as a background script or a migration job.
+
+**Step 3 — Add the constraint:**
+```sql
+-- Postgres: use NOT VALID to skip re-scanning existing rows, then validate separately
+ALTER TABLE your_table ADD CONSTRAINT your_table_new_col_not_null CHECK (new_col IS NOT NULL) NOT VALID;
+-- later, in a separate migration:
+ALTER TABLE your_table VALIDATE CONSTRAINT your_table_new_col_not_null;
+
+-- MySQL / straightforward path once all rows are populated:
+ALTER TABLE your_table MODIFY COLUMN new_col INTEGER NOT NULL;
+```
+
+The `NOT VALID` + `VALIDATE CONSTRAINT` split (Postgres) is the gold standard — `VALIDATE` takes a `SHARE UPDATE EXCLUSIVE` lock instead of a full table lock, so it doesn't block writes.
+
+## Which DB are you on?
+
+If Postgres, MySQL, or something else, I can give you the exact syntax and any version-specific gotchas.

@@ -1,0 +1,5 @@
+Idempotent means safe to run twice: the second call produces the same result as the first, with no extra side effects.
+
+A POST is not idempotent by default, but if the /v2/orders endpoint is designed that way (for example, it uses a client-supplied order ID to deduplicate), then retrying on timeout is safe. The risk is a timeout that occurs after the server accepted the request but before it replied. If the endpoint is truly idempotent, a retry will find the order already created and return the same response rather than create a duplicate.
+
+Confirm with the API owner that deduplication covers the window between server acceptance and client acknowledgment, because that is where timeouts bite.

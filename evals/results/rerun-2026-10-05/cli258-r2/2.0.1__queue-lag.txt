@@ -1,0 +1,5 @@
+Yes, that is bad. Consumer lag of 2 million means your consumers are 2 million messages behind the producers, and the gap is growing.
+
+For users, the impact depends on what those messages drive. If they power real-time features (notifications, order status, live feeds), users see stale or delayed data proportional to how long it takes to process those 2 million messages at your current throughput. If consumers process 10,000 messages per second, users wait roughly 3 minutes behind real time, and that delay grows until lag stabilizes or falls.
+
+The immediate questions to answer are: is lag still climbing (producers outpacing consumers), or has it plateaued (consumers keeping up but not recovering)? A plateau is less urgent than a climb. You want to find the bottleneck, which is usually slow consumer processing, under-provisioned consumer instances, a consumer group rebalance loop, or a downstream dependency (database, API) that is the real bottleneck.

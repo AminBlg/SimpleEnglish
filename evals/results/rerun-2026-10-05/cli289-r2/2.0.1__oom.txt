@@ -1,0 +1,25 @@
+The pod process used more RAM than its configured memory limit, so the Linux kernel OOM (Out of Memory) killer terminated it. Kubernetes then restarted the pod, which will keep happening until the process stays within its limit.
+
+Run this to confirm the cause and see peak memory use:
+
+```bash
+kubectl describe pod <pod-name> -n <namespace>
+```
+
+Look for `Last State: OOMKilled` and the `OOM Score` or `Limits` section. Then check actual usage over time:
+
+```bash
+kubectl top pod <pod-name> -n <namespace>
+```
+
+You have two changes to make. First, raise the memory limit in the pod specification:
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"
+```
+
+Set `requests` to the typical steady-state usage and `limits` to the safe ceiling. Second, if the process is a JVM or Node.js app, make sure that its internal heap limit matches the container limit, because those runtimes do not read Linux cgroup limits by default. For a JVM, add `-XX:MaxRAMPercentage=75.0` so the heap stays below the container ceiling.

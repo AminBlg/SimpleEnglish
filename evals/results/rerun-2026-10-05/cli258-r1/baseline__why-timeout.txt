@@ -1,0 +1,16 @@
+**Idempotent** means: running the same operation N times produces the same result as running it once. For a POST to `/v2/orders`, that typically means the server uses a deduplication key (a client-supplied `idempotency-key` header, or a unique field in the body) so that retrying a timed-out request doesn't create a duplicate order.
+
+**Is retrying on timeout safe?** Only if the idempotency guarantee actually holds end-to-end:
+
+- A timeout means *you don't know* whether the server received and processed the request. It may have succeeded, failed, or never arrived.
+- If the server is truly idempotent (deduplication key stored before the response is sent), retrying is safe — the duplicate is detected and the original result is returned.
+- If "idempotent" just means the *business logic* is the same (e.g., same order data), but there's no dedup mechanism, retrying on timeout **will create duplicate orders**.
+
+**The risk specific to POST:** Unlike PUT/DELETE, POST has no idempotency guarantee in HTTP by default. The endpoint has to implement it explicitly.
+
+**What to verify before trusting the retry:**
+1. Does the API document a deduplication key (e.g., `Idempotency-Key` header)?
+2. Is that key stable across your retries (same value, not regenerated)?
+3. Does the server store the key *before* executing the side effect, not after?
+
+If you can answer yes to all three, the retry is safe. If you're unsure about any of them, the retry is a latent duplicate-order bug.

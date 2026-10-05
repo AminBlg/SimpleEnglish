@@ -1,0 +1,15 @@
+Before sharding, rule out the cheaper fixes — sharding is operationally expensive and often unnecessary.
+
+First, run `EXPLAIN (ANALYZE, BUFFERS)` on your slowest queries. The output tells you whether Postgres is doing sequential scans, which indexes it uses, and where time is actually spent. Most read slowness at 40 million rows is a missing or unused index, not a scale problem.
+
+Check these things in order:
+
+1. Make sure that the columns in your `WHERE`, `JOIN`, and `ORDER BY` clauses have indexes. A sequential scan on 40 million rows is slow; an index scan is not.
+2. Run `VACUUM ANALYZE` on the table. Stale statistics cause the query planner to pick bad execution plans.
+3. Check `pg_stat_user_tables` for dead tuple bloat. High `n_dead_tup` means the table needs vacuuming.
+4. If queries read the same rows repeatedly, add a read replica and route read traffic there. This costs one config change, not a schema redesign.
+5. If certain queries always read the same small subset of columns, a covering index (one that includes all columns the query needs) can answer the query from the index alone, without touching the table.
+
+Sharding becomes the right answer only when the data no longer fits on one machine, or when write throughput exceeds what one primary can handle. At 40 million rows you are almost certainly not there yet — that is a medium-sized table for Postgres.
+
+If you share the slow query and the `EXPLAIN ANALYZE` output, I can tell you exactly what to add or change.
