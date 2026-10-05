@@ -12,7 +12,7 @@
   <a href="evals/results/rebuild-2026-09-02/RESULTS.md"><img src="https://img.shields.io/badge/reply_defects-%E2%88%9295%25_measured-brightgreen?style=flat" alt="95% fewer visible reply defects, measured"></a>
   <a href="evals/results/RESULTS.md"><img src="https://img.shields.io/badge/benchmarked_on-9_Claude_models-blueviolet?style=flat" alt="9 models benchmarked"></a>
   <a href="https://agentskills.io"><img src="https://img.shields.io/badge/SKILL.md-open_standard-blue?style=flat" alt="Agent Skills"></a>
-  <a href="skills/simple-english/SKILL.md"><img src="https://img.shields.io/badge/version-2.1.1-blue?style=flat" alt="version 2.1.1"></a>
+  <a href="skills/simple-english/SKILL.md"><img src="https://img.shields.io/badge/version-2.2.0-blue?style=flat" alt="version 2.1.1"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-lightgrey?style=flat" alt="MIT"></a>
   <a href="https://github.com/AminBlg/SimpleEnglish/stargazers"><img src="https://img.shields.io/github/stars/AminBlg/SimpleEnglish?style=flat&logo=github&color=yellow" alt="GitHub stars"></a>
 </p>

@@ -16,7 +16,7 @@ description: |
 license: MIT
 compatibility: claude-code cursor codex gemini-cli opencode
 metadata:
-  version: "2.1.1"
+  version: "2.2.0"
   standard: ASD-STE100 Issue 9 (2025-01-15)
 ---
 
@@ -28,18 +28,20 @@ Write plain English that a smart reader outside your field understands on one re
 
 When asked to write or rewrite documentation, apply these rules to the prose:
 
-1. Classify each passage. Procedural text tells the reader what to do: imperative mood, 20 words per sentence, one instruction per sentence. Descriptive text explains: simple tenses, 25 words per sentence, one topic per paragraph, six sentences per paragraph at most.
-2. Never touch code, identifiers, commands, flags, file paths, quoted errors, product names, or facts. When the source gives no number or cause, keep the general statement.
-3. Condition before command, with a comma: "If the build fails, read the log."
-4. Use simple tenses and active voice. No present perfect ("has completed" → "completed"). No "-ing" verb after a comma (", making it easy" → new sentence). Name the actor: "You run the migration."
-5. Modals: can, will, must. Never should, would, may, might, could. A required "should" becomes "must". An optional one is deleted.
-6. Use complete grammar. No contractions, keep articles, keep "that". Write short sentences, not telegraph style.
-7. No semicolons and no em-dashes. Write two sentences, or name the relation.
-8. One word, one meaning, for the whole document. Use `make sure that` for check, verify, confirm, validate, ensure. Use `configuration` for config, settings, options. Break noun chains over three words with a preposition ("the timeout value for the connection pool").
-9. Give the reader each term and each fact before the step that needs it. Define a concept term at its first use, under ten words, one per sentence. Do not define product names, standard names (Postgres, S3, HTTP), or the tool the document is about. Also name the host, the flag, or the prior step that a command depends on. "Restart the service" becomes "Restart the `sync` service on the host that runs the job."
-10. State the fact, not its importance. Delete words that carry no fact: simply, seamlessly, robust, powerful, comprehensive, leverage, crucial, "in order to", "it is worth noting". No "not just X, it is Y". No decorative triplets. No "in conclusion".
-11. Use formatting only where it carries structure. No bold lead-ins, no bold as emphasis, no emoji, no heading over two sentences. A vertical list is for three or more parallel items or steps: colon on the lead-in, uppercase start, one instruction per item.
-12. Warnings: command or condition first, then the risk. "Do not run this against production. The command deletes rows."
+1. Add nothing. Every sentence must trace to a statement in the source or in the request. Add no fact, cause, reason, consequence, evaluation, number, actor, host, flag, definition, or promise that the source does not state. "Far from the cause" and "which makes this safer" are evaluations. Where the source leaves a gap, leave the gap. Keep every reason the source gives, attached to the step it explains. Keep a word that states real uncertainty in the source, such as "probably". Do not repeat a detail from earlier in the conversation unless the task needs it.
+2. Never touch code, identifiers, commands, flags, file paths, quoted errors, product names, or facts. Keep a product name in the case the source uses.
+3. Classify each passage. Procedural text tells the reader what to do: imperative mood, one instruction per sentence. Descriptive text explains: simple tenses, one topic per paragraph.
+4. Write sentences that a reader finishes on one read. Do not count words. Split a sentence only where one reading would fail.
+5. When you split a sentence, keep the link between the halves. A cause or a consequence stays attached with "because", "so", "then", or "if". "sqlpipe retries on its own, so you can run it unattended" becomes two sentences only as "sqlpipe retries on its own. As a result, you can run it unattended."
+6. Condition before command, with a comma: "If the build fails, read the log."
+7. Use simple tenses and active voice. No present perfect ("has completed" → "completed"). No "-ing" verb after a comma (", making it easy" → new sentence). Name the actor only when the source names it. When the source names none, write the passive: "The deploy was rolled back." Never write "We rolled back the deploy" for that source.
+8. Modals: can, will, must. Do not hedge with should, would, may, might, or could. A required "should" becomes "must". An optional one is deleted. A possibility ("may depend") becomes "can" ("can depend"). Keep a fact that the source states: "1,240 accounts could not open invoices."
+9. Use complete grammar. No contractions, keep articles, keep "that". Write short sentences, not telegraph style.
+10. No semicolons and no em-dashes. Write two sentences, or name the relation.
+11. One word, one meaning, for the whole document. Use `make sure that` for check, verify, confirm, validate, ensure. Use `configuration` for config, settings, options. Break noun chains over three words with a preposition ("the timeout value for the connection pool").
+12. State the fact, not its importance. Delete words that carry no fact: simply, seamlessly, robust, powerful, comprehensive, leverage, crucial, "in order to", "it is worth noting". No "not just X, it is Y". No decorative triplets. No "in conclusion".
+13. Use formatting only where it carries structure. No bold lead-ins, no bold as emphasis, no bold title line, no emoji, no heading over two sentences. A vertical list is for parallel steps or items: colon on the lead-in, uppercase start, one instruction per item.
+14. Warnings: command or condition first, then the risk. "Do not run this against production. The command deletes rows."
 
 Use American spelling. `references/word-swaps.md` maps the overused words to plain ones. For an error message, a runbook, an incident report, release notes, a commit message, or UI copy, read `references/use-cases.md` first. It names the mode and the pattern for each.
 
@@ -47,14 +49,14 @@ Before (AI output):
 
 > **Connection timeouts.** If sqlpipe hangs or fails with `dial tcp: i/o timeout`, check that the host running sqlpipe can reach the Postgres port (usually 5432) — this is often a security group or firewall rule blocking the connection. If you're connecting to a managed database (RDS, Cloud SQL, etc.), confirm the instance allows connections from sqlpipe's IP.
 
-After (procedural, headed, numbered):
+After (procedural, headed, numbered). Every fact in it is in the source:
 
 > ## Connection timeouts
 >
-> sqlpipe stops with `dial tcp: i/o timeout` when it cannot connect to the Postgres port (5432 by default).
+> sqlpipe stops with `dial tcp: i/o timeout` when it cannot connect to the Postgres port (usually 5432).
 >
-> 1. Make sure that the host that runs sqlpipe can connect to the Postgres port. A firewall or security group usually blocks it.
-> 2. If the database is managed (RDS, Cloud SQL), make sure that the instance accepts connections from the IP of sqlpipe.
+> 1. Make sure that the host that runs sqlpipe can connect to the Postgres port. A security group or a firewall rule often blocks the connection.
+> 2. If the database is managed (RDS, Cloud SQL), make sure that the instance allows connections from the IP of sqlpipe.
 
 ## The Reply
 
@@ -73,7 +75,7 @@ After: The pods restarted and the queue lost its leader for a short time. It rec
 ## Self-Check Before You Deliver
 
 1. Reply: search for `—`, `**`, `#`, and a line that starts with `-`. Remove each one.
-2. Document: count the words in your three longest sentences. Over 20 or 25, split. Search for `'`, `has been`, `should`, `may`, `;`, `—`, `, making`, `**`, `check`, `verify`, `config`, and any heading that covers fewer than three sentences. Fix each hit. Read each step: does it name a host, a flag, or a prior step the reader must already have? If not, add it or point to it.
+2. Document: for each sentence, find its source statement. Delete any sentence, definition, or detail that has none. Search for `'`, `has been`, `should`, `may`, `;`, `—`, `, making`, `**`, `check`, `verify`, `config`. Where you split a sentence, make sure that the "because" or "so" survived.
 
 ## Modes
 
@@ -83,7 +85,7 @@ When asked to CHECK text instead of writing it, first open `references/rule-cata
 
 ## Limits
 
-These rules are for facts and instructions, not marketing copy or brand writing, because they delete persuasion. Say so, and offer them for the docs instead.
+These rules are for facts and instructions, not marketing copy or brand writing, because they delete persuasion. Do not write marketing copy under these rules. Write it in the voice that the user asks for, and offer the rules for the docs that it links to.
 
 ## References
 

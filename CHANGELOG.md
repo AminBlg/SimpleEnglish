@@ -2,6 +2,31 @@
 
 Each entry names the version, the date, and the measured effect where one exists.
 
+## 2.2.0, 2026-10-05
+
+- Changed: the document rules add nothing. A rewrite or a draft states no fact,
+  cause, reason, consequence, evaluation, actor, host, definition, or promise
+  that the source lacks. This restores the guardrail that 2.0.1 removed and
+  reverses the rule from 2.1.0 that told the model to name a host, a flag, or
+  a prior step.
+- Changed: when a sentence is split, the cause or consequence stays attached
+  with "because", "so", "then", or "if". Every reason in the source stays
+  attached to its step. Real uncertainty ("probably") stays.
+- Removed: the 20-word and 25-word sentence limits, the word-counting
+  self-check, and the rule to define a concept term in a document. The
+  self-check now asks for the source statement behind each sentence.
+- Changed: name the actor only when the source names it. The passive is legal
+  when the source names none. A possibility ("may") becomes "can". A source
+  fact such as "could not open" stays. No bold title line.
+- Tested: the prompts and graders are in `evals/01-*` to `evals/13-*`. They ran
+  through `claude plugin eval` on the `sonnet` model alias with an Opus judge,
+  2026-10-01 to 2026-10-05, two runs per prompt in the last round. The
+  candidate failed fewer fidelity checks than the no-plugin baseline and than
+  2.1.1. The sample is small, it covers one model family, and the blind
+  comparison files are not committed. No published README figure covers 2.2.0.
+- Known gap: `evals/ste_lint.py` and the PostToolUse file hook still count
+  sentence length and now disagree with the skill. They need a follow-up.
+
 ## 2.1.1, 2026-09-30
 
 - Changed: removed wording in the skill that broke the skill's own rules. The
