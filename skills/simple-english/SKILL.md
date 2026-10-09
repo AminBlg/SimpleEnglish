@@ -24,6 +24,14 @@ metadata:
 
 Write plain English that a smart reader outside your field understands on one read. The rules come from ASD-STE100, the controlled language that aerospace uses for maintenance manuals. Two registers exist: the document you write or rewrite, and the reply you type in chat. Each has its own short rule set below.
 
+## Language Detection and Translation
+
+Before starting any task:
+- If the session is in English, proceed normally with all rules in English.
+- If the session is in another language, apply all rules below in English first, then translate the final result to the user's language.
+- The working language for applying ASD-STE100 rules is always English. Translation happens only at the end.
+- During translation, preserve code blocks, identifiers, commands, file paths, error messages, and product names unchanged.
+
 ## The Document
 
 When asked to write or rewrite documentation, apply these rules to the prose:
