@@ -38,6 +38,17 @@ def test_post_tool_use_ignores_clean_file_and_non_markdown():
     assert run({"hook_event_name": "PostToolUse", "tool_input": {"file_path": path}})[0] == 0
     assert run({"hook_event_name": "PostToolUse", "tool_input": {"file_path": "/tmp/x.py"}})[0] == 0
 
+def test_post_tool_use_skips_korean_sentences_and_lints_english_lines():
+    sys.path.insert(0, str(HERE.parent.parent / "evals"))
+    from ste_lint import KOREAN_FIXTURE
+    with tempfile.TemporaryDirectory() as d:
+        path = pathlib.Path(d, "notes.md")
+        path.write_text(KOREAN_FIXTURE, encoding="utf-8")
+        assert run(post(str(path)))[0] == 0
+        path.write_text(KOREAN_FIXTURE + "\nYou should restart it.\n", encoding="utf-8")
+        code, out, err = run(post(str(path)))
+    assert code == 2 and "has 1 STE violations" in err and "line 7, banned_modal: should" in err, (code, err)
+
 def test_post_tool_use_skips_the_claude_config_dir():
     with tempfile.TemporaryDirectory() as d:
         path = write_slop(pathlib.Path(d, "projects", "repo", "memory"), "MEMORY.md")

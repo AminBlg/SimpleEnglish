@@ -12,6 +12,10 @@ sentence bounds in unusual markdown. Numbers from this tool are comparable
 between two texts run through the same version; they are not a compliance
 verdict. No tool can guarantee STE compliance.
 
+The rules are for English. A sentence whose words are mostly in another
+script, such as Korean or Chinese, is skipped and counted in
+skipped_sentences.
+
 Usage:
   python3 ste_lint.py --type procedural file.md
   cat text.md | python3 ste_lint.py --type descriptive -
@@ -21,6 +25,7 @@ import json
 import pathlib
 import re
 import sys
+import unicodedata
 from collections import Counter
 
 BANNED_MODALS = re.compile(r"\b(should|would|may|might|could)\b", re.I)
@@ -75,6 +80,36 @@ def strip_code(text):
     return text
 
 
+# Sentence bounds for the script check: the split of sentences() without the
+# colon, plus the CJK full stops, which take no space after them. A colon often
+# ends a label such as "- 2026-09-15 — #12:", which has no letters to judge.
+SEGMENT_BREAK = re.compile(r"(\n|(?<=[.!?])[ \t]+|(?<=[。！？]))")
+PLACEHOLDER = re.compile(r"\b(CODESPAN|URL)\b")
+
+
+def is_latin_word(word):
+    return all("LATIN" in unicodedata.name(c, "") for c in word if c.isalpha())
+
+
+def skip_non_latin(body):
+    """Blank each sentence whose words are mostly not in the Latin script.
+
+    A word with any letter from another script counts as non-Latin, so a
+    Korean particle on an English term (`range를`) marks the word as Korean.
+    The blank is spaces of the same length, so offsets and line numbers stay
+    the same. Returns the new body and the count of skipped sentences.
+    """
+    parts = SEGMENT_BREAK.split(body)
+    skipped = 0
+    for i in range(0, len(parts), 2):
+        words = [w for w in PLACEHOLDER.sub(" ", parts[i]).split() if any(c.isalpha() for c in w)]
+        other = sum(1 for w in words if not is_latin_word(w))
+        if other > len(words) - other:
+            parts[i] = " " * len(parts[i])
+            skipped += 1
+    return "".join(parts), skipped
+
+
 def sentences(text):
     # Append ". " to each item so items become their own sentence units instead of merging.
     text = re.sub(r"^\s*([-*]|\d+\.)\s+(.*?)([.!?:])?\s*$", lambda m: m.group(2) + (m.group(3) or ".") + " ", text, flags=re.M)
@@ -86,14 +121,15 @@ def lint_detail(text, text_type):
     """Every hit lint() counts, with its matched text and line number.
 
     strip_code() keeps every original newline (it blanks or rewrites text in
-    place, never deletes a line), so a line number counted in the stripped
-    body is the same line number in the caller's original text. Locating a
+    place, never deletes a line), and skip_non_latin() blanks in place too,
+    so a line number counted in the stripped body is the same line number in
+    the caller's original text. Locating a
     whole sentence uses its start offset in body, found once per sentence
     with str.find(), which is safe here because sentences() never returns
     the same sentence text twice for two different source positions in a
     single lint pass (each split fragment keeps its surrounding words).
     """
-    body = strip_code(text)
+    body = skip_non_latin(strip_code(text))[0]
     limit = LIMITS[text_type]
     hits = []
 
@@ -152,7 +188,7 @@ def lint_detail(text, text_type):
 
 
 def lint(text, text_type):
-    body = strip_code(text)
+    body, skipped = skip_non_latin(strip_code(text))
     sents = sentences(body)
     limit = LIMITS[text_type]
     counts = {}
@@ -189,6 +225,7 @@ def lint(text, text_type):
         "type": text_type,
         "words": words,
         "sentences": len(sents),
+        "skipped_sentences": skipped,
         "mean_sentence_words": round(sum(lengths) / max(1, len(lengths)), 1),
         "longest_sentence_words": max(lengths, default=0),
         "violations": counts,
@@ -243,6 +280,24 @@ Write x - y = z on the board.
 Use the `--config sqlpipe.yaml` flag.
 Remove the panel:
    -   Loosen the four bolts.
+"""
+
+# The reproduction from issue #41: three hits, all on Korean sentences.
+KOREAN_FIXTURE = """# 백업 점검
+
+백업 작업은 매일 새벽에 돌고, 결과는 저장소의 점검 기록과 운영 문서에 함께 남으며, 실패하면 다음 날 아침에 담당자가 원인을 확인하고 다시 실행하는 절차를 따른다 — 이 절차는 지난달에 정했다.
+
+복구 시험은 한 달에 한 번 한다; 결과는 같은 기록에 남긴다.
+"""
+
+# Line 1: a Korean sentence around English terms is skipped; the English one is not.
+# Line 2: one Korean word does not make an English sentence Korean.
+# Line 3: two Chinese sentences with no spaces after the full stops.
+# Line 4: a label with no letters before the colon belongs to its Korean sentence.
+MIXED_SCRIPT_FIXTURE = """`fs.cp`는 copy_file_range를 먼저 부른다; 그다음 결과를 본다. You should restart it.
+Restart the 백업 service; then read the log.
+这是一个没有空格的很长的中文句子，规则不适用于它。下一句也是中文。
+- 2026-09-15 — #12: upstream 병합 충돌을 해결했다.
 """
 
 
@@ -328,6 +383,15 @@ def self_test():
     assert all(h["line"] >= 1 and h["text"] for h in detail), detail
     detail_counts = Counter(h["category"] for h in detail)
     assert detail_counts == {k: v for k, v in slop["violations"].items() if v}, (detail_counts, slop["violations"])
+    # Sentences in another script are skipped. English results do not change.
+    assert slop["skipped_sentences"] == 0 and clean["skipped_sentences"] == 0, (slop, clean)
+    korean = lint(KOREAN_FIXTURE, "descriptive")
+    assert korean["violations_total"] == 0 and korean["skipped_sentences"] == 2, korean
+    mixed = lint(MIXED_SCRIPT_FIXTURE, "descriptive")
+    assert mixed["skipped_sentences"] == 4, mixed
+    assert {k: v for k, v in mixed["violations"].items() if v} == {"banned_modal": 1, "semicolon": 1}, mixed
+    mixed_detail = [(h["category"], h["line"]) for h in lint_detail(MIXED_SCRIPT_FIXTURE, "descriptive")]
+    assert mixed_detail == [("banned_modal", 1), ("semicolon", 2)], mixed_detail
     print("self-test OK:", slop["violations_total"], "violations in slop fixture, 0 in clean")
 
 
