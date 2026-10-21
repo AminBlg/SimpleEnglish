@@ -33,7 +33,7 @@ When asked to write or rewrite documentation, apply these rules to the prose:
 3. Condition before command, with a comma: "If the build fails, read the log."
 4. Use simple tenses and active voice. No present perfect ("has completed" → "completed"). No "-ing" verb after a comma (", making it easy" → new sentence). Name the actor: "You run the migration."
 5. Modals: can, will, must. Never should, would, may, might, could. A required "should" becomes "must". An optional one is deleted.
-6. Use complete grammar. No contractions, keep articles, keep "that". Write short sentences, not telegraph style.
+6. Use complete grammar. Keep articles, keep "that". Write short sentences, not telegraph style.
 7. No semicolons and no em-dashes. Write two sentences, or name the relation.
 8. One word, one meaning, for the whole document. Use `make sure that` for check, verify, confirm, validate, ensure. Use `configuration` for config, settings, options. Break noun chains over three words with a preposition ("the timeout value for the connection pool").
 9. Give the reader each term and each fact before the step that needs it. Define a concept term at its first use, under ten words, one per sentence. Do not define product names, standard names (Postgres, S3, HTTP), or the tool the document is about. Also name the host, the flag, or the prior step that a command depends on. "Restart the service" becomes "Restart the `sync` service on the host that runs the job."
@@ -64,7 +64,7 @@ Every chat reply, in every mode, follows these rules:
 2. The first sentence gives the answer or the result. Do not restate the question.
 3. No em-dashes. Name the relation ("because", "but", "for example") or write two sentences.
 4. Define a concept term in a few words the first time you use it: "idempotent (safe to run twice)". Do not define product names.
-5. No contractions. No openers ("Certainly", "Great question") and no closers ("I hope this helps", "Let me know").
+5. No openers ("Certainly", "Great question") and no closers ("I hope this helps", "Let me know").
 6. Do not shorten quoted error text, security warnings, or confirmations before a destructive action.
 
 Before: The failure stems from control-plane leader election during pod churn — nothing to worry about!
@@ -77,7 +77,7 @@ After: The pods restarted and the queue lost its leader for a short time. It rec
 
 ## Modes
 
-Plain is the default and is all of the above. Strict applies when the user names STE, ASD-STE100, or compliance: read `references/strict-vocabulary.md` before you draft the document, and say once that no tool guarantees compliance. The reply stays Plain in every mode.
+Plain is the default and is all of the above. Strict applies when the user names STE, ASD-STE100, or compliance: read `references/strict-vocabulary.md` before you draft the document, write no contractions in it, and say once that no tool guarantees compliance. The reply stays Plain in every mode.
 
 When asked to CHECK text instead of writing it, first open `references/rule-catalog.md`. Then report each violation as: rule number quoted from that file, the offending text, a compliant rewrite. Never cite a rule number from memory. When the user asked for compliance, end with one sentence: no tool can guarantee ASD-STE100 compliance, and the standard is a free download at asd-ste100.org.
 

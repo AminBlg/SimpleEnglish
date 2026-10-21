@@ -26,6 +26,8 @@ ROOT = HERE.parent.parent
 sys.path.insert(0, str(ROOT / "evals"))
 
 MAX_HOOK_HITS = 12
+# Plain mode allows contractions, so the hook leaves them to strict-mode review.
+STRICT_ONLY = {"contraction"}
 CLAUDE_DIR = ".claude"
 OPENERS = re.compile(r"^\s*(certainly|great question|you're absolutely right|sure[,!]|absolutely[,!])", re.I)
 CLOSERS = re.compile(r"(i hope this helps|let me know if|feel free to)", re.I)
@@ -87,10 +89,11 @@ def post_tool_use(event):
     except OSError:
         return 0
     report = lint.lint(text, "descriptive")
-    if not report["violations_total"]:
+    total = sum(n for k, n in report["violations"].items() if k not in STRICT_ONLY)
+    if not total:
         return 0
-    detail = lint.lint_detail(text, "descriptive")
-    lines = [f"simple-english: {target.name} has {report['violations_total']} STE violations."]
+    detail = [h for h in lint.lint_detail(text, "descriptive") if h["category"] not in STRICT_ONLY]
+    lines = [f"simple-english: {target.name} has {total} STE violations."]
     for h in detail[:MAX_HOOK_HITS]:
         lines.append(f"  line {h['line']}, {h['category']}: {h['text']}")
     if len(detail) > MAX_HOOK_HITS:
