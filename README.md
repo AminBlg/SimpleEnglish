@@ -118,7 +118,7 @@ The reply, every chat answer:
 | First sentence answers | The preamble |
 | No em-dashes | The spliced half-thought |
 | Define a concept term in a few words | Jargon the reader has to look up |
-| No contractions, openers, or closers | "Great question!" and "Hope this helps!" |
+| No openers or closers | "Great question!" and "Hope this helps!" |
 
 The document: docs, READMEs, runbooks, error messages, release notes:
 
