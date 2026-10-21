@@ -65,10 +65,17 @@ ROTATION_SETS = [
 LIMITS = {"procedural": 20, "descriptive": 25}
 
 
+def strip_links(text):
+    """A link target is a file name or a path, so it is exempt like code. The link text is still linted."""
+    text = re.sub(r"!?\[\[[^\]\n]+\]\]", " LINK ", text)  # Obsidian wiki link or embed
+    return re.sub(r"(!?\[[^\]\n]*\])\([^)\n]+\)", r"\1", text)  # Markdown link: keep the text
+
+
 def strip_code(text):
     text = re.sub(r"```.*?```", " ", text, flags=re.S)
     text = re.sub(r"`[^`\n]+`", " CODESPAN ", text)  # one word per Rule 8.6
     text = re.sub(r"^#+\s.*$", " ", text, flags=re.M)  # headings exempt (titles, 8.6)
+    text = strip_links(text)
     text = re.sub(r"https?://\S+", " URL ", text)
     text = re.sub(r"^\s*\|[\s:|-]+\|\s*$", " ", text, flags=re.M)  # table separator rows
     text = re.sub(r"^\s*\|(.*)\|\s*$", lambda m: ". ".join(c.strip() for c in m.group(1).split("|") if c.strip()) + ". ", text, flags=re.M)  # each cell is its own unit, still linted
@@ -245,6 +252,13 @@ Remove the panel:
    -   Loosen the four bolts.
 """
 
+# A dash inside a link target is part of a file name. Only the last line has a dash in prose.
+LINK_FIXTURE = """Read [[Release Notes - Draft]] first.
+Embed ![[Diagram - Shape.png]] here.
+Open [the guide](docs/Setup - Linux.md) next.
+The [notes - draft](notes.md) link fails.
+"""
+
 
 BOLD = re.compile(r"\*\*[^*\n]+\*\*")
 HEADER = re.compile(r"^#{1,6}\s", re.M)
@@ -260,6 +274,7 @@ def reader_check(text):
     text = text.replace("\r\n", "\n")
     prose = re.sub(r"```.*?```", " ", text, flags=re.S)
     prose = re.sub(r"`[^`\n]+`", " CODESPAN ", prose)
+    prose = strip_links(prose)
     prose_no_md = re.sub(r"^\s*(#{1,6}\s|[-*+]\s|\d+[.)]\s|\|)", "", prose, flags=re.M)
     prose_no_md = re.sub(r"^\s*[\s:|-]+$", "", prose_no_md, flags=re.M)  # table separator rows
     sents = [p for p in re.split(r"(?<=[.!?])[\"')\]]*\s+|\n+", prose_no_md) if len(p.strip().split()) >= 2]
@@ -302,6 +317,8 @@ def self_test():
     assert clean["violations_total"] == 0, clean
     assert lint("We delve into the landscape.", "descriptive")["violations"]["slop_word"] == 2
     assert dashes["violations"]["em_dash"] == 3, dashes
+    assert lint(LINK_FIXTURE, "procedural")["violations"]["em_dash"] == 1, lint(LINK_FIXTURE, "procedural")
+    assert reader_check(LINK_FIXTURE)["counts"]["em_dash"] == 1, reader_check(LINK_FIXTURE)
     r = reader_check(REPLY_FIXTURE)["counts"]
     assert (r["sentences"], r["em_dash"], r["bold_spans"], r["headers"], r["bullets"]) == (5, 1, 1, 1, 2), r
     assert reader_check("Yes. It is bad because lag grows. Scale now.")["visible_total"] == 0
