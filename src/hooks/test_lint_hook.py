@@ -5,9 +5,9 @@ CLEAN = {"CLAUDE_CONFIG_DIR": "/nonexistent/claude-config", "SIMPLE_ENGLISH_LINT
 SLOP = "You should simply leverage the robust tool, making it seamless.\n"
 
 def run(event, env=None):
-    r = subprocess.run([sys.executable, str(HOOK)], input=json.dumps(event), capture_output=True, text=True,
+    r = subprocess.run([sys.executable, str(HOOK)], input=json.dumps(event, ensure_ascii=False).encode("utf-8"), capture_output=True,
                        env={**os.environ, **CLEAN, **(env or {})})
-    return r.returncode, r.stdout, r.stderr
+    return r.returncode, r.stdout.decode("utf-8"), r.stderr.decode("utf-8")
 
 def write_slop(directory, name="notes.md"):
     path = pathlib.Path(directory, name)
@@ -102,6 +102,41 @@ def test_stop_does_not_count_sentences():
 def test_stop_is_silent_on_a_good_reply():
     code, out, err = run({"hook_event_name": "Stop", "last_assistant_message": "The build failed because the disk was full. Free 2 GB and run it again."})
     assert code == 0 and out.strip() == "", (code, out)
+
+def test_stop_does_not_invent_dashes_when_stdin_uses_a_legacy_encoding():
+    # The UTF-8 bytes for this CJK text contain 0x96, an en-dash in cp1252.
+    reply = "The fix is ready. \u4e2d\u6587."
+    for encoding in ("cp1252", "utf-8"):
+        code, out, err = run({"hook_event_name": "Stop", "last_assistant_message": reply},
+                             env={"PYTHONIOENCODING": encoding, "PYTHONUTF8": "0"})
+        assert code == 0 and out.strip() == "" and err == "", (encoding, code, out, err)
+
+def test_stop_still_detects_a_real_dash_with_a_legacy_stdin_encoding():
+    reply = "The build failed \u2014 retry it."
+    for encoding in ("cp1252", "utf-8"):
+        code, out, err = run({"hook_event_name": "Stop", "last_assistant_message": reply},
+                             env={"PYTHONIOENCODING": encoding, "PYTHONUTF8": "0"})
+        assert code == 0 and out, (encoding, code, out, err)
+        assert "1 em-dash(s)" in json.loads(out)["systemMessage"], (encoding, out)
+
+def test_stop_still_reads_ascii_escaped_json_with_a_legacy_stdin_encoding():
+    event = {"hook_event_name": "Stop", "last_assistant_message": "The build failed \u2014 retry it."}
+    r = subprocess.run([sys.executable, str(HOOK)], input=json.dumps(event).encode("ascii"), capture_output=True,
+                       env={**os.environ, "PYTHONIOENCODING": "cp1252", "PYTHONUTF8": "0"})
+    assert r.returncode == 0 and b"1 em-dash(s)" in r.stdout and r.stderr == b"", r
+
+def test_post_tool_use_reads_utf8_paths_with_a_legacy_stdin_encoding():
+    with tempfile.TemporaryDirectory() as d:
+        cwd = pathlib.Path(d, "\u4e2d\u6587")
+        write_slop(cwd)
+        code, out, err = run(post("notes.md", cwd=str(cwd)),
+                             env={"PYTHONIOENCODING": "cp1252", "PYTHONUTF8": "0"})
+    assert code == 2 and "STE violations" in err, (code, out, err)
+
+def test_invalid_utf8_event_exits_zero_without_output():
+    r = subprocess.run([sys.executable, str(HOOK)], input=b'\xff', capture_output=True,
+                       env={**os.environ, "PYTHONIOENCODING": "cp1252", "PYTHONUTF8": "0"})
+    assert r.returncode == 0 and r.stdout == b"" and r.stderr == b"", r
 
 def test_garbage_stdin_exits_zero():
     r = subprocess.run([sys.executable, str(HOOK)], input="not json", capture_output=True, text=True)

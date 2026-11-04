@@ -123,7 +123,8 @@ def stop(event):
 
 def main():
     try:
-        event = json.load(sys.stdin)
+        # Read the event bytes independently of the pipe's locale encoding.
+        event = json.load(sys.stdin.buffer)
     except Exception:  # noqa: BLE001
         return 0
     try:
