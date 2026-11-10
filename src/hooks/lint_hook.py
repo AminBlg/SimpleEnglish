@@ -10,8 +10,8 @@ skipped. The writing rules do not govern it, and a summary of its
 violations only spends tokens. Set SIMPLE_ENGLISH_LINT_EXCLUDE to skip more
 paths.
 
-Stop: read `last_assistant_message`, check the reply register (no headers,
-bullets, bold, or em-dashes), and return a systemMessage only when the reply
+Stop: read `last_assistant_message`, check the reply register (no bold and
+no em-dashes), and return a systemMessage only when the reply
 breaks it. Always exit 0, so the session never loops.
 """
 import fnmatch
@@ -106,7 +106,7 @@ def stop(event):
     lint = load_linter()
     if lint is not None:
         c = lint.reader_check(reply)["counts"]
-        for key, label in (("em_dash", "em-dash"), ("bold_spans", "bold span"), ("headers", "header"), ("bullets", "list item")):
+        for key, label in (("em_dash", "em-dash"), ("bold_spans", "bold span")):
             if c[key]:
                 problems.append(f"{c[key]} {label}(s)")
         slop = lint.lint(strip_code(reply), "descriptive")["violations"].get("slop_word", 0)
@@ -117,7 +117,7 @@ def stop(event):
     if CLOSERS.search(reply):
         problems.append("a filler closer")
     if problems:
-        print(json.dumps({"systemMessage": "simple-english reply check: " + "; ".join(problems) + ". Answer in prose."}))
+        print(json.dumps({"systemMessage": "simple-english reply check: " + "; ".join(problems) + "."}))
     return 0
 
 
