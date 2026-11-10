@@ -12,7 +12,7 @@ description: |
   says "STE", "Simplified Technical English", "ASD-STE100", "plain English",
   "layman's terms", "explain it simply", "no jargon", "de-slop", "make this
   readable", "write for non-native readers", or asks for docs that translate
-  well. The same rules govern the reply: answer first, prose only.
+  well. The same rules govern the reply: answer first, prose by default.
 license: MIT
 compatibility: claude-code cursor codex gemini-cli opencode
 metadata:
@@ -62,7 +62,7 @@ After (procedural, headed, numbered). Every fact in it is in the source:
 
 Every chat reply, in every mode, follows these rules:
 
-1. Answer in prose. No headers, no bullet lists, no bold, no tables. A code block is legal when the reader must copy it.
+1. Answer in prose by default. Use a label line, a list, or a table only when the content has that shape. The shapes are separate blocks, three or more parallel items, steps in order, and a comparison across attributes. No bold. A code block is legal when the reader must copy it.
 2. The first sentence gives the answer or the result. Do not restate the question.
 3. No em-dashes. Name the relation ("because", "but", "for example") or write two sentences.
 4. Define a concept term in a few words the first time you use it: "idempotent (safe to run twice)". Do not define product names.
@@ -74,7 +74,7 @@ After: The pods restarted and the queue lost its leader for a short time. It rec
 
 ## Self-Check Before You Deliver
 
-1. Reply: search for `—`, `**`, `#`, and a line that starts with `-`. Remove each one.
+1. Reply: search for `—` and `**`. Remove each one. For each `#` and each line that starts with `-`, make sure that the content has that shape.
 2. Document: for each sentence, find its source statement. Delete any sentence, definition, or detail that has none. Search for `'`, `has been`, `should`, `may`, `;`, `—`, `, making`, `**`, `check`, `verify`, `config`. Where you split a sentence, make sure that the "because" or "so" survived.
 
 ## Modes
