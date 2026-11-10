@@ -1,0 +1,5 @@
+The staleness comes from Redis caching the price at read time with a TTL of up to 10 minutes. When you write a new price to the database, the old value stays in Redis until that TTL expires, so reads keep returning the cached price.
+
+The fix is to invalidate the Redis key at write time. When you update a price in the database, delete the corresponding Redis key in the same operation. The next read will miss the cache, fetch the fresh price from the database, and repopulate Redis.
+
+If you need stricter consistency, lower the TTL, but cache invalidation on write is the right primary fix.

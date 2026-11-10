@@ -1,0 +1,9 @@
+Yes, 2 million messages of consumer lag is a serious problem. It means your consumer group is reading messages far slower than producers write them, and the gap is growing.
+
+The number alone does not tell the full story. What matters is the throughput rate. If producers write 100,000 messages per second and consumers process 99,000, the lag grows by 1,000 per second and will eventually stabilize or cause producers to block (if you use backpressure). If consumers process 50,000 per second against 100,000 written, the gap grows without bound and your system is in trouble.
+
+For users, the effect depends on what that topic drives. If it feeds real-time features like notifications, order status updates, or fraud checks, users see stale data or delayed responses proportional to the lag divided by consumer throughput. At 2 million messages with a consumer rate of 10,000 per second, that is a 200-second delay. If the topic feeds async work like email sends or report generation, users wait longer for those jobs to complete.
+
+There is also a retention risk. Kafka deletes old segments based on time or size limits set in your broker configuration. If lag grows faster than consumers drain it, old messages fall off the retention window before consumers read them, and that data is lost permanently with no replay possible.
+
+The immediate checks to run: compare the consumer group's `records-lag-max` metric against the producer `records-sent-rate` to see if the gap is stable or widening. Then check consumer CPU, GC pause times, and network throughput to find the bottleneck. If the consumer is I/O-bound on a downstream database, that is your constraint. If it is CPU-bound on deserialization or business logic, adding more partitions and consumer instances will help, provided the topic has enough partitions to parallelize across.

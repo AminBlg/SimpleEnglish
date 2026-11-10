@@ -1,0 +1,5 @@
+Idempotent means calling the endpoint multiple times with the same input produces the same result as calling it once — no duplicate side effects.
+
+For POST /v2/orders, "idempotent" is a claim, not a guarantee. You must verify that the server uses a deduplication key (a client-supplied order ID, or an idempotency key header like `Idempotency-Key`) to detect and suppress duplicate requests. If it does, retrying on timeout is safe. If it does not, a timeout means the request may have succeeded server-side before the connection dropped, and a retry creates a duplicate order.
+
+Check whether the endpoint documents an idempotency key mechanism, and make sure your retry sends the same key as the original request.

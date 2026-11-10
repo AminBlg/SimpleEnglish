@@ -1,0 +1,72 @@
+## OOMKilled — What's Happening
+
+The container's process exceeded the **memory limit** set in its pod spec. The Linux kernel's OOM (Out-Of-Memory) killer terminated the process, and Kubernetes restarted the pod. This repeats if the root cause isn't fixed.
+
+---
+
+## Diagnose First
+
+```bash
+# See current/last restart reason and memory usage
+kubectl describe pod <pod-name> -n <namespace>
+
+# Check memory usage trend
+kubectl top pod <pod-name> -n <namespace>
+
+# Look at logs from the previous (crashed) container
+kubectl logs <pod-name> -n <namespace> --previous
+```
+
+In `describe` output, look for:
+- `Last State: Terminated / Reason: OOMKilled`
+- `Limits.memory` and `Requests.memory` values
+
+---
+
+## What to Change
+
+### 1. Raise the memory limit (quick fix)
+
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"   # increase this
+```
+
+Rule of thumb: set `limits` to ~2× `requests` to absorb spikes, but don't set it higher than the node can afford.
+
+### 2. Set a request if it's missing
+
+Without a `requests.memory`, the scheduler places the pod on a node without knowing its actual needs. A missing request also means `limits` defaults to the namespace's `LimitRange`, which may be too low.
+
+### 3. Fix the actual memory leak / over-use (real fix)
+
+| Cause | Fix |
+|---|---|
+| JVM/heap not bounded | Set `-Xmx` to ~75% of the container limit |
+| Node.js heap unbounded | Set `--max-old-space-size` (in MB) |
+| Memory leak in app code | Profile with heap dumps, fix the leak |
+| Processing large data in-memory | Stream instead of loading entirely |
+| Too many worker threads/processes | Reduce concurrency or worker count |
+
+### 4. Enable VPA (Vertical Pod Autoscaler) for right-sizing
+
+If you don't know the right limit, VPA in `Off` or `Initial` mode can **recommend** values without restarting pods:
+
+```bash
+kubectl describe vpa <vpa-name> -n <namespace>
+# Look at: Recommendation.ContainerRecommendations[].Target.memory
+```
+
+---
+
+## Key Distinction: Request vs Limit
+
+| Field | Effect |
+|---|---|
+| `requests.memory` | Used for **scheduling** — the node must have this free |
+| `limits.memory` | **Hard cap** — the kernel kills the container if it exceeds this |
+
+Setting `requests == limits` (Guaranteed QoS) prevents OOM in most cases but wastes capacity. A reasonable gap (Burstable QoS) is usually the right trade-off.

@@ -1,0 +1,76 @@
+## What's happening
+
+When you add a `NOT NULL` column to an existing table, the database needs every existing row to have a value for that column. If you don't supply a `DEFAULT`, the DB has to either reject the migration or lock the table while it writes a value to every row — on a 20 GB table, that lock can hang for minutes or hours, blocking all reads/writes.
+
+A **backfill** is the process of populating that new column's value for all pre-existing rows after the fact.
+
+---
+
+## The safe pattern (3 steps)
+
+### 1. Add the column as nullable first
+
+```sql
+ALTER TABLE your_table ADD COLUMN new_col INTEGER;
+```
+
+This is near-instant — no row rewriting, no lock.
+
+### 2. Backfill existing rows in batches
+
+Never do `UPDATE your_table SET new_col = <value>` in one shot — that locks the entire table. Do it in batches:
+
+```sql
+-- Repeat until 0 rows updated
+UPDATE your_table
+SET new_col = <default_value>
+WHERE new_col IS NULL
+  AND id BETWEEN <start> AND <end>;  -- or use a cursor/pagination
+```
+
+A common pattern with a loop (PostgreSQL example):
+
+```sql
+DO $$
+DECLARE
+  batch_size INT := 10000;
+  last_id    BIGINT := 0;
+  max_id     BIGINT;
+BEGIN
+  SELECT MAX(id) INTO max_id FROM your_table;
+  WHILE last_id < max_id LOOP
+    UPDATE your_table
+    SET new_col = <default_value>
+    WHERE id > last_id AND id <= last_id + batch_size
+      AND new_col IS NULL;
+    last_id := last_id + batch_size;
+    PERFORM pg_sleep(0.05);  -- throttle to avoid I/O spikes
+  END LOOP;
+END $$;
+```
+
+### 3. Add the NOT NULL constraint once backfill is complete
+
+```sql
+-- PostgreSQL 12+ can do this without a full table scan if you use NOT VALID + VALIDATE
+ALTER TABLE your_table ALTER COLUMN new_col SET NOT NULL;
+```
+
+On PostgreSQL 12+, there's an even safer way using a `CHECK` constraint:
+
+```sql
+ALTER TABLE your_table ADD CONSTRAINT new_col_not_null CHECK (new_col IS NOT NULL) NOT VALID;
+-- backfill here...
+ALTER TABLE your_table VALIDATE CONSTRAINT new_col_not_null;
+-- only then drop nullable and add NOT NULL if needed
+```
+
+`NOT VALID` skips scanning existing rows; `VALIDATE` scans them with a weaker lock that doesn't block reads.
+
+---
+
+## What to do right now
+
+If your migration is currently **hanging**, kill it — `ROLLBACK` or cancel the query. The column hasn't been added yet (or it was added nullable and the constraint application is what's stuck). Then follow the 3-step pattern above.
+
+Which database are you on (Postgres, MySQL, etc.)? The exact syntax varies, and some versions have built-in tooling for this (e.g., `pt-online-schema-change` for MySQL, `pg_repack` for Postgres).

@@ -1,0 +1,16 @@
+curl cannot verify the server's TLS certificate because the certificate authority (CA) that signed it is not in curl's trusted CA bundle. Internal APIs often use a private CA that operating systems and tools do not trust by default.
+
+To fix it, get the PEM file for your internal CA and pass it to curl:
+
+```bash
+curl --cacert /path/to/internal-ca.crt https://your-internal-api/
+```
+
+To make that permanent, add the CA to your system trust store:
+
+```bash
+sudo cp /path/to/internal-ca.crt /usr/local/share/ca-certificates/internal-ca.crt
+sudo update-ca-certificates
+```
+
+After that, curl uses the system store by default and the error stops. Do not use `-k` (`--insecure`) in production because it disables all certificate validation and exposes you to man-in-the-middle attacks.

@@ -1,0 +1,15 @@
+The stale data is caused by **cache-aside with no invalidation on write**.
+
+When a price is updated in the database, the old value remains in Redis until its TTL expires (likely ~10 minutes). Reads still hit the cache and return the old price.
+
+**Fix: invalidate or update the cache on write.**
+
+Two options:
+
+1. **Delete on write (simplest)** — after updating the DB, call `DEL price:<id>`. The next read will miss the cache, fetch from DB, and repopulate. Brief extra DB load under traffic, but prices are always fresh after one miss.
+
+2. **Write-through** — after updating the DB, also write the new value to Redis with `SET price:<id> <new_value> EX <ttl>`. No extra DB hit on the next read. Better under high read traffic.
+
+Option 1 is usually the right default — it's simpler and avoids any race between the DB write and the cache write. Option 2 is worth it only if the cache miss latency matters (e.g., a price page under heavy load).
+
+The root cause is that your write path only touches the DB, leaving the cache unaware. Whichever option you choose, the fix lives in the same service layer that performs the DB update.

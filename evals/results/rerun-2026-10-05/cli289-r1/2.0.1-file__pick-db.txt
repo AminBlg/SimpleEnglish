@@ -1,0 +1,9 @@
+Before sharding, exhaust the cheaper options — sharding is irreversible complexity you want to avoid if possible.
+
+**First, diagnose.** Run `EXPLAIN (ANALYZE, BUFFERS)` on your slow queries. Most slow reads at 40M rows are missing indexes, not volume. Check `pg_stat_user_indexes` and `pg_stat_user_tables` for sequential scans.
+
+**Second, add indexes.** A well-chosen index on a 40M-row table cuts query time from seconds to milliseconds. Partial indexes and covering indexes (`INCLUDE`) are especially effective if your queries filter on a small subset of rows.
+
+**Third, if indexes are not enough**, look at table partitioning (native Postgres, no application changes) — partition by date range or a high-cardinality column you already filter on. This lets the planner skip entire partitions and also speeds up `VACUUM`.
+
+Sharding is the right call only when you have exceeded a single node's I/O or storage capacity, or when write throughput is the bottleneck — not read latency alone. At 40M rows you are almost certainly not there yet.

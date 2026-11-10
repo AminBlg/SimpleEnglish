@@ -1,0 +1,35 @@
+curl cannot verify the server's certificate because the certificate authority (CA) that signed it is not in curl's trusted CA bundle. This happens most often with internal APIs that use a private CA or a self-signed certificate, neither of which ships in the system CA bundle.
+
+There are three ways to fix it, ordered from most correct to least correct.
+
+**Tell curl about your internal CA (correct fix).** Get the PEM file for your internal CA root certificate, then pass it to curl:
+
+```bash
+curl --cacert /path/to/internal-ca.pem https://your-internal-api/
+```
+
+To make this permanent for all curl calls, add the CA certificate to your system trust store. On Arch Linux:
+
+```bash
+SUDO_ASKPASS=$(which ksshaskpass) sudo -A trust anchor --store /path/to/internal-ca.pem
+SUDO_ASKPASS=$(which ksshaskpass) sudo -A update-ca-trust
+```
+
+After that, curl uses the system store by default and will trust your internal CA without `--cacert`.
+
+**Point curl at a bundle that already includes your CA.** If your team maintains a combined CA bundle file, set the `CURL_CA_BUNDLE` environment variable to its path. curl reads that variable on every call.
+
+```bash
+export CURL_CA_BUNDLE=/path/to/team-ca-bundle.pem
+```
+
+**Disable verification entirely (wrong for anything beyond a one-off test).** `curl -k` or `--insecure` skips certificate verification. This removes the protection TLS gives you and must not be used against any API that carries real data.
+
+To get the CA certificate from the server so you can add it to your trust store, run:
+
+```bash
+openssl s_client -connect your-internal-api:443 -showcerts </dev/null 2>/dev/null \
+  | openssl x509 -outform PEM > internal-ca.pem
+```
+
+That writes the server's certificate chain to `internal-ca.pem`. If the server sends the full chain, the root CA will be the last certificate in the file. You can then use the trust anchor command above.

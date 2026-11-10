@@ -1,0 +1,5 @@
+The stale reads come from your cache TTL. When a price updates in the database, the old value sits in Redis until its TTL expires, so users see the old price for up to that window.
+
+The fix is cache invalidation on write. When you write a new price to the database, delete or update the corresponding Redis key in the same operation. Use a write-through pattern: write to the database first, then call `DEL` on the cache key so the next read fetches the fresh value and repopulates the cache.
+
+If you cannot guarantee atomicity between the database write and the cache delete, use a Redis transaction or a Lua script to make them atomic. A message queue (database write publishes an event, a consumer deletes the cache key) is another option if the write path is distributed.

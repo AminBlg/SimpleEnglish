@@ -1,0 +1,27 @@
+**Why it happens:**
+
+Redis is caching price data with a TTL (or no invalidation on write). When a price update is written to the database, the Redis cache still holds the old value — reads serve the stale cached entry until it expires, up to 10 minutes later.
+
+**The fix — cache invalidation on write:**
+
+Instead of waiting for TTL expiry, explicitly delete (or update) the Redis key whenever a price is written to the database:
+
+```python
+# When updating a price
+def update_price(product_id, new_price):
+    db.execute("UPDATE prices SET price = ? WHERE id = ?", new_price, product_id)
+    redis.delete(f"price:{product_id}")   # invalidate immediately
+```
+
+Or if you want to avoid a thundering herd on a high-traffic key, write-through instead of delete:
+
+```python
+    redis.set(f"price:{product_id}", new_price, ex=600)  # update in-place
+```
+
+**If the writes go through a different service** (e.g. an admin tool or direct DB writes that bypass your app layer), the app-layer invalidation won't fire. In that case:
+
+- Use a DB trigger or change-data-capture (CDC) tool (e.g. Debezium) to publish invalidation events, and have a consumer delete the Redis key.
+- Or reduce the TTL to an acceptable staleness window (e.g. 30s).
+
+The root cause is **cache-aside reads without coordinated write invalidation** — the fix is to make writes own their cache entry.

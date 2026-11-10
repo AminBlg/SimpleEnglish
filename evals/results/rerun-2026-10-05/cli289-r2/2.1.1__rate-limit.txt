@@ -1,0 +1,7 @@
+A token bucket is a counter that refills at a fixed rate and depletes with each request.
+
+Each user gets a bucket that holds up to 100 tokens. The bucket refills at 100 tokens per minute, which works out to roughly 1.67 tokens per second. When a request arrives, the system removes one token. If the bucket is empty, the system rejects the request.
+
+The key property is that a user who has been idle accumulates tokens up to the bucket's maximum capacity. That means a quiet user can send a short burst of 100 requests all at once, then must wait for the bucket to refill before sending more. If you want to prevent that burst behavior entirely, a fixed window counter (count requests in a one-minute window, reset at the boundary) is simpler, but it has a boundary problem: a user can fire 100 requests at 12:00:59 and another 100 at 12:01:01 and stay within the per-window limit while hitting you with 200 requests in two seconds.
+
+For your case, the token bucket fits well. The 100-request-per-minute rate maps directly to the refill rate, the burst capacity is bounded by the bucket size, and the algorithm is straightforward to implement with a timestamp and a counter per user in Redis or a similar store. If you need to forbid all bursting, set the bucket size equal to the number of tokens that refill in one small interval rather than the full minute.

@@ -1,0 +1,29 @@
+The pod's container is exceeding its memory limit. Kubernetes enforces the `resources.limits.memory` value hard — when a container crosses it, the kernel OOM killer terminates the process, and Kubernetes restarts the pod, which is why you see the `OOMKilled` exit code in `kubectl describe pod <name>`.
+
+**Diagnose first.** Run these to understand the actual usage:
+
+```bash
+kubectl describe pod <pod-name> -n <namespace>
+kubectl top pod <pod-name> -n <namespace>
+```
+
+Look at `Last State: OOMKilled` and the `Memory` column in `top` to see how close you are to the limit.
+
+**Fix options, in order of preference:**
+
+1. **Raise the memory limit** if the workload legitimately needs more:
+```yaml
+resources:
+  requests:
+    memory: "256Mi"
+  limits:
+    memory: "512Mi"
+```
+
+2. **Tune the application** if it has a memory leak or inefficient allocation — common culprits are JVM heap (`-Xmx`), Node.js `--max-old-space-size`, or unbounded caches. Set the app-level heap ceiling below the container limit (leave ~10–20% headroom for the runtime overhead outside the heap).
+
+3. **Set a request without a limit** (or a generous limit) for burstable workloads where occasional spikes are normal and eviction is acceptable. The pod moves to the `Burstable` QoS class instead of `Guaranteed`.
+
+4. **Use a VerticalPodAutoscaler (VPA)** in recommendation mode to get data-driven sizing suggestions before you commit to a value.
+
+The most common mistake is setting `limits.memory` equal to `requests.memory` without accounting for runtime overhead — always leave headroom above what the application heap reports as used.

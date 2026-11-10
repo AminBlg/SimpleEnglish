@@ -1,0 +1,7 @@
+Yes, 2 million consumer lag is bad. It means consumers are reading messages far slower than producers write them — the queue is growing, not shrinking.
+
+For users, the effect depends on what those consumers do. If they drive real-time features (notifications, order processing, live updates), those actions are delayed by however long it takes to drain the backlog. At typical throughput rates, 2 million unprocessed messages can mean minutes to hours of delay on user-facing actions.
+
+The immediate questions to answer: Is lag still growing, or has it plateaued? A plateau means consumers are keeping pace but never catching up — a capacity problem. Still climbing means consumers are falling further behind — likely a processing bottleneck, a crashed consumer, or a sudden traffic spike.
+
+Check consumer CPU and memory, partition assignment balance (one overloaded partition starves others), and whether any consumer group members dropped off recently. A rebalance storm or a slow external call inside the consumer loop (database write, HTTP call) is the most common culprit.

@@ -1,0 +1,5 @@
+Before sharding, profile the actual bottleneck. Sharding is a last resort because it destroys joins, complicates transactions, and adds operational overhead.
+
+Run `EXPLAIN (ANALYZE, BUFFERS)` on your slowest queries. The output tells you whether the problem is missing indexes, sequential scans, poor query plans, or genuine I/O saturation. 40 million rows is not large for Postgres with proper indexes.
+
+Work through this list in order, stopping when reads are fast enough: add indexes on filtered and sorted columns, tune `work_mem` and `shared_buffers` for your workload, add read replicas to offload read traffic, then try table partitioning (range or list) which gives most sharding benefits without the distributed-system cost. Sharding only makes sense after all of those fail.

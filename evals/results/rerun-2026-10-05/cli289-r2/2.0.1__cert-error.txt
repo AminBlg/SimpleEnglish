@@ -1,0 +1,5 @@
+Curl cannot verify the server's certificate because the certificate chain leads to a CA (certificate authority) that curl does not trust. This happens with internal APIs when the company uses a private CA that is not in the system trust store.
+
+Run this to confirm the chain: `curl -v https://your-internal-api/ 2>&1 | grep -A5 'SSL certificate'`
+
+You have three options. First, if you have the internal CA certificate file (a `.crt` or `.pem`), pass it directly: `curl --cacert /path/to/internal-ca.crt https://your-internal-api/`. Second, install the CA into the system trust store so all tools trust it automatically — on Arch Linux, copy the CA file to `/etc/ca-certificates/trust-source/anchors/` and run `trust extract-compat`. Third, use `-k` to skip verification entirely, but only for quick local debugging, because it removes all protection against man-in-the-middle attacks.

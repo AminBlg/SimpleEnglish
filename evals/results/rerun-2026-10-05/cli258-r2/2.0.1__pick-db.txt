@@ -1,0 +1,7 @@
+Before sharding, exhaust the single-node options — sharding adds enormous operational complexity and is rarely the right first move.
+
+Run `EXPLAIN (ANALYZE, BUFFERS)` on your slow queries. The output will tell you whether the problem is a missing index, a sequential scan, or something else entirely. Fix what you find there first.
+
+If queries are already hitting indexes and are still slow, check `pg_stat_user_tables` for dead tuple bloat and run `VACUUM ANALYZE` on the table. Then look at your `work_mem`, `shared_buffers`, and `effective_cache_size` configuration — under-tuned memory settings cause more slow reads at 40M rows than the row count itself does.
+
+Partitioning (not sharding) is the next step if single-node tuning is not enough. Postgres range or list partitioning on a natural column like a date or tenant ID lets the planner prune irrelevant partitions and keeps you on one machine. Sharding splits data across multiple machines and multiplies your operational surface area — backup, schema migrations, cross-shard joins all become harder. Most 40M-row tables never need it.

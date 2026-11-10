@@ -1,0 +1,3 @@
+A token bucket works like a jar that refills over time. Each user gets a jar that holds 100 tokens and gains roughly 1.67 tokens per second (100 per 60 seconds). Each request costs one token. If the jar has tokens, the request goes through and one token is removed. If the jar is empty, the request is rejected.
+
+This fits your requirement well. The bucket capacity sets the per-minute ceiling at 100, and the refill rate distributes that allowance across the minute. A user who sends no requests for 30 seconds accumulates 50 tokens, so they can burst up to 100 at once before hitting the limit. If that burst behavior is unwanted, a sliding window counter is a better fit because it enforces a strict 100-request count over any rolling 60-second window with no burst headroom.

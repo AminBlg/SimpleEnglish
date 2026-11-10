@@ -1,0 +1,5 @@
+Idempotent means safe to run twice: repeating the exact same request produces the same result as running it once.
+
+A POST is not idempotent by default, but if the server guarantees it (usually via a client-supplied idempotency key in the request header), then retrying on timeout is safe. Without that guarantee, a timeout means the request may have already succeeded on the server before the connection dropped, so retrying will create a duplicate order.
+
+Check whether your POST sends an `Idempotency-Key` header and whether the server honors it.

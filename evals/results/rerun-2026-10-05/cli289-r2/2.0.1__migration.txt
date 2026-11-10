@@ -1,0 +1,29 @@
+A backfill is the process of writing a value into existing rows after you add a new column, so every row satisfies the NOT NULL constraint.
+
+When you add a NOT NULL column without a default, Postgres must rewrite the entire table to set that value on every existing row. On a 20 GB table that holds a lock for minutes, which is why the migration hangs and blocks all reads and writes.
+
+The safe pattern is three separate migrations: first add the column as nullable, then backfill in batches, then add the NOT NULL constraint once every row has a value.
+
+Here is the batched backfill in raw SQL, which you run outside your migration framework so you can control the batch size and pause between runs:
+
+```sql
+DO $$
+DECLARE
+  batch_size INT := 5000;
+  last_id    BIGINT := 0;
+  max_id     BIGINT;
+BEGIN
+  SELECT MAX(id) INTO max_id FROM your_table;
+  WHILE last_id < max_id LOOP
+    UPDATE your_table
+    SET    your_column = 'your_default_value'
+    WHERE  id > last_id
+      AND  id <= last_id + batch_size
+      AND  your_column IS NULL;
+    last_id := last_id + batch_size;
+    PERFORM pg_sleep(0.05);
+  END LOOP;
+END $$;
+```
+
+Once `SELECT COUNT(*) FROM your_table WHERE your_column IS NULL` returns zero, run the final migration to add `SET NOT NULL`. On Postgres 12 and later that final step is instant because Postgres checks the constraint metadata rather than scanning the table again, provided you also add a `CHECK (your_column IS NOT NULL)` constraint with `NOT VALID` and then `VALIDATE CONSTRAINT` before the `SET NOT NULL`.

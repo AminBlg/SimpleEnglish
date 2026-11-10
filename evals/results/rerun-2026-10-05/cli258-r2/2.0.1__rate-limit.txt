@@ -1,0 +1,5 @@
+A token bucket works like a jar that refills at a fixed rate. Each user gets their own jar that holds 100 tokens and gains 100 tokens per minute (roughly 1.67 per second). Each request costs one token. If the jar is full and the user makes no requests, tokens do not accumulate past 100. If the jar is empty, the request is rejected or queued until a token arrives.
+
+This fits your requirement well. The bucket capacity sets the burst limit (100 requests at once if the user was idle), and the refill rate sets the sustained limit (100 per minute). That means a user can fire 100 requests instantly after a quiet period, which is usually acceptable behavior, but you can lower the capacity if you want to suppress large bursts.
+
+The main alternative is a fixed window counter, which is simpler but allows a user to send 100 requests at the end of one window and 100 more at the start of the next, giving 200 requests in two seconds. The token bucket does not have this boundary problem.

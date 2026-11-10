@@ -1,0 +1,67 @@
+## What's Happening
+
+curl is failing to verify the server's SSL certificate because it can't find the **Certificate Authority (CA)** that signed it in its trust store. This almost always means one of:
+
+1. **Internal/private CA** — your API uses a cert signed by a company/self-hosted CA that isn't in the system trust store.
+2. **Self-signed cert** — the server uses a cert it signed itself, which no CA can vouch for.
+3. **Missing intermediate cert** — the server isn't sending the full chain, so curl can't build the path to a trusted root.
+
+---
+
+## Diagnosing First
+
+```bash
+# See the full cert chain the server is presenting
+openssl s_client -connect your-api-host:443 -showcerts 2>/dev/null < /dev/null
+
+# Check what CA signed it
+openssl s_client -connect your-api-host:443 2>/dev/null | openssl x509 -noout -issuer -subject
+```
+
+---
+
+## Fixes (ordered best to worst)
+
+### 1. Add your internal CA to curl's trust store (correct long-term fix)
+
+Get the root CA certificate (`.crt` or `.pem`) from your infra/security team, then:
+
+```bash
+# Arch Linux (your system)
+sudo trust anchor --store /path/to/internal-ca.crt
+sudo update-ca-trust
+
+# Verify it's now trusted
+trust list | grep -i "your ca name"
+```
+
+Then retry curl — it should work without any flags.
+
+### 2. Point curl at the CA cert directly (per-request or scripted)
+
+```bash
+curl --cacert /path/to/internal-ca.crt https://your-api-host/endpoint
+```
+
+Or set it for all curl invocations:
+
+```bash
+# ~/.curlrc
+cacert = /path/to/internal-ca.crt
+```
+
+### 3. Fix a missing intermediate cert (server-side fix)
+
+If `openssl s_client` shows the chain is incomplete, the server needs to be reconfigured to send the full chain (root + intermediates). This is a server config fix, not a client fix.
+
+### 4. `-k` / `--insecure` (never in production)
+
+```bash
+curl -k https://your-api-host/endpoint
+```
+
+This disables verification entirely — fine for a one-off local test to confirm it's *only* a cert issue, but never use it in scripts or CI.
+
+---
+
+**Most likely path:** get the internal CA cert from your team and run `sudo trust anchor --store` on it. That fixes it system-wide for curl, browsers, and any other tool using the system trust store.

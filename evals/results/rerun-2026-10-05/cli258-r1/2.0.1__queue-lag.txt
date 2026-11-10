@@ -1,0 +1,5 @@
+Consumer lag of 2 million means your consumers are 2 million messages behind the producers — the queue is growing faster than it is being drained. Whether that is bad depends on your message rate and the processing time budget each message has.
+
+If your producers write 10,000 messages per second and your consumers process 9,000, lag grows by 1,000 per second, so 2 million represents roughly 33 minutes of backlog. If each message drives a user-visible action (a notification, an order status update, a payment confirmation), users experience that same delay. If messages are purely internal analytics, users notice nothing.
+
+The real risk is that lag keeps growing rather than stabilizing. A stable high-lag number means consumers are slow but keeping up at a plateau; a number that climbs continuously means you have a runaway backlog and must add consumer instances or reduce producer throughput before you hit retention limits and start losing messages entirely.

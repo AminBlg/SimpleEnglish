@@ -1,0 +1,45 @@
+**Yes, that's bad.** Here's what it means:
+
+## What consumer lag means
+
+Lag = messages produced minus messages consumed. At 2M lag, your consumers are 2 million messages *behind* what producers have written. They're falling further behind faster than they can catch up.
+
+## Impact on users
+
+Depends entirely on your **throughput rate**:
+
+| Throughput | 2M lag = |
+|---|---|
+| 10k msg/s | ~3 min delay |
+| 100k msg/s | ~20 sec delay |
+| 1k msg/s | ~33 min delay |
+
+The lag number alone doesn't tell you severity — the **rate of change** does. If lag is climbing, that's the crisis. If it plateaued, consumers are keeping pace but haven't caught up yet.
+
+**User-facing symptoms typically include:**
+- Delayed notifications, emails, or webhooks
+- Stale read-your-writes (user takes an action, doesn't see it reflected)
+- Order processing, payments, or analytics falling behind real-time
+- Downstream services (search indexes, caches, recommendation engines) showing old data
+
+## Likely causes
+
+1. **Consumer too slow** — processing logic is the bottleneck (DB calls, external API, CPU-heavy work)
+2. **Under-partitioned topic** — you can't add more consumer instances than you have partitions
+3. **Consumer crash/rebalance loop** — group is constantly rebalancing, no real processing happening
+4. **Producer spike** — sudden burst that outpaced normal consumer capacity
+5. **Bad message** — one poison pill causing repeated failures and retries
+
+## What to check first
+
+```bash
+# Lag per partition — is it one partition or spread across all?
+kafka-consumer-groups.sh --bootstrap-server <host> --describe --group <group>
+
+# Is lag growing or stable?
+# Watch the LAG column over 30s intervals
+```
+
+If lag is concentrated on **one partition**, you likely have a poison pill or a single slow consumer. If it's **spread evenly**, you're under-provisioned for the current load.
+
+The immediate question: **is it growing right now?** If yes, you need more consumer parallelism or to find and skip/DLQ the blocking message. If it peaked and stabilized, you're catching up and can assess calmly.

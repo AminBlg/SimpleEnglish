@@ -1,0 +1,17 @@
+Before sharding, exhaust simpler options — sharding is expensive and complex to reverse.
+
+**Do this first:**
+
+1. Run `EXPLAIN (ANALYZE, BUFFERS)` on your slow queries. Slow reads are almost always missing indexes, not table size. A 40M-row table with the right index is fast; a 1M-row table with a sequential scan is slow.
+
+2. Check `pg_stat_user_tables` for `seq_scan` counts on that table. High sequential scan counts confirm missing indexes.
+
+3. Confirm autovacuum is keeping up — bloat from dead tuples degrades read performance significantly. Run `SELECT n_dead_tup, last_autovacuum FROM pg_stat_user_tables WHERE relname = 'your_table'`.
+
+**If indexes are fine, next try:**
+
+- Postgres table partitioning (built-in, same connection string, no app changes) — partition by a natural dimension like date or tenant ID. This gives most sharding benefits at a fraction of the cost.
+- Read replicas for read-heavy workloads.
+- Materialized views for expensive aggregation queries.
+
+**Sharding only makes sense** if you have already done the above and are hitting single-node write throughput limits or storage limits, not just slow reads. Slow reads are almost never a sharding problem.

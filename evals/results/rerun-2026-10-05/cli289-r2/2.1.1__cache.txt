@@ -1,0 +1,5 @@
+The staleness comes from a TTL (time-to-live) set on the Redis cache keys. When you write a new price to the database, the old value sits in Redis until its TTL expires, so reads return the cached copy for up to that window.
+
+The fix is cache invalidation on write: when your code updates a price in the database, it must also delete (or overwrite) the corresponding Redis key in the same operation. Most teams use `DEL key` immediately after the database write succeeds. If you write prices in bulk, pipeline the deletes alongside the inserts so they go out atomically.
+
+A secondary safeguard is to lower the TTL to a value that matches your acceptable staleness tolerance, but invalidation on write is the correct primary fix because a TTL alone only bounds the worst case, it does not eliminate it.

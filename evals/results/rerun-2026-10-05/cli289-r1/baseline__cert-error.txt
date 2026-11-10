@@ -1,0 +1,74 @@
+## What's happening
+
+curl is trying to verify the server's TLS certificate by tracing the chain up to a trusted root CA. It fails because the CA that signed your internal API's certificate isn't in curl's trust store (`/etc/ssl/certs/ca-certificates.crt` on Arch).
+
+This is common for internal APIs that use a **private/corporate CA** rather than a public one (Let's Encrypt, DigiCert, etc.).
+
+---
+
+## Diagnosis
+
+First, see what the chain looks like:
+
+```bash
+curl -vvI https://your-internal-api/ 2>&1 | grep -E 'issuer|subject|SSL|certificate'
+```
+
+Or with openssl for more detail:
+
+```bash
+openssl s_client -connect your-internal-api:443 -showcerts </dev/null 2>&1
+```
+
+Look for the `issuer` field — if it's an internal name (e.g. `CN=Acme Corp Internal CA`), that's your answer.
+
+---
+
+## Fixes
+
+### Option 1 — Add your internal CA to the system trust store (recommended)
+
+```bash
+# Get the CA cert (PEM format) from your IT/infra team, or extract it:
+openssl s_client -connect your-internal-api:443 -showcerts </dev/null 2>&1 \
+  | awk '/BEGIN CERTIFICATE/,/END CERTIFICATE/' > /tmp/internal-ca.crt
+
+# Install it system-wide (Arch)
+SUDO_ASKPASS=$(which ksshaskpass) sudo -A cp /tmp/internal-ca.crt /etc/ca-certificates/trust-source/anchors/
+SUDO_ASKPASS=$(which ksshaskpass) sudo -A update-ca-trust
+
+# Verify
+curl https://your-internal-api/
+```
+
+This fixes it permanently for curl, browsers, git, and most other tools.
+
+---
+
+### Option 2 — Point curl at the CA cert directly (per-request or per-session)
+
+```bash
+# One-off
+curl --cacert /path/to/internal-ca.crt https://your-internal-api/
+
+# Per-session env var (add to ~/.bashrc or ~/.zshrc for persistence)
+export CURL_CA_BUNDLE=/path/to/internal-ca.crt
+```
+
+---
+
+### Option 3 — Skip verification entirely (NOT for production use)
+
+```bash
+curl -k https://your-internal-api/
+```
+
+This bypasses TLS verification completely — fine for a quick test, but exposes you to MITM attacks, so don't script it into anything real.
+
+---
+
+## Which to use
+
+- **IT-managed machine with a corporate CA** → Option 1, and ask your IT team for the CA cert bundle.
+- **Your own internal service** → Option 1 or 2 with the self-signed CA you control.
+- **Just debugging** → Option 3 to confirm the server is up, then fix it properly.

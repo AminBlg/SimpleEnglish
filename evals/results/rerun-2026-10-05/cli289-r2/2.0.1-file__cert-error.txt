@@ -1,0 +1,20 @@
+The server is presenting a certificate signed by a private or internal CA that curl does not trust. Curl validates the full chain up to a trusted root, and your internal CA is not in the system trust store (or the bundle curl uses).
+
+You have three options, in order of correctness:
+
+**Best: add your internal CA to the trust store.**
+Get the CA certificate (PEM format) from your infra team, copy it to `/etc/ca-certificates/trust-source/anchors/`, then run `sudo update-ca-trust`. Curl picks up the system store by default.
+
+**Targeted: point curl at the CA directly.**
+```bash
+curl --cacert /path/to/internal-ca.pem https://internal-api/...
+```
+This works without touching the system store and is good for scripts or CI.
+
+**Quick but insecure: skip verification entirely.**
+```bash
+curl -k https://internal-api/...
+```
+This defeats TLS validation and must not be used in production or scripts — it exposes you to MITM attacks.
+
+To inspect what the server actually sends, run `curl -v https://internal-api/... 2>&1 | grep -E 'issuer|subject|SSL'` and confirm the issuer matches your internal CA.

@@ -1,0 +1,11 @@
+Yes, 2 million lag is a serious problem, but the impact on users depends on what the consumer does.
+
+Consumer lag is the number of messages that Kafka has received but the consumer has not yet processed. A lag of 2 million means the consumer is falling behind the producer at some rate and has accumulated that backlog.
+
+The user impact depends on the consumer's role. If the consumer writes to a database that powers a user-facing feature, those users see stale data or delayed events. If the consumer drives notifications or order confirmations, those are delayed by however long it takes to drain the backlog. If the consumer feeds a search index, search results are out of date by the same interval.
+
+To estimate the delay, divide the lag by the consumer's throughput. If the consumer processes 10,000 messages per second and the producer is at equilibrium (not still growing the lag), the backlog drains in 200 seconds. If the producer is still faster than the consumer, the lag grows indefinitely and the delay is unbounded.
+
+The more urgent question is whether the lag is growing or stable. A stable lag at 2 million means the consumer keeps up with the current rate but cannot drain the backlog. A growing lag means throughput is insufficient right now and the situation will worsen.
+
+Immediate steps to check: compare the consumer group's `records-lag-max` trend over the last 30 minutes, check whether the consumer is throwing exceptions (which cause pauses), and check whether partition count matches consumer thread count so all partitions are assigned. If the lag is growing, adding consumer instances or increasing partition count is the fastest lever.

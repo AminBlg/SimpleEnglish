@@ -1,0 +1,5 @@
+A token bucket gives each user a bucket that holds up to 100 tokens. The bucket refills at a fixed rate — in your case, 100 tokens per minute, or roughly 1.67 tokens per second. Each request costs one token. If the bucket is empty, the request is rejected or queued.
+
+This fits your requirement well because it allows short bursts (a user can fire 100 requests instantly if their bucket is full) while enforcing the 100-per-minute average over time. The alternative, a fixed window counter, resets at the minute boundary and lets a user send 100 requests at 00:59 and another 100 at 01:00 — a burst of 200 in two seconds. The token bucket prevents that.
+
+The main implementation cost is storing one counter and one timestamp per user, which is cheap in Redis using a single key per user ID.

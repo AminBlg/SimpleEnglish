@@ -1,0 +1,17 @@
+Redis holds a cached copy of each price with a time-to-live (TTL). When the database record changes, Redis still serves the old value until that TTL expires, which explains the up-to-10-minute lag.
+
+The fix is cache invalidation on write. When code updates a price in the database, it must also delete (or update) the matching Redis key in the same operation. Deletion is safer than updating because it forces the next read to fetch the fresh value from the database and repopulate the cache.
+
+```python
+def update_price(product_id, new_price):
+    db.execute("UPDATE prices SET price = %s WHERE id = %s", (new_price, product_id))
+    redis.delete(f"price:{product_id}")
+```
+
+If you want to avoid a thundering-herd problem (many requests hitting the database at once after the key is deleted), write the new value directly into Redis instead of deleting it, using the same TTL you set on initial population.
+
+```python
+redis.setex(f"price:{product_id}", ttl_seconds, new_price)
+```
+
+A secondary safeguard is to reduce the TTL on price keys to a value your business can tolerate (30 seconds, for example). This does not replace invalidation on write, but it limits the damage window if a write path ever misses the invalidation call.

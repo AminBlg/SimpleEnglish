@@ -1,0 +1,5 @@
+Idempotent means the operation produces the same result no matter how many times you run it with the same inputs. A POST to `/v2/orders` is idempotent if the server deduplicates requests, typically by requiring a client-supplied idempotency key in the request header (e.g. `Idempotency-Key: <uuid>`).
+
+Retrying on timeout is safe only if the server guarantees deduplication. A timeout means you do not know whether the server processed the first request. Without an idempotency key, the server cannot tell either, so it creates a duplicate order.
+
+Check two things: your client sends a stable `Idempotency-Key` that stays the same across retries for the same logical order, and the API documentation confirms the server honors that key on `/v2/orders`.

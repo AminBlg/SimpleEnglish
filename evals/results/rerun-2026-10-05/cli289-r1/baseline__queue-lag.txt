@@ -1,0 +1,35 @@
+**Yes, 2 million lag is bad** — but how bad depends on your throughput.
+
+## What it means
+
+Consumer lag = messages produced but not yet consumed. At 2M lag, your consumers are behind by 2 million unprocessed messages.
+
+**The key metric is time-to-drain, not the raw number:**
+- At 100k msg/s throughput → 20 seconds behind (probably fine)
+- At 1k msg/s throughput → 33 minutes behind (likely a problem)
+- If consumers are slower than producers → lag grows indefinitely (crisis)
+
+## User impact depends on your pipeline
+
+| Use case | Impact at 2M lag |
+|---|---|
+| Real-time notifications | Users see delayed alerts/messages |
+| Event-driven DB writes | Stale reads, data appears "missing" |
+| Analytics/metrics | Dashboards show outdated data |
+| Async background jobs | Jobs queue up, SLAs breached |
+| Log aggregation | Usually tolerable |
+
+## What to check right now
+
+1. **Is lag growing or stable?** — `kafka-consumer-groups.sh --describe` — growing = active incident, stable = backpressure you can drain
+2. **Consumer throughput** — are consumers processing at all, or stuck/crashed?
+3. **Producer rate vs consumer rate** — if producers outpace consumers, adding consumer instances (if the topic has enough partitions) is the fastest fix
+4. **Topic partition count** — max parallelism is capped at partition count; if you have 4 partitions, a 5th consumer does nothing
+
+## Immediate actions
+
+- Check if consumers are alive and processing (no errors, no rebalancing loops)
+- Scale out consumer instances up to partition count
+- If lag is growing: treat as incident — users are likely experiencing delays proportional to the drain time
+
+What's your consumer group's current throughput and partition count? That'll tell you if you're looking at minutes or hours of backlog.
