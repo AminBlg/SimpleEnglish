@@ -94,7 +94,7 @@ def load_slop(path=SLOP_TSV):
 def forms(word):
     """Base form plus the regular inflections that a writer produces."""
     out = {word}
-    if word.endswith("y") and len(word) > 2:
+    if word.endswith("y") and len(word) > 2 and word[-2] not in "aeiou":
         out |= {word[:-1] + "ies", word[:-1] + "ied"}
     elif word.endswith(("s", "x", "z", "ch", "sh")):
         out.add(word + "es")
@@ -177,6 +177,10 @@ def self_test():
     both = ({f: "x" for f in forms("delve")}, [])
     r4 = lint("Delve deeper.", both, slop)
     assert r4["not_approved"] == 1 and r4["slop"] == 0, r4
+    # a vowel before the final y keeps the y: "interplays", not "interplaies"
+    assert {"interplays", "interplayed"} <= forms("interplay"), forms("interplay")
+    assert "interplaies" not in forms("interplay")
+    assert {"applies", "applied"} <= forms("apply"), forms("apply")
     print("self-test ok")
 
 
