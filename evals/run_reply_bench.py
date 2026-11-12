@@ -63,7 +63,7 @@ def extract_result(stdout):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--skill", action="append", default=[], help="label=path, repeatable")
-    ap.add_argument("--model", default="claude-sonnet-4-6")
+    ap.add_argument("--model", default="claude-sonnet-5-5")
     ap.add_argument("--effort", default="low")
     ap.add_argument("--out", required=True)
     ap.add_argument("--report-only", action="store_true")

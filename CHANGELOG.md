@@ -2,6 +2,26 @@
 
 Each entry names the version, the date, and the measured effect where one exists.
 
+## 2.1.2, 2026-11-10
+
+- Changed: the reply rule. A reply is prose by default. A label line, a list,
+  or a table is legal when the content has that shape: separate blocks, three
+  or more parallel items, steps in order, or a comparison across attributes.
+  Bold stays banned.
+- Changed: the Stop hook no longer reports headers and list items. It still
+  reports bold, em-dashes, slop words, openers, and closers.
+- Changed: `evals/run_reply_bench.py` defaults to `claude-sonnet-5-5`.
+- Tested: the same reply rule ran once through `evals/run_reply_bench.py` on
+  `claude-sonnet-5-5` at low effort, 2026-11-10, inside the 2.2.0 rule block.
+  The replies used lists only for steps, options, or checks, and used no bold
+  or headers. Two replies used a two-item list, which the rule does not allow.
+  This release carries the 2.1.1 document rules, so that run is not a test of
+  this exact prompt. Its files are not committed. No published README figure
+  covers 2.1.2.
+- Known gap: `reader_check` in `evals/ste_lint.py` still counts headers and
+  list items in `visible_total`, so the reply benchmark scores a fitting list
+  as a defect.
+
 ## 2.1.1, 2026-09-30
 
 - Changed: removed wording in the skill that broke the skill's own rules. The
