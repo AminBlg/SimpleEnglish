@@ -63,10 +63,26 @@ ROTATION_SETS = [
     ("config-settings", re.compile(r"\b(config|configuration|settings)\b", re.I)),
 ]
 LIMITS = {"procedural": 20, "descriptive": 25}
+FENCED_CODE = re.compile(
+    r"```.*?```"
+    r"|^ {0,3}(?P<tilde>~{3,})(?!~)[^\r\n]*(?:\r?\n|\Z)"
+    r".*?(?:^ {0,3}(?P=tilde)~*[ \t]*(?=\r?$)|\Z)",
+    re.M | re.S,
+)
+
+
+def strip_fenced_code(text: str) -> str:
+    """Remove fenced code and keep the line breaks in tilde blocks."""
+    def replace(match: re.Match[str]) -> str:
+        if match["tilde"] is not None:
+            return re.sub(r"[^\r\n]+", "", match[0])
+        return " "
+
+    return FENCED_CODE.sub(replace, text)
 
 
 def strip_code(text):
-    text = re.sub(r"```.*?```", " ", text, flags=re.S)
+    text = strip_fenced_code(text)
     text = re.sub(r"`[^`\n]+`", " CODESPAN ", text)  # one word per Rule 8.6
     text = re.sub(r"^#+\s.*$", " ", text, flags=re.M)  # headings exempt (titles, 8.6)
     text = re.sub(r"https?://\S+", " URL ", text)
@@ -258,7 +274,7 @@ def reader_check(text):
     limit: the reply register sets no sentence cap, so it is not part of `visible_total`.
     """
     text = text.replace("\r\n", "\n")
-    prose = re.sub(r"```.*?```", " ", text, flags=re.S)
+    prose = strip_fenced_code(text)
     prose = re.sub(r"`[^`\n]+`", " CODESPAN ", prose)
     prose_no_md = re.sub(r"^\s*(#{1,6}\s|[-*+]\s|\d+[.)]\s|\|)", "", prose, flags=re.M)
     prose_no_md = re.sub(r"^\s*[\s:|-]+$", "", prose_no_md, flags=re.M)  # table separator rows
@@ -328,6 +344,16 @@ def self_test():
     assert all(h["line"] >= 1 and h["text"] for h in detail), detail
     detail_counts = Counter(h["category"] for h in detail)
     assert detail_counts == {k: v for k, v in slop["violations"].items() if v}, (detail_counts, slop["violations"])
+    tilde = "~~~sh\r\nshould; utilize\r\n~~~~\r\nYou should restart.\r\n"
+    assert lint(tilde, "descriptive")["violations_total"] == 1
+    assert lint_detail(tilde, "descriptive") == [
+        {"category": "banned_modal", "text": "should", "line": 4},
+    ]
+    assert lint("~~~~sh\n~~~\nshould; utilize\n~~~~\n", "descriptive")["violations_total"] == 0
+    assert lint("~~~sh\nshould; utilize", "descriptive")["violations_total"] == 0
+    assert lint("~~~md\n```sh\nshould; utilize\n```\n~~~\n", "descriptive")["violations_total"] == 0
+    assert lint("```md\n~~~sh\nshould; utilize\n```\n", "descriptive")["violations_total"] == 0
+    assert reader_check("~~~md\n**bold** — hidden\n~~~\nPlain reply.")["visible_total"] == 0
     print("self-test OK:", slop["violations_total"], "violations in slop fixture, 0 in clean")
 
 

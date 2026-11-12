@@ -32,6 +32,14 @@ def test_post_tool_use_prints_the_offending_text_and_line_number():
     assert "line 3, banned_modal: should" in err, err
     assert "line 3, perfect_tense: has been" in err, err
 
+def test_post_tool_use_skips_tilde_code_and_keeps_the_following_line_number():
+    with tempfile.TemporaryDirectory() as d:
+        path = pathlib.Path(d, "notes.md")
+        path.write_text("~~~sh\nshould; utilize\n~~~\nYou should restart.\n", encoding="utf-8")
+        code, _, err = run(post(str(path)))
+    assert code == 2 and "1 STE violations" in err, (code, err)
+    assert "line 4, banned_modal: should" in err, err
+
 def test_post_tool_use_ignores_clean_file_and_non_markdown():
     with tempfile.NamedTemporaryFile("w", suffix=".md", delete=False) as f:
         f.write("Run the migration. Then restart the service.\n"); path = f.name
@@ -101,6 +109,11 @@ def test_stop_does_not_count_sentences():
 
 def test_stop_is_silent_on_a_good_reply():
     code, out, err = run({"hook_event_name": "Stop", "last_assistant_message": "The build failed because the disk was full. Free 2 GB and run it again."})
+    assert code == 0 and out.strip() == "", (code, out)
+
+def test_stop_ignores_tilde_fenced_code():
+    reply = "~~~md\n**Example** — utilize the robust tool.\n~~~\nPlain reply."
+    code, out, _ = run({"hook_event_name": "Stop", "last_assistant_message": reply})
     assert code == 0 and out.strip() == "", (code, out)
 
 def test_garbage_stdin_exits_zero():

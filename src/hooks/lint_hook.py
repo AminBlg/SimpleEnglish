@@ -39,11 +39,6 @@ def load_linter():
         return None
 
 
-def strip_code(text):
-    text = re.sub(r"```.*?```", " ", text, flags=re.S)
-    return re.sub(r"`[^`]*`", " ", text)
-
-
 def absolute(path, cwd=None):
     """Make the path absolute. The harness can send it relative to the session directory."""
     return pathlib.Path(cwd or ".", pathlib.Path(path).expanduser()).absolute()
@@ -109,7 +104,8 @@ def stop(event):
         for key, label in (("em_dash", "em-dash"), ("bold_spans", "bold span")):
             if c[key]:
                 problems.append(f"{c[key]} {label}(s)")
-        slop = lint.lint(strip_code(reply), "descriptive")["violations"].get("slop_word", 0)
+        prose = re.sub(r"`[^`]*`", " ", lint.strip_fenced_code(reply))
+        slop = lint.lint(prose, "descriptive")["violations"].get("slop_word", 0)
         if slop:
             problems.append(f"{slop} slop word(s)")
     if OPENERS.search(reply):
