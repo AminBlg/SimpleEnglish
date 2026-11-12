@@ -69,3 +69,5 @@ export SIMPLE_ENGLISH_LINT_EXCLUDE="$HOME/notes/*:*/CHANGELOG.md"
 ```
 
 To turn the file check off, set the variable to `*`. The `Stop` reply check stays on.
+
+The rules are for English, so the linter also skips sentences in another script. When most words of a sentence have letters outside the Latin script, such as Korean or Chinese, the linter does not lint that sentence. It counts the sentence in `skipped_sentences`. The check therefore does not tell the model to change Korean sentences, and the English sentences in the same file still get the checks.
