@@ -15,8 +15,9 @@ def write_slop(directory, name="notes.md"):
     path.write_text(SLOP, encoding="utf-8")
     return str(path)
 
-def post(path, **event):
-    return {"hook_event_name": "PostToolUse", "tool_name": "Write", "tool_input": {"file_path": path}, **event}
+def post(path, tool_name="Write", tool_input=None, **event):
+    payload = {"file_path": path, **(tool_input or {})}
+    return {"hook_event_name": "PostToolUse", "tool_name": tool_name, "tool_input": payload, **event}
 
 def test_post_tool_use_flags_a_slop_markdown_file():
     with tempfile.TemporaryDirectory() as d:
@@ -85,6 +86,65 @@ def test_post_tool_use_matches_a_glob_through_a_symlinked_directory():
         path = str(pathlib.Path(d, "notes", "notes.md"))
         assert run(post(path))[0] == 2
         assert run(post(path), env={"SIMPLE_ENGLISH_LINT_EXCLUDE": f"{d}/notes/*"})[0] == 0
+
+def test_post_tool_use_edit_lints_only_the_new_string():
+    """An Edit must not report pre-existing violations in the rest of the file (#53, #58)."""
+    with tempfile.TemporaryDirectory() as d:
+        path = pathlib.Path(d, "notes.md")
+        # File state after the edit: old slop remains, new_string is clean.
+        path.write_text(SLOP + "Run the tests.\nThen restart the service.\n", encoding="utf-8")
+        code, out, err = run(post(
+            str(path),
+            tool_name="Edit",
+            tool_input={"old_string": "Run the tests.", "new_string": "Run the tests.\nThen restart the service."},
+        ))
+    assert code == 0 and err.strip() == "", (code, err)
+
+
+def test_post_tool_use_edit_flags_slop_in_the_new_string():
+    with tempfile.TemporaryDirectory() as d:
+        path = pathlib.Path(d, "notes.md")
+        # PostToolUse runs after the edit, so the file already holds new_string.
+        path.write_text("Run the migration.\nYou should simply leverage it.\n", encoding="utf-8")
+        code, out, err = run(post(
+            str(path),
+            tool_name="Edit",
+            tool_input={"old_string": "Then restart the service.", "new_string": "You should simply leverage it."},
+        ))
+    assert code == 2, (code, err)
+    assert "line 2, banned_modal: should" in err, err
+    assert "slop_word: simply" in err and "slop_word: leverage" in err, err
+    assert "Fix these hits in the text you just wrote" in err, err
+
+
+def test_post_tool_use_write_lints_payload_content():
+    with tempfile.TemporaryDirectory() as d:
+        path = pathlib.Path(d, "notes.md")
+        path.write_text(SLOP, encoding="utf-8")
+        code, out, err = run(post(str(path), tool_input={"content": SLOP}))
+    assert code == 2 and "STE violations" in err, (code, err)
+
+
+def test_post_tool_use_multiedit_lints_each_new_string():
+    with tempfile.TemporaryDirectory() as d:
+        path = pathlib.Path(d, "notes.md")
+        path.write_text(
+            "Run the migration.\nYou should simply leverage it.\nThen restart the service.\n",
+            encoding="utf-8",
+        )
+        code, out, err = run(post(
+            str(path),
+            tool_name="MultiEdit",
+            tool_input={"edits": [
+                {"old_string": "Run the migration.", "new_string": "Run the migration."},
+                {"old_string": "You should simply leverage it.", "new_string": "You should simply leverage it."},
+                {"old_string": "Then restart the service.", "new_string": "Then restart the service."},
+            ]},
+        ))
+    assert code == 2, (code, err)
+    assert "line 2, banned_modal: should" in err, err
+    assert err.count("line 1,") == 0 and "line 3," not in err, err
+
 
 def test_stop_flags_slop_reply_and_never_blocks():
     long = "Great question! " + "This is a robust sentence. " * 7 + "I hope this helps!"

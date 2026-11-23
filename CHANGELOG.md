@@ -2,6 +2,13 @@
 
 Each entry names the version, the date, and the measured effect where one exists.
 
+## Unreleased
+
+- Fixed: the PostToolUse hook lints only the text that Write, Edit, or
+  MultiEdit just wrote. An edit whose own text is clean no longer reports
+  pre-existing violations in the rest of the file, and no longer tells the
+  model to rewrite lines it did not touch (#53, #58).
+
 ## 2.1.2, 2026-11-10
 
 - Changed: the reply rule. A reply is prose by default. A label line, a list,
