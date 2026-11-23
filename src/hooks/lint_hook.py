@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """Advisory writing checks for Claude Code hooks. Never blocks.
 
-PostToolUse (Write|Edit on a .md file): lint the file with evals/ste_lint.py
-and, when it has violations, print the offending text and line number for
-each hit (capped at MAX_HOOK_HITS) to stderr and exit 2 so the model sees
-it. Exit 2 on PostToolUse is advisory: the tool already ran. Agent-internal
-Markdown, such as memory files under the Claude configuration directory, is
-skipped. The writing rules do not govern it, and a summary of its
-violations only spends tokens. Set SIMPLE_ENGLISH_LINT_EXCLUDE to skip more
-paths.
+PostToolUse (Write|Edit|MultiEdit on a .md file): lint the text that the
+tool just wrote, not the whole file. Write carries it in tool_input.content,
+Edit in tool_input.new_string, and MultiEdit in each edits[].new_string.
+When the payload has no written text, the check falls back to the file on
+disk so older callers still work. Hits print the offending text and the
+line number in the file (capped at MAX_HOOK_HITS) to stderr and exit 2 so
+the model sees them. Exit 2 on PostToolUse is advisory: the tool already
+ran. Agent-internal Markdown, such as memory files under the Claude
+configuration directory, is skipped. The writing rules do not govern it,
+and a summary of its violations only spends tokens. Set
+SIMPLE_ENGLISH_LINT_EXCLUDE to skip more paths.
 
 Stop: read `last_assistant_message`, check the reply register (no bold and
 no em-dashes), and return a systemMessage only when the reply
@@ -72,8 +75,63 @@ def excluded(target):
     return False
 
 
+def written_segments(tool_name, tool_input):
+    """The prose the tool just wrote, or None when the payload has none.
+
+    None means fall back to the whole file. An empty list means the tool
+    wrote nothing to lint.
+    """
+    tool_input = tool_input or {}
+    name = (tool_name or "").strip()
+    if name == "Write" and "content" in tool_input:
+        content = tool_input.get("content")
+        return [content] if isinstance(content, str) else None
+    if name == "Edit" and "new_string" in tool_input:
+        new_string = tool_input.get("new_string")
+        return [new_string] if isinstance(new_string, str) else None
+    if name == "MultiEdit":
+        edits = tool_input.get("edits")
+        if not isinstance(edits, list):
+            return None
+        segments = []
+        for edit in edits:
+            if isinstance(edit, dict) and isinstance(edit.get("new_string"), str):
+                segments.append(edit["new_string"])
+        return segments
+    return None
+
+
+def start_line_in_file(file_text, snippet):
+    """1-based line where snippet begins in file_text. 1 if the snippet is missing."""
+    if not snippet:
+        return 1
+    index = file_text.find(snippet)
+    if index < 0:
+        return 1
+    return file_text.count("\n", 0, index) + 1
+
+
+def remap_hits(hits, base_line):
+    """Shift segment-local line numbers onto the file."""
+    offset = base_line - 1
+    return [{**hit, "line": hit["line"] + offset} for hit in hits]
+
+
+def collect_hits(lint, segments, file_text):
+    """Lint each written segment and report hits with file line numbers."""
+    hits = []
+    for segment in segments:
+        if not segment:
+            continue
+        detail = lint.lint_detail(segment, "descriptive")
+        hits.extend(remap_hits(detail, start_line_in_file(file_text, segment)))
+    hits.sort(key=lambda hit: hit["line"])
+    return hits
+
+
 def post_tool_use(event):
-    path = (event.get("tool_input") or {}).get("file_path") or ""
+    tool_input = event.get("tool_input") or {}
+    path = tool_input.get("file_path") or ""
     if not path.endswith(".md"):
         return 0
     target = absolute(path, event.get("cwd"))
@@ -82,20 +140,25 @@ def post_tool_use(event):
     lint = load_linter()
     if lint is None:
         return 0
+    segments = written_segments(event.get("tool_name"), tool_input)
     try:
-        text = target.read_text(encoding="utf-8")
+        file_text = target.read_text(encoding="utf-8")
     except OSError:
+        file_text = ""
+    if segments is None:
+        if not file_text:
+            return 0
+        hits = lint.lint_detail(file_text, "descriptive")
+    else:
+        hits = collect_hits(lint, segments, file_text)
+    if not hits:
         return 0
-    report = lint.lint(text, "descriptive")
-    if not report["violations_total"]:
-        return 0
-    detail = lint.lint_detail(text, "descriptive")
-    lines = [f"simple-english: {target.name} has {report['violations_total']} STE violations."]
-    for h in detail[:MAX_HOOK_HITS]:
-        lines.append(f"  line {h['line']}, {h['category']}: {h['text']}")
-    if len(detail) > MAX_HOOK_HITS:
-        lines.append(f"  and {len(detail) - MAX_HOOK_HITS} more hit(s).")
-    lines.append("Fix these hits in the file you just wrote, then continue.")
+    lines = [f"simple-english: {target.name} has {len(hits)} STE violations."]
+    for hit in hits[:MAX_HOOK_HITS]:
+        lines.append(f"  line {hit['line']}, {hit['category']}: {hit['text']}")
+    if len(hits) > MAX_HOOK_HITS:
+        lines.append(f"  and {len(hits) - MAX_HOOK_HITS} more hit(s).")
+    lines.append("Fix these hits in the text you just wrote, then continue.")
     sys.stderr.write("\n".join(lines) + "\n")
     return 2
 
