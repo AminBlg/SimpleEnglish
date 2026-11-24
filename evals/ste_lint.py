@@ -57,12 +57,35 @@ SLOP = slop_pattern()
 # prefix pattern, whose backtracking was quadratic on long sentences
 # (a punctuation-free 8,000-word input took ~7s; now sub-millisecond).
 TRAILING_COND = re.compile(r"\s(if|when)\s", re.I)
+# A short lead-in before "if"/"when" keeps the condition first: a phrase of up
+# to four words that ends in a comma ("First,", "For example,"), or a connective
+# ("Even", "But only").
+LEAD_IN = re.compile(
+    r"^(?:(?:[^\s,]+\s+){0,3}[^\s,]+,"
+    r"|(?:even|only|but|and|or|so|then|also|just)(?:\s+(?:even|only))?)$",
+    re.I,
+)
+
 DASH = re.compile(r"—|(?<!\d)–(?!\d)|(?<= )--(?= )|(?<=[^\s\d]{2}) - (?=[^\s\d]{2})")
 ROTATION_SETS = [
     ("check-verify", re.compile(r"\b(check|verify|confirm|validate|ensure)\w*\b", re.I)),
     ("config-settings", re.compile(r"\b(config|configuration|settings)\b", re.I)),
 ]
 LIMITS = {"procedural": 20, "descriptive": 25}
+
+
+def trailing_condition(s):
+    """True when a sentence puts an if/when clause after its main clause."""
+    m = TRAILING_COND.search(s)
+    if not m:
+        return False
+    # The whitespace before "if" may be a newline (a wrapped sentence), but
+    # the 4-char prefix must sit on the same line as that whitespace. A
+    # heading, a blank line, then "If ..." is condition-first, not trailing.
+    line_start = s.rfind("\n", 0, m.start()) + 1
+    if m.start() - line_start < 4 or re.match(r"^(if|when)\b", s, re.I):
+        return False
+    return not LEAD_IN.match(s[line_start:m.start()].strip())
 
 
 def strip_code(text):
@@ -117,11 +140,8 @@ def lint_detail(text, text_type):
         n = len(s.split())
         if n > limit:
             add_sentence("sentence_over_limit", s, pos)
-        m = TRAILING_COND.search(s)
-        if m:
-            line_start = s.rfind("\n", 0, m.start()) + 1
-            if m.start() - line_start >= 4 and not re.match(r"^(if|when)\b", s, re.I):
-                add_sentence("trailing_condition", s, pos)
+        if trailing_condition(s):
+            add_sentence("trailing_condition", s, pos)
         pos += max(len(s), 1)
 
     for m in CONTRACTION.finditer(body):
@@ -166,17 +186,7 @@ def lint(text, text_type):
     counts["em_dash"] = len(DASH.findall(body))
     counts["latin_abbrev"] = len(LATIN.findall(body))
     counts["slop_word"] = len(SLOP.findall(body))
-    def trailing_cond(s):
-        m = TRAILING_COND.search(s)
-        if not m:
-            return False
-        # The whitespace before "if" may be a newline (a wrapped sentence), but
-        # the 4-char prefix must sit on the same line as that whitespace. A
-        # heading, a blank line, then "If ..." is condition-first, not trailing.
-        line_start = s.rfind("\n", 0, m.start()) + 1
-        return m.start() - line_start >= 4 and not re.match(r"^(if|when)\b", s, re.I)
-
-    counts["trailing_condition"] = sum(1 for s in sents if trailing_cond(s))
+    counts["trailing_condition"] = sum(1 for s in sents if trailing_condition(s))
     rotation = 0
     for _, rx in ROTATION_SETS:
         stems = {m.group(1).lower().rstrip("s") for m in rx.finditer(body)}
@@ -323,6 +333,22 @@ def self_test():
     long_prose = "a " * 30  # 30 repetitions of the same word, one space each
     assert lint(long_prose, "descriptive")["violations"]["sentence_over_limit"] >= 1, \
         "genuine long sentence was not flagged"
+    # A short lead-in before a leading condition is still condition-first.
+    for lead_in in (
+        "First, if several measurements send the same query, the plugin makes one call.",
+        "Even when a search matches nothing, it returns the real response.",
+        "For example, if the key is missing, the measurement ends in an error.",
+        "But only when the cache is cold, the plugin calls Datadog.",
+    ):
+        assert lint(lead_in, "descriptive")["violations"]["trailing_condition"] == 0, lead_in
+        assert not lint_detail(lead_in, "descriptive"), lead_in
+    for trailing in (
+        "The step fails if a monitor alerts.",
+        "Overall, the step fails when the budget runs out.",
+        "Use this guide when Datadog throttles the plugin.",
+    ):
+        assert lint(trailing, "descriptive")["violations"]["trailing_condition"] == 1, trailing
+        assert [h["category"] for h in lint_detail(trailing, "descriptive")] == ["trailing_condition"], trailing
     detail = lint_detail(SLOP_FIXTURE, "procedural")
     assert len(detail) == slop["violations_total"], (len(detail), slop["violations_total"])
     assert all(h["line"] >= 1 and h["text"] for h in detail), detail
